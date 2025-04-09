@@ -68,4 +68,21 @@
     <sys:String x:Key="HyperlinkTipLine1">Create a link in your document for</sys:String>
     <sys:String x:Key="HyperlinkTipLine2">quick access to webpage and files.</sys:String>
 
+    <!-- Clipboard Buttons -->
+    <sys:String x:Key="Paste">Paste</sys:String>
+    <sys:String x:Key="PasteShortcut">Paste (Ctrl+V)</sys:String>
+    <sys:String x:Key="PasteTipLine1">Add content on the Clipboard</sys:String>
+    <sys:String x:Key="PasteTipLine2">to your document.</sys:String>
+
+    <sys:String x:Key="Cut">Cut</sys:String>
+    <sys:String x:Key="CutShortcut">Cut (Ctrl+X)</sys:String>
+    <sys:String x:Key="CutTipLine1">Remove the selection and put it on</sys:String>
+    <sys:String x:Key="CutTipLine2">the Clipboard so you can paste</sys:String>
+    <sys:String x:Key="CutTipLine3">it somewhere else.</sys:String>
+
+    <sys:String x:Key="Copy">Copy</sys:String>
+    <sys:String x:Key="CopyShortcut">Copy (Ctrl+C)</sys:String>
+    <sys:String x:Key="CopyTipLine1">Put a copy of the selection on the clipboard</sys:String>
+    <sys:String x:Key="CopyTipLine2">so you can paste it somewhere else.</sys:String>
+
 </ResourceDictionary>

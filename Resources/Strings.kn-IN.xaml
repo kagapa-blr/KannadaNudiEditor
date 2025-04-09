@@ -68,4 +68,21 @@
     <sys:String x:Key="HyperlinkTipLine1">ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು</sys:String>
     <sys:String x:Key="HyperlinkTipLine2">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಸೃಷ್ಟಿಸಿ.</sys:String>
 
+    <!-- Clipboard Buttons -->
+    <sys:String x:Key="Paste">ಅಂಟಿಸಿ</sys:String>
+    <sys:String x:Key="PasteShortcut">ಅಂಟಿಸಿ (Ctrl+V)</sys:String>
+    <sys:String x:Key="PasteTipLine1">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಲ್ಲಿರುವ ವಿಷಯವನ್ನು</sys:String>
+    <sys:String x:Key="PasteTipLine2">ನಿಮ್ಮ ಡಾಕ್ಯುಮೆಂಟ್‌ಗೆ ಸೇರಿಸಿ.</sys:String>
+
+    <sys:String x:Key="Cut">ಕತ್ತರಿಸಿ</sys:String>
+    <sys:String x:Key="CutShortcut">ಕತ್ತರಿಸಿ (Ctrl+X)</sys:String>
+    <sys:String x:Key="CutTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ತೆಗೆದು</sys:String>
+    <sys:String x:Key="CutTipLine2">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಹಾಕಿ</sys:String>
+    <sys:String x:Key="CutTipLine3">ಬೇರೇದೊಂದು ಕಡೆ ಅಂಟಿಸಲು ಅವಕಾಶ ನೀಡುತ್ತದೆ.</sys:String>
+
+    <sys:String x:Key="Copy">ಪ್ರತಿ</sys:String>
+    <sys:String x:Key="CopyShortcut">ಪ್ರತಿ (Ctrl+C)</sys:String>
+    <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
+    <sys:String x:Key="CopyTipLine2">ಬೇರೇದೊಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
+
 </ResourceDictionary>
