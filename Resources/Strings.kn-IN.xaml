@@ -1,12 +1,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
     <!-- Tabs -->
     <sys:String x:Key="HomeTab">ಮನೆ</sys:String>
-    <sys:String x:Key="InsertTab">ಸೆರಿಸಲು</sys:String>
+    <sys:String x:Key="InsertTab">ಸೇರಿಸಿ</sys:String>
     <sys:String x:Key="PageLayoutTab">ಪುಟ ವಿನ್ಯಾಸ</sys:String>
     <sys:String x:Key="ViewTab">ನೋಟ</sys:String>
-
+<sys:String x:Key="ReviewTab">ಪುನರ್ ವಿಮರ್ಶೆ</sys:String>
     <!-- RibbonBars -->
     <sys:String x:Key="Clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್</sys:String>
     <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
@@ -14,8 +15,25 @@
     <sys:String x:Key="PageBackground">ಹಿನ್ನೆಲೆ</sys:String>
     <sys:String x:Key="PageSetup">ಪುಟ ಸೆಟಪ್</sys:String>
     <sys:String x:Key="PageSize">ಪುಟ ಗಾತ್ರ</sys:String>
-
+    <sys:String x:Key="Views">ನೋಟಗಳು</sys:String>
+    <sys:String x:Key="Zoom">ವಿಸ್ತರಣೆ</sys:String>
+<sys:String x:Key="Comments">ಟಿಪ್ಪಣಿಗಳು</sys:String>
     <!-- Labels -->
     <sys:String x:Key="Margins">ಅಂಚುಗಳು</sys:String>
     <sys:String x:Key="Size">ಗಾತ್ರ</sys:String>
+    <sys:String x:Key="PrintLayout">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
+    <sys:String x:Key="WebLayout">ವೆಬ್ ವಿನ್ಯಾಸ</sys:String>
+    <sys:String x:Key="ZoomIn">ಜೂಮ್ ಇನ್</sys:String>
+    <sys:String x:Key="ZoomOut">ಜೂಮ್ ಔಟ್</sys:String>
+    <sys:String x:Key="ResetZoom">100%</sys:String>
+    <sys:String x:Key="OnePage">ಒಂದು ಪುಟ</sys:String>
+    <sys:String x:Key="MultiplePages">ಅನೇಕ ಪುಟಗಳು</sys:String>
+    <sys:String x:Key="PageWidth">ಪುಟ ಅಗಲ</sys:String>
+
+
+    <sys:String x:Key="NewComment">ಹೊಸ ಟಿಪ್ಪಣಿ</sys:String>
+<sys:String x:Key="DeleteComment">ಅಳಿಸಿ</sys:String>
+<sys:String x:Key="PreviousComment">ಹಿಂದಿನದು</sys:String>
+<sys:String x:Key="NextComment">ಮುಂದಿನದು</sys:String>
+<sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
 </ResourceDictionary>
