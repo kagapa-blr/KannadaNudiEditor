@@ -16,44 +16,53 @@ namespace Document_Editor_.NET_8
         private Process _kannadaKeyboardProcess;
 
 
-        protected override void OnStartup(StartupEventArgs e)
+
+protected override void OnStartup(StartupEventArgs e)
+{
+    // Register Syncfusion license
+    SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NNaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXtedXRVQmNYUUN/XUdWYUA=");
+
+    base.OnStartup(e);
+
+    string exeFileName = "kannadaKeyboard.exe";
+    string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFileName);
+
+    // Check if process is already running
+    bool isAlreadyRunning = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeFileName)).Length > 0;
+
+    if (!isAlreadyRunning)
+    {
+        if (File.Exists(exePath))
         {
-            // Register Syncfusion license
-            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NNaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXtedXRVQmNYUUN/XUdWYUA=");
-
-            base.OnStartup(e);
-
-            // Path to kannadaKeyboard.exe in the output directory (relative)
-            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "kannadaKeyboard.exe");
-
-            if (File.Exists(exePath))
+            try
             {
-                try
+                _kannadaKeyboardProcess = new Process
                 {
-                    _kannadaKeyboardProcess = new Process
+                    StartInfo = new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = exePath,
-                            CreateNoWindow = true,
-                            UseShellExecute = false
-                        }
-                    };
+                        FileName = exePath,
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    }
+                };
 
-                    _kannadaKeyboardProcess.Start();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to start kannadaKeyboard.exe:\n" + ex.Message, "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                _kannadaKeyboardProcess.Start();
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("kannadaKeyboard.exe not found in Assets folder.\nExpected at: " + exePath, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to start kannadaKeyboard.exe:\n" + ex.Message, "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
+        else
+        {
+            MessageBox.Show("kannadaKeyboard.exe not found in Assets folder.\nExpected at: " + exePath, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+    else
+    {
+        Debug.WriteLine("kannadaKeyboard.exe is already running. Skipping startup.");
+    }
+}
 
         protected override void OnExit(ExitEventArgs e)
         {
