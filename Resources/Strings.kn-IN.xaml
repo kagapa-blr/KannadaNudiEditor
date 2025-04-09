@@ -85,4 +85,13 @@
     <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
     <sys:String x:Key="CopyTipLine2">ಬೇರೇದೊಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
 
+
+    <!-- NEW: Font ComboBox Tooltip Support -->
+    <sys:String x:Key="FontShortcut">ಅಕ್ಷರಶೈಲಿ (Ctrl+Shift+F)</sys:String>
+    <sys:String x:Key="FontTipLine1">ನಿಮ್ಮ ಪಠ್ಯದಿಗಾಗಿ ಹೊಸ ಅಕ್ಷರಶೈಲಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</sys:String>
+    <sys:String x:Key="FontSizeShortcut">ಅಕ್ಷರ ಗಾತ್ರ (Ctrl+Shift+P)</sys:String>
+    <sys:String x:Key="FontSizeTipLine1">ನಿಮ್ಮ ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಬದಲಾಯಿಸಿ.</sys:String>
+
+
+
 </ResourceDictionary>

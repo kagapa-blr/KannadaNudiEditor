@@ -752,28 +752,32 @@
 
 
                             <Syncfusion:RibbonComboBox.ToolTip>
-                                <Syncfusion:ScreenTip Description="Font (Ctrl+Shift+F)"
+                                <Syncfusion:ScreenTip Description="{DynamicResource FontShortcut}"
                                                       MaxWidth="250">
-                                    <TextBlock Text="Pick a new font for your text."
+                                    <TextBlock Text="{DynamicResource FontTipLine1}"
                                                TextWrapping="Wrap"/>
                                 </Syncfusion:ScreenTip>
                             </Syncfusion:RibbonComboBox.ToolTip>
 
 
                         </Syncfusion:RibbonComboBox>
+
                         <Syncfusion:RibbonComboBox x:Name="fontSizeComboBox"
                                                    Width="50"
                                                    IsEditable="True"
                                                    Text="{Binding Selection.CharacterFormat.FontSize, Mode=OneWay, Converter={StaticResource DoubleStringConverter}}"
                                                    SelectedValue="{Binding Selection.CharacterFormat.FontSize, Mode=TwoWay}">
                             <Syncfusion:RibbonComboBox.ToolTip>
-                                <Syncfusion:ScreenTip Description="Font Size (Ctrl+Shift+P)"
+                                <Syncfusion:ScreenTip Description="{DynamicResource FontSizeShortcut}"
                                                       MaxWidth="250">
-                                    <TextBlock Text="Change the size of your text."
+                                    <TextBlock Text="{DynamicResource FontSizeTipLine1}"
                                                TextWrapping="Wrap"/>
                                 </Syncfusion:ScreenTip>
                             </Syncfusion:RibbonComboBox.ToolTip>
                         </Syncfusion:RibbonComboBox>
+
+
+
                     </Syncfusion:ButtonPanel>
                     <Syncfusion:ButtonPanel Height="24"
                                             SeparatorVisibility="Collapsed">

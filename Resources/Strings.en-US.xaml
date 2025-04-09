@@ -85,4 +85,10 @@
     <sys:String x:Key="CopyTipLine1">Put a copy of the selection on the clipboard</sys:String>
     <sys:String x:Key="CopyTipLine2">so you can paste it somewhere else.</sys:String>
 
+    <!-- NEW: Font ComboBox Tooltip Support -->
+    <sys:String x:Key="FontShortcut">Font (Ctrl+Shift+F)</sys:String>
+    <sys:String x:Key="FontTipLine1">Pick a new font for your text.</sys:String>
+    <sys:String x:Key="FontSizeShortcut">Font Size (Ctrl+Shift+P)</sys:String>
+    <sys:String x:Key="FontSizeTipLine1">Change the size of your text.</sys:String>
+
 </ResourceDictionary>
