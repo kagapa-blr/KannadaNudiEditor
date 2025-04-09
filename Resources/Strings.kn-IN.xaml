@@ -7,8 +7,9 @@
     <sys:String x:Key="InsertTab">ಸೇರಿಸಿ</sys:String>
     <sys:String x:Key="PageLayoutTab">ಪುಟ ವಿನ್ಯಾಸ</sys:String>
     <sys:String x:Key="ViewTab">ನೋಟ</sys:String>
-<sys:String x:Key="ReviewTab">ಪುನರ್ ವಿಮರ್ಶೆ</sys:String>
-    <!-- RibbonBars -->
+    <sys:String x:Key="ReviewTab">ಪುನರ್ ವಿಮರ್ಶೆ</sys:String>
+
+    <!-- Ribbon Bars -->
     <sys:String x:Key="Clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್</sys:String>
     <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
     <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
@@ -17,8 +18,9 @@
     <sys:String x:Key="PageSize">ಪುಟ ಗಾತ್ರ</sys:String>
     <sys:String x:Key="Views">ನೋಟಗಳು</sys:String>
     <sys:String x:Key="Zoom">ವಿಸ್ತರಣೆ</sys:String>
-<sys:String x:Key="Comments">ಟಿಪ್ಪಣಿಗಳು</sys:String>
-    <!-- Labels -->
+    <sys:String x:Key="Comments">ಟಿಪ್ಪಣಿಗಳು</sys:String>
+
+    <!-- Ribbon Labels -->
     <sys:String x:Key="Margins">ಅಂಚುಗಳು</sys:String>
     <sys:String x:Key="Size">ಗಾತ್ರ</sys:String>
     <sys:String x:Key="PrintLayout">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
@@ -30,10 +32,40 @@
     <sys:String x:Key="MultiplePages">ಅನೇಕ ಪುಟಗಳು</sys:String>
     <sys:String x:Key="PageWidth">ಪುಟ ಅಗಲ</sys:String>
 
-
+    <!-- Review Tab Labels -->
     <sys:String x:Key="NewComment">ಹೊಸ ಟಿಪ್ಪಣಿ</sys:String>
-<sys:String x:Key="DeleteComment">ಅಳಿಸಿ</sys:String>
-<sys:String x:Key="PreviousComment">ಹಿಂದಿನದು</sys:String>
-<sys:String x:Key="NextComment">ಮುಂದಿನದು</sys:String>
-<sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
+    <sys:String x:Key="DeleteComment">ಅಳಿಸಿ</sys:String>
+    <sys:String x:Key="PreviousComment">ಹಿಂದಿನದು</sys:String>
+    <sys:String x:Key="NextComment">ಮುಂದಿನದು</sys:String>
+    <sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
+
+    <!-- Insert Tab - Pages -->
+    <sys:String x:Key="Pages">ಪುಟಗಳು</sys:String>
+    <sys:String x:Key="PageBreak">ಪುಟ ವಿರಾಮ</sys:String>
+    <sys:String x:Key="PageBreakToolTipHeader">ಪುಟ ವಿರಾಮ ಸೇರಿಸಿ</sys:String>
+    <sys:String x:Key="PageBreakToolTip">ನಾವುಳ ಸ್ಥಾನದ ಬಳಿ ಹೊಸ ಪುಟ ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+
+    <!-- Insert Tab - Tables -->
+    <sys:String x:Key="Tables">ಕೋಷ್ಟಕಗಳು</sys:String>
+    <sys:String x:Key="Table">ಕೋಷ್ಟಕ</sys:String>
+    <sys:String x:Key="AddTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
+    <sys:String x:Key="AddTableTipLine1">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಮಾಹಿತಿಯನ್ನು</sys:String>
+    <sys:String x:Key="AddTableTipLine2">ಏರ್ಪಡಿಸಲು ಉತ್ತಮ ಮಾರ್ಗವಾಗಿದೆ.</sys:String>
+    <sys:String x:Key="InsertTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
+
+    <!-- Insert Tab - Illustrations -->
+    <sys:String x:Key="Illustrations">ಚಿತ್ರಣಗಳು</sys:String>
+    <sys:String x:Key="Picture">ಚಿತ್ರ</sys:String>
+    <sys:String x:Key="FromFile">ಫೈಲ್‌ನಿಂದ</sys:String>
+    <sys:String x:Key="PictureTipLine1">ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಿಂದ ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ</sys:String>
+    <sys:String x:Key="PictureTipLine2">ಅಥವಾ ಇತರ ಸಂಪರ್ಕಿತ ಕಂಪ್ಯೂಟರ್‌ಗಳಿಂದ</sys:String>
+    <sys:String x:Key="PictureTipLine3">ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ.</sys:String>
+
+    <!-- Insert Tab - Links -->
+    <sys:String x:Key="Links">ಲಿಂಕುಗಳು</sys:String>
+    <sys:String x:Key="Hyperlink">ಹೈಪರ್‌ಲಿಂಕ್</sys:String>
+    <sys:String x:Key="HyperlinkHeader">ಹೈಪರ್‌ಲಿಂಕ್ ಸೇರಿಸಿ (Ctrl+K)</sys:String>
+    <sys:String x:Key="HyperlinkTipLine1">ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು</sys:String>
+    <sys:String x:Key="HyperlinkTipLine2">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಸೃಷ್ಟಿಸಿ.</sys:String>
+
 </ResourceDictionary>

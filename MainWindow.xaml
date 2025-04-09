@@ -1919,101 +1919,113 @@
                     </Syncfusion:RibbonButton>
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
-            <Syncfusion:RibbonTab Caption="Insert">
-                <Syncfusion:RibbonBar CollapseImage="/Images/Insert/CollapsePages.png"
-                                      Header="Pages"
-                                      IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonButton SizeForm="Large"
-                                             Width="70"
-                                             ToolTipService.ShowOnDisabled="True"
-                                             HorizontalAlignment="Center"
-                                             Label="PageBreak"
-                                             Command="Syncfusion:SfRichTextBoxAdv.InsertBreakCommand"
-                                             CommandParameter="PageBreak"
-                                             LargeIcon="/Images/Insert/PageBreak16.png">
-                        <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="PageBreakToolTipHeader">
-                                <StackPanel>
-                                    <TextBlock Text="PageBreakToolTip"
-                                               MaxWidth="250"
-                                               TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Syncfusion:ScreenTip>
-                        </Syncfusion:RibbonButton.ToolTip>
-                    </Syncfusion:RibbonButton>
-                </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar Header="Tables"
-                                      IsLauncherButtonVisible="False">
-                    <Syncfusion:DropDownButton Margin="3"
-                                               Width="50"
-                                               SizeForm="Large"
-                                               HorizontalAlignment="Center"
-                                               LargeIcon="/Images/Insert/Table32.png"
-                                               Label="Table">
-                        <Syncfusion:DropDownButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="Add a Table"
-                                                  MaxWidth="250">
-                                <StackPanel>
-                                    <TextBlock Text="A table is a great way to organize"/>
-                                    <TextBlock Text="information with in your document."/>
-                                </StackPanel>
-                            </Syncfusion:ScreenTip>
-                        </Syncfusion:DropDownButton.ToolTip>
-                        <Syncfusion:TablePickerUI x:Name="tablePicker"
-                                                  CellCount="10 8"
-                                                  Margin="3"
-                                                  Command="Syncfusion:SfRichTextBoxAdv.InsertTableCommand"/>
-                        <Separator/>
-                        <Syncfusion:RibbonButton x:Name="insertTableButton"
-                                                 Label="Insert Table"
-                                                 SizeForm="Small"
-                                                 SmallIcon="/Images/Insert/Table16.png"
-                                                 Margin="3"
-                                                 Command="Syncfusion:SfRichTextBoxAdv.ShowInsertTableDialogCommand"/>
-                    </Syncfusion:DropDownButton>
-                </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar IsLauncherButtonVisible="False"
-                                      Header="Illustrations">
-                    <Syncfusion:RibbonButton SizeForm="Large"
-                                             Margin="3"
-                                             Width="60"
-                                             HorizontalAlignment="Center"
-                                             Label="Picture"
-                                             Command="Syncfusion:SfRichTextBoxAdv.InsertPictureCommand"
-                                             LargeIcon="/Images/Insert/Picture32.png">
-                        <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="From File"
-                                                  MaxWidth="250">
-                                <StackPanel>
-                                    <TextBlock Text="Insert pictures from your computer"/>
-                                    <TextBlock Text="or from other computers that"/>
-                                    <TextBlock Text="you're connected to."/>
-                                </StackPanel>
-                            </Syncfusion:ScreenTip>
-                        </Syncfusion:RibbonButton.ToolTip>
-                    </Syncfusion:RibbonButton>
-                </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar IsLauncherButtonVisible="False"
-                                      Header="Links">
-                    <Syncfusion:RibbonButton SizeForm="Large"
-                                             Margin="3"
-                                             Width="70"
-                                             HorizontalAlignment="Center"
-                                             Label="Hyperlink"
-                                             LargeIcon="/Images/Insert/Hyperlink32.png"
-                                             Command="Syncfusion:SfRichTextBoxAdv.ShowHyperlinkDialogCommand">
-                        <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="Add a Hyperlink(Ctrl+K)"
-                                                  MaxWidth="250">
-                                <StackPanel>
-                                    <TextBlock Text="Create a link in your document for"/>
-                                    <TextBlock Text="quick access to webpage and files."/>
-                                </StackPanel>
-                            </Syncfusion:ScreenTip>
-                        </Syncfusion:RibbonButton.ToolTip>
-                    </Syncfusion:RibbonButton>
-                </Syncfusion:RibbonBar>
-            </Syncfusion:RibbonTab>
+
+<Syncfusion:RibbonTab Caption="{DynamicResource InsertTab}">
+    
+    <!-- Pages -->
+    <Syncfusion:RibbonBar CollapseImage="/Images/Insert/CollapsePages.png"
+                          Header="{DynamicResource Pages}"
+                          IsLauncherButtonVisible="False">
+        <Syncfusion:RibbonButton SizeForm="Large"
+                                 Width="70"
+                                 ToolTipService.ShowOnDisabled="True"
+                                 HorizontalAlignment="Center"
+                                 Label="{DynamicResource PageBreak}"
+                                 Command="Syncfusion:SfRichTextBoxAdv.InsertBreakCommand"
+                                 CommandParameter="PageBreak"
+                                 LargeIcon="/Images/Insert/PageBreak16.png">
+            <Syncfusion:RibbonButton.ToolTip>
+                <Syncfusion:ScreenTip Description="{DynamicResource PageBreakToolTipHeader}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource PageBreakToolTip}"
+                                   MaxWidth="250"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Syncfusion:ScreenTip>
+            </Syncfusion:RibbonButton.ToolTip>
+        </Syncfusion:RibbonButton>
+    </Syncfusion:RibbonBar>
+
+    <!-- Tables -->
+    <Syncfusion:RibbonBar Header="{DynamicResource Tables}"
+                          IsLauncherButtonVisible="False">
+        <Syncfusion:DropDownButton Margin="3"
+                                   Width="50"
+                                   SizeForm="Large"
+                                   HorizontalAlignment="Center"
+                                   LargeIcon="/Images/Insert/Table32.png"
+                                   Label="{DynamicResource Table}">
+            <Syncfusion:DropDownButton.ToolTip>
+                <Syncfusion:ScreenTip Description="{DynamicResource AddTable}"
+                                      MaxWidth="250">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource AddTableTipLine1}"/>
+                        <TextBlock Text="{DynamicResource AddTableTipLine2}"/>
+                    </StackPanel>
+                </Syncfusion:ScreenTip>
+            </Syncfusion:DropDownButton.ToolTip>
+            <Syncfusion:TablePickerUI x:Name="tablePicker"
+                                      CellCount="10 8"
+                                      Margin="3"
+                                      Command="Syncfusion:SfRichTextBoxAdv.InsertTableCommand"/>
+            <Separator/>
+            <Syncfusion:RibbonButton x:Name="insertTableButton"
+                                     Label="{DynamicResource InsertTable}"
+                                     SizeForm="Small"
+                                     SmallIcon="/Images/Insert/Table16.png"
+                                     Margin="3"
+                                     Command="Syncfusion:SfRichTextBoxAdv.ShowInsertTableDialogCommand"/>
+        </Syncfusion:DropDownButton>
+    </Syncfusion:RibbonBar>
+
+    <!-- Illustrations -->
+    <Syncfusion:RibbonBar IsLauncherButtonVisible="False"
+                          Header="{DynamicResource Illustrations}">
+        <Syncfusion:RibbonButton SizeForm="Large"
+                                 Margin="3"
+                                 Width="60"
+                                 HorizontalAlignment="Center"
+                                 Label="{DynamicResource Picture}"
+                                 Command="Syncfusion:SfRichTextBoxAdv.InsertPictureCommand"
+                                 LargeIcon="/Images/Insert/Picture32.png">
+            <Syncfusion:RibbonButton.ToolTip>
+                <Syncfusion:ScreenTip Description="{DynamicResource FromFile}"
+                                      MaxWidth="250">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource PictureTipLine1}"/>
+                        <TextBlock Text="{DynamicResource PictureTipLine2}"/>
+                        <TextBlock Text="{DynamicResource PictureTipLine3}"/>
+                    </StackPanel>
+                </Syncfusion:ScreenTip>
+            </Syncfusion:RibbonButton.ToolTip>
+        </Syncfusion:RibbonButton>
+    </Syncfusion:RibbonBar>
+
+    <!-- Links -->
+    <Syncfusion:RibbonBar IsLauncherButtonVisible="False"
+                          Header="{DynamicResource Links}">
+        <Syncfusion:RibbonButton SizeForm="Large"
+                                 Margin="3"
+                                 Width="70"
+                                 HorizontalAlignment="Center"
+                                 Label="{DynamicResource Hyperlink}"
+                                 LargeIcon="/Images/Insert/Hyperlink32.png"
+                                 Command="Syncfusion:SfRichTextBoxAdv.ShowHyperlinkDialogCommand">
+            <Syncfusion:RibbonButton.ToolTip>
+                <Syncfusion:ScreenTip Description="{DynamicResource HyperlinkHeader}"
+                                      MaxWidth="250">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource HyperlinkTipLine1}"/>
+                        <TextBlock Text="{DynamicResource HyperlinkTipLine2}"/>
+                    </StackPanel>
+                </Syncfusion:ScreenTip>
+            </Syncfusion:RibbonButton.ToolTip>
+        </Syncfusion:RibbonButton>
+    </Syncfusion:RibbonBar>
+
+</Syncfusion:RibbonTab>
+
+
 
             <Syncfusion:RibbonTab Caption="{DynamicResource ReviewTab}">
                 <Syncfusion:RibbonBar Header="{DynamicResource Comments}"
