@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- Tabs -->
+    <sys:String x:Key="HomeTab">ಮನೆ</sys:String>
+    <sys:String x:Key="InsertTab">ಸೆರಿಸಲು</sys:String>
+    <sys:String x:Key="PageLayoutTab">ಪುಟ ವಿನ್ಯಾಸ</sys:String>
+    <sys:String x:Key="ViewTab">ನೋಟ</sys:String>
+
+    <!-- RibbonBars -->
+    <sys:String x:Key="Clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್</sys:String>
+    <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
+    <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
+    <sys:String x:Key="PageBackground">ಹಿನ್ನೆಲೆ</sys:String>
+    <sys:String x:Key="PageSetup">ಪುಟ ಸೆಟಪ್</sys:String>
+    <sys:String x:Key="PageSize">ಪುಟ ಗಾತ್ರ</sys:String>
+
+    <!-- Labels -->
+    <sys:String x:Key="Margins">ಅಂಚುಗಳು</sys:String>
+    <sys:String x:Key="Size">ಗಾತ್ರ</sys:String>
+</ResourceDictionary>

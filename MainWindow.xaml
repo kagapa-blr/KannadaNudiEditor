@@ -1161,51 +1161,74 @@
                     </Syncfusion:RibbonButton>
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
-            <Syncfusion:RibbonTab Caption="Page Layout">
-                <Syncfusion:RibbonBar Header="Page Background" IsLauncherButtonVisible="False">
-                    <Syncfusion:ColorPickerPalette x:Name="pageColorColorPicker" HeaderTemplate="{DynamicResource Custom_HeaderTemplate}" MoreColorOptionVisibility="Visible" SelectedBrushChanged="pageColorColorPicker_ColorChanged"/>
-                </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar Header="Page Setup" IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <TextBox Text="Margins" BorderBrush="Transparent"/>
-                        <ComboBox Name="pageMargins" Text="Margins" HorizontalAlignment="Left" VerticalAlignment="Top" Width="170" Height="50" SelectionChanged="pageMargins_SelectionChanged">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Key}" FontWeight="Bold"/>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="2" Text="{Binding top}"/>
-                                            <TextBlock Margin="2" Text="{Binding bottom}"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="2" Text="{Binding left}"/>
-                                            <TextBlock Margin="2" Text="{Binding right}"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar Header="Page Size" IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <TextBox Text="Size" BorderBrush="Transparent"/>
-                        <ComboBox Name="pageSize" Text="Size" HorizontalAlignment="Left" VerticalAlignment="Top" Width="170" Height="50" SelectionChanged="pageSize_SelectionChanged">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Key}" FontWeight="Bold"/>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="2" Text="{Binding height}"/>
-                                            <TextBlock Margin="2" Text="{Binding width}"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </Syncfusion:RibbonBar>
-            </Syncfusion:RibbonTab>
+
+<Syncfusion:RibbonTab Caption="{DynamicResource PageLayoutTab}">
+    <!-- Page Background -->
+    <Syncfusion:RibbonBar Header="{DynamicResource PageBackground}" IsLauncherButtonVisible="False">
+        <Syncfusion:ColorPickerPalette x:Name="pageColorColorPicker"
+                                       HeaderTemplate="{DynamicResource Custom_HeaderTemplate}"
+                                       MoreColorOptionVisibility="Visible"
+                                       SelectedBrushChanged="pageColorColorPicker_ColorChanged"/>
+    </Syncfusion:RibbonBar>
+
+    <!-- Page Setup -->
+    <Syncfusion:RibbonBar Header="{DynamicResource PageSetup}" IsLauncherButtonVisible="False">
+        <StackPanel Margin="3">
+            <TextBox Text="{DynamicResource Margins}" BorderBrush="Transparent"/>
+            <ComboBox Name="pageMargins"
+                      Text="{DynamicResource Margins}"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Width="170"
+                      Height="50"
+                      SelectionChanged="pageMargins_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Key}" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2" Text="{Binding top}"/>
+                                <TextBlock Margin="2" Text="{Binding bottom}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2" Text="{Binding left}"/>
+                                <TextBlock Margin="2" Text="{Binding right}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+    </Syncfusion:RibbonBar>
+
+    <!-- Page Size -->
+    <Syncfusion:RibbonBar Header="{DynamicResource PageSize}" IsLauncherButtonVisible="False">
+        <StackPanel Margin="3">
+            <TextBox Text="{DynamicResource Size}" BorderBrush="Transparent"/>
+            <ComboBox Name="pageSize"
+                      Text="{DynamicResource Size}"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Width="170"
+                      Height="50"
+                      SelectionChanged="pageSize_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Key}" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2" Text="{Binding height}"/>
+                                <TextBlock Margin="2" Text="{Binding width}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+    </Syncfusion:RibbonBar>
+</Syncfusion:RibbonTab>
+
+       
         </Syncfusion:Ribbon>
         
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"

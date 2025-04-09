@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:Document_Editor_.NET_8"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Kannada by default -->
+                <ResourceDictionary Source="Resources/Strings.kn-IN.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
