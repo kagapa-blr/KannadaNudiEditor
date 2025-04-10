@@ -166,6 +166,7 @@
         </DataTemplate>
     </Syncfusion:RibbonWindow.Resources>
 
+
     <Syncfusion:RibbonWindow.StatusBar>
         <Syncfusion:RibbonStatusBar Height="25">
             <Grid>
@@ -174,35 +175,41 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
+                <!-- Page Info -->
                 <StackPanel HorizontalAlignment="Left"
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
                     <TextBlock Margin="10,0,0,5"
                                FontSize="12"
-                               ToolTip="Page number in document.">
-                     <this:RunAdv RunText="Page :"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                               ToolTip="{DynamicResource PageNumberTooltip}">
+                    <this:RunAdv RunText="{DynamicResource PageLabel}"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                      <this:RunAdv x:Name="currentPageNumberRun"
                                   Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
-                     <this:RunAdv RunText="of"
+                     <this:RunAdv RunText="/"
                                   Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
                      <this:RunAdv x:Name="pagecountRun"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
                 </StackPanel>
+
+                <!-- Word Count -->
                 <StackPanel HorizontalAlignment="Left"
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             Grid.Column="1">
                     <TextBlock Margin="10,0,0,5"
                                FontSize="12"
-                               ToolTip="No of Words in document.">
+                               ToolTip="{DynamicResource WordCountTooltip}">
                          <this:RunAdv x:Name="totalWords"
-                                      Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
-                     <this:RunAdv RunText=" Words"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                                      Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
+                    <this:RunAdv RunText="{DynamicResource WordsLabel}"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
                 </StackPanel>
+
+                <!-- Layout & Zoom -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
@@ -213,36 +220,37 @@
                                              Command="Syncfusion:SfRichTextBoxAdv.LayoutTypeCommand"
                                              CommandTarget="{Binding ElementName=richTextBoxAdv}"
                                              CommandParameter="Pages"
-                                             ToolTip="Print Layout"/>
+                                             ToolTip="{DynamicResource PrintLayoutTooltip}"/>
                     <Syncfusion:RibbonButton Style="{StaticResource StatusBarRibbonButtonStyle}"
                                              SizeForm="ExtraSmall"
                                              SmallIcon="/Assets/WebLayout.png"
                                              Command="Syncfusion:SfRichTextBoxAdv.LayoutTypeCommand"
                                              CommandTarget="{Binding ElementName=richTextBoxAdv}"
                                              CommandParameter="Continuous"
-                                             ToolTip="Web Layout"/>
+                                             ToolTip="{DynamicResource WebLayoutTooltip}"/>
                     <TextBlock FontSize="12"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0">
                      <this:RunAdv RunText="{Binding ZoomFactor, Mode=OneWay, Converter={StaticResource PercentageStringConverter}}"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                      <this:RunAdv RunText="%"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
                     <Slider x:Name="rangeslider"
                             Focusable="False"
                             Value="{Binding ZoomFactor, Mode=TwoWay, Converter={StaticResource PercentageDoubleConverter}}"
-                            Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"
+                            Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"
                             TickFrequency="0.1"
                             Width="150"
                             TickPlacement="None"
                             Minimum="0.1"
                             Maximum="5"
-                            ToolTip="Zoom"/>
+                            ToolTip="{DynamicResource ZoomTooltip}"/>
                 </StackPanel>
             </Grid>
         </Syncfusion:RibbonStatusBar>
     </Syncfusion:RibbonWindow.StatusBar>
+
 
     <Grid x:Name="Root">
         <Grid.RowDefinitions>

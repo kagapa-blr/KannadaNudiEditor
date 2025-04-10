@@ -92,6 +92,15 @@
     <sys:String x:Key="FontSizeShortcut">ಅಕ್ಷರ ಗಾತ್ರ (Ctrl+Shift+P)</sys:String>
     <sys:String x:Key="FontSizeTipLine1">ನಿಮ್ಮ ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಬದಲಾಯಿಸಿ.</sys:String>
 
+<!-- status bar -->
+
+<sys:String x:Key="PageNumberTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನ ಪುಟ ಸಂಖ್ಯೆ.</sys:String>
+<sys:String x:Key="PageLabel">ಪುಟ :</sys:String>
+<sys:String x:Key="WordCountTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪದಗಳ ಸಂಖ್ಯೆ.</sys:String>
+<sys:String x:Key="WordsLabel"> ಪದಗಳು</sys:String>
+<sys:String x:Key="PrintLayoutTooltip">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
+<sys:String x:Key="WebLayoutTooltip">ವೆಬ್ ವಿನ್ಯಾಸ</sys:String>
+<sys:String x:Key="ZoomTooltip">ಜೂಮ್</sys:String>
 
 
 </ResourceDictionary>

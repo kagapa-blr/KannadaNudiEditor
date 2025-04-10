@@ -91,4 +91,15 @@
     <sys:String x:Key="FontSizeShortcut">Font Size (Ctrl+Shift+P)</sys:String>
     <sys:String x:Key="FontSizeTipLine1">Change the size of your text.</sys:String>
 
+<!-- Status bar -->
+<sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
+<sys:String x:Key="PageLabel">Page :</sys:String>
+<sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
+<sys:String x:Key="WordsLabel"> Words</sys:String>
+<sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
+<sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
+<sys:String x:Key="ZoomTooltip">Zoom</sys:String>
+
+
+
 </ResourceDictionary>
