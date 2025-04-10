@@ -1,12 +1,10 @@
 ﻿<Application x:Class="KannadaNudiEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:KannadaNudiEditor"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:KannadaNudiEditor">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Kannada by default -->
                 <ResourceDictionary Source="Resources/Strings.kn-IN.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
