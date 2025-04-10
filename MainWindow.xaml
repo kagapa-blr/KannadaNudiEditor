@@ -279,68 +279,88 @@
                                              ToolTip="Save (Ctrl + S)"/>
                 </Syncfusion:QuickAccessToolBar>
             </Syncfusion:Ribbon.QuickAccessToolBar>
+
             <Syncfusion:Ribbon.ApplicationMenu>
                 <Syncfusion:ApplicationMenu ApplicationButtonImage="/Images/Syncfusion.png">
-                    <Syncfusion:SimpleMenuButton Label="New"
+
+                    <!-- New -->
+                    <Syncfusion:SimpleMenuButton Label="{DynamicResource BackstageNew}"
                                                  IconSize="25,33"
                                                  Command="Syncfusion:SfRichTextBoxAdv.NewDocumentCommand"
                                                  Icon="/Images/Backstage/New32.png"/>
-                    <Syncfusion:SimpleMenuButton Label="Open"
+
+                    <!-- Open -->
+                    <Syncfusion:SimpleMenuButton Label="{DynamicResource BackstageOpen}"
                                                  IconSize="25,33"
                                                  Command="Syncfusion:SfRichTextBoxAdv.OpenDocumentCommand"
                                                  Icon="/Images/Backstage/Open32.png"/>
-                    <Syncfusion:SimpleMenuButton Label="Save"
+
+                    <!-- Save -->
+                    <Syncfusion:SimpleMenuButton Label="{DynamicResource BackstageSave}"
                                                  IconSize="25,33"
                                                  Command="Syncfusion:SfRichTextBoxAdv.SaveDocumentCommand"
                                                  Icon="/Images/Backstage/Save32.png"/>
-                    <Syncfusion:SplitMenuButton Label="SaveAs"
+
+                    <!-- Save As -->
+                    <Syncfusion:SplitMenuButton Label="{DynamicResource BackstageSaveAs}"
                                                 IconSize="25,32"
                                                 Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                 Icon="/Images/Backstage/SaveAs32.png">
                         <Syncfusion:ApplicationMenuGroup>
                             <Syncfusion:SimpleMenuButton IconSize="25,25"
-                                                         Label="WordDocx"
-                                                         Description="Save the file as Word document"
+                                                         Label="{DynamicResource BackstageSaveAsWordDocx}"
+                                                         Description="{DynamicResource BackstageSaveAsWordDocxDescription}"
                                                          Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                          CommandParameter=".docx"
                                                          Icon="Images/Backstage/Word2010.png"/>
+
                             <Syncfusion:SimpleMenuButton IconSize="25,25"
-                                                         Label="WordDoc"
-                                                         Description="Save a copy as Word 97-2003"
+                                                         Label="{DynamicResource BackstageSaveAsWordDoc}"
+                                                         Description="{DynamicResource BackstageSaveAsWordDocDescription}"
                                                          Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                          CommandParameter=".doc"
                                                          Icon="/Images/Backstage/Word2007.png"/>
+
                             <Syncfusion:SimpleMenuButton IconSize="25,25"
-                                                         Label="HtmlDocument"
-                                                         Description="Save the file as Html document"
+                                                         Label="{DynamicResource BackstageSaveAsHtml}"
+                                                         Description="{DynamicResource BackstageSaveAsHtmlDescription}"
                                                          Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                          CommandParameter=".html"
                                                          Icon="/Images/Backstage/HtmlIcon.png"/>
+
                             <Syncfusion:SimpleMenuButton IconSize="25,25"
-                                                         Label="XamlDocument"
-                                                         Description="Save the file as Xaml document"
+                                                         Label="{DynamicResource BackstageSaveAsXaml}"
+                                                         Description="{DynamicResource BackstageSaveAsXamlDescription}"
                                                          Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                          CommandParameter=".xaml"
                                                          Icon="/Images/Backstage/XamlIcon.png"/>
+
                             <Syncfusion:SimpleMenuButton IconSize="25,25"
-                                                         Label="TextDocument"
-                                                         Description="Save the file as Text document"
+                                                         Label="{DynamicResource BackstageSaveAsText}"
+                                                         Description="{DynamicResource BackstageSaveAsTextDescription}"
                                                          Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"
                                                          CommandParameter=".txt"
                                                          Icon="/Images/Backstage/TextDocument32.png"/>
                         </Syncfusion:ApplicationMenuGroup>
                     </Syncfusion:SplitMenuButton>
-                    <Syncfusion:SimpleMenuButton Label="Print"
+
+                    <!-- Print -->
+                    <Syncfusion:SimpleMenuButton Label="{DynamicResource BackstagePrint}"
                                                  IconSize="25,33"
                                                  Command="Syncfusion:SfRichTextBoxAdv.PrintDocumentCommand"
                                                  Icon="Images/Backstage/Print32.png"/>
+
+                    <!-- Spacer -->
                     <Syncfusion:ApplicationMenu.MenuItems>
                         <TextBlock Text=""
-                                   Margin="5"
-                                   Width="210"/>
+                                Margin="5"
+                                Width="210"/>
                     </Syncfusion:ApplicationMenu.MenuItems>
+
                 </Syncfusion:ApplicationMenu>
             </Syncfusion:Ribbon.ApplicationMenu>
+
+
             <Syncfusion:Ribbon.BackStage>
                 <Syncfusion:Backstage>
                     <Syncfusion:BackstageTabItem Header="Info">

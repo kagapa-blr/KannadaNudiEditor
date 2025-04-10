@@ -2,73 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- Tabs -->
+    <!-- =========================== -->
+    <!-- Tabs                        -->
+    <!-- =========================== -->
     <sys:String x:Key="HomeTab">Home</sys:String>
     <sys:String x:Key="InsertTab">Insert</sys:String>
     <sys:String x:Key="PageLayoutTab">Page Layout</sys:String>
     <sys:String x:Key="ViewTab">View</sys:String>
     <sys:String x:Key="ReviewTab">Review</sys:String>
 
-    <!-- Ribbon Bars -->
+    <!-- =========================== -->
+    <!-- Home Tab: Clipboard Group   -->
+    <!-- =========================== -->
     <sys:String x:Key="Clipboard">Clipboard</sys:String>
-    <sys:String x:Key="Font">Font</sys:String>
-    <sys:String x:Key="Paragraph">Paragraph</sys:String>
-    <sys:String x:Key="PageBackground">Page Background</sys:String>
-    <sys:String x:Key="PageSetup">Page Setup</sys:String>
-    <sys:String x:Key="PageSize">Page Size</sys:String>
-    <sys:String x:Key="Views">Views</sys:String>
-    <sys:String x:Key="Zoom">Zoom</sys:String>
-    <sys:String x:Key="Comments">Comments</sys:String>
 
-    <!-- Ribbon Labels -->
-    <sys:String x:Key="Margins">Margins</sys:String>
-    <sys:String x:Key="Size">Size</sys:String>
-    <sys:String x:Key="PrintLayout">Print Layout</sys:String>
-    <sys:String x:Key="WebLayout">Web Layout</sys:String>
-    <sys:String x:Key="ZoomIn">Zoom In</sys:String>
-    <sys:String x:Key="ZoomOut">Zoom Out</sys:String>
-    <sys:String x:Key="ResetZoom">100%</sys:String>
-    <sys:String x:Key="OnePage">One Page</sys:String>
-    <sys:String x:Key="MultiplePages">Multiple Pages</sys:String>
-    <sys:String x:Key="PageWidth">Page Width</sys:String>
-
-    <!-- Review Tab Labels -->
-    <sys:String x:Key="NewComment">New Comment</sys:String>
-    <sys:String x:Key="DeleteComment">Delete</sys:String>
-    <sys:String x:Key="PreviousComment">Previous</sys:String>
-    <sys:String x:Key="NextComment">Next</sys:String>
-    <sys:String x:Key="ShowComments">Show Comments</sys:String>
-
-    <!-- Insert Tab - Pages -->
-    <sys:String x:Key="Pages">Pages</sys:String>
-    <sys:String x:Key="PageBreak">Page Break</sys:String>
-    <sys:String x:Key="PageBreakToolTipHeader">Insert a Page Break</sys:String>
-    <sys:String x:Key="PageBreakToolTip">Start a new page at the cursor position.</sys:String>
-
-    <!-- Insert Tab - Tables -->
-    <sys:String x:Key="Tables">Tables</sys:String>
-    <sys:String x:Key="Table">Table</sys:String>
-    <sys:String x:Key="AddTable">Add a Table</sys:String>
-    <sys:String x:Key="AddTableTipLine1">A table is a great way to organize</sys:String>
-    <sys:String x:Key="AddTableTipLine2">information within your document.</sys:String>
-    <sys:String x:Key="InsertTable">Insert Table</sys:String>
-
-    <!-- Insert Tab - Illustrations -->
-    <sys:String x:Key="Illustrations">Illustrations</sys:String>
-    <sys:String x:Key="Picture">Picture</sys:String>
-    <sys:String x:Key="FromFile">From File</sys:String>
-    <sys:String x:Key="PictureTipLine1">Insert pictures from your computer</sys:String>
-    <sys:String x:Key="PictureTipLine2">or from other computers that</sys:String>
-    <sys:String x:Key="PictureTipLine3">you're connected to.</sys:String>
-
-    <!-- Insert Tab - Links -->
-    <sys:String x:Key="Links">Links</sys:String>
-    <sys:String x:Key="Hyperlink">Hyperlink</sys:String>
-    <sys:String x:Key="HyperlinkHeader">Add a Hyperlink (Ctrl+K)</sys:String>
-    <sys:String x:Key="HyperlinkTipLine1">Create a link in your document for</sys:String>
-    <sys:String x:Key="HyperlinkTipLine2">quick access to webpage and files.</sys:String>
-
-    <!-- Clipboard Buttons -->
     <sys:String x:Key="Paste">Paste</sys:String>
     <sys:String x:Key="PasteShortcut">Paste (Ctrl+V)</sys:String>
     <sys:String x:Key="PasteTipLine1">Add content on the Clipboard</sys:String>
@@ -85,21 +32,121 @@
     <sys:String x:Key="CopyTipLine1">Put a copy of the selection on the clipboard</sys:String>
     <sys:String x:Key="CopyTipLine2">so you can paste it somewhere else.</sys:String>
 
-    <!-- NEW: Font ComboBox Tooltip Support -->
+    <!-- =========================== -->
+    <!-- Home Tab: Font Group        -->
+    <!-- =========================== -->
+    <sys:String x:Key="Font">Font</sys:String>
     <sys:String x:Key="FontShortcut">Font (Ctrl+Shift+F)</sys:String>
     <sys:String x:Key="FontTipLine1">Pick a new font for your text.</sys:String>
     <sys:String x:Key="FontSizeShortcut">Font Size (Ctrl+Shift+P)</sys:String>
     <sys:String x:Key="FontSizeTipLine1">Change the size of your text.</sys:String>
 
-<!-- Status bar -->
-<sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
-<sys:String x:Key="PageLabel">Page :</sys:String>
-<sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
-<sys:String x:Key="WordsLabel"> Words</sys:String>
-<sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
-<sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
-<sys:String x:Key="ZoomTooltip">Zoom</sys:String>
+    <!-- =========================== -->
+    <!-- Home Tab: Paragraph Group   -->
+    <!-- =========================== -->
+    <sys:String x:Key="Paragraph">Paragraph</sys:String>
 
+    <!-- =========================== -->
+    <!-- Insert Tab: Pages Group     -->
+    <!-- =========================== -->
+    <sys:String x:Key="Pages">Pages</sys:String>
+    <sys:String x:Key="PageBreak">Page Break</sys:String>
+    <sys:String x:Key="PageBreakToolTipHeader">Insert a Page Break</sys:String>
+    <sys:String x:Key="PageBreakToolTip">Start a new page at the cursor position.</sys:String>
 
+    <!-- =========================== -->
+    <!-- Insert Tab: Tables Group    -->
+    <!-- =========================== -->
+    <sys:String x:Key="Tables">Tables</sys:String>
+    <sys:String x:Key="Table">Table</sys:String>
+    <sys:String x:Key="AddTable">Add a Table</sys:String>
+    <sys:String x:Key="AddTableTipLine1">A table is a great way to organize</sys:String>
+    <sys:String x:Key="AddTableTipLine2">information within your document.</sys:String>
+    <sys:String x:Key="InsertTable">Insert Table</sys:String>
+
+    <!-- =========================== -->
+    <!-- Insert Tab: Illustrations   -->
+    <!-- =========================== -->
+    <sys:String x:Key="Illustrations">Illustrations</sys:String>
+    <sys:String x:Key="Picture">Picture</sys:String>
+    <sys:String x:Key="FromFile">From File</sys:String>
+    <sys:String x:Key="PictureTipLine1">Insert pictures from your computer</sys:String>
+    <sys:String x:Key="PictureTipLine2">or from other computers that</sys:String>
+    <sys:String x:Key="PictureTipLine3">you're connected to.</sys:String>
+
+    <!-- =========================== -->
+    <!-- Insert Tab: Links           -->
+    <!-- =========================== -->
+    <sys:String x:Key="Links">Links</sys:String>
+    <sys:String x:Key="Hyperlink">Hyperlink</sys:String>
+    <sys:String x:Key="HyperlinkHeader">Add a Hyperlink (Ctrl+K)</sys:String>
+    <sys:String x:Key="HyperlinkTipLine1">Create a link in your document for</sys:String>
+    <sys:String x:Key="HyperlinkTipLine2">quick access to webpage and files.</sys:String>
+
+    <!-- =========================== -->
+    <!-- Page Layout Tab             -->
+    <!-- =========================== -->
+    <sys:String x:Key="PageBackground">Page Background</sys:String>
+    <sys:String x:Key="PageSetup">Page Setup</sys:String>
+    <sys:String x:Key="PageSize">Page Size</sys:String>
+    <sys:String x:Key="Margins">Margins</sys:String>
+    <sys:String x:Key="Size">Size</sys:String>
+
+    <!-- =========================== -->
+    <!-- View Tab                    -->
+    <!-- =========================== -->
+    <sys:String x:Key="Views">Views</sys:String>
+    <sys:String x:Key="Zoom">Zoom</sys:String>
+    <sys:String x:Key="ZoomIn">Zoom In</sys:String>
+    <sys:String x:Key="ZoomOut">Zoom Out</sys:String>
+    <sys:String x:Key="ResetZoom">100%</sys:String>
+    <sys:String x:Key="OnePage">One Page</sys:String>
+    <sys:String x:Key="MultiplePages">Multiple Pages</sys:String>
+    <sys:String x:Key="PageWidth">Page Width</sys:String>
+
+    <!-- =========================== -->
+    <!-- Review Tab                  -->
+    <!-- =========================== -->
+    <sys:String x:Key="Comments">Comments</sys:String>
+    <sys:String x:Key="NewComment">New Comment</sys:String>
+    <sys:String x:Key="DeleteComment">Delete</sys:String>
+    <sys:String x:Key="PreviousComment">Previous</sys:String>
+    <sys:String x:Key="NextComment">Next</sys:String>
+    <sys:String x:Key="ShowComments">Show Comments</sys:String>
+
+    <!-- =========================== -->
+    <!-- Status Bar                  -->
+    <!-- =========================== -->
+    <sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
+    <sys:String x:Key="PageLabel">Page :</sys:String>
+    <sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
+    <sys:String x:Key="WordsLabel"> Words</sys:String>
+    <sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
+    <sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
+    <sys:String x:Key="ZoomTooltip">Zoom</sys:String>
+
+    <!-- =========================== -->
+    <!-- Backstage (File Menu)       -->
+    <!-- =========================== -->
+    <sys:String x:Key="BackstageNew">New</sys:String>
+    <sys:String x:Key="BackstageOpen">Open</sys:String>
+    <sys:String x:Key="BackstageSave">Save</sys:String>
+    <sys:String x:Key="BackstageSaveAs">Save As</sys:String>
+    <sys:String x:Key="BackstagePrint">Print</sys:String>
+
+    <sys:String x:Key="BackstageSaveAsWordDocx">Word Document</sys:String>
+    <sys:String x:Key="BackstageSaveAsWordDocxDescription">Save the file as Word document</sys:String>
+
+    <sys:String x:Key="BackstageSaveAsWordDoc">Word 97-2003</sys:String>
+    <sys:String x:Key="BackstageSaveAsWordDocDescription">Save a copy as Word 97-2003</sys:String>
+
+    <sys:String x:Key="BackstageSaveAsHtml">HTML Document</sys:String>
+    <sys:String x:Key="BackstageSaveAsHtmlDescription">Save the file as HTML document</sys:String>
+
+    <sys:String x:Key="BackstageSaveAsXaml">XAML Document</sys:String>
+    <sys:String x:Key="BackstageSaveAsXamlDescription">Save the file as XAML document</sys:String>
+
+    <sys:String x:Key="BackstageSaveAsText">Text Document</sys:String>
+    <sys:String x:Key="BackstageSaveAsTextDescription">Save the file as Text document</sys:String>
 
 </ResourceDictionary>
