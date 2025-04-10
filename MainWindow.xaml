@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:this="clr-namespace:Document_Editor_.NET_8"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     SnapsToDevicePixels="True"
     IsGlassActive="False"
     x:Name="ribbonWindow"
@@ -14,6 +15,7 @@
     Height="635"
     WindowState="Normal"
     WindowStartupLocation="CenterScreen">
+
     <Syncfusion:RibbonWindow.Resources>
         <Syncfusion:FontFamilyStringConverter x:Key="FontFamilyStringConverter"/>
         <Syncfusion:LeftAlignmentToggleConverter x:Key="LeftAlignmentToggleConverter"/>
@@ -1245,7 +1247,10 @@
                 </Syncfusion:RibbonBar>
 
 
-                <Syncfusion:RibbonBar Header="Paragraph"
+
+
+
+                <Syncfusion:RibbonBar Header="{DynamicResource Paragraph}"
                                       IsLargeButtonPanel="False"
                                       Width="192"
                                       LauncherCommand="Syncfusion:SfRichTextBoxAdv.ShowParagraphDialogCommand">
@@ -1844,6 +1849,10 @@
                         </Syncfusion:DropDownButton>
                     </Syncfusion:ButtonPanel>
                 </Syncfusion:RibbonBar>
+               
+               
+               
+               
                 <Syncfusion:RibbonBar Header="Styles"
                                       LauncherCommand="Syncfusion:SfRichTextBoxAdv.ShowStylesDialogCommand">
                     <Syncfusion:RibbonGallery HorizontalAlignment="Stretch"
@@ -2386,13 +2395,18 @@
                                          DocumentTitle="Untitled document"
                                          SelectionChanged="RichTextBoxAdv_SelectionChanged"
                                          LayoutType="Pages"
+                                         Language="kn-IN"
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.Wpf">
-            <RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
-                <RichTextBoxAdv:SpellChecker IsEnabled="True"
-                                             IgnoreURIs="true"
-                                             IgnoreAlphaNumericWords="true"
-                                             IgnoreUppercaseWords="true"/>
-            </RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
+           <Syncfusion:SfRichTextBoxAdv.SpellChecker>
+                <Syncfusion:SpellChecker IsEnabled="True" IgnoreUppercaseWords="False" UseFrameworkSpellCheck="False">
+                    <Syncfusion:SpellChecker.Dictionaries>
+                        <System:String>Assets\kn_IN.dic</System:String>
+                    </Syncfusion:SpellChecker.Dictionaries>
+                    <Syncfusion:SpellChecker.CustomDictionaries>
+                        <System:String>Assets\Custom_MyDictionary_kn_IN.dic</System:String>
+                    </Syncfusion:SpellChecker.CustomDictionaries>
+                </Syncfusion:SpellChecker>
+            </Syncfusion:SfRichTextBoxAdv.SpellChecker>
         </RichTextBoxAdv:SfRichTextBoxAdv>
     </Grid>
 </Syncfusion:RibbonWindow>

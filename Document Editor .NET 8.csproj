@@ -19,6 +19,19 @@
     </EmbeddedResource>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="Assets\Custom_MyDictionary_kn_IN.dic">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\kn_IN.dic">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
+
+
   <ItemGroup>
     <Resource Include="Assets\Default.png" />
     <Resource Include="Assets\PrintLayout.png" />
