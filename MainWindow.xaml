@@ -283,7 +283,7 @@
             </Syncfusion:Ribbon.QuickAccessToolBar>
 
             <Syncfusion:Ribbon.ApplicationMenu>
-                <Syncfusion:ApplicationMenu ApplicationButtonImage="/Images/Syncfusion.png">
+                <Syncfusion:ApplicationMenu ApplicationButtonImage="/Images/nudi.png">
 
                     <!-- New -->
                     <Syncfusion:SimpleMenuButton Label="{DynamicResource BackstageNew}"

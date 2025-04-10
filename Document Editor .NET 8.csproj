@@ -36,7 +36,8 @@
     <Resource Include="Assets\Default.png" />
     <Resource Include="Assets\PrintLayout.png" />
     <Resource Include="Assets\RTE.png" />
-    <Resource Include="Assets\Syncfusion.png" />
+    <!-- <Resource Include="Assets\Syncfusion.png" /> -->
+    <Resource Include="Assets\nudi.png" />
     <Resource Include="Assets\SyncLogo.png" />
     <Resource Include="Assets\WebLayout.png" />
   </ItemGroup>
@@ -121,7 +122,8 @@
     <Resource Include="Images\Review\PreviousComment.png" />
     <Resource Include="Images\Review\ShowComments.png" />
     <Resource Include="Images\RTE.png" />
-    <Resource Include="Images\Syncfusion.png" />
+    <!-- <Resource Include="Images\Syncfusion.png" /> -->
+    <Resource Include="Images\nudi.png" />
     <Resource Include="Images\View\FlowLayout.png" />
     <Resource Include="Images\View\MultiplePages.png" />
     <Resource Include="Images\View\OnePage.png" />
