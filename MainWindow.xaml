@@ -7,14 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:this="clr-namespace:KannadaNudiEditor"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d"
     SnapsToDevicePixels="True"
     IsGlassActive="False"
+    Icon="Images/nudi.png"
     x:Name="ribbonWindow"
     Title="{Binding DocumentTitle}"
-    WindowStyle="None"
     WindowState="Maximized"
-    ResizeMode="NoResize"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen">
+
 
     <Syncfusion:RibbonWindow.Resources>
         <Syncfusion:FontFamilyStringConverter x:Key="FontFamilyStringConverter"/>
