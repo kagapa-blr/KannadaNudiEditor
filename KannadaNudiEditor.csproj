@@ -22,10 +22,10 @@
 
   <ItemGroup>
     <None Update="Assets\Custom_MyDictionary_kn_IN.dic">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\kn_IN.dic">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
