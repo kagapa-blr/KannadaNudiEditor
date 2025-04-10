@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 #endif
 
-namespace Document_Editor_.NET_8
+namespace KannadaNudiEditor
 {
     /// <summary>
     /// Specifies the Percentage value to Double value converter

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows;
 
-namespace Document_Editor_.NET_8
+namespace KannadaNudiEditor
 {
     public class RunAdv : Run
     {

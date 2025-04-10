@@ -6,7 +6,7 @@ using System.IO;
 using System.Windows;
 using Syncfusion.Licensing;
 
-namespace Document_Editor_.NET_8
+namespace KannadaNudiEditor
 {
     /// <summary>
     /// Interaction logic for App.xaml

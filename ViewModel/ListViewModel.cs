@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 #endif
 using System.Windows.Media;
 
-namespace Document_Editor_.NET_8
+namespace KannadaNudiEditor
 {
     /// <summary>
     /// The List viewmodel class.

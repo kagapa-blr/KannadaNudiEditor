@@ -13,7 +13,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Document_Editor_.NET_8
+namespace KannadaNudiEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
