@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:this="clr-namespace:KannadaNudiEditor"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    syncfusionskin:SfSkinManager.VisualStyle="Office2013White"
     mc:Ignorable="d"
     SnapsToDevicePixels="True"
     IsGlassActive="False"
@@ -261,7 +263,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Syncfusion:Ribbon x:Name="ribbon"
+
+        
+        <Syncfusion:Ribbon x:Name="ribbon" 
                            SnapsToDevicePixels="True"
                            DataContext="{Binding ElementName=richTextBoxAdv}">
             <Syncfusion:Ribbon.QuickAccessToolBar>

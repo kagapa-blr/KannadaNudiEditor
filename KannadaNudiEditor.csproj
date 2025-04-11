@@ -135,5 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.1.35" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.1.37" />
   </ItemGroup>
 </Project>
