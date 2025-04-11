@@ -253,6 +253,24 @@
                             Maximum="5"
                             ToolTip="{DynamicResource ZoomTooltip}"/>
                 </StackPanel>
+
+
+                <!-- Language Switch -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Grid.Column="3">
+                    <ToggleButton x:Name="LanguageToggleButton"
+                                  Width="80"
+                                  Height="20"
+                                  Margin="5,0,10,0"
+                                  Content="EN | ಕ"
+                                  ToolTip="{DynamicResource LanguageSwitchTooltip}"
+                                  Checked="LanguageToggleButton_Checked"
+                                  Unchecked="LanguageToggleButton_Unchecked"/>
+                </StackPanel>
+
+
             </Grid>
         </Syncfusion:RibbonStatusBar>
     </Syncfusion:RibbonWindow.StatusBar>
@@ -264,8 +282,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        
-        <Syncfusion:Ribbon x:Name="ribbon" 
+
+        <Syncfusion:Ribbon x:Name="ribbon"
                            SnapsToDevicePixels="True"
                            DataContext="{Binding ElementName=richTextBoxAdv}">
             <Syncfusion:Ribbon.QuickAccessToolBar>
@@ -1964,7 +1982,7 @@
                             <Syncfusion:ScreenTip Description="{DynamicResource FindTooltipTitle}"
                                                   MaxWidth="250">
                                 <TextBlock Text="{DynamicResource FindTooltipLine1}"
-                                        TextWrapping="Wrap"/>
+                                           TextWrapping="Wrap"/>
                             </Syncfusion:ScreenTip>
                         </Syncfusion:RibbonButton.ToolTip>
                     </Syncfusion:RibbonButton>
@@ -2419,8 +2437,8 @@
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.Wpf">
             <Syncfusion:SfRichTextBoxAdv.SpellChecker>
                 <Syncfusion:SpellChecker IsEnabled="True"
-                        IgnoreUppercaseWords="False"
-                        UseFrameworkSpellCheck="False">
+                                         IgnoreUppercaseWords="False"
+                                         UseFrameworkSpellCheck="False">
                     <Syncfusion:SpellChecker.Dictionaries>
                         <System:String>Assets\kn_IN.dic</System:String>
                     </Syncfusion:SpellChecker.Dictionaries>

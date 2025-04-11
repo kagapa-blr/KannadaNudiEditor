@@ -12,7 +12,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using KannadaNudiEditor.Helpers;
 namespace KannadaNudiEditor
 {
     /// <summary>
@@ -1244,6 +1244,24 @@ namespace KannadaNudiEditor
             }
         }
         #endregion
+
+
+
+        private void LanguageToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            LanguageManager.SwitchLanguage("en-US");
+        }
+
+        private void LanguageToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LanguageManager.SwitchLanguage("kn-IN");
+        }
+
+
+
+
+
+
     }
 
     /// <summary>
