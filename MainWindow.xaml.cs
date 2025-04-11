@@ -245,6 +245,9 @@ namespace KannadaNudiEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
+
+
         private void Ribbon_Loaded(object sender, RoutedEventArgs e)
         {
             CommandBindings.Add(new CommandBinding(SfRichTextBoxAdv.SaveDocumentCommand, OnSaveExecuted));
@@ -254,18 +257,36 @@ namespace KannadaNudiEditor
             CommandBindings.Add(new CommandBinding(SfRichTextBoxAdv.NewDocumentCommand, OnNewExecuted));
             CommandBindings.Add(new CommandBinding(SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand, OnShowEncryptDocumentExecuted));
             WireUpEvents();
+
+
             if (fontFamilyComboBox != null)
                 fontFamilyComboBox.ItemsSource = GetFontFamilySource();
+            fontFamilyComboBox.SelectedValue = "NudiParijataha"; // set default selected value
+
             if (fontSizeComboBox != null)
                 fontSizeComboBox.ItemsSource = new double[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 26, 28, 36, 48, 72, 96 };
+
             if (richTextBoxAdv != null)
+            {
+                // Set default font at the document level
+                richTextBoxAdv.Document.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijataha");
+
+                // Optionally, apply it to current selection too
+                richTextBoxAdv.Selection.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijataha");
+
                 richTextBoxAdv.Focus();
+            }
+
             if (ribbonGallery != null && ribbonGallery.Items != null)
             {
                 ribbonGallery.Items.Clear();
                 AddRibbonGalleryItems();
             }
         }
+
+
+
+
         /// <summary>
         /// On save executed.
         /// </summary>

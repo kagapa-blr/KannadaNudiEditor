@@ -412,7 +412,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Information"
-                                           FontFamily="Segoe UI"
+                                           FontFamily="NudiParijatha"
                                            FontSize="20"
                                            Margin="10"/>
                                 <Rectangle Grid.Row="1"
@@ -529,7 +529,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="AvailableTemplates"
-                                           FontFamily="Segoe UI"
+                                           FontFamily="NudiParijatha"
                                            FontSize="20"
                                            Margin="10"/>
                                 <Rectangle Grid.Row="1"
@@ -644,7 +644,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="UserInterfaceHelp"
-                                           FontFamily="Segoe UI"
+                                           FontFamily="NudiParijatha"
                                            FontSize="20"
                                            Margin="10"/>
                                 <Rectangle Grid.Row="1"
