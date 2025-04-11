@@ -82,15 +82,6 @@
     <sys:String x:Key="ReplaceTooltipLine2">and replace it with something else.</sys:String>
 
 
-
-
-
-
-
-
-
-
-
     <!-- =========================== -->
     <!-- Insert Tab: Pages Group     -->
     <!-- =========================== -->
@@ -166,6 +157,7 @@
     <sys:String x:Key="PageLabel">Page :</sys:String>
     <sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
     <sys:String x:Key="WordsLabel">Words</sys:String>
+    <sys:String x:Key="LanguageSwitchTooltip">Switch between English and Kannada</sys:String>
     <sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
     <sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
     <sys:String x:Key="ZoomTooltip">Zoom</sys:String>

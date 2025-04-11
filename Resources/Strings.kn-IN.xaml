@@ -72,9 +72,6 @@
 
 
 
-
-
-
     <!-- ========== INSERT TAB ========== -->
     <!-- Pages -->
     <sys:String x:Key="Pages">ಪುಟಗಳು</sys:String>
@@ -137,6 +134,7 @@
     <sys:String x:Key="PageNumberTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನ ಪುಟ ಸಂಖ್ಯೆ.</sys:String>
     <sys:String x:Key="WordsLabel">ಪದಗಳು</sys:String>
     <sys:String x:Key="WordCountTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪದಗಳ ಸಂಖ್ಯೆ.</sys:String>
+    <sys:String x:Key="LanguageSwitchTooltip">ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ನಡುವೆ ಬದಲಾಯಿಸಿ</sys:String>
     <sys:String x:Key="PrintLayoutTooltip">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
     <sys:String x:Key="WebLayoutTooltip">ವೆಬ್ ವಿನ್ಯಾಸ</sys:String>
     <sys:String x:Key="ZoomTooltip">ಜೂಮ್</sys:String>

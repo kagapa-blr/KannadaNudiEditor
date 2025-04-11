@@ -1246,17 +1246,17 @@ namespace KannadaNudiEditor
         #endregion
 
 
-
         private void LanguageToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             LanguageManager.SwitchLanguage("en-US");
+            LanguageToggleButton.Content = "EN";
         }
 
         private void LanguageToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
             LanguageManager.SwitchLanguage("kn-IN");
+            LanguageToggleButton.Content = "ಕ";
         }
-
 
 
 

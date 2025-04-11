@@ -173,13 +173,20 @@
     </Syncfusion:RibbonWindow.Resources>
 
 
+
+
     <Syncfusion:RibbonWindow.StatusBar>
         <Syncfusion:RibbonStatusBar Height="25">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
+                    <!-- Page Info -->
                     <ColumnDefinition Width="100"/>
+                    <!-- Word Count -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Language Toggle -->
                     <ColumnDefinition Width="*"/>
+                    <!-- Layout & Zoom -->
                 </Grid.ColumnDefinitions>
 
                 <!-- Page Info -->
@@ -191,12 +198,12 @@
                                ToolTip="{DynamicResource PageNumberTooltip}">
                     <this:RunAdv RunText="{DynamicResource PageLabel}"
                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
-                     <this:RunAdv x:Name="currentPageNumberRun"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
-                     <this:RunAdv RunText="/"
-                                  Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
-                     <this:RunAdv x:Name="pagecountRun"
-                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
+                    <this:RunAdv x:Name="currentPageNumberRun"
+                                 Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                    <this:RunAdv RunText="/"
+                                 Foreground="{Binding Path=Foreground, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Syncfusion:RibbonStatusBar}}}"/>
+                    <this:RunAdv x:Name="pagecountRun"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
                 </StackPanel>
 
@@ -208,18 +215,36 @@
                     <TextBlock Margin="10,0,0,5"
                                FontSize="12"
                                ToolTip="{DynamicResource WordCountTooltip}">
-                         <this:RunAdv x:Name="totalWords"
-                                      Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
+                    <this:RunAdv x:Name="totalWords"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     <this:RunAdv RunText="{DynamicResource WordsLabel}"
                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
+                </StackPanel>
+
+                <!-- Language Switch -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Grid.Column="2"
+                            Margin="0,0,10,0">
+                    <ToggleButton x:Name="LanguageToggleButton"
+                                  Width="100"
+                                  Height="26"
+                                  FontSize="14"
+                                  FontFamily="Tunga"
+                                  Content="ಕ"
+                                  ToolTip="{DynamicResource LanguageSwitchTooltip}"
+                                  Checked="LanguageToggleButton_Checked"
+                                  Unchecked="LanguageToggleButton_Unchecked"/>
+
                 </StackPanel>
 
                 <!-- Layout & Zoom -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Grid.Column="2">
+                            Grid.Column="3">
                     <Syncfusion:RibbonButton Style="{StaticResource StatusBarRibbonButtonStyle}"
                                              SizeForm="ExtraSmall"
                                              SmallIcon="/Assets/PrintLayout.png"
@@ -237,10 +262,10 @@
                     <TextBlock FontSize="12"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0">
-                     <this:RunAdv RunText="{Binding ZoomFactor, Mode=OneWay, Converter={StaticResource PercentageStringConverter}}"
-                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
-                     <this:RunAdv RunText="%"
-                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
+                    <this:RunAdv RunText="{Binding ZoomFactor, Mode=OneWay, Converter={StaticResource PercentageStringConverter}}"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
+                    <this:RunAdv RunText="%"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonStatusBar}}"/>
                     </TextBlock>
                     <Slider x:Name="rangeslider"
                             Focusable="False"
@@ -253,28 +278,9 @@
                             Maximum="5"
                             ToolTip="{DynamicResource ZoomTooltip}"/>
                 </StackPanel>
-
-
-                <!-- Language Switch -->
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Grid.Column="3">
-                    <ToggleButton x:Name="LanguageToggleButton"
-                                  Width="80"
-                                  Height="20"
-                                  Margin="5,0,10,0"
-                                  Content="EN | ಕ"
-                                  ToolTip="{DynamicResource LanguageSwitchTooltip}"
-                                  Checked="LanguageToggleButton_Checked"
-                                  Unchecked="LanguageToggleButton_Unchecked"/>
-                </StackPanel>
-
-
             </Grid>
         </Syncfusion:RibbonStatusBar>
     </Syncfusion:RibbonWindow.StatusBar>
-
 
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
