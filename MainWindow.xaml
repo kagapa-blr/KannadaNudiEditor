@@ -357,8 +357,8 @@
                     <!-- Spacer -->
                     <Syncfusion:ApplicationMenu.MenuItems>
                         <TextBlock Text=""
-                                Margin="5"
-                                Width="210"/>
+                                   Margin="5"
+                                   Width="210"/>
                     </Syncfusion:ApplicationMenu.MenuItems>
 
                 </Syncfusion:ApplicationMenu>
@@ -706,6 +706,7 @@
                     </Syncfusion:BackstageTabItem>
                 </Syncfusion:Backstage>
             </Syncfusion:Ribbon.BackStage>
+
             <Syncfusion:RibbonTab  Caption="{DynamicResource HomeTab}">
 
                 <Syncfusion:RibbonBar Header="{DynamicResource Clipboard}"
@@ -1851,25 +1852,25 @@
                         </Syncfusion:DropDownButton>
                     </Syncfusion:ButtonPanel>
                 </Syncfusion:RibbonBar>
-               
-               
-               
-               
-                <Syncfusion:RibbonBar Header="Styles"
+
+
+
+
+                <Syncfusion:RibbonBar Header="{DynamicResource StylesHeader}"
                                       LauncherCommand="Syncfusion:SfRichTextBoxAdv.ShowStylesDialogCommand">
                     <Syncfusion:RibbonGallery HorizontalAlignment="Stretch"
                                               Name="PART_RibbonGallery"
                                               Width="470"
                                               ItemWidth="75"
                                               Margin="5 0 5 0"
-                                              Label="RibbonGallery">
+                                              Label="{DynamicResource StylesGalleryLabel}">
                         <Syncfusion:RibbonGallery.MenuItems>
                             <Syncfusion:RibbonButton SizeForm="Small"
                                                      HorizontalAlignment="Left"
                                                      ToolTipService.ShowOnDisabled="True"
                                                      Height="25"
                                                      Width="120"
-                                                     Label="CreateStyle"
+                                                     Label="{DynamicResource CreateStyle}"
                                                      IsToggle="False"
                                                      IconType="VectorImage"
                                                      Command="Syncfusion:SfRichTextBoxAdv.ShowStyleDialogCommand">
@@ -1893,7 +1894,7 @@
                                                      Height="25"
                                                      Width="120"
                                                      HorizontalContentAlignment="Left"
-                                                     Label="ClearFormatting"
+                                                     Label="{DynamicResource ClearFormatting}"
                                                      IsToggle="False"
                                                      IconType="VectorImage"
                                                      Command="Syncfusion:SfRichTextBoxAdv.ClearFormattingCommand">
@@ -1923,61 +1924,74 @@
                         </Syncfusion:RibbonGallery.MenuItems>
                     </Syncfusion:RibbonGallery>
                 </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonBar Header="Editing"
+
+                <Syncfusion:RibbonBar Header="{DynamicResource EditingHeader}"
                                       IsLauncherButtonVisible="False">
+
+                    <!-- ReadOnly Toggle Button -->
                     <Syncfusion:RibbonButton x:Name="restrictEditingButton"
                                              Margin="3"
-                                             Label="ReadOnly"
+                                             Label="{DynamicResource ReadOnly}"
                                              Width="60"
                                              IsSelected="{Binding IsReadOnly, Mode=TwoWay}"
                                              IsToggle="True"
                                              SizeForm="Large"
                                              LargeIcon="/Images/Home/Editing/RestrictEditing.png">
                         <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="Restrict Editing"
+                            <Syncfusion:ScreenTip Description="{DynamicResource ReadOnlyTooltipTitle}"
                                                   MaxWidth="250">
                                 <StackPanel>
-                                    <TextBlock Text="Restrict the content editing"/>
-                                    <TextBlock Text="and formatting changes."/>
+                                    <TextBlock Text="{DynamicResource ReadOnlyTooltipLine1}"/>
+                                    <TextBlock Text="{DynamicResource ReadOnlyTooltipLine2}"/>
                                 </StackPanel>
                             </Syncfusion:ScreenTip>
                         </Syncfusion:RibbonButton.ToolTip>
                     </Syncfusion:RibbonButton>
+
+                    <!-- Find Button -->
                     <Syncfusion:RibbonButton Margin="3"
                                              SizeForm="Small"
-                                             Label="Find"
+                                             Label="{DynamicResource Find}"
                                              HorizontalAlignment="Left"
                                              IsToggle="False"
                                              SmallIcon="/Images/Home/Editing/Find.png"
                                              Command="Syncfusion:SfRichTextBoxAdv.ShowOptionsPaneCommand">
                         <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="Find (Ctrl+F)"
+                            <Syncfusion:ScreenTip Description="{DynamicResource FindTooltipTitle}"
                                                   MaxWidth="250">
-                                <TextBlock Text="Find text or other content in the document."
-                                           TextWrapping="Wrap"/>
+                                <TextBlock Text="{DynamicResource FindTooltipLine1}"
+                                        TextWrapping="Wrap"/>
                             </Syncfusion:ScreenTip>
                         </Syncfusion:RibbonButton.ToolTip>
                     </Syncfusion:RibbonButton>
+
+                    <!-- Replace Button -->
                     <Syncfusion:RibbonButton Margin="3"
                                              SizeForm="Small"
-                                             Label="Replace"
+                                             Label="{DynamicResource Replace}"
                                              HorizontalAlignment="Left"
                                              IsToggle="False"
                                              SmallIcon="/Images/Home/Editing/Replace.png"
                                              Command="Syncfusion:SfRichTextBoxAdv.ShowFindAndReplaceDialogCommand"
                                              CommandParameter="True">
                         <Syncfusion:RibbonButton.ToolTip>
-                            <Syncfusion:ScreenTip Description="Replace (Ctrl+H)"
+                            <Syncfusion:ScreenTip Description="{DynamicResource ReplaceTooltipTitle}"
                                                   MaxWidth="250">
                                 <StackPanel>
-                                    <TextBlock Text="Search for text you'd like to change"/>
-                                    <TextBlock Text="and replace it with something else."/>
+                                    <TextBlock Text="{DynamicResource ReplaceTooltipLine1}"/>
+                                    <TextBlock Text="{DynamicResource ReplaceTooltipLine2}"/>
                                 </StackPanel>
                             </Syncfusion:ScreenTip>
                         </Syncfusion:RibbonButton.ToolTip>
                     </Syncfusion:RibbonButton>
                 </Syncfusion:RibbonBar>
+
             </Syncfusion:RibbonTab>
+
+
+
+
+
 
             <Syncfusion:RibbonTab Caption="{DynamicResource InsertTab}">
 
@@ -2399,8 +2413,10 @@
                                          LayoutType="Pages"
                                          Language="kn-IN"
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.Wpf">
-           <Syncfusion:SfRichTextBoxAdv.SpellChecker>
-                <Syncfusion:SpellChecker IsEnabled="True" IgnoreUppercaseWords="False" UseFrameworkSpellCheck="False">
+            <Syncfusion:SfRichTextBoxAdv.SpellChecker>
+                <Syncfusion:SpellChecker IsEnabled="True"
+                        IgnoreUppercaseWords="False"
+                        UseFrameworkSpellCheck="False">
                     <Syncfusion:SpellChecker.Dictionaries>
                         <System:String>Assets\kn_IN.dic</System:String>
                     </Syncfusion:SpellChecker.Dictionaries>

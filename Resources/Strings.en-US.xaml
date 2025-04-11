@@ -46,6 +46,51 @@
     <!-- =========================== -->
     <sys:String x:Key="Paragraph">Paragraph</sys:String>
 
+
+
+    <!-- =========================== -->
+    <!-- Home Tab: Style Group   -->
+    <!-- =========================== -->
+    <sys:String x:Key="StylesHeader">Styles</sys:String>
+    <sys:String x:Key="StylesGalleryLabel">Styles</sys:String>
+    <sys:String x:Key="CreateStyle">Create Style</sys:String>
+    <sys:String x:Key="ClearFormatting">Clear Formatting</sys:String>
+
+
+
+
+
+
+
+    <sys:String x:Key="EditingHeader">Editing</sys:String>
+
+    <!-- ReadOnly -->
+    <sys:String x:Key="ReadOnly">ReadOnly</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipTitle">Restrict Editing</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipLine1">Restrict the content editing</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipLine2">and formatting changes.</sys:String>
+
+    <!-- Find -->
+    <sys:String x:Key="Find">Find</sys:String>
+    <sys:String x:Key="FindTooltipTitle">Find (Ctrl+F)</sys:String>
+    <sys:String x:Key="FindTooltipLine1">Find text or other content in the document.</sys:String>
+
+    <!-- Replace -->
+    <sys:String x:Key="Replace">Replace</sys:String>
+    <sys:String x:Key="ReplaceTooltipTitle">Replace (Ctrl+H)</sys:String>
+    <sys:String x:Key="ReplaceTooltipLine1">Search for text you'd like to change</sys:String>
+    <sys:String x:Key="ReplaceTooltipLine2">and replace it with something else.</sys:String>
+
+
+
+
+
+
+
+
+
+
+
     <!-- =========================== -->
     <!-- Insert Tab: Pages Group     -->
     <!-- =========================== -->
@@ -120,7 +165,7 @@
     <sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
     <sys:String x:Key="PageLabel">Page :</sys:String>
     <sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
-    <sys:String x:Key="WordsLabel"> Words</sys:String>
+    <sys:String x:Key="WordsLabel">Words</sys:String>
     <sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
     <sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
     <sys:String x:Key="ZoomTooltip">Zoom</sys:String>

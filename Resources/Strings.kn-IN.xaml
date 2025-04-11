@@ -28,6 +28,7 @@
     <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
     <sys:String x:Key="CopyTipLine2">ಬೇರೇದೊಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
 
+
     <!-- Font -->
     <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
     <sys:String x:Key="FontShortcut">ಅಕ್ಷರಶೈಲಿ (Ctrl+Shift+F)</sys:String>
@@ -37,6 +38,42 @@
 
     <!-- Paragraph -->
     <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
+
+
+
+    <!-- =========================== -->
+    <!-- Home Tab: Style  -->
+    <!-- =========================== -->
+    <sys:String x:Key="StylesHeader">ಶೈಲಿಗಳು</sys:String>
+    <sys:String x:Key="StylesGalleryLabel">ಶೈಲಿಗಳು</sys:String>
+    <sys:String x:Key="CreateStyle">ಹೊಸ ಶೈಲಿ</sys:String>
+    <sys:String x:Key="ClearFormatting">ರೂಪವನ್ನು ತೆಗೆದುಹಾಕಿ</sys:String>
+
+
+
+    <sys:String x:Key="EditingHeader">ಸಂಪಾದನೆ</sys:String>
+
+    <!-- ReadOnly -->
+    <sys:String x:Key="ReadOnly">ಓದಲು ಮಾತ್ರ</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipTitle">ಸಂಪಾದನೆ ನಿರ್ಬಂಧಿಸಿ</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipLine1">ವಿಷಯ ಸಂಪಾದನೆ ಮತ್ತು ಶೈಲಿಯಲ್ಲಿ</sys:String>
+    <sys:String x:Key="ReadOnlyTooltipLine2">ಮಾರ್ಪಡಿಸದಂತೆ ನಿರ್ಬಂಧಿಸಿ.</sys:String>
+
+    <!-- Find -->
+    <sys:String x:Key="Find">ಹುಡುಕಿ</sys:String>
+    <sys:String x:Key="FindTooltipTitle">ಹುಡುಕಿ (Ctrl+F)</sys:String>
+    <sys:String x:Key="FindTooltipLine1">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿರುವ ಪಠ್ಯ ಅಥವಾ ವಿಷಯವನ್ನು ಹುಡುಕಿ.</sys:String>
+
+    <!-- Replace -->
+    <sys:String x:Key="Replace">ಬದಲಾಯಿಸಿ</sys:String>
+    <sys:String x:Key="ReplaceTooltipTitle">ಬದಲಾಯಿಸಿ (Ctrl+H)</sys:String>
+    <sys:String x:Key="ReplaceTooltipLine1">ಬದಲಾಯಿಸಬೇಕಾದ ಪಠ್ಯವನ್ನು ಹುಡುಕಿ</sys:String>
+    <sys:String x:Key="ReplaceTooltipLine2">ಮತ್ತು ಬೇರೆ ಪದದಿಂದ ಬದಲಾಯಿಸಿ.</sys:String>
+
+
+
+
+
 
     <!-- ========== INSERT TAB ========== -->
     <!-- Pages -->
