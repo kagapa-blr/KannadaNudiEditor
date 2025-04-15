@@ -67,8 +67,8 @@ namespace KannadaNudiEditor
             }
 
             UpdateRichTextBoxAdvItems();
-            InitailizePageMargins();
-            InitailizePageSizes();
+            InitializePageMargins();
+            InitializePageSizes();
             ApplyDefaultPageSettings();
         }
         #endregion
@@ -1175,7 +1175,7 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Initializes the page margins.
         /// </summary>
-        private void InitailizePageMargins()
+        private void InitializePageMargins()
         {
             List<PageMargins> items = new List<PageMargins> {
             new PageMargins { Key = "Normal", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 72 pt", right = "Right: 72 pt" },
@@ -1219,7 +1219,7 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Initializes the page sizes.
         /// </summary>
-        private void InitailizePageSizes()
+        private void InitializePageSizes()
         {
             List<PageSize> items = new List<PageSize> {
                                    new PageSize { Key = "Letter",width="612 pt",height="792 pt" },
