@@ -8,7 +8,7 @@
     xmlns:this="clr-namespace:KannadaNudiEditor"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-    syncfusionskin:SfSkinManager.VisualStyle="Office2013White"
+    syncfusionskin:SfSkinManager.VisualStyle="Windows11Light"
     mc:Ignorable="d"
     SnapsToDevicePixels="True"
     IsGlassActive="False"
@@ -17,7 +17,7 @@
     Title="{Binding DocumentTitle}"
     WindowState="Maximized"
     ResizeMode="CanResize"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen" Closing="ribbonWindow_Closing">
 
 
     <Syncfusion:RibbonWindow.Resources>
@@ -2428,9 +2428,15 @@
                         </ComboBox>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
+                <Syncfusion:RibbonButton SizeForm="Large"
+                          Margin="3"
+                          Width="70"
+                          HorizontalAlignment="Center"
+                          LargeIcon="/Images/Page Layout/pagesetup.jpg"
+                          Label="Page Size"
+                          Click="RibbonButton_Click">
+                </Syncfusion:RibbonButton>
             </Syncfusion:RibbonTab>
-
-
         </Syncfusion:Ribbon>
 
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
@@ -2440,6 +2446,7 @@
                                          SelectionChanged="RichTextBoxAdv_SelectionChanged"
                                          LayoutType="Pages"
                                          Language="kn-IN"
+                                         AllowDrop="True"
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.Wpf">
             <Syncfusion:SfRichTextBoxAdv.SpellChecker>
                 <Syncfusion:SpellChecker IsEnabled="True"

@@ -1279,10 +1279,62 @@ namespace KannadaNudiEditor
             LanguageToggleButton.Content = "ಕ";
         }
 
+        /// <summary>
+        /// Launches the page setup dialog on click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageSetupDialog dialog = new PageSetupDialog
+            {
+                Owner = this
+            };
 
+            if (dialog.ShowDialog() == true)
+            {
+                double widthInInches = dialog.PageWidthInInches;
+                double heightInInches = dialog.PageHeightInInches;
+                double marginInInches = dialog.PageMarginInInches;
 
+                // Convert the inches values to pixels, as SfRichTextBoxAdv preseve elements in pixels.
+                const double dpi = 96;
+                double widthInPixels = widthInInches * dpi;
+                double heightInPixels = heightInInches * dpi;
+                double marginInPixels = marginInInches * dpi;
 
+                // Apply the converted values to the document
+                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                {
+                    section.SectionFormat.PageSize = new Size(widthInPixels, heightInPixels);
+                    section.SectionFormat.PageMargin = new Thickness(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Called on closing the ribbon window applictaion.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show(
+                "Do you want to save changes to the document before exiting?",
+                "Save Document",
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Call the saving dialog of SfRichTextBoxAdv.
+                SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true; // Cancel closing
+            }
+        }
     }
 
     /// <summary>

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Assets\kannadaKeyboard.exe" />
+    <None Remove="Images\Page Layout\pagesetup.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -112,6 +113,7 @@
     <Resource Include="Images\Insert\Picture32.png" />
     <Resource Include="Images\Insert\Table16.png" />
     <Resource Include="Images\Insert\Table32.png" />
+    <Resource Include="Images\Page Layout\pagesetup.jpg" />
     <Resource Include="Images\QAT\Redo16.png" />
     <Resource Include="Images\QAT\Save16.png" />
     <Resource Include="Images\QAT\Undo16.png" />
@@ -136,5 +138,6 @@
   <ItemGroup>
     <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.1.35" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.1.37" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="29.1.37" />
   </ItemGroup>
 </Project>
