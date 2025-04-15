@@ -1170,7 +1170,6 @@ namespace KannadaNudiEditor
             }
         }
         #endregion
-
         #region PageMargins Implementation
         /// <summary>
         /// Initializes the page margins.
@@ -1178,38 +1177,42 @@ namespace KannadaNudiEditor
         private void InitializePageMargins()
         {
             List<PageMargins> items = new List<PageMargins> {
-            new PageMargins { Key = "Normal", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 72 pt", right = "Right: 72 pt" },
-            new PageMargins { Key = "Narrow", top = "Top: 36 pt", bottom = "Bottom: 36 pt", left = "Left: 36 pt", right = "Right: 36 pt" },
-            new PageMargins { Key = "Moderate", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 54 pt", right = "Right: 54 pt" },
-            new PageMargins { Key = "Wide", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 144 pt", right = "Right: 144 pt" },
-            new PageMargins { Key = "Mirrored", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 90 pt", right = "Right: 72 pt" },
-            new PageMargins { Key = "Office 2003 Default", top = "Top: 72 pt", bottom = "Bottom: 72 pt", left = "Left: 90 pt", right = "Right: 90 pt" }};
+        new PageMargins { Key = "Normal", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1 in", right = "Right: 1 in" },
+        new PageMargins { Key = "Narrow", top = "Top: 0.5 in", bottom = "Bottom: 0.5 in", left = "Left: 0.5 in", right = "Right: 0.5 in" },
+        new PageMargins { Key = "Moderate", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 0.75 in", right = "Right: 0.75 in" },
+        new PageMargins { Key = "Wide", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 2 in", right = "Right: 2 in" },
+        new PageMargins { Key = "Mirrored", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1 in" },
+        new PageMargins { Key = "Office 2003 Default", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1.25 in" }
+    };
             pageMargins.ItemsSource = items;
 
-            // Dictionary where key is a string and value is a list of strings
+            // Dictionary values in inches
             pageMarginsCollection = new Dictionary<string, List<double>> {
-                                   { "Normal", new List<double> { 72,72,72,72 } },
-                                   { "Narrow", new List<double> { 36,36,36,36 } },
-                                   { "Moderate", new List<double> { 72,72,54,54 } },
-                                   { "Wide", new List<double> { 72,72,144,144 } },
-                                   { "Mirrored", new List<double> { 72,72,90,72 } },
-                                   { "Office 2003 Default", new List<double> { 72,72,90,90 } }};
+        { "Normal", new List<double> { 1, 1, 1, 1 } },
+        { "Narrow", new List<double> { 0.5, 0.5, 0.5, 0.5 } },
+        { "Moderate", new List<double> { 1, 1, 0.75, 0.75 } },
+        { "Wide", new List<double> { 1, 1, 2, 2 } },
+        { "Mirrored", new List<double> { 1, 1, 1.25, 1 } },
+        { "Office 2003 Default", new List<double> { 1, 1, 1.25, 1.25 } }
+    };
         }
 
         /// <summary>
         /// Updates the page margins.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void pageMargins_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            string selectedKey = (pageMargins.SelectedItem as PageMargins).Key;
-            if (pageMarginsCollection.ContainsKey(selectedKey))
+            string selectedKey = (pageMargins.SelectedItem as PageMargins)?.Key;
+            if (!string.IsNullOrEmpty(selectedKey) && pageMarginsCollection.TryGetValue(selectedKey, out var values))
             {
-                List<double> values = pageMarginsCollection[selectedKey];
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
-                    section.SectionFormat.PageMargin = new Thickness((values[2] * 96) / 72, (values[0] * 96) / 72, (values[3] * 96) / 72, (values[1] * 96) / 72);
+                    section.SectionFormat.PageMargin = new Thickness(
+                        values[2] * 96, // Left
+                        values[0] * 96, // Top
+                        values[3] * 96, // Right
+                        values[1] * 96  // Bottom
+                    );
                 }
             }
         }
@@ -1222,50 +1225,51 @@ namespace KannadaNudiEditor
         private void InitializePageSizes()
         {
             List<PageSize> items = new List<PageSize> {
-                                   new PageSize { Key = "Letter",width="612 pt",height="792 pt" },
-                                   new PageSize { Key = "Tabloid",width="792 pt",height="1224 pt" },
-                                   new PageSize { Key = "Legal",width="612 pt",height="1008 pt" },
-                                   new PageSize { Key = "Statement",width="396 pt",height="612 pt" },
-                                   new PageSize { Key = "Executive",width="522 pt",height="756 pt" },
-                                   new PageSize { Key = "A3",width="841.9 pt",height="1190.6 pt" },
-                                   new PageSize { Key = "A4",width="595.3 pt",height="841.9 pt" },
-                                   new PageSize { Key = "B4 (JIS)",width="728.5 pt",height="1031.8 pt" },
-                                   new PageSize { Key = "B5 (JIS)",width="515.9 pt",height="728.5 pt" }};
+        new PageSize { Key = "Letter", width = "8.5 in", height = "11 in" },
+        new PageSize { Key = "Tabloid", width = "11 in", height = "17 in" },
+        new PageSize { Key = "Legal", width = "8.5 in", height = "14 in" },
+        new PageSize { Key = "Statement", width = "5.5 in", height = "8.5 in" },
+        new PageSize { Key = "Executive", width = "7.25 in", height = "10.5 in" },
+        new PageSize { Key = "A3", width = "11.69 in", height = "16.54 in" },
+        new PageSize { Key = "A4", width = "8.27 in", height = "11.69 in" },
+        new PageSize { Key = "B4 (JIS)", width = "10.12 in", height = "14.33 in" },
+        new PageSize { Key = "B5 (JIS)", width = "7.21 in", height = "10.12 in" }
+    };
             pageSize.ItemsSource = items;
 
-            // Dictionary where key is a string and value is a list of strings
+            // Dictionary values in inches
             pageSizesCollection = new Dictionary<string, List<double>> {
-                                   { "Letter", new List<double> { 612,792} },
-                                   { "Tabloid", new List<double> { 792,1224 } },
-                                   { "Legal", new List<double> { 612,1008 } },
-                                   { "Statement", new List<double> { 396,612 } },
-                                   { "Executive", new List<double> { 522,756 } },
-                                   { "A3", new List<double> { 841.9,1190.6 } },
-                                   { "A4", new List<double> { 595.3,841.9} },
-                                   { "B4 (JIS)", new List<double> { 728.5,1031.8 } },
-                                   { "B5 (JIS)", new List<double> { 515.9,728.5 } }};
+        { "Letter", new List<double> { 8.5, 11 } },
+        { "Tabloid", new List<double> { 11, 17 } },
+        { "Legal", new List<double> { 8.5, 14 } },
+        { "Statement", new List<double> { 5.5, 8.5 } },
+        { "Executive", new List<double> { 7.25, 10.5 } },
+        { "A3", new List<double> { 11.69, 16.54 } },
+        { "A4", new List<double> { 8.27, 11.69 } },
+        { "B4 (JIS)", new List<double> { 10.12, 14.33 } },
+        { "B5 (JIS)", new List<double> { 7.21, 10.12 } }
+    };
         }
 
         /// <summary>
         /// Updates the page sizes.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            string selectedKey = (pageSize.SelectedItem as PageSize).Key;
-            if (pageSizesCollection.ContainsKey(selectedKey))
+            string selectedKey = (pageSize.SelectedItem as PageSize)?.Key;
+            if (!string.IsNullOrEmpty(selectedKey) && pageSizesCollection.TryGetValue(selectedKey, out var values))
             {
-                List<double> values = pageSizesCollection[selectedKey];
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
                     section.SectionFormat.PageSize = new Size(
-                (values[0] * 96) / 72,
-                (values[1] * 96) / 72); ;
+                        values[0] * 96, // Width
+                        values[1] * 96  // Height
+                    );
                 }
             }
         }
         #endregion
+
 
         private void ApplyDefaultPageSettings()
         {
