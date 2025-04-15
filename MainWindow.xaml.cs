@@ -69,6 +69,7 @@ namespace KannadaNudiEditor
             UpdateRichTextBoxAdvItems();
             InitailizePageMargins();
             InitailizePageSizes();
+            ApplyDefaultPageSettings();
         }
         #endregion
 
@@ -1266,6 +1267,25 @@ namespace KannadaNudiEditor
         }
         #endregion
 
+        private void ApplyDefaultPageSettings()
+        {
+            // Default to A4 (595.3 x 841.9 pt → converted to pixels)
+            double a4Width = (595.3 * 96) / 72;
+            double a4Height = (841.9 * 96) / 72;
+
+            // Default margin: 1 inch = 72 pt → converted to pixels
+            double margin = (72 * 96) / 72;
+
+            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+            {
+                section.SectionFormat.PageSize = new Size(a4Width, a4Height);
+                section.SectionFormat.PageMargin = new Thickness(margin, margin, margin, margin);
+            }
+
+            // Optional: Set ComboBoxes to reflect default selections
+            pageSize.SelectedIndex = pageSize.Items.Cast<PageSize>().ToList().FindIndex(p => p.Key == "A4");
+            pageMargins.SelectedIndex = pageMargins.Items.Cast<PageMargins>().ToList().FindIndex(m => m.Key == "Normal");
+        }
 
         private void LanguageToggleButton_Checked(object sender, RoutedEventArgs e)
         {
