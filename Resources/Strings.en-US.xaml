@@ -186,4 +186,17 @@
     <sys:String x:Key="BackstageSaveAsText">Text Document</sys:String>
     <sys:String x:Key="BackstageSaveAsTextDescription">Save the file as Text document</sys:String>
 
+    <!-- =========================== -->
+    <!-- Page Layout: Custom Page Setup      -->
+    <!-- =========================== -->
+    <sys:String x:Key="EnterMarginsTitle">Enter Margins</sys:String>
+    <sys:String x:Key="EnterMarginInstruction">Enter Margins (in inches)</sys:String>
+    <sys:String x:Key="LeftLabel">Left (inch):</sys:String>
+    <sys:String x:Key="TopLabel">Top (inch):</sys:String>
+    <sys:String x:Key="RightLabel">Right (inch):</sys:String>
+    <sys:String x:Key="BottomLabel">Bottom (inch):</sys:String>
+    <sys:String x:Key="OkButton">OK</sys:String>
+    <sys:String x:Key="CancelButton">Cancel</sys:String>
+
+
 </ResourceDictionary>

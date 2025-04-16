@@ -161,4 +161,18 @@
     <sys:String x:Key="BackstageSaveAsText">ಪಠ್ಯ ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
     <sys:String x:Key="BackstageSaveAsTextDescription">ಫೈಲ್ ಅನ್ನು ಪಠ್ಯ ರೂಪದಲ್ಲಿ ಉಳಿಸಿ</sys:String>
 
+
+    <!-- =========================== -->
+    <!-- Page Layout: Custom Page Setup      -->
+    <!-- =========================== -->
+    <sys:String x:Key="EnterMarginsTitle">ಅಂಚುಗಳನ್ನು ನಮೂದಿಸಿ</sys:String>
+    <sys:String x:Key="EnterMarginInstruction">ಅಂಚುಗಳನ್ನು ಇಂಚುಗಳಲ್ಲಿ ನಮೂದಿಸಿ</sys:String>
+    <sys:String x:Key="LeftLabel">ಎಡ (ಇಂಚು):</sys:String>
+    <sys:String x:Key="TopLabel">ಮೇಲ್ಮೈ (ಇಂಚು):</sys:String>
+    <sys:String x:Key="RightLabel">ಬಲ (ಇಂಚು):</sys:String>
+    <sys:String x:Key="BottomLabel">ಕೆಳ (ಇಂಚು):</sys:String>
+    <sys:String x:Key="OkButton">ಸರಿ</sys:String>
+    <sys:String x:Key="CancelButton">ರದ್ದುಮಾಡಿ</sys:String>
+
+
 </ResourceDictionary>
