@@ -435,7 +435,7 @@
                                                                LargeIcon="/Images/Backstage/Protect.png"
                                                                Margin="5"
                                                                BorderThickness="1">
-                                        <Syncfusion:SimpleMenuButton x:Name="backstageRestrictEditingButton"
+                                        <Syncfusion:SimpleMenuButton x:Name="PART_BackstageRestrictEditingButton"
                                                                      Icon="Images/Home/Editing/RestrictEditing.png"
                                                                      IconSize="30,30"
                                                                      Label="RestrictEditing"
@@ -2372,7 +2372,7 @@
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
                                   Width="170"
-                                  Height="50"
+                                  Height="20"
                                   SelectionChanged="pageMargins_SelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -2395,6 +2395,7 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+                        <Button Content="Custom Margin" Height="30" Margin="5" Width="130" Click="CustomMarginButton_Click" />
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
@@ -2409,7 +2410,7 @@
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
                                   Width="170"
-                                  Height="50"
+                                  Height="20"
                                   SelectionChanged="pageSize_SelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -2426,16 +2427,9 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+                        <Button Content="Custom Size" Height="30" Margin="5" Width="130" Click="RibbonButton_Click" />
                     </StackPanel>
                 </Syncfusion:RibbonBar>
-                <Syncfusion:RibbonButton SizeForm="Large"
-                          Margin="3"
-                          Width="70"
-                          HorizontalAlignment="Center"
-                          LargeIcon="/Images/Page Layout/pagesetup.jpg"
-                          Label="Page Size"
-                          Click="RibbonButton_Click">
-                </Syncfusion:RibbonButton>
             </Syncfusion:RibbonTab>
         </Syncfusion:Ribbon>
 

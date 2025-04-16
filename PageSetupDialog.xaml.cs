@@ -22,7 +22,6 @@ namespace KannadaNudiEditor
         #region property
         public double PageWidthInInches { get; private set; }
         public double PageHeightInInches { get; private set; }
-        public double PageMarginInInches { get; private set; }
         #endregion
 
         #region Constructor
@@ -41,12 +40,10 @@ namespace KannadaNudiEditor
         private void OK_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(WidthBox.Text, out double width) &&
-                double.TryParse(HeightBox.Text, out double height) &&
-                double.TryParse(MarginBox.Text, out double margin))
+                double.TryParse(HeightBox.Text, out double height))
             {
                 PageWidthInInches = width;
                 PageHeightInInches = height;
-                PageMarginInInches = margin;
                 DialogResult = true;
             }
             else

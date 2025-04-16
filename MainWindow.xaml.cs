@@ -1319,19 +1319,16 @@ namespace KannadaNudiEditor
             {
                 double widthInInches = dialog.PageWidthInInches;
                 double heightInInches = dialog.PageHeightInInches;
-                double marginInInches = dialog.PageMarginInInches;
 
                 // Convert the inches values to pixels, as SfRichTextBoxAdv preseve elements in pixels.
                 const double dpi = 96;
                 double widthInPixels = widthInInches * dpi;
                 double heightInPixels = heightInInches * dpi;
-                double marginInPixels = marginInInches * dpi;
 
                 // Apply the converted values to the document
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
                     section.SectionFormat.PageSize = new Size(widthInPixels, heightInPixels);
-                    section.SectionFormat.PageMargin = new Thickness(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
                 }
             }
         }
@@ -1357,6 +1354,34 @@ namespace KannadaNudiEditor
             else if (result == MessageBoxResult.Cancel)
             {
                 e.Cancel = true; // Cancel closing
+            }
+        }
+
+
+        
+        private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
+        {
+            CustomMargin dialog = new CustomMargin();
+            if (dialog.ShowDialog() == true)
+            {
+                // Get the margin values from the dialog (in inches)
+                double topMarginInInches = dialog.TopMarginInInches;
+                double bottomMarginInInches = dialog.BottomMarginInInches;
+                double leftMarginInInches = dialog.LeftMarginInInches;
+                double rightMarginInInches = dialog.RightMarginInInches;
+
+                // Convert the margins from inches to pixels (96 DPI)
+                const double dpi = 96;
+                double topMarginInPixels = topMarginInInches * dpi;
+                double bottomMarginInPixels = bottomMarginInInches * dpi;
+                double leftMarginInPixels = leftMarginInInches * dpi;
+                double rightMarginInPixels = rightMarginInInches * dpi;
+
+                // Apply the converted margin values to the document's sections
+                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                {
+                    section.SectionFormat.PageMargin = new Thickness(leftMarginInPixels, topMarginInPixels, rightMarginInPixels, bottomMarginInPixels);
+                }
             }
         }
     }
