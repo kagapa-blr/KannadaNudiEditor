@@ -207,4 +207,12 @@
 <sys:String x:Key="EditEvenPageNumber">ಜೋಡಿ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
 <sys:String x:Key="EditOddPageNumber">ವಿಚಿತ್ರ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
 <sys:String x:Key="DefaultPageNumber">ಡೆಫಾಲ್ಟ್ ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+
+
+
+<sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+<sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+
+
 </ResourceDictionary>

@@ -235,4 +235,12 @@
 <sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
 
 
+
+
+
+
+<sys:String x:Key="PageWidthLabel">Page Width (in inches):</sys:String>
+<sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
+
+
 </ResourceDictionary>
