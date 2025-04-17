@@ -1341,11 +1341,26 @@ namespace KannadaNudiEditor
         /// <param name="e"></param>
         private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            string message;
+            string caption;
+
+            if (LanguageToggleButton.IsChecked == true) // English
+            {
+                message = "Do you want to save changes to the document before exiting?";
+                caption = "Save Document";
+            }
+            else // Kannada
+            {
+                message = "ನೀವು ಎಕ್ಸಿಟ್ ಮಾಡುವ ಮೊದಲು ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಲು ಬಯಸುತ್ತೀರಾ?";
+                caption = "ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಿ";
+            }
+
             MessageBoxResult result = MessageBox.Show(
-                "Do you want to save changes to the document before exiting?",
-                "Save Document",
+                message,
+                caption,
                 MessageBoxButton.YesNoCancel,
                 MessageBoxImage.Warning);
+
 
             if (result == MessageBoxResult.Yes)
             {

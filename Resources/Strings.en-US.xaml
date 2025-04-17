@@ -199,48 +199,50 @@
     <sys:String x:Key="CancelButton">Cancel</sys:String>
 
 
-<!-- =========================== -->
-<!-- Header/Footer: Custom Setup -->
-<!-- =========================== -->
 
-<!-- Tab Title -->
-<sys:String x:Key="HeaderFooterTab">Header/Footer</sys:String>
-
-<!-- Ribbon Group Headers -->
-<sys:String x:Key="HeaderFooterGroup">Header/Footer</sys:String>
-<sys:String x:Key="HeaderFooterOptions">Options</sys:String>
-
-<!-- Buttons -->
-<sys:String x:Key="EditHeader">Edit Header</sys:String>
-<sys:String x:Key="EditFooter">Edit Footer</sys:String>
-<sys:String x:Key="RemoveHeaderFooter">Remove Header/Footer</sys:String>
-
-<!-- Checkboxes -->
-<sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
-<sys:String x:Key="DifferentOddEvenPages">Different Odd/Even Pages</sys:String>
-<sys:String x:Key="SuppressFirstPageHeaderFooter">Suppress Header/Footer on First Page</sys:String>
-<sys:String x:Key="LinkToPrevious">Link to Previous</sys:String>
-
-<!-- =========================== -->
-<!-- Page Number: Custom Setup -->
-<!-- =========================== -->
-
-<!-- Tab Title -->
-<sys:String x:Key="PageNumberGroup">Page Number</sys:String>
-
-<!-- Buttons -->
-<sys:String x:Key="EditPageNumber">Edit Page Number</sys:String>
-<sys:String x:Key="EditEvenPageNumber">Edit Even Page Number</sys:String>
-<sys:String x:Key="EditOddPageNumber">Edit Odd Page Number</sys:String>
-<sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
+    <sys:String x:Key="PageWidthLabel">Page Width (in inches):</sys:String>
+    <sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
 
 
+    <!-- =========================== -->
+    <!-- Header/Footer: Custom Setup -->
+    <!-- =========================== -->
+
+    <!-- Tab Title -->
+    <sys:String x:Key="HeaderFooterTab">Header/Footer</sys:String>
+
+    <!-- Ribbon Group Headers -->
+    <sys:String x:Key="HeaderFooterGroup">Header/Footer</sys:String>
+    <sys:String x:Key="HeaderFooterOptions">Options</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="EditHeader">Edit Header</sys:String>
+    <sys:String x:Key="EditFooter">Edit Footer</sys:String>
+    <sys:String x:Key="RemoveHeaderFooter">Remove Header/Footer</sys:String>
+
+    <!-- Checkboxes -->
+    <sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
+    <sys:String x:Key="DifferentOddEvenPages">Different Odd/Even Pages</sys:String>
+    <sys:String x:Key="SuppressFirstPageHeaderFooter">Suppress Header/Footer on First Page</sys:String>
+    <sys:String x:Key="LinkToPrevious">Link to Previous</sys:String>
+
+    <!-- =========================== -->
+    <!-- Page Number: Custom Setup -->
+    <!-- =========================== -->
+
+    <!-- Tab Title -->
+    <sys:String x:Key="PageNumberGroup">Page Number</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="EditPageNumber">Edit Page Number</sys:String>
+    <sys:String x:Key="EditEvenPageNumber">Edit Even Page Number</sys:String>
+    <sys:String x:Key="EditOddPageNumber">Edit Odd Page Number</sys:String>
+    <sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
 
 
 
-
-<sys:String x:Key="PageWidthLabel">Page Width (in inches):</sys:String>
-<sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
+    <sys:String x:Key="ExitPrompt">Do you want to save changes to the document before exiting?</sys:String>
+    <sys:String x:Key="ExitPromptTitle">Save Document</sys:String>
 
 
 </ResourceDictionary>

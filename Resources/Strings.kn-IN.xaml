@@ -173,46 +173,48 @@
     <sys:String x:Key="BottomLabel">ಕೆಳ (ಇಂಚು):</sys:String>
     <sys:String x:Key="OkButton">ಸರಿ</sys:String>
     <sys:String x:Key="CancelButton">ರದ್ದುಮಾಡಿ</sys:String>
-<!-- =========================== -->
-<!-- Header/Footer: Custom Setup -->
-<!-- =========================== -->
-
-<!-- Tab Title -->
-<sys:String x:Key="HeaderFooterTab">ಹೆಡರ್/ಫೂಟರ್</sys:String>
-
-<!-- Ribbon Group Headers -->
-<sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
-<sys:String x:Key="HeaderFooterOptions">ಆಯ್ಕೆಗಳು</sys:String>
-
-<!-- Buttons -->
-<sys:String x:Key="EditHeader">ಹೆಡರ್ ಸಂಪಾದಿಸಿ</sys:String>
-<sys:String x:Key="EditFooter">ಫೂಟರ್ ಸಂಪಾದಿಸಿ</sys:String>
-<sys:String x:Key="RemoveHeaderFooter">ಹೆಡರ್/ಫೂಟರ್ ಅಳಿಸಿ</sys:String>
-
-<!-- Checkboxes -->
-<sys:String x:Key="DifferentFirstPage">ಪದಪುಟ ಭಿನ್ನವಾಗಿರಲಿ</sys:String>
-<sys:String x:Key="DifferentOddEvenPages">ವಿಚಿತ್ರ/ಜೋಡಿ ಪುಟಗಳು</sys:String>
-<sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೂದಲ ಪುಟದ ಹೆಡರ್/ಫೂಟರ್ ತಡೆಯಿರಿ</sys:String>
-<sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದೊಂದಿಗೆ ಲಿಂಕ್ ಮಾಡಿ</sys:String>
-
-<!-- =========================== -->
-<!-- Page Number: Custom Setup -->
-<!-- =========================== -->
-
-<!-- Tab Title -->
-<sys:String x:Key="PageNumberGroup">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
-
-<!-- Buttons -->
-<sys:String x:Key="EditPageNumber">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-<sys:String x:Key="EditEvenPageNumber">ಜೋಡಿ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-<sys:String x:Key="EditOddPageNumber">ವಿಚಿತ್ರ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-<sys:String x:Key="DefaultPageNumber">ಡೆಫಾಲ್ಟ್ ಪುಟ ಸಂಖ್ಯೆ</sys:String>
 
 
 
+    <sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+    <sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+    <!-- =========================== -->
+    <!-- Header/Footer: Custom Setup -->
+    <!-- =========================== -->
 
-<sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
-<sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+    <!-- Tab Title -->
+    <sys:String x:Key="HeaderFooterTab">ಹೆಡರ್/ಫೂಟರ್</sys:String>
+
+    <!-- Ribbon Group Headers -->
+    <sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
+    <sys:String x:Key="HeaderFooterOptions">ಆಯ್ಕೆಗಳು</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="EditHeader">ಹೆಡರ್ ಸಂಪಾದಿಸಿ</sys:String>
+    <sys:String x:Key="EditFooter">ಫೂಟರ್ ಸಂಪಾದಿಸಿ</sys:String>
+    <sys:String x:Key="RemoveHeaderFooter">ಹೆಡರ್/ಫೂಟರ್ ಅಳಿಸಿ</sys:String>
+
+    <!-- Checkboxes -->
+    <sys:String x:Key="DifferentFirstPage">ಪದಪುಟ ಭಿನ್ನವಾಗಿರಲಿ</sys:String>
+    <sys:String x:Key="DifferentOddEvenPages">ವಿಚಿತ್ರ/ಜೋಡಿ ಪುಟಗಳು</sys:String>
+    <sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೂದಲ ಪುಟದ ಹೆಡರ್/ಫೂಟರ್ ತಡೆಯಿರಿ</sys:String>
+    <sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದೊಂದಿಗೆ ಲಿಂಕ್ ಮಾಡಿ</sys:String>
+
+    <!-- =========================== -->
+    <!-- Page Number: Custom Setup -->
+    <!-- =========================== -->
+
+    <!-- Tab Title -->
+    <sys:String x:Key="PageNumberGroup">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="EditPageNumber">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+    <sys:String x:Key="EditEvenPageNumber">ಜೋಡಿ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+    <sys:String x:Key="EditOddPageNumber">ವಿಚಿತ್ರ ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+    <sys:String x:Key="DefaultPageNumber">ಡೆಫಾಲ್ಟ್ ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+
+
 
 
 </ResourceDictionary>
