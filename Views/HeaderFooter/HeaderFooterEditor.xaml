@@ -1,20 +1,22 @@
 <Window x:Class="KannadaNudiEditor.Views.HeaderFooter.HeaderFooterEditor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Header/Footer Editor"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="{DynamicResource HeaderFooterTab}"
         Height="300"
         Width="400">
     <Grid>
         <StackPanel Margin="10">
             <!-- Header Text Input -->
-            <TextBlock Text="Enter Header Text"
+            <TextBlock Text="{DynamicResource EditHeader}"
                     Margin="0,10"/>
             <TextBox x:Name="HeaderTextBox"
                     Margin="0,5"
                     Height="30"/>
 
             <!-- Footer Text Input -->
-            <TextBlock Text="Enter Footer Text"
+            <TextBlock Text="{DynamicResource EditFooter}"
                     Margin="0,10"/>
             <TextBox x:Name="FooterTextBox"
                     Margin="0,5"
