@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
+using KannadaNudiEditor.Views.HeaderFooter;
 namespace KannadaNudiEditor
 {
     /// <summary>
@@ -1384,6 +1385,54 @@ namespace KannadaNudiEditor
                 }
             }
         }
+   
+   
+   
+   
+           // Handle Edit Header button click to show the Header/Footer editor
+        private void EditHeader_Click(object sender, RoutedEventArgs e)
+        {
+            ShowHeaderFooterEditor("Enter Header Text");
+        }
+
+        // Handle Edit Footer button click to show the Header/Footer editor
+        private void EditFooter_Click(object sender, RoutedEventArgs e)
+        {
+            ShowHeaderFooterEditor("Enter Footer Text");
+        }
+   
+   
+
+        // Helper method to show HeaderFooterEditor popup
+        private void ShowHeaderFooterEditor(string initialText)
+        {
+            var editorWindow = new HeaderFooterEditor(initialText);
+            if (editorWindow.ShowDialog() == true)
+            {
+                // Use the entered text from the popup
+                string editedText = editorWindow.EditedText;
+                MessageBox.Show($"Edited Text: {editedText}");
+                // Here you can process the editedText to set the header or footer in the SfRichTextBoxAdv
+            }
+        }
+    
+
+
+
+private void DifferentFirstPage_Checked(object sender, RoutedEventArgs e)
+{
+    // Handle checked logic for "Different First Page"
+}
+
+private void DifferentFirstPage_Unchecked(object sender, RoutedEventArgs e)
+{
+    // Handle unchecked logic for "Different First Page"
+}
+
+
+   
+   
+   
     }
 
     /// <summary>

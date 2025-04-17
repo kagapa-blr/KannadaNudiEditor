@@ -17,7 +17,8 @@
     Title="{Binding DocumentTitle}"
     WindowState="Maximized"
     ResizeMode="CanResize"
-    WindowStartupLocation="CenterScreen" Closing="ribbonWindow_Closing">
+    WindowStartupLocation="CenterScreen"
+    Closing="ribbonWindow_Closing">
 
 
     <Syncfusion:RibbonWindow.Resources>
@@ -2395,7 +2396,11 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Content="Custom Margin" Height="30" Margin="5" Width="130" Click="CustomMarginButton_Click" />
+                        <Button Content="Custom Margin"
+                                Height="30"
+                                Margin="5"
+                                Width="130"
+                                Click="CustomMarginButton_Click"/>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
@@ -2427,10 +2432,85 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Content="Custom Size" Height="30" Margin="5" Width="130" Click="RibbonButton_Click" />
+                        <Button Content="Custom Size"
+                                Height="30"
+                                Margin="5"
+                                Width="130"
+                                Click="RibbonButton_Click"/>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
+
+            <Syncfusion:RibbonTab Caption="{DynamicResource HeaderFooterTab}">
+                <!-- Header & Footer Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterGroup}"
+                        IsLauncherButtonVisible="False">
+                    <StackPanel Margin="3">
+                        <Button Content="{DynamicResource EditHeader}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"
+                                Click="EditHeader_Click"/>
+                        <Button Content="{DynamicResource EditFooter}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"
+                                Click="EditFooter_Click"/>
+                        <Button Content="{DynamicResource RemoveHeaderFooter}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"/>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Header/Footer Options Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterOptions}"
+                        IsLauncherButtonVisible="False">
+                    <StackPanel Margin="3">
+                        <!-- Checkbox for Different First Page -->
+                        <CheckBox Content="{DynamicResource DifferentFirstPage}"
+                                  Margin="5"/>
+                        <!-- Checkbox for Different Odd and Even Pages -->
+                        <CheckBox Content="{DynamicResource DifferentOddEvenPages}"
+                                  Margin="5"/>
+                        <!-- Checkbox for Suppress Header/Footer on First Page -->
+                        <CheckBox Content="{DynamicResource SuppressFirstPageHeaderFooter}"
+                                  Margin="5"/>
+                        <!-- Checkbox for Link to Previous -->
+                        <CheckBox Content="{DynamicResource LinkToPrevious}"
+                                  Margin="5"/>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Page Number Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
+                        IsLauncherButtonVisible="False">
+                    <StackPanel Margin="3">
+                        <Button Content="{DynamicResource EditPageNumber}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"/>
+                        <Button Content="{DynamicResource EditEvenPageNumber}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"/>
+                        <Button Content="{DynamicResource EditOddPageNumber}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"/>
+                        <Button Content="{DynamicResource DefaultPageNumber}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"/>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+            </Syncfusion:RibbonTab>
+
+
+
+
+
         </Syncfusion:Ribbon>
 
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
