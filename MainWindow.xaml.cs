@@ -1359,7 +1359,7 @@ namespace KannadaNudiEditor
         }
 
 
-        
+
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
             CustomMargin dialog = new CustomMargin();
@@ -1385,54 +1385,69 @@ namespace KannadaNudiEditor
                 }
             }
         }
-   
-   
-   
-   
-           // Handle Edit Header button click to show the Header/Footer editor
+
+
+
+        // Handle Edit Header button click to show the Header/Footer editor
         private void EditHeader_Click(object sender, RoutedEventArgs e)
         {
-            ShowHeaderFooterEditor("Enter Header Text");
-        }
+            // Open HeaderFooterEditor to let the user enter header and footer text
+            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(); // Instantiate without arguments
+            headerFooterEditor.ShowDialog();  // Open it as a modal dialog
 
-        // Handle Edit Footer button click to show the Header/Footer editor
-        private void EditFooter_Click(object sender, RoutedEventArgs e)
-        {
-            ShowHeaderFooterEditor("Enter Footer Text");
-        }
-   
-   
+            // After the user has applied the header and footer, we will retrieve the header/footer values
+            string headerText = headerFooterEditor.HeaderText;  // Corrected to use HeaderText
+            string footerText = headerFooterEditor.FooterText;  // Corrected to use FooterText
 
-        // Helper method to show HeaderFooterEditor popup
-        private void ShowHeaderFooterEditor(string initialText)
-        {
-            var editorWindow = new HeaderFooterEditor(initialText);
-            if (editorWindow.ShowDialog() == true)
+            // Only proceed if both header and footer texts are not empty
+            if (!string.IsNullOrEmpty(headerText) && !string.IsNullOrEmpty(footerText))
             {
-                // Use the entered text from the popup
-                string editedText = editorWindow.EditedText;
-                MessageBox.Show($"Edited Text: {editedText}");
-                // Here you can process the editedText to set the header or footer in the SfRichTextBoxAdv
+                // Defines the header and footer. 
+                HeaderFooters headerFooters = new HeaderFooters();
+
+                // Defines the header. 
+                ParagraphAdv headerParagraph = new ParagraphAdv();
+                SpanAdv headerSpan = new SpanAdv();
+                headerSpan.Text = headerText; // Dynamic text from the editor
+                headerParagraph.Inlines.Add(headerSpan);
+                headerFooters.Header.Blocks.Add(headerParagraph);
+
+                // Defines the footer. 
+                ParagraphAdv footerParagraph = new ParagraphAdv();
+                SpanAdv footerSpan = new SpanAdv();
+                footerSpan.Text = footerText; // Dynamic text from the editor
+                footerParagraph.Inlines.Add(footerSpan);
+                headerFooters.Footer.Blocks.Add(footerParagraph);
+
+                // Apply the header and footer to the first section
+                SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
+                sectionAdv.HeaderFooters = headerFooters;
+                sectionAdv.SectionFormat.HeaderDistance = 50;
+                sectionAdv.SectionFormat.FooterDistance = 50;
+            }
+            else
+            {
+                MessageBox.Show("Header and Footer cannot be empty.");
             }
         }
-    
 
 
 
-private void DifferentFirstPage_Checked(object sender, RoutedEventArgs e)
-{
-    // Handle checked logic for "Different First Page"
-}
 
-private void DifferentFirstPage_Unchecked(object sender, RoutedEventArgs e)
-{
-    // Handle unchecked logic for "Different First Page"
-}
+        private void DifferentFirstPage_Checked(object sender, RoutedEventArgs e)
+        {
+            // Handle checked logic for "Different First Page"
+        }
+
+        private void DifferentFirstPage_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // Handle unchecked logic for "Different First Page"
+        }
 
 
-   
-   
-   
+
+
+
     }
 
     /// <summary>

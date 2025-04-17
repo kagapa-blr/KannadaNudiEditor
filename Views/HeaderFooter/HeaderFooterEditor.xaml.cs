@@ -4,20 +4,31 @@ namespace KannadaNudiEditor.Views.HeaderFooter
 {
     public partial class HeaderFooterEditor : Window
     {
-        public string EditedText { get; private set; }
+        public string HeaderText { get; private set; }
+        public string FooterText { get; private set; }
 
-        public HeaderFooterEditor(string initialText = "")
+        public HeaderFooterEditor()  // Default constructor (no parameters)
         {
             InitializeComponent();
-            TextInput.Text = initialText;
         }
 
-        // OK button click - save the text and close the window
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        // Handle Apply button click to update the header/footer
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            EditedText = TextInput.Text;
-            DialogResult = true;
-            Close();
+            // Retrieve the header and footer texts
+            HeaderText = HeaderTextBox.Text;
+            FooterText = FooterTextBox.Text;
+
+            // Validate that both header and footer are not empty
+            if (!string.IsNullOrEmpty(HeaderText) && !string.IsNullOrEmpty(FooterText))
+            {
+                this.DialogResult = true; // Close the dialog with success
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Please enter both header and footer text.");
+            }
         }
     }
 }

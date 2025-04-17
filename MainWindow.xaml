@@ -2444,18 +2444,13 @@
             <Syncfusion:RibbonTab Caption="{DynamicResource HeaderFooterTab}">
                 <!-- Header & Footer Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
                         <Button Content="{DynamicResource EditHeader}"
                                 Height="30"
                                 Width="130"
                                 Margin="5"
                                 Click="EditHeader_Click"/>
-                        <Button Content="{DynamicResource EditFooter}"
-                                Height="30"
-                                Width="130"
-                                Margin="5"
-                                Click="EditFooter_Click"/>
                         <Button Content="{DynamicResource RemoveHeaderFooter}"
                                 Height="30"
                                 Width="130"
@@ -2465,7 +2460,7 @@
 
                 <!-- Header/Footer Options Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterOptions}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
                         <!-- Checkbox for Different First Page -->
                         <CheckBox Content="{DynamicResource DifferentFirstPage}"
@@ -2484,7 +2479,7 @@
 
                 <!-- Page Number Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
                         <Button Content="{DynamicResource EditPageNumber}"
                                 Height="30"
