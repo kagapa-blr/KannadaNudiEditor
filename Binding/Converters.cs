@@ -1,14 +1,7 @@
-﻿using Syncfusion.Windows.Controls.RichTextBoxAdv;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 #if !Framework3_5
-using System.Linq;
-using System.Threading.Tasks;
 #endif
 
 namespace KannadaNudiEditor
@@ -77,10 +70,13 @@ namespace KannadaNudiEditor
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return null;
         }
+
+
+
     }
 
     /// <summary>
@@ -117,10 +113,9 @@ namespace KannadaNudiEditor
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            double lineSpacing = 1d;
-            if (parameter is string)
-                lineSpacing = double.Parse(parameter.ToString());
-            return lineSpacing >= 1 ? lineSpacing : 1d;
+            if (parameter is string s && double.TryParse(s, out double lineSpacing))
+                return lineSpacing >= 1 ? lineSpacing : 1d;
+            return 1d;
         }
     }
 
@@ -168,32 +163,24 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Converts the List value to Toggle.
         /// </summary>
-        /// <param name="value">The value produced by the binding source.</param>
-        /// <param name="targetType">The type of the binding target property.</param>
-        /// <param name="parameter">The converter parameter to use.</param>
-        /// <param name="culture">The culture to use in the converter.</param>
-        /// <returns>
-        /// A converted value. If the method returns null, the valid null value is used.
-        /// </returns>
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null && value.ToString() == parameter.ToString())
-                return true;
-            return false;
+            if (value == null || parameter == null)
+                return false;
+
+            return string.Equals(value.ToString(), parameter.ToString(), StringComparison.OrdinalIgnoreCase);
         }
+
         /// <summary>
         /// Converts the Toggle value to List.
         /// </summary>
-        /// <param name="value">The value that is produced by the binding target.</param>
-        /// <param name="targetType">The type to convert to.</param>
-        /// <param name="parameter">The converter parameter to use.</param>
-        /// <param name="culture">The culture to use in the converter.</param>
-        /// <returns>
-        /// A converted value. If the method returns null, the valid null value is used.
-        /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return parameter.ToString();
+            // Only return parameter if the toggle is checked (true)
+            if (value is bool boolVal && boolVal && parameter != null)
+                return parameter.ToString();
+            // Return null if unchecked or invalid
+            return null;
         }
     }
 
@@ -224,13 +211,14 @@ namespace KannadaNudiEditor
         /// <param name="parameter">The parameter.</param>
         /// <param name="language">The language.</param>
         /// <returns></returns>
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo language)
+        public object? ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo language)
         {
-            Color? color = null;
-            if (value is Color)
-                color = (Color)value;
-            if (color.HasValue && color.Value != null && !(color.Value.A == 0 && color.Value.R == 255 && color.Value.G == 255 && color.Value.B == 255))
-                return color.Value;
+            if (value is Color color)
+            {
+                // If not fully transparent white, return the color
+                if (!(color.A == 0 && color.R == 255 && color.G == 255 && color.B == 255))
+                    return color;
+            }
             return null;
         }
     }

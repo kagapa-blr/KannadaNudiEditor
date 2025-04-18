@@ -23,12 +23,12 @@ namespace KannadaNudiEditor
     {
         #region Feilds
 #if !Framework3_5
-        Task<bool> loadAsync = null;
-        CancellationTokenSource cancellationTokenSource = null;
-        private RibbonGallery ribbonGallery = null;
-        private RibbonButton RibbonButton = null;
-        Dictionary<string, List<double>> pageMarginsCollection = null;
-        Dictionary<string, List<double>> pageSizesCollection = null;
+        Task<bool>? loadAsync = null;
+        CancellationTokenSource? cancellationTokenSource = null;
+        private RibbonGallery? ribbonGallery = null;
+        private RibbonButton? RibbonButton = null;
+        Dictionary<string, List<double>>? pageMarginsCollection = null;
+        Dictionary<string, List<double>>? pageSizesCollection = null;
 
 #endif
         #endregion
@@ -1470,17 +1470,16 @@ namespace KannadaNudiEditor
     /// </summary>
     public class PageMargins
     {
-        #region Fields
-        public string Key { get; set; }
-        public string top { get; set; }
-        public string bottom { get; set; }
-        public string left { get; set; }
-        public string right { get; set; }
+        public string? Key { get; set; }
+        public string? top { get; set; }
+        public string? bottom { get; set; }
+        public string? left { get; set; }
+        public string? right { get; set; }
         public override string ToString()
         {
             return $"{Key}: {top}, {bottom}, {left}, {right}";
         }
-        #endregion
+
     }
 
     /// <summary>
@@ -1488,14 +1487,12 @@ namespace KannadaNudiEditor
     /// </summary>
     public class PageSize
     {
-        #region Fields
-        public string Key { get; set; }
-        public string height { get; set; }
-        public string width { get; set; }
+        public string? Key { get; set; }
+        public string? height { get; set; }
+        public string? width { get; set; }
         public override string ToString()
         {
             return $"{Key}: {height}, {width}";
         }
-        #endregion
     }
 }

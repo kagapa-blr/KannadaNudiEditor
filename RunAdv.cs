@@ -52,9 +52,12 @@ namespace KannadaNudiEditor
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnRunTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            RunAdv runadv = d as RunAdv;
-            runadv.OnRunTextChanged(e);
+            if (d is RunAdv runadv)
+            {
+                runadv.OnRunTextChanged(e);
+            }
         }
+
         /// <summary>
         /// Raises the <see cref="E:RunTextChanged" /> event.
         /// </summary>

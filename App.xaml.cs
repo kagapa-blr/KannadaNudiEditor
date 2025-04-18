@@ -9,7 +9,7 @@ namespace KannadaNudiEditor
 {
     public partial class App : Application
     {
-        private Process _kannadaKeyboardProcess;
+        private Process? _kannadaKeyboardProcess;
 
         protected override void OnStartup(StartupEventArgs e)
         {

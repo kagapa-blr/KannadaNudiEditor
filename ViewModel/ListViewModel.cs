@@ -15,11 +15,13 @@ namespace KannadaNudiEditor
     /// The List viewmodel class.
     /// </summary>
     /// <remarks></remarks>
-    internal class ListViewModel: INotifyPropertyChanged
+    internal class ListViewModel : INotifyPropertyChanged
     {
         #region Fields
         private string listName;
-        private SfRichTextBoxAdv richTextBoxAdv = null;
+
+        private SfRichTextBoxAdv? richTextBoxAdv = null;
+
         Dictionary<string, ListAdv> lists = new Dictionary<string, ListAdv>();
         private bool isRetrieving = false;
         #endregion
@@ -57,7 +59,7 @@ namespace KannadaNudiEditor
             if (richTextBoxAdv != null)
             {
                 this.richTextBoxAdv = richTextBoxAdv;
-                List<string> listNames = new List<string>() 
+                List<string> listNames = new List<string>()
                 {
                     "_Bullet_Dot", "_Bullet_Square", "_Bullet_Circle", "_Bullet_Flower", "_Bullet_Tick", "_Bullet_Arrow" ,
                     "_Numbering_LowLetter_Brace","_Numbering_LowLetter_Dot","_Numbering_Number_Brace","_Numbering_Number_Dot","_Numbering_UpLetter","_Numbering_UpRoman","_Numbering_LowRoman",
@@ -73,7 +75,7 @@ namespace KannadaNudiEditor
         #endregion
 
         #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         /// <summary>
         /// Occurs when the richTextBoxAdv selection changes
         /// </summary>
@@ -123,10 +125,10 @@ namespace KannadaNudiEditor
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             if (!isRetrieving)
             {
-                if(listName == "NoList")
+                if (listName == "NoList")
                     richTextBoxAdv.Selection.ParagraphFormat.SetList(null);
-                if(lists.ContainsKey(ListName))
-                    richTextBoxAdv.Selection.ParagraphFormat.SetList(lists[ListName]);                   
+                if (lists.ContainsKey(ListName))
+                    richTextBoxAdv.Selection.ParagraphFormat.SetList(lists[ListName]);
             }
         }
         /// <summary>
@@ -189,7 +191,7 @@ namespace KannadaNudiEditor
                         listLevel.ListLevelPattern = ListLevelPattern.LowLetter;
                     else if (listName.Contains("Number"))
                         listLevel.ListLevelPattern = ListLevelPattern.Number;
-                    if(listName.EndsWith("Brace"))
+                    if (listName.EndsWith("Brace"))
                         listLevel.NumberFormat = "%1)";
                     else
                         listLevel.NumberFormat = "%1.";

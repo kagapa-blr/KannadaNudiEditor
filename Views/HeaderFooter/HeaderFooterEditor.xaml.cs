@@ -4,8 +4,10 @@ namespace KannadaNudiEditor.Views.HeaderFooter
 {
     public partial class HeaderFooterEditor : Window
     {
-        public string HeaderText { get; private set; }
-        public string FooterText { get; private set; }
+
+
+        public string? HeaderText { get; private set; }
+        public string? FooterText { get; private set; }
 
         public HeaderFooterEditor()  // Default constructor (no parameters)
         {
