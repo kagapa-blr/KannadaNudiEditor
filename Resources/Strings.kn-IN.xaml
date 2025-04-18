@@ -2,232 +2,232 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- ========== TABS ========== -->
-    <sys:String x:Key="HomeTab">ಮನೆ</sys:String>
-    <sys:String x:Key="InsertTab">ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="PageLayoutTab">ಪುಟ ವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="ViewTab">ನೋಟ</sys:String>
-    <sys:String x:Key="ReviewTab">ಪರಾಮರ್ಶೆ</sys:String>
+  <!-- ========== TABS ========== -->
+  <sys:String x:Key="HomeTab">ಮನೆ</sys:String>
+  <sys:String x:Key="InsertTab">ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="PageLayoutTab">ಪುಟ ವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="ViewTab">ನೋಟ</sys:String>
+  <sys:String x:Key="ReviewTab">ಪರಾಮರ್ಶೆ</sys:String>
 
-    <!-- ========== HOME TAB ========== -->
-    <!-- Clipboard -->
-    <sys:String x:Key="Clipboard">ನಕಲು ಹಾಳೆ</sys:String>
-    <sys:String x:Key="Paste">ಅಂಟಿಸಿ</sys:String>
-    <sys:String x:Key="PasteShortcut">ಕಿರು ಸೂಚಕವನ್ನು ಅಂಟಿಸಿ (Ctrl+V)</sys:String>
-    <sys:String x:Key="PasteTipLine1">ನಕಲು ಹಾಳೆಗೆ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="PasteTipLine2">ನಿಮ್ಮ ದಸ್ತಾವೇಜಿಗೆ  ಸೇರಿಸಿ.</sys:String>
+  <!-- ========== HOME TAB ========== -->
+  <!-- Clipboard -->
+  <sys:String x:Key="Clipboard">ನಕಲು ಹಾಳೆ</sys:String>
+  <sys:String x:Key="Paste">ಅಂಟಿಸಿ</sys:String>
+  <sys:String x:Key="PasteShortcut">ಕಿರು ಸೂಚಕವನ್ನು ಅಂಟಿಸಿ (Ctrl+V)</sys:String>
+  <sys:String x:Key="PasteTipLine1">ನಕಲು ಹಾಳೆಗೆ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="PasteTipLine2">ನಿಮ್ಮ ದಸ್ತಾವೇಜಿಗೆ  ಸೇರಿಸಿ.</sys:String>
 
-    <sys:String x:Key="Cut">ಕತ್ತರಿಸಿ</sys:String>
-    <sys:String x:Key="CutShortcut">ಕತ್ತರಿಸಿ (Ctrl+X)</sys:String>
-    <sys:String x:Key="CutTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ</sys:String>
-    <sys:String x:Key="CutTipLine2">ನಕಲು ಹಾಳೆಗೆ ಹಾಕಿ</sys:String>
-    <sys:String x:Key="CutTipLine3">ಇದರಿಂದ ಬೇರೆ ಕಡೆ ಅಂಟಿಸಲು ನಕಲಿಸಿ</sys:String>
+  <sys:String x:Key="Cut">ಕತ್ತರಿಸಿ</sys:String>
+  <sys:String x:Key="CutShortcut">ಕತ್ತರಿಸಿ (Ctrl+X)</sys:String>
+  <sys:String x:Key="CutTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ</sys:String>
+  <sys:String x:Key="CutTipLine2">ನಕಲು ಹಾಳೆಗೆ ಹಾಕಿ</sys:String>
+  <sys:String x:Key="CutTipLine3">ಇದರಿಂದ ಬೇರೆ ಕಡೆ ಅಂಟಿಸಲು ನಕಲಿಸಿ</sys:String>
 
-    <sys:String x:Key="Copy">ನಕಲಿಸಿ</sys:String>
-    <sys:String x:Key="CopyShortcut">ನಕಲಿಸಿ ಕಿರುಸೂಚಕ  (Ctrl+C)</sys:String>
-    <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ್ದನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
-    <sys:String x:Key="CopyTipLine2">ಇದರಿಂದ ಬೇರೆ ಒಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
-
-
-    <!-- Font -->
-    <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
-    <sys:String x:Key="FontShortcut">ಅಕ್ಷರಶೈಲಿ ಕಿರುಸೂಚಕ (Ctrl+Shift+F)</sys:String>
-    <sys:String x:Key="FontTipLine1">ನಿಮ್ಮ ಪಠ್ಯಕ್ಕಾಗಿ  ಹೊಸ ಅಕ್ಷರಶೈಲಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</sys:String>
-    <sys:String x:Key="FontSizeShortcut">ಅಕ್ಷರ ಗಾತ್ರ ಕಿರುಸೂಚಕ(Ctrl+Shift+P)</sys:String>
-    <sys:String x:Key="FontSizeTipLine1">ನಿಮ್ಮ ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಬದಲಾಯಿಸಿ.</sys:String>
-
-    <!-- Paragraph -->
-    <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
+  <sys:String x:Key="Copy">ನಕಲಿಸಿ</sys:String>
+  <sys:String x:Key="CopyShortcut">ನಕಲಿಸಿ ಕಿರುಸೂಚಕ  (Ctrl+C)</sys:String>
+  <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ್ದನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
+  <sys:String x:Key="CopyTipLine2">ಇದರಿಂದ ಬೇರೆ ಒಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
 
 
+  <!-- Font -->
+  <sys:String x:Key="Font">ಅಕ್ಷರಶೈಲಿ</sys:String>
+  <sys:String x:Key="FontShortcut">ಅಕ್ಷರಶೈಲಿ ಕಿರುಸೂಚಕ (Ctrl+Shift+F)</sys:String>
+  <sys:String x:Key="FontTipLine1">ನಿಮ್ಮ ಪಠ್ಯಕ್ಕಾಗಿ  ಹೊಸ ಅಕ್ಷರಶೈಲಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</sys:String>
+  <sys:String x:Key="FontSizeShortcut">ಅಕ್ಷರ ಗಾತ್ರ ಕಿರುಸೂಚಕ(Ctrl+Shift+P)</sys:String>
+  <sys:String x:Key="FontSizeTipLine1">ನಿಮ್ಮ ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಬದಲಾಯಿಸಿ.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Home Tab: Style  -->
-    <!-- =========================== -->
-    <sys:String x:Key="StylesHeader">ಶೀರ್ಷಿಕೆ ಶೈಲಿಗಳು</sys:String>
-    <sys:String x:Key="StylesGalleryLabel">ಚಿತ್ರಾಗಾರ ಪಟ್ಟಿಕೆ ಶೈಲಿಗಳು</sys:String>
-    <sys:String x:Key="CreateStyle">ಹೊಸ ಶೈಲಿ ಸೃಜಿಸಿ</sys:String>
-    <sys:String x:Key="ClearFormatting">ವಿನ್ಯಾಸವನ್ನು ಅಳಿಸಿ</sys:String>
+  <!-- Paragraph -->
+  <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
 
 
 
-    <sys:String x:Key="EditingHeader">ಶೀರ್ಷಿಕೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-
-    <!-- ReadOnly -->
-    <sys:String x:Key="ReadOnly">ಓದಲು ಮಾತ್ರ</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipTitle">ಸಂಪಾದನೆ ನಿರ್ಬಂಧಿಸಿ</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipLine1">ಮಾಹಿತಿ ಸಂಪಾದನೆಯನ್ನು   ನಿರ್ಬಂಧಿಸಿ</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipLine2">ಮತ್ತು ವಿನ್ಯಾಸ ಬದಲಾವಣೆಯನ್ನು ನಿರ್ಬಂಧಿಸಿ.</sys:String>
-
-    <!-- Find -->
-    <sys:String x:Key="Find">ಹುಡುಕಿ</sys:String>
-    <sys:String x:Key="FindTooltipTitle">ಹುಡುಕಿ (Ctrl+F)</sys:String>
-    <sys:String x:Key="FindTooltipLine1">ಕಡತದಲ್ಲಿರುವ ಪಠ್ಯ ಅಥವಾ ಮಾಹಿತಿಯನ್ನು ಹುಡುಕಿ.</sys:String>
-
-    <!-- Replace -->
-    <sys:String x:Key="Replace">ಬದಲಾಯಿಸಿ</sys:String>
-    <sys:String x:Key="ReplaceTooltipTitle">ಬದಲಾಯಿಸಿ (Ctrl+H)</sys:String>
-    <sys:String x:Key="ReplaceTooltipLine1">ಬದಲಾಯಿಸಬೇಕಾದ ಪಠ್ಯವನ್ನು ಹುಡುಕಿ</sys:String>
-    <sys:String x:Key="ReplaceTooltipLine2">ಮತ್ತು ಬೇರೆ ಪಠ್ಯದಿಂದ ಬದಲಾಯಿಸಿ.</sys:String>
+  <!-- =========================== -->
+  <!-- Home Tab: Style  -->
+  <!-- =========================== -->
+  <sys:String x:Key="StylesHeader">ಶೀರ್ಷಿಕೆ ಶೈಲಿಗಳು</sys:String>
+  <sys:String x:Key="StylesGalleryLabel">ಚಿತ್ರಾಗಾರ ಪಟ್ಟಿಕೆ ಶೈಲಿಗಳು</sys:String>
+  <sys:String x:Key="CreateStyle">ಹೊಸ ಶೈಲಿ ಸೃಜಿಸಿ</sys:String>
+  <sys:String x:Key="ClearFormatting">ವಿನ್ಯಾಸವನ್ನು ಅಳಿಸಿ</sys:String>
 
 
 
-    <!-- ========== INSERT TAB ========== -->
-    <!-- Pages -->
-    <sys:String x:Key="Pages">ಪುಟಗಳು</sys:String>
-    <sys:String x:Key="PageBreak">ಪುಟ ವಿರಾಮ</sys:String>
-    <sys:String x:Key="PageBreakToolTipHeader">ಪುಟ ವಿರಾಮ ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="PageBreakToolTip">ಸೂಚಿಸಿದ ಸ್ಥಾನದ ಬಳಿ ಹೊಸ ಪುಟ ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+  <sys:String x:Key="EditingHeader">ಶೀರ್ಷಿಕೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
 
-    <!-- Tables -->
-    <sys:String x:Key="Tables">ಕೋಷ್ಟಕಗಳು</sys:String>
-    <sys:String x:Key="Table">ಕೋಷ್ಟಕ</sys:String>
-    <sys:String x:Key="AddTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="InsertTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="AddTableTipLine1">ಕಡತದಲ್ಲಿ ಮಾಹಿತಿಯನ್ನು</sys:String>
-    <sys:String x:Key="AddTableTipLine2">ಏರ್ಪಡಿಸಲು ಕೋಷ್ಟಕ ಒಂದು ಉತ್ತಮ ಸಾಧನವಾಗಿದೆ.</sys:String>
+  <!-- ReadOnly -->
+  <sys:String x:Key="ReadOnly">ಓದಲು ಮಾತ್ರ</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipTitle">ಸಂಪಾದನೆ ನಿರ್ಬಂಧಿಸಿ</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipLine1">ಮಾಹಿತಿ ಸಂಪಾದನೆಯನ್ನು   ನಿರ್ಬಂಧಿಸಿ</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipLine2">ಮತ್ತು ವಿನ್ಯಾಸ ಬದಲಾವಣೆಯನ್ನು ನಿರ್ಬಂಧಿಸಿ.</sys:String>
 
-    <!-- Illustrations -->
-    <sys:String x:Key="Illustrations">ಚಿತ್ರಗಳು</sys:String>
-    <sys:String x:Key="Picture">ಚಿತ್ರ</sys:String>
-    <sys:String x:Key="FromFile">ಕಡತದಿಂದ</sys:String>
-    <sys:String x:Key="PictureTipLine1">ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಿಂದ ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="PictureTipLine2">ಅಥವಾ ಇತರ ಸಂಪರ್ಕಿತ ಕಂಪ್ಯೂಟರ್‌ಗಳಿಂದ</sys:String>
-    <sys:String x:Key="PictureTipLine3">ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ.</sys:String>
+  <!-- Find -->
+  <sys:String x:Key="Find">ಹುಡುಕಿ</sys:String>
+  <sys:String x:Key="FindTooltipTitle">ಹುಡುಕಿ (Ctrl+F)</sys:String>
+  <sys:String x:Key="FindTooltipLine1">ಕಡತದಲ್ಲಿರುವ ಪಠ್ಯ ಅಥವಾ ಮಾಹಿತಿಯನ್ನು ಹುಡುಕಿ.</sys:String>
 
-    <!-- Links -->
-    <sys:String x:Key="Links">ಕೊಂಡಿಗಳು</sys:String>
-    <sys:String x:Key="Hyperlink">ಹೈಪರ್‌ಕೊಂಡಿ</sys:String>
-    <sys:String x:Key="HyperlinkHeader">ಹೈಪರ್‌ಲಿಂಕ್ ಸೇರಿಸಿ (Ctrl+K)</sys:String>
-    <sys:String x:Key="HyperlinkTipLine1">ಜಾಲಪುಟಗಳಲ್ಲಿ ಹಾಗೂ ದಸ್ತಾವೇಜಿನಲ್ಲಿ</sys:String>
-    <sys:String x:Key="HyperlinkTipLine2">ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು ಸೃಜಿಸಿ.</sys:String>
-
-    <!-- ========== PAGE LAYOUT TAB ========== -->
-    <sys:String x:Key="PageSetup">ಪುಟವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="PageSize">ಪುಟ ಗಾತ್ರ</sys:String>
-    <sys:String x:Key="PageBackground">ಹಿನ್ನೆಲೆ</sys:String>
-    <sys:String x:Key="Margins">ಅಂಚುಗಳು</sys:String>
-    <sys:String x:Key="Size">ಗಾತ್ರ</sys:String>
-
-    <!-- ========== VIEW TAB ========== -->
-    <sys:String x:Key="Views">ನೋಟಗಳು</sys:String>
-    <sys:String x:Key="PrintLayout">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="WebLayout">ಜಾಲತಾಣ ವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="Zoom">ಹಿಗ್ಗಿಸು</sys:String>
-    <sys:String x:Key="ZoomIn">ಹಿಗ್ಗಿಸು</sys:String>
-    <sys:String x:Key="ZoomOut">ಕುಗ್ಗಿಸು</sys:String>
-    <sys:String x:Key="ResetZoom">100%</sys:String>
-    <sys:String x:Key="OnePage">ಒಂದು ಪುಟ</sys:String>
-    <sys:String x:Key="MultiplePages">ಅನೇಕ ಪುಟಗಳು</sys:String>
-    <sys:String x:Key="PageWidth">ಪುಟದ ಅಗಲ</sys:String>
-
-    <!-- ========== REVIEW TAB ========== -->
-    <sys:String x:Key="Comments">ಟಿಪ್ಪಣಿಗಳು</sys:String>
-    <sys:String x:Key="NewComment">ಹೊಸ ಟಿಪ್ಪಣಿ</sys:String>
-    <sys:String x:Key="DeleteComment">ಟಿಪ್ಪಣಿ ಅಳಿಸಿ</sys:String>
-    <sys:String x:Key="PreviousComment">ಹಿಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
-    <sys:String x:Key="NextComment">ಮುಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
-    <sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
-
-    <!-- ========== STATUS BAR ========== -->
-    <sys:String x:Key="PageLabel">ಪುಟ :</sys:String>
-    <sys:String x:Key="PageNumberTooltip">ದಸ್ತಾವೇಜಿನ ಪುಟ ಸಂಖ್ಯೆ.</sys:String>
-    <sys:String x:Key="WordsLabel">ಪದಗಳು</sys:String>
-    <sys:String x:Key="WordCountTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪದಗಳ ಸಂಖ್ಯೆ.</sys:String>
-    <sys:String x:Key="LanguageSwitchTooltip">ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ಭಾಷೆಗಳ ಬದಲಾವಣೆ</sys:String>
-    <sys:String x:Key="PrintLayoutTooltip">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="WebLayoutTooltip">ಜಾಲತಾಣ ವಿನ್ಯಾಸ</sys:String>
-    <sys:String x:Key="ZoomTooltip">ಹಿಗ್ಗಿಸು</sys:String>
-
-    <!-- ========== BACKSTAGE MENU ========== -->
-    <sys:String x:Key="BackstageNew">ಹೊಸದು</sys:String>
-    <sys:String x:Key="BackstageOpen">ತೆರೆ</sys:String>
-    <sys:String x:Key="BackstageSave">ಉಳಿಸಿ</sys:String>
-    <sys:String x:Key="BackstageSaveAs">ಅಂತೆ ಉಳಿಸಿ</sys:String>
-    <sys:String x:Key="BackstagePrint">ಮುದ್ರಿಸಿ</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsWordDocx">ವರ್ಡ್ ಡಾಕ್ಯುಮೆಂಟ್ ಎಕ್ಸ್</sys:String>
-    <sys:String x:Key="BackstageSaveAsWordDocxDescription">ಕಡತವನ್ನು  Word ಡಾಕ್ಯುಮೆಂಟ್‌ ಆಗಿ ಉಳಿಸಿ</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsWordDoc">Word 97-2003</sys:String>
-    <sys:String x:Key="BackstageSaveAsWordDocDescription">Word 97-2003 ರೂಪದಲ್ಲಿ  ಉಳಿಸಿ</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsHtml">Html ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
-    <sys:String x:Key="BackstageSaveAsHtmlDescription">ಫೈಲ್ ಅನ್ನು Html ಆಗಿ ಉಳಿಸಿ</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsXaml">Xaml ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
-    <sys:String x:Key="BackstageSaveAsXamlDescription">ಕಡತವನ್ನು Xaml ಆಗಿ ಉಳಿಸಿ</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsText">ಪಠ್ಯ ದಸ್ತಾವೇಜು</sys:String>
-    <sys:String x:Key="BackstageSaveAsTextDescription">ಫೈಲ್ ಅನ್ನು ಪಠ್ಯ ದಸ್ತಾವೇಜು ರೂಪದಲ್ಲಿ ಉಳಿಸಿ</sys:String>
-
-
-    <!-- =========================== -->
-    <!-- Page Layout: Custom Page Setup      -->
-    <!-- =========================== -->
-    <sys:String x:Key="EnterMarginsTitle">ಅಂಚುಗಳನ್ನು ನಮೂದಿಸಿ</sys:String>
-    <sys:String x:Key="EnterMarginInstruction">ಅಂಚುಗಳನ್ನು ಇಂಚುಗಳಲ್ಲಿ ನಮೂದಿಸಿ</sys:String>
-    <sys:String x:Key="LeftLabel">ಎಡ (ಇಂಚು):</sys:String>
-    <sys:String x:Key="TopLabel">ಮೇಲ್ಮೈ (ಇಂಚು):</sys:String>
-    <sys:String x:Key="RightLabel">ಬಲ (ಇಂಚು):</sys:String>
-    <sys:String x:Key="BottomLabel">ಕೆಳ (ಇಂಚು):</sys:String>
-    <sys:String x:Key="OkButton">ಸರಿ</sys:String>
-    <sys:String x:Key="CancelButton">ರದ್ದುಮಾಡಿ</sys:String>
+  <!-- Replace -->
+  <sys:String x:Key="Replace">ಬದಲಾಯಿಸಿ</sys:String>
+  <sys:String x:Key="ReplaceTooltipTitle">ಬದಲಾಯಿಸಿ (Ctrl+H)</sys:String>
+  <sys:String x:Key="ReplaceTooltipLine1">ಬದಲಾಯಿಸಬೇಕಾದ ಪಠ್ಯವನ್ನು ಹುಡುಕಿ</sys:String>
+  <sys:String x:Key="ReplaceTooltipLine2">ಮತ್ತು ಬೇರೆ ಪಠ್ಯದಿಂದ ಬದಲಾಯಿಸಿ.</sys:String>
 
 
 
-    <sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
-    <sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
-    <!-- =========================== -->
-    <!-- Header/Footer: Custom Setup -->
-    <!-- =========================== -->
+  <!-- ========== INSERT TAB ========== -->
+  <!-- Pages -->
+  <sys:String x:Key="Pages">ಪುಟಗಳು</sys:String>
+  <sys:String x:Key="PageBreak">ಪುಟ ವಿರಾಮ</sys:String>
+  <sys:String x:Key="PageBreakToolTipHeader">ಪುಟ ವಿರಾಮ ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="PageBreakToolTip">ಸೂಚಿಸಿದ ಸ್ಥಾನದ ಬಳಿ ಹೊಸ ಪುಟ ಪ್ರಾರಂಭಿಸಿ.</sys:String>
 
-    <!-- Tab Title -->
-    <sys:String x:Key="HeaderFooterTab">ಅಗ್ರಶೀರ್ಷಿಕೆ / ಅಡಿ ಶೀರ್ಷಿಕೆ</sys:String>
+  <!-- Tables -->
+  <sys:String x:Key="Tables">ಕೋಷ್ಟಕಗಳು</sys:String>
+  <sys:String x:Key="Table">ಕೋಷ್ಟಕ</sys:String>
+  <sys:String x:Key="AddTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="InsertTable">ಕೋಷ್ಟಕ ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="AddTableTipLine1">ಕಡತದಲ್ಲಿ ಮಾಹಿತಿಯನ್ನು</sys:String>
+  <sys:String x:Key="AddTableTipLine2">ಏರ್ಪಡಿಸಲು ಕೋಷ್ಟಕ ಒಂದು ಉತ್ತಮ ಸಾಧನವಾಗಿದೆ.</sys:String>
 
-    <!-- Ribbon Group Headers -->
-    <sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
-    <sys:String x:Key="HeaderFooterOptions">ಆಯ್ಕೆಗಳು</sys:String>
+  <!-- Illustrations -->
+  <sys:String x:Key="Illustrations">ಚಿತ್ರಗಳು</sys:String>
+  <sys:String x:Key="Picture">ಚಿತ್ರ</sys:String>
+  <sys:String x:Key="FromFile">ಕಡತದಿಂದ</sys:String>
+  <sys:String x:Key="PictureTipLine1">ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಿಂದ ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ</sys:String>
+  <sys:String x:Key="PictureTipLine2">ಅಥವಾ ಇತರ ಸಂಪರ್ಕಿತ ಕಂಪ್ಯೂಟರ್‌ಗಳಿಂದ</sys:String>
+  <sys:String x:Key="PictureTipLine3">ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸಿ.</sys:String>
 
-    <!-- Buttons -->
-    <sys:String x:Key="EditHeader">ಅಗ್ರಶೀರ್ಷಿಕೆ  ಸಂಪಾದಿಸಿ</sys:String>
-    <sys:String x:Key="EditFooter">ಅಡಿ ಶೀರ್ಷಿಕೆ   ಸಂಪಾದಿಸಿ</sys:String>
-    <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
+  <!-- Links -->
+  <sys:String x:Key="Links">ಕೊಂಡಿಗಳು</sys:String>
+  <sys:String x:Key="Hyperlink">ಹೈಪರ್‌ಕೊಂಡಿ</sys:String>
+  <sys:String x:Key="HyperlinkHeader">ಹೈಪರ್‌ಲಿಂಕ್ ಸೇರಿಸಿ (Ctrl+K)</sys:String>
+  <sys:String x:Key="HyperlinkTipLine1">ಜಾಲಪುಟಗಳಲ್ಲಿ ಹಾಗೂ ದಸ್ತಾವೇಜಿನಲ್ಲಿ</sys:String>
+  <sys:String x:Key="HyperlinkTipLine2">ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು ಸೃಜಿಸಿ.</sys:String>
 
-    <!-- Checkboxes -->
-    <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ</sys:String>
-    <sys:String x:Key="DifferentOddEvenPages">ಬೆಸ/ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳು</sys:String>
-    <sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೊದಲ ಪುಟದ ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಡಗಿಸಿ</sys:String>
-    <sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದರೊಂದಿಗೆ  ಜೋಡಿಸಿ</sys:String>
+  <!-- ========== PAGE LAYOUT TAB ========== -->
+  <sys:String x:Key="PageSetup">ಪುಟವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="PageSize">ಪುಟ ಗಾತ್ರ</sys:String>
+  <sys:String x:Key="PageBackground">ಹಿನ್ನೆಲೆ</sys:String>
+  <sys:String x:Key="Margins">ಅಂಚುಗಳು</sys:String>
+  <sys:String x:Key="Size">ಗಾತ್ರ</sys:String>
 
-    <!-- =========================== -->
-    <!-- Page Number: Custom Setup -->
-    <!-- =========================== -->
+  <!-- ========== VIEW TAB ========== -->
+  <sys:String x:Key="Views">ನೋಟಗಳು</sys:String>
+  <sys:String x:Key="PrintLayout">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="WebLayout">ಜಾಲತಾಣ ವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="Zoom">ಹಿಗ್ಗಿಸು</sys:String>
+  <sys:String x:Key="ZoomIn">ಹಿಗ್ಗಿಸು</sys:String>
+  <sys:String x:Key="ZoomOut">ಕುಗ್ಗಿಸು</sys:String>
+  <sys:String x:Key="ResetZoom">100%</sys:String>
+  <sys:String x:Key="OnePage">ಒಂದು ಪುಟ</sys:String>
+  <sys:String x:Key="MultiplePages">ಅನೇಕ ಪುಟಗಳು</sys:String>
+  <sys:String x:Key="PageWidth">ಪುಟದ ಅಗಲ</sys:String>
 
-    <!-- Tab Title -->
-    <sys:String x:Key="PageNumberGroup">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+  <!-- ========== REVIEW TAB ========== -->
+  <sys:String x:Key="Comments">ಟಿಪ್ಪಣಿಗಳು</sys:String>
+  <sys:String x:Key="NewComment">ಹೊಸ ಟಿಪ್ಪಣಿ</sys:String>
+  <sys:String x:Key="DeleteComment">ಟಿಪ್ಪಣಿ ಅಳಿಸಿ</sys:String>
+  <sys:String x:Key="PreviousComment">ಹಿಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
+  <sys:String x:Key="NextComment">ಮುಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
+  <sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
 
-    <!-- Buttons -->
-    <sys:String x:Key="EditPageNumber">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-    <sys:String x:Key="EditEvenPageNumber">ಸಮ  ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-    <sys:String x:Key="EditOddPageNumber">ಬೆಸ ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
-    <sys:String x:Key="DefaultPageNumber">ಪೂರ್ವ ನಿಗದಿತಪುಟ ಸಂಖ್ಯೆ</sys:String>
+  <!-- ========== STATUS BAR ========== -->
+  <sys:String x:Key="PageLabel">ಪುಟ :</sys:String>
+  <sys:String x:Key="PageNumberTooltip">ದಸ್ತಾವೇಜಿನ ಪುಟ ಸಂಖ್ಯೆ.</sys:String>
+  <sys:String x:Key="WordsLabel">ಪದಗಳು</sys:String>
+  <sys:String x:Key="WordCountTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪದಗಳ ಸಂಖ್ಯೆ.</sys:String>
+  <sys:String x:Key="LanguageSwitchTooltip">ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ಭಾಷೆಗಳ ಬದಲಾವಣೆ</sys:String>
+  <sys:String x:Key="PrintLayoutTooltip">ಮುದ್ರಣ ವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="WebLayoutTooltip">ಜಾಲತಾಣ ವಿನ್ಯಾಸ</sys:String>
+  <sys:String x:Key="ZoomTooltip">ಹಿಗ್ಗಿಸು</sys:String>
+
+  <!-- ========== BACKSTAGE MENU ========== -->
+  <sys:String x:Key="BackstageNew">ಹೊಸದು</sys:String>
+  <sys:String x:Key="BackstageOpen">ತೆರೆ</sys:String>
+  <sys:String x:Key="BackstageSave">ಉಳಿಸಿ</sys:String>
+  <sys:String x:Key="BackstageSaveAs">ಅಂತೆ ಉಳಿಸಿ</sys:String>
+  <sys:String x:Key="BackstagePrint">ಮುದ್ರಿಸಿ</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsWordDocx">ವರ್ಡ್ ಡಾಕ್ಯುಮೆಂಟ್ ಎಕ್ಸ್</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDocxDescription">ಕಡತವನ್ನು  Word ಡಾಕ್ಯುಮೆಂಟ್‌ ಆಗಿ ಉಳಿಸಿ</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsWordDoc">Word 97-2003</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDocDescription">Word 97-2003 ರೂಪದಲ್ಲಿ  ಉಳಿಸಿ</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsHtml">Html ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
+  <sys:String x:Key="BackstageSaveAsHtmlDescription">ಫೈಲ್ ಅನ್ನು Html ಆಗಿ ಉಳಿಸಿ</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsXaml">Xaml ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
+  <sys:String x:Key="BackstageSaveAsXamlDescription">ಕಡತವನ್ನು Xaml ಆಗಿ ಉಳಿಸಿ</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsText">ಪಠ್ಯ ದಸ್ತಾವೇಜು</sys:String>
+  <sys:String x:Key="BackstageSaveAsTextDescription">ಫೈಲ್ ಅನ್ನು ಪಠ್ಯ ದಸ್ತಾವೇಜು ರೂಪದಲ್ಲಿ ಉಳಿಸಿ</sys:String>
 
 
-    <!-- =========================== -->
-    <!-- Nudi Manager -->
-    <!-- =========================== -->
+  <!-- =========================== -->
+  <!-- Page Layout: Custom Page Setup      -->
+  <!-- =========================== -->
+  <sys:String x:Key="EnterMarginsTitle">ಅಂಚುಗಳನ್ನು ನಮೂದಿಸಿ</sys:String>
+  <sys:String x:Key="EnterMarginInstruction">ಅಂಚುಗಳನ್ನು ಇಂಚುಗಳಲ್ಲಿ ನಮೂದಿಸಿ</sys:String>
+  <sys:String x:Key="LeftLabel">ಎಡ (ಇಂಚು):</sys:String>
+  <sys:String x:Key="TopLabel">ಮೇಲ್ಮೈ (ಇಂಚು):</sys:String>
+  <sys:String x:Key="RightLabel">ಬಲ (ಇಂಚು):</sys:String>
+  <sys:String x:Key="BottomLabel">ಕೆಳ (ಇಂಚು):</sys:String>
+  <sys:String x:Key="OkButton">ಸರಿ</sys:String>
+  <sys:String x:Key="CancelButton">ರದ್ದುಮಾಡಿ</sys:String>
 
-    <sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
-    <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
-    <sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
-    <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
+
+
+  <sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+  <sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+  <!-- =========================== -->
+  <!-- Header/Footer: Custom Setup -->
+  <!-- =========================== -->
+
+  <!-- Tab Title -->
+  <sys:String x:Key="HeaderFooterTab">ಅಗ್ರಶೀರ್ಷಿಕೆ / ಅಡಿ ಶೀರ್ಷಿಕೆ</sys:String>
+
+  <!-- Ribbon Group Headers -->
+  <sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
+  <sys:String x:Key="HeaderFooterOptions">ಆಯ್ಕೆಗಳು</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="EditHeader">ಅಗ್ರಶೀರ್ಷಿಕೆ  ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="EditFooter">ಅಡಿ ಶೀರ್ಷಿಕೆ   ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
+
+  <!-- Checkboxes -->
+  <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ</sys:String>
+  <sys:String x:Key="DifferentOddEvenPages">ಬೆಸ/ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳು</sys:String>
+  <sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೊದಲ ಪುಟದ ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಡಗಿಸಿ</sys:String>
+  <sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದರೊಂದಿಗೆ  ಜೋಡಿಸಿ</sys:String>
+
+  <!-- =========================== -->
+  <!-- Page Number: Custom Setup -->
+  <!-- =========================== -->
+
+  <!-- Tab Title -->
+  <sys:String x:Key="PageNumberGroup">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="EditPageNumber">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="EditEvenPageNumber">ಸಮ  ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="EditOddPageNumber">ಬೆಸ ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="DefaultPageNumber">ಪೂರ್ವ ನಿಗದಿತಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+
+  <!-- =========================== -->
+  <!-- Nudi Manager -->
+  <!-- =========================== -->
+
+  <sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
+  <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
+  <sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
+  <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
 
 
 
-    <!-- =========================== -->
-    <!-- Help -->
-    <!-- =========================== -->
+  <!-- =========================== -->
+  <!-- Help -->
+  <!-- =========================== -->
 
 
   <!-- Help Tab -->
@@ -245,9 +245,18 @@
 
   <sys:String x:Key="AppInfoGroup">ಅನ್ವಯ ಮಾಹಿತಿ</sys:String>
   <sys:String x:Key="AppInfoGroupDescription">ಅನ್ವಯದ ಕುರಿತು ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
-
+ 
+ 
+  <!-- =========================== -->
+  <!-- Help  Feedback-->
+  <!-- =========================== -->
   <sys:String x:Key="FeedbackGroup">ಪ್ರತಿಕ್ರಿಯೆ</sys:String>
-  <sys:String x:Key="FeedbackGroupDescription">ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಅಥವಾ ತೊಂದರೆಗಳನ್ನು ಕಳುಹಿಸಿ.</sys:String>
+  <sys:String x:Key="FeedbackTitle">ಅಭಿಪ್ರಾಯ</sys:String>
+  <sys:String x:Key="EmailLabel">ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ:</sys:String>
+  <sys:String x:Key="FeedbackLabel">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ನಮೂದಿಸಿ:</sys:String>
+  <sys:String x:Key="Submit">ಸಲ್ಲಿಸು</sys:String>
+  <sys:String x:Key="Close">ಮುಚ್ಚಿ</sys:String>
+
 
   <!-- Buttons -->
   <sys:String x:Key="AboutNudi">ನುಡಿಯ ಕುರಿತು</sys:String>
@@ -270,6 +279,19 @@
   <sys:String x:Key="FeedbackTipLine1">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ಕಳುಹಿಸಿ.</sys:String>
   <sys:String x:Key="FeedbackTipLine2">ಭವಿಷ್ಯದಲ್ಲಿ ಉತ್ತಮೀಕರಣಕ್ಕಾಗಿ ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಬೇಕು.</sys:String>
 
+
+
+  <sys:String x:Key="AboutNudiTitle">ನುಡಿ ಬಗ್ಗೆ</sys:String>
+  <sys:String x:Key="AboutNudiHeader">ಕನ್ನಡ ನುಡಿ ಸಂಪಾದಕ</sys:String>
+
+  <sys:String x:Key="AboutNudiDescription">
+    ಕನ್ನಡ ನುಡಿ ಸಂಪಾದಕವು ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಭಾಷೆಗಳಲ್ಲಿ ದ್ವಿಭಾಷಾ ಸಂಪಾದನೆಯನ್ನು ಬೆಂಬಲಿಸುವ ಸಮೃದ್ಧ ಪಠ್ಯ ಸಂಪಾದಕವಾಗಿದೆ. 
+  ಇದು ಸುಧಾರಿತ ಅಕ್ಷರಶೈಲಿ, ಆಕಾರಣ ಮತ್ತು ಸ್ಥಳೀಕರಣವನ್ನು ಒದಗಿಸುತ್ತದೆ. 
+  ಈ ಸಂಪಾದಕವನ್ನು ಕಾಗಪಾ ಅಭಿವೃದ್ಧಿಪಡಿಸಿ ನಿರ್ವಹಿಸುತ್ತಿದ್ದು, ಇದು .NET 8 ಮತ್ತು WPF ಉಪಯೋಗಿಸಿ Windows ವ್ಯವಸ್ಥೆಗಾಗಿ ರೂಪುಗೊಳಿಸಲಾಗಿದೆ.
+  </sys:String>
+
+
+  <sys:String x:Key="CloseButton">ಮುಚ್ಚು</sys:String>
 
 
 

@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
+using KannadaNudiEditor.Views.HelpTab;
 namespace KannadaNudiEditor
 {
     /// <summary>
@@ -1461,11 +1462,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
         {
             // Code to start Nudi Engine goes here
@@ -1478,13 +1474,17 @@ namespace KannadaNudiEditor
 
         private void AboutNudi_Click(object sender, RoutedEventArgs e)
         {
-            // Code to show About Nudi information goes here
+            var window = new Views.HelpTab.AboutNudiWindow();
+            window.ShowDialog();
         }
 
 
-
-
-
+        private void ProvideFeedback_Click(object sender, RoutedEventArgs e)
+        {
+            // Create and show the HelpFeedbackWindow when the "Feedback" button is clicked
+            var feedbackWindow = new Views.HelpTab.HelpFeedbackWindow();
+            feedbackWindow.ShowDialog(); // Show the feedback form as a modal window
+        }
 
 
         private void ShowDocumentation_Click(object sender, RoutedEventArgs e)
@@ -1505,11 +1505,6 @@ namespace KannadaNudiEditor
             MessageBox.Show("Application info here.");
         }
 
-        private void ProvideFeedback_Click(object sender, RoutedEventArgs e)
-        {
-            // Open feedback window or link
-            MessageBox.Show("Feedback link or window here.");
-        }
 
 
 

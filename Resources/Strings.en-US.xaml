@@ -276,7 +276,7 @@
   <sys:String x:Key="AppInfoGroupDescription">Information about the application.</sys:String>
 
   <sys:String x:Key="FeedbackGroup">Feedback</sys:String>
-  <sys:String x:Key="FeedbackGroupDescription">Send your feedback or report issues.</sys:String>
+
 
   <!-- Buttons -->
   <sys:String x:Key="AboutNudi">About Nudi</sys:String>
@@ -307,6 +307,27 @@
 
 
 
+
+
+<sys:String x:Key="AboutNudiTitle">About Nudi</sys:String>
+<sys:String x:Key="AboutNudiHeader">About Kannada Nudi Editor</sys:String>
+
+<sys:String x:Key="AboutNudiDescription">
+  Kannada Nudi Editor is a rich-text editor designed to support bilingual document editing in Kannada and English. 
+  It provides advanced typography, document formatting, and localization support. 
+  Developed and maintained by KAGAPA, the editor is built using .NET 8 and WPF, specifically for Windows systems.
+</sys:String>
+
+
+<sys:String x:Key="CloseButton">Close</sys:String>
+
+
+<!-- Feedback Form -->
+<sys:String x:Key="FeedbackTitle">Feedback</sys:String>
+<sys:String x:Key="EmailLabel">Enter your Email:</sys:String>
+<sys:String x:Key="FeedbackLabel">Enter Your Feedback:</sys:String>
+<sys:String x:Key="Submit">Submit</sys:String>
+<sys:String x:Key="Close">Close</sys:String>
 
 
 
