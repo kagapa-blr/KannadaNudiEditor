@@ -13,7 +13,6 @@ namespace KannadaNudiEditor
 
         protected override void OnStartup(StartupEventArgs e)
         {
-
             SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NNaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXtedXRVQmNYUUN/XUdWYUA=");
 
             base.OnStartup(e);
@@ -27,39 +26,66 @@ namespace KannadaNudiEditor
         private void LaunchKannadaKeyboard()
         {
             string exeFileName = "kannadaKeyboard.exe";
-            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFileName);
+            // Check if the process is already running
             bool isAlreadyRunning = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeFileName)).Length > 0;
 
-            if (!isAlreadyRunning && File.Exists(exePath))
+            if (!isAlreadyRunning)
             {
-                try
+                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFileName);
+
+                if (File.Exists(exePath))
                 {
-                    _kannadaKeyboardProcess = new Process
+                    try
                     {
-                        StartInfo = new ProcessStartInfo
+                        // Start the process if it's not already running
+                        _kannadaKeyboardProcess = new Process
                         {
-                            FileName = exePath,
-                            CreateNoWindow = true,
-                            UseShellExecute = false
-                        }
-                    };
-                    _kannadaKeyboardProcess.Start();
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = exePath,
+                                CreateNoWindow = true,
+                                UseShellExecute = false
+                            }
+                        };
+                        _kannadaKeyboardProcess.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Failed to start kannadaKeyboard.exe:\n" + ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Failed to start kannadaKeyboard.exe:\n" + ex.Message);
+                    MessageBox.Show("kannadaKeyboard.exe not found at the specified path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+            else
+            {
+                // Optionally show a message if it's already running
+                MessageBox.Show("The Nudi Engine is already running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            // Ensure the Nudi engine is killed upon app exit
             base.OnExit(e);
 
             if (_kannadaKeyboardProcess != null && !_kannadaKeyboardProcess.HasExited)
             {
-                try { _kannadaKeyboardProcess.Kill(); }
-                catch (Exception ex) { Debug.WriteLine("Error stopping keyboard: " + ex.Message); }
+                try
+                {
+                    // Kill the process if it is running
+                    _kannadaKeyboardProcess.Kill();
+                    _kannadaKeyboardProcess.WaitForExit();
+                    //MessageBox.Show("Nudi Engine has been stopped.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    // Log any error that occurs when trying to kill the process
+                    Debug.WriteLine("Error stopping keyboard: " + ex.Message);
+                    MessageBox.Show("Error stopping the Nudi Engine: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

@@ -248,14 +248,13 @@
     <!-- =========================== -->
     <!-- Nudi Manager -->
     <!-- =========================== -->
- <sys:String x:Key="NudiManagerTab">Nudi Manager</sys:String>
+<sys:String x:Key="NudiManagerTab">Nudi Manager</sys:String>
 <sys:String x:Key="NudiManagerGroup">Nudi Controls</sys:String>
-<sys:String x:Key="NudiManagerGroupDescription">Manage the Kannada Nudi Engine. Start or stop the Nudi engine used for language processing and rendering.</sys:String>
+<sys:String x:Key="NudiManagerGroupDescription">Manage the Kannada Nudi Engine. This engine allows you to type and render Kannada characters system-wide on your computer.</sys:String>
 <sys:String x:Key="StartNudiEngine">Start Nudi Engine</sys:String>
 <sys:String x:Key="StopNudiEngine">Stop Nudi Engine</sys:String>
-<sys:String x:Key="StartNudiTooltip">Start the Kannada Nudi engine to enable typing and rendering of Kannada text.</sys:String>
-<sys:String x:Key="StopNudiTooltip">Stop the Nudi engine when it's no longer needed to free up resources.</sys:String>
-
+<sys:String x:Key="StartNudiTooltip">Start the Kannada Nudi engine to enable typing and rendering of Kannada characters across all applications on your system.</sys:String>
+<sys:String x:Key="StopNudiTooltip">Stop the Nudi engine when it’s no longer needed to free up system resources.</sys:String>
 
 
     <!-- =========================== -->

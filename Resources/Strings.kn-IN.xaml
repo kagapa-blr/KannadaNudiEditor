@@ -217,15 +217,13 @@
   <!-- =========================== -->
   <!-- Nudi Manager -->
   <!-- =========================== -->
-
-<sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
+<sys:String x:Key="NudiManagerTab">ನುಡಿ ವ್ಯವಸ್ಥಾಪಕ</sys:String>
 <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
-<sys:String x:Key="NudiManagerGroupDescription">ಕನ್ನಡ ನುಡಿ ಎಂಜಿನ್‌ನ ನಿಯಂತ್ರಣ. ಭಾಷಾ ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ರೆಂಡರಿಂಗ್‌ಗೆ ಬಳಸುವ ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಆರಂಭಿಸಬಹುದು ಅಥವಾ ನಿಲ್ಲಿಸಬಹುದು.</sys:String>
-<sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
+<sys:String x:Key="NudiManagerGroupDescription">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ. ಈ ಎಂಜಿನ್ ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ಸಿಸ್ಟಮ್ ವ್ಯಾಪಕವಾಗಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡುವುದಕ್ಕೆ ಅನುಮತಿಸುತ್ತದೆ.</sys:String>
+<sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಪ್ರಾರಂಭಿಸಿ</sys:String>
 <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
-<sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಪಠ್ಯವನ್ನು ಟೈಪ್ ಮಾಡಲು ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಆರಂಭಿಸಿ.</sys:String>
-<sys:String x:Key="StopNudiTooltip">ಮೂಲಗಳನ್ನು ಉಳಿಸಲು ನುಡಿ ಎಂಜಿನ್ ಬಳಕೆಯ ನಂತರ ನಿಲ್ಲಿಸಿ.</sys:String>
-
+<sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ನಿಮ್ಮ ಸಿಸ್ಟಮ್ನ ಎಲ್ಲಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+<sys:String x:Key="StopNudiTooltip">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿಲ್ಲಿಸಿ, ಇದು ಸಿಸ್ಟಮ್ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ.</sys:String>
 
 
   <!-- =========================== -->
