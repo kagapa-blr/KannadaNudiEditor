@@ -240,9 +240,80 @@
     <sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
 
 
-
     <sys:String x:Key="ExitPrompt">Do you want to save changes to the document before exiting?</sys:String>
     <sys:String x:Key="ExitPromptTitle">Save Document</sys:String>
+
+
+
+    <!-- =========================== -->
+    <!-- Nudi Manager -->
+    <!-- =========================== -->
+    <sys:String x:Key="NudiManagerTab">Nudi Manager</sys:String>
+    <sys:String x:Key="NudiManagerGroup">Nudi Controls</sys:String>
+    <sys:String x:Key="StartNudiEngine">Start Nudi Engine</sys:String>
+    <sys:String x:Key="StopNudiEngine">Stop Nudi Engine</sys:String>
+
+
+    <!-- =========================== -->
+    <!-- Help -->
+    <!-- =========================== -->
+  
+
+  <!-- Help Tab -->
+  <sys:String x:Key="HelpTab">Help</sys:String>
+
+  <!-- Groups -->
+  <sys:String x:Key="HelpGroup">About Nudi</sys:String>
+  <sys:String x:Key="HelpGroupDescription">Learn about the Nudi software and its creators.</sys:String>
+
+  <sys:String x:Key="HelpDocumentationGroup">Documentation</sys:String>
+  <sys:String x:Key="HelpDocumentationGroupDescription">User guides and reference materials.</sys:String>
+
+  <sys:String x:Key="SupportGroup">Support</sys:String>
+  <sys:String x:Key="SupportGroupDescription">Access support options and resources.</sys:String>
+
+  <sys:String x:Key="AppInfoGroup">App Info</sys:String>
+  <sys:String x:Key="AppInfoGroupDescription">Information about the application.</sys:String>
+
+  <sys:String x:Key="FeedbackGroup">Feedback</sys:String>
+  <sys:String x:Key="FeedbackGroupDescription">Send your feedback or report issues.</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="AboutNudi">About Nudi</sys:String>
+  <sys:String x:Key="AboutNudiTipLine1">Nudi is a Kannada typing software developed for ease of use.</sys:String>
+  <sys:String x:Key="AboutNudiTipLine2">Click to learn more about its history and contributors.</sys:String>
+
+  <sys:String x:Key="Documentation">Documentation</sys:String>
+  <sys:String x:Key="DocumentationTipLine1">Access the complete Nudi user manual and reference.</sys:String>
+  <sys:String x:Key="DocumentationTipLine2">Includes getting started and advanced usage help.</sys:String>
+
+  <sys:String x:Key="Support">Support</sys:String>
+  <sys:String x:Key="SupportTipLine1">Need help with Nudi? Get assistance and contact info.</sys:String>
+  <sys:String x:Key="SupportTipLine2">Includes FAQs and troubleshooting steps.</sys:String>
+
+  <sys:String x:Key="AboutApp">About Application</sys:String>
+  <sys:String x:Key="AboutAppTipLine1">View app version, license info, and credits.</sys:String>
+  <sys:String x:Key="AboutAppTipLine2">Click to see details about this software.</sys:String>
+
+  <sys:String x:Key="Feedback">Feedback</sys:String>
+  <sys:String x:Key="FeedbackTipLine1">Send us your thoughts or report issues.</sys:String>
+  <sys:String x:Key="FeedbackTipLine2">We value your feedback for future updates.</sys:String>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </ResourceDictionary>

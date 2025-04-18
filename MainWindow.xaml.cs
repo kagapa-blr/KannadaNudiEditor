@@ -1463,6 +1463,68 @@ namespace KannadaNudiEditor
 
 
 
+
+
+
+        private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
+        {
+            // Code to start Nudi Engine goes here
+        }
+
+        private void StopNudiEngine_Click(object sender, RoutedEventArgs e)
+        {
+            // Code to stop Nudi Engine goes here
+        }
+
+        private void AboutNudi_Click(object sender, RoutedEventArgs e)
+        {
+            // Code to show About Nudi information goes here
+        }
+
+
+
+
+
+
+
+        private void ShowDocumentation_Click(object sender, RoutedEventArgs e)
+        {
+            // Open the documentation window or link
+            MessageBox.Show("Documentation link or window here.");
+        }
+
+        private void ShowSupport_Click(object sender, RoutedEventArgs e)
+        {
+            // Open support window or link to support page
+            MessageBox.Show("Support link or window here.");
+        }
+
+        private void AboutApp_Click(object sender, RoutedEventArgs e)
+        {
+            // Show Application Info (different from About Nudi)
+            MessageBox.Show("Application info here.");
+        }
+
+        private void ProvideFeedback_Click(object sender, RoutedEventArgs e)
+        {
+            // Open feedback window or link
+            MessageBox.Show("Feedback link or window here.");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /// <summary>

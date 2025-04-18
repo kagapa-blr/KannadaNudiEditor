@@ -14,19 +14,19 @@
     <sys:String x:Key="Clipboard">ನಕಲು ಹಾಳೆ</sys:String>
     <sys:String x:Key="Paste">ಅಂಟಿಸಿ</sys:String>
     <sys:String x:Key="PasteShortcut">ಕಿರು ಸೂಚಕವನ್ನು ಅಂಟಿಸಿ (Ctrl+V)</sys:String>
-    <sys:String x:Key="PasteTipLine1">  ನಕಲು ಹಾಳೆಗೆ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</sys:String>
+    <sys:String x:Key="PasteTipLine1">ನಕಲು ಹಾಳೆಗೆ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</sys:String>
     <sys:String x:Key="PasteTipLine2">ನಿಮ್ಮ ದಸ್ತಾವೇಜಿಗೆ  ಸೇರಿಸಿ.</sys:String>
 
     <sys:String x:Key="Cut">ಕತ್ತರಿಸಿ</sys:String>
     <sys:String x:Key="CutShortcut">ಕತ್ತರಿಸಿ (Ctrl+X)</sys:String>
     <sys:String x:Key="CutTipLine1">ಆಯ್ಕೆಮಾಡಿದ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ</sys:String>
     <sys:String x:Key="CutTipLine2">ನಕಲು ಹಾಳೆಗೆ ಹಾಕಿ</sys:String>
-    <sys:String x:Key="CutTipLine3">ಇದರಿಂದ ಬೇರೆ ಕಡೆ ಅಂಟಿಸಲು ನಕಲಿಸಿ </sys:String>
+    <sys:String x:Key="CutTipLine3">ಇದರಿಂದ ಬೇರೆ ಕಡೆ ಅಂಟಿಸಲು ನಕಲಿಸಿ</sys:String>
 
     <sys:String x:Key="Copy">ನಕಲಿಸಿ</sys:String>
     <sys:String x:Key="CopyShortcut">ನಕಲಿಸಿ ಕಿರುಸೂಚಕ  (Ctrl+C)</sys:String>
     <sys:String x:Key="CopyTipLine1">ಆಯ್ಕೆಮಾಡಿದ್ದನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</sys:String>
-    <sys:String x:Key="CopyTipLine2"> ಇದರಿಂದ ಬೇರೆ ಒಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
+    <sys:String x:Key="CopyTipLine2">ಇದರಿಂದ ಬೇರೆ ಒಂದು ಕಡೆ ಅಂಟಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</sys:String>
 
 
     <!-- Font -->
@@ -45,7 +45,7 @@
     <!-- Home Tab: Style  -->
     <!-- =========================== -->
     <sys:String x:Key="StylesHeader">ಶೀರ್ಷಿಕೆ ಶೈಲಿಗಳು</sys:String>
-    <sys:String x:Key="StylesGalleryLabel"> ಚಿತ್ರಾಗಾರ ಪಟ್ಟಿಕೆ ಶೈಲಿಗಳು</sys:String>
+    <sys:String x:Key="StylesGalleryLabel">ಚಿತ್ರಾಗಾರ ಪಟ್ಟಿಕೆ ಶೈಲಿಗಳು</sys:String>
     <sys:String x:Key="CreateStyle">ಹೊಸ ಶೈಲಿ ಸೃಜಿಸಿ</sys:String>
     <sys:String x:Key="ClearFormatting">ವಿನ್ಯಾಸವನ್ನು ಅಳಿಸಿ</sys:String>
 
@@ -77,7 +77,7 @@
     <sys:String x:Key="Pages">ಪುಟಗಳು</sys:String>
     <sys:String x:Key="PageBreak">ಪುಟ ವಿರಾಮ</sys:String>
     <sys:String x:Key="PageBreakToolTipHeader">ಪುಟ ವಿರಾಮ ಸೇರಿಸಿ</sys:String>
-    <sys:String x:Key="PageBreakToolTip"> ಸೂಚಿಸಿದ ಸ್ಥಾನದ ಬಳಿ ಹೊಸ ಪುಟ ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+    <sys:String x:Key="PageBreakToolTip">ಸೂಚಿಸಿದ ಸ್ಥಾನದ ಬಳಿ ಹೊಸ ಪುಟ ಪ್ರಾರಂಭಿಸಿ.</sys:String>
 
     <!-- Tables -->
     <sys:String x:Key="Tables">ಕೋಷ್ಟಕಗಳು</sys:String>
@@ -99,8 +99,8 @@
     <sys:String x:Key="Links">ಕೊಂಡಿಗಳು</sys:String>
     <sys:String x:Key="Hyperlink">ಹೈಪರ್‌ಕೊಂಡಿ</sys:String>
     <sys:String x:Key="HyperlinkHeader">ಹೈಪರ್‌ಲಿಂಕ್ ಸೇರಿಸಿ (Ctrl+K)</sys:String>
-    <sys:String x:Key="HyperlinkTipLine1">ಜಾಲಪುಟಗಳಲ್ಲಿ ಹಾಗೂ ದಸ್ತಾವೇಜಿನಲ್ಲಿ </sys:String>
-    <sys:String x:Key="HyperlinkTipLine2"> ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು ಸೃಜಿಸಿ.</sys:String>
+    <sys:String x:Key="HyperlinkTipLine1">ಜಾಲಪುಟಗಳಲ್ಲಿ ಹಾಗೂ ದಸ್ತಾವೇಜಿನಲ್ಲಿ</sys:String>
+    <sys:String x:Key="HyperlinkTipLine2">ತ್ವರಿತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಲಿಂಕುಗಳನ್ನು ಸೃಜಿಸಿ.</sys:String>
 
     <!-- ========== PAGE LAYOUT TAB ========== -->
     <sys:String x:Key="PageSetup">ಪುಟವಿನ್ಯಾಸ</sys:String>
@@ -126,7 +126,7 @@
     <sys:String x:Key="NewComment">ಹೊಸ ಟಿಪ್ಪಣಿ</sys:String>
     <sys:String x:Key="DeleteComment">ಟಿಪ್ಪಣಿ ಅಳಿಸಿ</sys:String>
     <sys:String x:Key="PreviousComment">ಹಿಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
-    <sys:String x:Key="NextComment">ಮುಂದಿನ ಟಿಪ್ಪಣಿ </sys:String>
+    <sys:String x:Key="NextComment">ಮುಂದಿನ ಟಿಪ್ಪಣಿ</sys:String>
     <sys:String x:Key="ShowComments">ಟಿಪ್ಪಣಿಗಳನ್ನು ತೋರಿಸಿ</sys:String>
 
     <!-- ========== STATUS BAR ========== -->
@@ -183,7 +183,7 @@
     <!-- =========================== -->
 
     <!-- Tab Title -->
-    <sys:String x:Key="HeaderFooterTab"> ಅಗ್ರಶೀರ್ಷಿಕೆ / ಅಡಿ ಶೀರ್ಷಿಕೆ  </sys:String>
+    <sys:String x:Key="HeaderFooterTab">ಅಗ್ರಶೀರ್ಷಿಕೆ / ಅಡಿ ಶೀರ್ಷಿಕೆ</sys:String>
 
     <!-- Ribbon Group Headers -->
     <sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
@@ -195,7 +195,7 @@
     <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
 
     <!-- Checkboxes -->
-    <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ </sys:String>
+    <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ</sys:String>
     <sys:String x:Key="DifferentOddEvenPages">ಬೆಸ/ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳು</sys:String>
     <sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೊದಲ ಪುಟದ ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಡಗಿಸಿ</sys:String>
     <sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದರೊಂದಿಗೆ  ಜೋಡಿಸಿ</sys:String>
@@ -212,6 +212,73 @@
     <sys:String x:Key="EditEvenPageNumber">ಸಮ  ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
     <sys:String x:Key="EditOddPageNumber">ಬೆಸ ಪುಟಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
     <sys:String x:Key="DefaultPageNumber">ಪೂರ್ವ ನಿಗದಿತಪುಟ ಸಂಖ್ಯೆ</sys:String>
+
+
+    <!-- =========================== -->
+    <!-- Nudi Manager -->
+    <!-- =========================== -->
+
+    <sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
+    <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
+    <sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
+    <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
+
+
+
+    <!-- =========================== -->
+    <!-- Help -->
+    <!-- =========================== -->
+
+
+  <!-- Help Tab -->
+  <sys:String x:Key="HelpTab">ಸಹಾಯ</sys:String>
+
+  <!-- Groups -->
+  <sys:String x:Key="HelpGroup">ನುಡಿಗೆ ಪರಿಚಯ</sys:String>
+  <sys:String x:Key="HelpGroupDescription">ನುಡೀ ತಂತ್ರಾಂಶದ ಪರಿಚಯ ಮತ್ತು ರಚನಾಕಾರರು.</sys:String>
+
+  <sys:String x:Key="HelpDocumentationGroup">ದಸ್ತಾವೇಜುಗಳು</sys:String>
+  <sys:String x:Key="HelpDocumentationGroupDescription">ಬಳಕೆದಾರರ ಮಾರ್ಗದರ್ಶಿಗಳು ಮತ್ತು ಉಲ್ಲೇಖ.</sys:String>
+
+  <sys:String x:Key="SupportGroup">ಬೆಂಬಲ</sys:String>
+  <sys:String x:Key="SupportGroupDescription">ಬೆಂಬಲ ಆಯ್ಕೆಗಳು ಮತ್ತು ಸಂಪನ್ಮೂಲಗಳು.</sys:String>
+
+  <sys:String x:Key="AppInfoGroup">ಅನ್ವಯ ಮಾಹಿತಿ</sys:String>
+  <sys:String x:Key="AppInfoGroupDescription">ಅನ್ವಯದ ಕುರಿತು ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
+
+  <sys:String x:Key="FeedbackGroup">ಪ್ರತಿಕ್ರಿಯೆ</sys:String>
+  <sys:String x:Key="FeedbackGroupDescription">ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಅಥವಾ ತೊಂದರೆಗಳನ್ನು ಕಳುಹಿಸಿ.</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="AboutNudi">ನುಡಿಯ ಕುರಿತು</sys:String>
+  <sys:String x:Key="AboutNudiTipLine1">ನುಡಿ ಒಂದು ಕನ್ನಡ ಟೈಪಿಂಗ್ ತಂತ್ರಾಂಶವಾಗಿದೆ.</sys:String>
+  <sys:String x:Key="AboutNudiTipLine2">ಇದಿನ ಇತಿಹಾಸ ಮತ್ತು ರಚನಾಕಾರರನ್ನು ತಿಳಿಯಿರಿ.</sys:String>
+
+  <sys:String x:Key="Documentation">ದಸ್ತಾವೇಜು</sys:String>
+  <sys:String x:Key="DocumentationTipLine1">ನುಡಿಯ ಬಳಕೆದಾರರ ಗೈಡ್ ಮತ್ತು ಉಲ್ಲೇಖ ನೋಡಿ.</sys:String>
+  <sys:String x:Key="DocumentationTipLine2">ಪ್ರಾರಂಭಿಕ ಮತ್ತು ಮುಂದುವರಿದ ಸಹಾಯವಾಣಿಯು ಇರುತ್ತದೆ.</sys:String>
+
+  <sys:String x:Key="Support">ಬೆಂಬಲ</sys:String>
+  <sys:String x:Key="SupportTipLine1">ನುಡಿಗೆ ನೆರವು ಬೇಕೆ? ಸಂಪರ್ಕ ಮತ್ತು ಸಹಾಯದ ಮಾಹಿತಿ.</sys:String>
+  <sys:String x:Key="SupportTipLine2">ಪದೇಪದೇ ಕೇಳುವ ಪ್ರಶ್ನೆಗಳು ಮತ್ತು ಪರಿಹಾರಗಳು ಸೇರಿವೆ.</sys:String>
+
+  <sys:String x:Key="AboutApp">ಅನ್ವಯದ ಕುರಿತು</sys:String>
+  <sys:String x:Key="AboutAppTipLine1">ಆವೃತ್ತಿ, ಪರವಾನಗಿ ಮತ್ತು ಹೆಸರಾವಳಿ ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
+  <sys:String x:Key="AboutAppTipLine2">ಈ ತಂತ್ರಾಂಶದ ಕುರಿತು ವಿವರಗಳನ್ನು ನೋಡಿ.</sys:String>
+
+  <sys:String x:Key="Feedback">ಪ್ರತಿಕ್ರಿಯೆ</sys:String>
+  <sys:String x:Key="FeedbackTipLine1">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ಕಳುಹಿಸಿ.</sys:String>
+  <sys:String x:Key="FeedbackTipLine2">ಭವಿಷ್ಯದಲ್ಲಿ ಉತ್ತಮೀಕರಣಕ್ಕಾಗಿ ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಬೇಕು.</sys:String>
+
+
+
+
+
+
+
+
+
+
 
 
 </ResourceDictionary>
