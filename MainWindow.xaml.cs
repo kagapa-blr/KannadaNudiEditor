@@ -1460,28 +1460,39 @@ namespace KannadaNudiEditor
             // Handle unchecked logic for "Different First Page"
         }
 
-
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the "kannadaKeyboard.exe" process is already running
-            if (IsProcessRunning("kannadaKeyboard"))
+            string exeFileName = "kannadaKeyboard.exe";
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFileName);
+
+            // Check if the process is already running
+            if (IsProcessRunning(Path.GetFileNameWithoutExtension(exeFileName)))
             {
                 MessageBox.Show("The Nudi Engine is already running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                // Start the process (assuming the full path to the executable)
-                try
+                // Check if the executable exists at the given path
+                if (File.Exists(exePath))
                 {
-                    Process.Start("C:\\path_to_your_executable\\kannadaKeyboard.exe");
-                    MessageBox.Show("The Nudi Engine has started.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        // Start the process
+                        Process.Start(exePath);
+                        MessageBox.Show("The Nudi Engine has started.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error starting Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Error starting Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Executable not found at path: {exePath}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
 
         private void StopNudiEngine_Click(object sender, RoutedEventArgs e)
         {
@@ -1507,14 +1518,10 @@ namespace KannadaNudiEditor
                 MessageBox.Show("The Nudi Engine is not running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
         private bool IsProcessRunning(string processName)
         {
-            // Check if a process with the name exists
             return Process.GetProcessesByName(processName).Length > 0;
         }
-
-
 
 
 
