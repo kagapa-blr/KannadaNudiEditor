@@ -2502,133 +2502,197 @@
 
             </Syncfusion:RibbonTab>
 
+
+
+
+
             <Syncfusion:RibbonTab Caption="{DynamicResource NudiManagerTab}">
-                <!-- Nudi Controls Group (Start and Stop) -->
+
+                <!-- Nudi Controls Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource NudiManagerGroup}"
                                       IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <Button Content="{DynamicResource StartNudiEngine}"
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource NudiManagerGroupDescription}"
+                                    TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <!-- Use a grid for better alignment -->
+                    <Grid Margin="5"
+                            Width="150">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Start Button -->
+                        <Button Grid.Row="0"
+                                Content="{DynamicResource StartNudiEngine}"
                                 Height="30"
-                                Width="130"
-                                Margin="5"
-                                Click="StartNudiEngine_Click"/>
-                        <Button Content="{DynamicResource StopNudiEngine}"
+                                HorizontalAlignment="Stretch"
+                                Click="StartNudiEngine_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StartNudiTooltip}"
+                                            TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <!-- Spacer -->
+                        <Rectangle Grid.Row="1"
+                                Height="10"
+                                Fill="Transparent"/>
+
+                        <!-- Stop Button -->
+                        <Button Grid.Row="2"
+                                Content="{DynamicResource StopNudiEngine}"
                                 Height="30"
-                                Width="130"
-                                Margin="5"
-                                Click="StopNudiEngine_Click"/>
-                    </StackPanel>
+                                HorizontalAlignment="Stretch"
+                                Click="StopNudiEngine_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StopNudiTooltip}"
+                                            TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </Grid>
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
 
 
-<Syncfusion:RibbonTab Caption="{DynamicResource HelpTab}">
-
-    <!-- Help Group (About Nudi) -->
-    <Syncfusion:RibbonBar Header="{DynamicResource HelpGroup}" IsLauncherButtonVisible="False">
-        <Syncfusion:RibbonBar.ToolTip>
-            <Syncfusion:ScreenTip MaxWidth="300">
-                <TextBlock Text="{DynamicResource HelpGroupDescription}" TextWrapping="Wrap" />
-            </Syncfusion:ScreenTip>
-        </Syncfusion:RibbonBar.ToolTip>
-        <StackPanel Margin="10">
-            <Button Content="{DynamicResource AboutNudi}"
-                    Height="32"
-                    Width="140"
-                    Margin="5"
-                    Click="AboutNudi_Click">
-                <Button.ToolTip>
-                    <Syncfusion:ScreenTip MaxWidth="300">
-                        <StackPanel>
-                            <TextBlock Text="{DynamicResource AboutNudiTipLine1}" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                            <TextBlock Text="{DynamicResource AboutNudiTipLine2}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </Syncfusion:ScreenTip>
-                </Button.ToolTip>
-            </Button>
-        </StackPanel>
-    </Syncfusion:RibbonBar>
-
-    <!-- Help Documentation Group -->
-    <Syncfusion:RibbonBar Header="{DynamicResource HelpDocumentationGroup}" IsLauncherButtonVisible="False">
-        <Syncfusion:RibbonBar.ToolTip>
-            <Syncfusion:ScreenTip MaxWidth="300">
-                <TextBlock Text="{DynamicResource HelpDocumentationGroupDescription}" TextWrapping="Wrap" />
-            </Syncfusion:ScreenTip>
-        </Syncfusion:RibbonBar.ToolTip>
-        <StackPanel Margin="10">
-            <Button Content="{DynamicResource Documentation}"
-                    Height="32"
-                    Width="140"
-                    Margin="5"
-                    Click="ShowDocumentation_Click">
-                <Button.ToolTip>
-                    <Syncfusion:ScreenTip MaxWidth="300">
-                        <StackPanel>
-                            <TextBlock Text="{DynamicResource DocumentationTipLine1}" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                            <TextBlock Text="{DynamicResource DocumentationTipLine2}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </Syncfusion:ScreenTip>
-                </Button.ToolTip>
-            </Button>
-        </StackPanel>
-    </Syncfusion:RibbonBar>
-
-    <!-- Support Group -->
-    <Syncfusion:RibbonBar Header="{DynamicResource SupportGroup}" IsLauncherButtonVisible="False">
-        <Syncfusion:RibbonBar.ToolTip>
-            <Syncfusion:ScreenTip MaxWidth="300">
-                <TextBlock Text="{DynamicResource SupportGroupDescription}" TextWrapping="Wrap" />
-            </Syncfusion:ScreenTip>
-        </Syncfusion:RibbonBar.ToolTip>
-        <StackPanel Margin="10">
-            <Button Content="{DynamicResource Support}"
-                    Height="32"
-                    Width="140"
-                    Margin="5"
-                    Click="ShowSupport_Click">
-                <Button.ToolTip>
-                    <Syncfusion:ScreenTip MaxWidth="300">
-                        <StackPanel>
-                            <TextBlock Text="{DynamicResource SupportTipLine1}" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                            <TextBlock Text="{DynamicResource SupportTipLine2}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </Syncfusion:ScreenTip>
-                </Button.ToolTip>
-            </Button>
-        </StackPanel>
-    </Syncfusion:RibbonBar>
 
 
-    <!-- Feedback Group -->
-    <Syncfusion:RibbonBar Header="{DynamicResource FeedbackGroup}" IsLauncherButtonVisible="False">
-        <Syncfusion:RibbonBar.ToolTip>
-            <Syncfusion:ScreenTip MaxWidth="300">
-                <TextBlock Text="{DynamicResource FeedbackGroupDescription}" TextWrapping="Wrap" />
-            </Syncfusion:ScreenTip>
-        </Syncfusion:RibbonBar.ToolTip>
-        <StackPanel Margin="10">
-            <Button Content="{DynamicResource Feedback}"
-                    Height="32"
-                    Width="140"
-                    Margin="5"
-                    Click="ProvideFeedback_Click">
-                <Button.ToolTip>
-                    <Syncfusion:ScreenTip MaxWidth="300">
-                        <StackPanel>
-                            <TextBlock Text="{DynamicResource FeedbackTipLine1}" TextWrapping="Wrap" Margin="0,0,0,5"/>
-                            <TextBlock Text="{DynamicResource FeedbackTipLine2}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </Syncfusion:ScreenTip>
-                </Button.ToolTip>
-            </Button>
-        </StackPanel>
-    </Syncfusion:RibbonBar>
+            <Syncfusion:RibbonTab Caption="{DynamicResource HelpTab}">
+
+                <!-- Help Group (About Nudi) -->
+                <Syncfusion:RibbonBar Header="{DynamicResource HelpGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource HelpGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+                    <StackPanel Margin="10">
+                        <Button Content="{DynamicResource AboutNudi}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="AboutNudi_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource AboutNudiTipLine1}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource AboutNudiTipLine2}"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Help Documentation Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource HelpDocumentationGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource HelpDocumentationGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+                    <StackPanel Margin="10">
+                        <Button Content="{DynamicResource Documentation}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="ShowDocumentation_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource DocumentationTipLine1}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource DocumentationTipLine2}"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Support Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource SupportGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource SupportGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+                    <StackPanel Margin="10">
+                        <Button Content="{DynamicResource Support}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="ShowSupport_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource SupportTipLine1}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource SupportTipLine2}"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+
+                <!-- Feedback Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource FeedbackGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource FeedbackGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+                    <StackPanel Margin="10">
+                        <Button Content="{DynamicResource Feedback}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="ProvideFeedback_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource FeedbackTipLine1}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource FeedbackTipLine2}"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
 
 
 
 
-</Syncfusion:RibbonTab>
+            </Syncfusion:RibbonTab>
 
 
 

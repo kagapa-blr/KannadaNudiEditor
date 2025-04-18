@@ -1461,16 +1461,65 @@ namespace KannadaNudiEditor
         }
 
 
-
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
         {
-            // Code to start Nudi Engine goes here
+            // Check if the "kannadaKeyboard.exe" process is already running
+            if (IsProcessRunning("kannadaKeyboard"))
+            {
+                MessageBox.Show("The Nudi Engine is already running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                // Start the process (assuming the full path to the executable)
+                try
+                {
+                    Process.Start("C:\\path_to_your_executable\\kannadaKeyboard.exe");
+                    MessageBox.Show("The Nudi Engine has started.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error starting Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void StopNudiEngine_Click(object sender, RoutedEventArgs e)
         {
-            // Code to stop Nudi Engine goes here
+            // Check if the "kannadaKeyboard.exe" process is running
+            if (IsProcessRunning("kannadaKeyboard"))
+            {
+                // Stop the process (assuming the name of the process is "kannadaKeyboard")
+                try
+                {
+                    foreach (var process in Process.GetProcessesByName("kannadaKeyboard"))
+                    {
+                        process.Kill();
+                    }
+                    MessageBox.Show("The Nudi Engine has stopped.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error stopping Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("The Nudi Engine is not running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
+
+        private bool IsProcessRunning(string processName)
+        {
+            // Check if a process with the name exists
+            return Process.GetProcessesByName(processName).Length > 0;
+        }
+
+
+
+
+
+
+
 
         private void AboutNudi_Click(object sender, RoutedEventArgs e)
         {

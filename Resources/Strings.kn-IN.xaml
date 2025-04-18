@@ -218,10 +218,13 @@
   <!-- Nudi Manager -->
   <!-- =========================== -->
 
-  <sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
-  <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
-  <sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
-  <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
+<sys:String x:Key="NudiManagerTab">ನುಡಿ ನಿರ್ವಾಹಕ</sys:String>
+<sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
+<sys:String x:Key="NudiManagerGroupDescription">ಕನ್ನಡ ನುಡಿ ಎಂಜಿನ್‌ನ ನಿಯಂತ್ರಣ. ಭಾಷಾ ಪ್ರಕ್ರಿಯೆ ಮತ್ತು ರೆಂಡರಿಂಗ್‌ಗೆ ಬಳಸುವ ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಆರಂಭಿಸಬಹುದು ಅಥವಾ ನಿಲ್ಲಿಸಬಹುದು.</sys:String>
+<sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಆರಂಭಿಸಿ</sys:String>
+<sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
+<sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಪಠ್ಯವನ್ನು ಟೈಪ್ ಮಾಡಲು ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಆರಂಭಿಸಿ.</sys:String>
+<sys:String x:Key="StopNudiTooltip">ಮೂಲಗಳನ್ನು ಉಳಿಸಲು ನುಡಿ ಎಂಜಿನ್ ಬಳಕೆಯ ನಂತರ ನಿಲ್ಲಿಸಿ.</sys:String>
 
 
 
