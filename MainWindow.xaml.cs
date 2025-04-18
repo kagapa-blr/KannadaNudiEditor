@@ -1351,8 +1351,8 @@ namespace KannadaNudiEditor
             }
             else // Kannada
             {
-                message = "ನೀವು ಎಕ್ಸಿಟ್ ಮಾಡುವ ಮೊದಲು ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಲು ಬಯಸುತ್ತೀರಾ?";
-                caption = "ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಿ";
+                message = "ನಿರ್ಗಮಿಸುವ ಮೊದಲು ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ?";
+                caption = "ಕಡತವನ್ನು ಉಳಿಸಿ";
             }
 
             MessageBoxResult result = MessageBox.Show(
