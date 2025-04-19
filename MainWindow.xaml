@@ -2785,6 +2785,7 @@
             <Syncfusion:SfRichTextBoxAdv.SpellChecker>
                 <Syncfusion:SpellChecker IsEnabled="True"
                                          IgnoreUppercaseWords="False"
+                                         IgnoreAlphaNumericWords="True"
                                          UseFrameworkSpellCheck="False">
                     <Syncfusion:SpellChecker.Dictionaries>
                         <System:String>Assets\kn_IN.dic</System:String>
