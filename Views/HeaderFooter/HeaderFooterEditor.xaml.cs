@@ -9,10 +9,14 @@ namespace KannadaNudiEditor.Views.HeaderFooter
         public string? HeaderText { get; private set; }
         public string? FooterText { get; private set; }
 
-        public HeaderFooterEditor()  // Default constructor (no parameters)
+        public HeaderFooterEditor(string? initialHeader, string? initialFooter)
         {
             InitializeComponent();
+
+            HeaderTextBox.Text = initialHeader ?? string.Empty;
+            FooterTextBox.Text = initialFooter ?? string.Empty;
         }
+
 
         // Handle Apply button click to update the header/footer
         private void ApplyButton_Click(object sender, RoutedEventArgs e)

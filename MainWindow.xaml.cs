@@ -1404,48 +1404,164 @@ namespace KannadaNudiEditor
 
 
 
+
+
         // Handle Edit Header button click to show the Header/Footer editor
         private void EditHeader_Click(object sender, RoutedEventArgs e)
         {
+            // Retrieve the current header and footer text
+            string? existingHeader = GetCurrentHeaderText();  // Get the current header text dynamically
+            string? existingFooter = GetCurrentFooterText();  // Get the current footer text dynamically
+
             // Open HeaderFooterEditor to let the user enter header and footer text
-            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(); // Instantiate without arguments
-            headerFooterEditor.ShowDialog();  // Open it as a modal dialog
+            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter); // Pass existing header/footer
+            bool? result = headerFooterEditor.ShowDialog();  // Open it as a modal dialog
 
             // After the user has applied the header and footer, we will retrieve the header/footer values
-            string headerText = headerFooterEditor.HeaderText;  // Corrected to use HeaderText
-            string footerText = headerFooterEditor.FooterText;  // Corrected to use FooterText
-
-            // Only proceed if both header and footer texts are not empty
-            if (!string.IsNullOrEmpty(headerText) && !string.IsNullOrEmpty(footerText))
+            if (result == true)
             {
-                // Defines the header and footer. 
-                HeaderFooters headerFooters = new HeaderFooters();
+                string headerText = headerFooterEditor.HeaderText ?? string.Empty;  // Safely retrieve header text
+                string footerText = headerFooterEditor.FooterText ?? string.Empty;  // Safely retrieve footer text
 
-                // Defines the header. 
-                ParagraphAdv headerParagraph = new ParagraphAdv();
-                SpanAdv headerSpan = new SpanAdv();
-                headerSpan.Text = headerText; // Dynamic text from the editor
-                headerParagraph.Inlines.Add(headerSpan);
-                headerFooters.Header.Blocks.Add(headerParagraph);
+                // Only proceed if both header and footer texts are not empty
+                if (!string.IsNullOrEmpty(headerText) && !string.IsNullOrEmpty(footerText))
+                {
+                    // Get the first section
+                    SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
 
-                // Defines the footer. 
-                ParagraphAdv footerParagraph = new ParagraphAdv();
-                SpanAdv footerSpan = new SpanAdv();
-                footerSpan.Text = footerText; // Dynamic text from the editor
-                footerParagraph.Inlines.Add(footerSpan);
-                headerFooters.Footer.Blocks.Add(footerParagraph);
+                    // Clear the existing header and footer manually
+                    sectionAdv.HeaderFooters.Header.Blocks.Clear();
+                    sectionAdv.HeaderFooters.Footer.Blocks.Clear();
 
-                // Apply the header and footer to the first section
-                SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-                sectionAdv.HeaderFooters = headerFooters;
-                sectionAdv.SectionFormat.HeaderDistance = 50;
-                sectionAdv.SectionFormat.FooterDistance = 50;
-            }
-            else
-            {
-                MessageBox.Show("Header and Footer cannot be empty.");
+                    // Create and add the new header
+                    ParagraphAdv headerParagraph = new ParagraphAdv();
+                    SpanAdv headerSpan = new SpanAdv();
+                    headerSpan.Text = headerText;  // Dynamic header text from the editor
+                    headerParagraph.Inlines.Add(headerSpan);
+                    sectionAdv.HeaderFooters.Header.Blocks.Add(headerParagraph);
+
+                    // Create and add the new footer
+                    ParagraphAdv footerParagraph = new ParagraphAdv();
+                    SpanAdv footerSpan = new SpanAdv();
+                    footerSpan.Text = footerText;  // Dynamic footer text from the editor
+                    footerParagraph.Inlines.Add(footerSpan);
+                    sectionAdv.HeaderFooters.Footer.Blocks.Add(footerParagraph);
+
+                    // Apply header/footer distance
+                    sectionAdv.SectionFormat.HeaderDistance = 50;
+                    sectionAdv.SectionFormat.FooterDistance = 50;
+                }
+                else
+                {
+                    MessageBox.Show("Header and Footer cannot be empty.");
+                }
             }
         }
+
+        // Get the current header text dynamically from the document
+        private string? GetCurrentHeaderText()
+        {
+            // Retrieve the first block of the header (if any)
+            var header = richTextBoxAdv.Document.Sections[0].HeaderFooters.Header;
+            if (header.Blocks.Count > 0)
+            {
+                var firstBlock = header.Blocks[0] as ParagraphAdv;
+                if (firstBlock != null && firstBlock.Inlines.Count > 0)
+                {
+                    var span = firstBlock.Inlines[0] as SpanAdv;
+                    return span?.Text;  // Return the current header text
+                }
+            }
+            return null;  // Return null if no header text exists
+        }
+
+        // Get the current footer text dynamically from the document
+        private string? GetCurrentFooterText()
+        {
+            // Retrieve the first block of the footer (if any)
+            var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters.Footer;
+            if (footer.Blocks.Count > 0)
+            {
+                var firstBlock = footer.Blocks[0] as ParagraphAdv;
+                if (firstBlock != null && firstBlock.Inlines.Count > 0)
+                {
+                    var span = firstBlock.Inlines[0] as SpanAdv;
+                    return span?.Text;  // Return the current footer text
+                }
+            }
+            return null;  // Return null if no footer text exists
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        private void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
+        {
+            // Defines the header and footer. 
+            HeaderFooters headerFooters = new HeaderFooters();
+
+            //// Defines the Even header. 
+            ParagraphAdv headerParagraph = new ParagraphAdv();
+            SpanAdv headerSpan = new SpanAdv();
+            headerSpan.Text = "Even Page Header";
+            headerParagraph.Inlines.Add(headerSpan);
+            headerFooters.EvenHeader.Blocks.Add(headerParagraph);
+
+            // Defines the Even footer. 
+            ParagraphAdv footerParagraph = new ParagraphAdv();
+            SpanAdv footerSpan = new SpanAdv();
+            footerSpan.Text = "Even Page Footer";
+            footerParagraph.Inlines.Add(footerSpan);
+            headerFooters.EvenFooter.Blocks.Add(footerParagraph);
+
+            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
+            sectionAdv.HeaderFooters = headerFooters;
+            // sets this bool value for preservation of Even Header and Footer.
+            sectionAdv.SectionFormat.DifferentOddAndEvenPages = true;
+            sectionAdv.SectionFormat.HeaderDistance = 50;
+            sectionAdv.SectionFormat.FooterDistance = 50;
+        }
+        /// <summary>
+        ///  Adds First Page Header and Footer into the SfRichTextBoxAdv.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void firstPageHeaderFooter_Click(object sender, RoutedEventArgs e)
+        {
+            // Defines the header and footer. 
+            HeaderFooters headerFooters = new HeaderFooters();
+
+            //// Defines the First page header. 
+            ParagraphAdv headerParagraph = new ParagraphAdv();
+            SpanAdv headerSpan = new SpanAdv();
+            headerSpan.Text = "First Page Header";
+            headerParagraph.Inlines.Add(headerSpan);
+            headerFooters.FirstPageHeader.Blocks.Add(headerParagraph);
+
+            // Defines the First page footer. 
+            ParagraphAdv footerParagraph = new ParagraphAdv();
+            SpanAdv footerSpan = new SpanAdv();
+            footerSpan.Text = "First Page Footer";
+            footerParagraph.Inlines.Add(footerSpan);
+            headerFooters.FirstPageFooter.Blocks.Add(footerParagraph);
+
+            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
+            sectionAdv.HeaderFooters = headerFooters;
+            // sets this bool value for preservation of First page Header and Footer.
+            sectionAdv.SectionFormat.DifferentFirstPage = true;
+            sectionAdv.SectionFormat.HeaderDistance = 50;
+            sectionAdv.SectionFormat.FooterDistance = 50;
+        }
+
+
 
 
 

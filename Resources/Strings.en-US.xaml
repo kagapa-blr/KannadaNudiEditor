@@ -2,265 +2,288 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- =========================== -->
-    <!-- Tabs                        -->
-    <!-- =========================== -->
-    <sys:String x:Key="HomeTab">Home</sys:String>
-    <sys:String x:Key="InsertTab">Insert</sys:String>
-    <sys:String x:Key="PageLayoutTab">Page Layout</sys:String>
-    <sys:String x:Key="ViewTab">View</sys:String>
-    <sys:String x:Key="ReviewTab">Review</sys:String>
+  <!-- =========================== -->
+  <!-- Tabs                        -->
+  <!-- =========================== -->
+  <sys:String x:Key="HomeTab">Home</sys:String>
+  <sys:String x:Key="InsertTab">Insert</sys:String>
+  <sys:String x:Key="PageLayoutTab">Page Layout</sys:String>
+  <sys:String x:Key="ViewTab">View</sys:String>
+  <sys:String x:Key="ReviewTab">Review</sys:String>
 
-    <!-- =========================== -->
-    <!-- Home Tab: Clipboard Group   -->
-    <!-- =========================== -->
-    <sys:String x:Key="Clipboard">Clipboard</sys:String>
+  <!-- =========================== -->
+  <!-- Home Tab: Clipboard Group   -->
+  <!-- =========================== -->
+  <sys:String x:Key="Clipboard">Clipboard</sys:String>
 
-    <sys:String x:Key="Paste">Paste</sys:String>
-    <sys:String x:Key="PasteShortcut">Paste (Ctrl+V)</sys:String>
-    <sys:String x:Key="PasteTipLine1">Add content on the Clipboard</sys:String>
-    <sys:String x:Key="PasteTipLine2">to your document.</sys:String>
+  <sys:String x:Key="Paste">Paste</sys:String>
+  <sys:String x:Key="PasteShortcut">Paste (Ctrl+V)</sys:String>
+  <sys:String x:Key="PasteTipLine1">Add content on the Clipboard</sys:String>
+  <sys:String x:Key="PasteTipLine2">to your document.</sys:String>
 
-    <sys:String x:Key="Cut">Cut</sys:String>
-    <sys:String x:Key="CutShortcut">Cut (Ctrl+X)</sys:String>
-    <sys:String x:Key="CutTipLine1">Remove the selection and put it on</sys:String>
-    <sys:String x:Key="CutTipLine2">the Clipboard so you can paste</sys:String>
-    <sys:String x:Key="CutTipLine3">it somewhere else.</sys:String>
+  <sys:String x:Key="Cut">Cut</sys:String>
+  <sys:String x:Key="CutShortcut">Cut (Ctrl+X)</sys:String>
+  <sys:String x:Key="CutTipLine1">Remove the selection and put it on</sys:String>
+  <sys:String x:Key="CutTipLine2">the Clipboard so you can paste</sys:String>
+  <sys:String x:Key="CutTipLine3">it somewhere else.</sys:String>
 
-    <sys:String x:Key="Copy">Copy</sys:String>
-    <sys:String x:Key="CopyShortcut">Copy (Ctrl+C)</sys:String>
-    <sys:String x:Key="CopyTipLine1">Put a copy of the selection on the clipboard</sys:String>
-    <sys:String x:Key="CopyTipLine2">so you can paste it somewhere else.</sys:String>
+  <sys:String x:Key="Copy">Copy</sys:String>
+  <sys:String x:Key="CopyShortcut">Copy (Ctrl+C)</sys:String>
+  <sys:String x:Key="CopyTipLine1">Put a copy of the selection on the clipboard</sys:String>
+  <sys:String x:Key="CopyTipLine2">so you can paste it somewhere else.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Home Tab: Font Group        -->
-    <!-- =========================== -->
-    <sys:String x:Key="Font">Font</sys:String>
-    <sys:String x:Key="FontShortcut">Font (Ctrl+Shift+F)</sys:String>
-    <sys:String x:Key="FontTipLine1">Pick a new font for your text.</sys:String>
-    <sys:String x:Key="FontSizeShortcut">Font Size (Ctrl+Shift+P)</sys:String>
-    <sys:String x:Key="FontSizeTipLine1">Change the size of your text.</sys:String>
+  <!-- =========================== -->
+  <!-- Home Tab: Font Group        -->
+  <!-- =========================== -->
+  <sys:String x:Key="Font">Font</sys:String>
+  <sys:String x:Key="FontShortcut">Font (Ctrl+Shift+F)</sys:String>
+  <sys:String x:Key="FontTipLine1">Pick a new font for your text.</sys:String>
+  <sys:String x:Key="FontSizeShortcut">Font Size (Ctrl+Shift+P)</sys:String>
+  <sys:String x:Key="FontSizeTipLine1">Change the size of your text.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Home Tab: Paragraph Group   -->
-    <!-- =========================== -->
-    <sys:String x:Key="Paragraph">Paragraph</sys:String>
-
-
-
-    <!-- =========================== -->
-    <!-- Home Tab: Style Group   -->
-    <!-- =========================== -->
-    <sys:String x:Key="StylesHeader">Styles</sys:String>
-    <sys:String x:Key="StylesGalleryLabel">Styles</sys:String>
-    <sys:String x:Key="CreateStyle">Create Style</sys:String>
-    <sys:String x:Key="ClearFormatting">Clear Formatting</sys:String>
+  <!-- =========================== -->
+  <!-- Home Tab: Paragraph Group   -->
+  <!-- =========================== -->
+  <sys:String x:Key="Paragraph">Paragraph</sys:String>
 
 
+
+  <!-- =========================== -->
+  <!-- Home Tab: Style Group   -->
+  <!-- =========================== -->
+  <sys:String x:Key="StylesHeader">Styles</sys:String>
+  <sys:String x:Key="StylesGalleryLabel">Styles</sys:String>
+  <sys:String x:Key="CreateStyle">Create Style</sys:String>
+  <sys:String x:Key="ClearFormatting">Clear Formatting</sys:String>
 
 
 
 
 
-    <sys:String x:Key="EditingHeader">Editing</sys:String>
-
-    <!-- ReadOnly -->
-    <sys:String x:Key="ReadOnly">ReadOnly</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipTitle">Restrict Editing</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipLine1">Restrict the content editing</sys:String>
-    <sys:String x:Key="ReadOnlyTooltipLine2">and formatting changes.</sys:String>
-
-    <!-- Find -->
-    <sys:String x:Key="Find">Find</sys:String>
-    <sys:String x:Key="FindTooltipTitle">Find (Ctrl+F)</sys:String>
-    <sys:String x:Key="FindTooltipLine1">Find text or other content in the document.</sys:String>
-
-    <!-- Replace -->
-    <sys:String x:Key="Replace">Replace</sys:String>
-    <sys:String x:Key="ReplaceTooltipTitle">Replace (Ctrl+H)</sys:String>
-    <sys:String x:Key="ReplaceTooltipLine1">Search for text you'd like to change</sys:String>
-    <sys:String x:Key="ReplaceTooltipLine2">and replace it with something else.</sys:String>
 
 
-    <!-- =========================== -->
-    <!-- Insert Tab: Pages Group     -->
-    <!-- =========================== -->
-    <sys:String x:Key="Pages">Pages</sys:String>
-    <sys:String x:Key="PageBreak">Page Break</sys:String>
-    <sys:String x:Key="PageBreakToolTipHeader">Insert a Page Break</sys:String>
-    <sys:String x:Key="PageBreakToolTip">Start a new page at the cursor position.</sys:String>
+  <sys:String x:Key="EditingHeader">Editing</sys:String>
 
-    <!-- =========================== -->
-    <!-- Insert Tab: Tables Group    -->
-    <!-- =========================== -->
-    <sys:String x:Key="Tables">Tables</sys:String>
-    <sys:String x:Key="Table">Table</sys:String>
-    <sys:String x:Key="AddTable">Add a Table</sys:String>
-    <sys:String x:Key="AddTableTipLine1">A table is a great way to organize</sys:String>
-    <sys:String x:Key="AddTableTipLine2">information within your document.</sys:String>
-    <sys:String x:Key="InsertTable">Insert Table</sys:String>
+  <!-- ReadOnly -->
+  <sys:String x:Key="ReadOnly">ReadOnly</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipTitle">Restrict Editing</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipLine1">Restrict the content editing</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipLine2">and formatting changes.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Insert Tab: Illustrations   -->
-    <!-- =========================== -->
-    <sys:String x:Key="Illustrations">Illustrations</sys:String>
-    <sys:String x:Key="Picture">Picture</sys:String>
-    <sys:String x:Key="FromFile">From File</sys:String>
-    <sys:String x:Key="PictureTipLine1">Insert pictures from your computer</sys:String>
-    <sys:String x:Key="PictureTipLine2">or from other computers that</sys:String>
-    <sys:String x:Key="PictureTipLine3">you're connected to.</sys:String>
+  <!-- Find -->
+  <sys:String x:Key="Find">Find</sys:String>
+  <sys:String x:Key="FindTooltipTitle">Find (Ctrl+F)</sys:String>
+  <sys:String x:Key="FindTooltipLine1">Find text or other content in the document.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Insert Tab: Links           -->
-    <!-- =========================== -->
-    <sys:String x:Key="Links">Links</sys:String>
-    <sys:String x:Key="Hyperlink">Hyperlink</sys:String>
-    <sys:String x:Key="HyperlinkHeader">Add a Hyperlink (Ctrl+K)</sys:String>
-    <sys:String x:Key="HyperlinkTipLine1">Create a link in your document for</sys:String>
-    <sys:String x:Key="HyperlinkTipLine2">quick access to webpage and files.</sys:String>
-
-    <!-- =========================== -->
-    <!-- Page Layout Tab             -->
-    <!-- =========================== -->
-    <sys:String x:Key="PageBackground">Page Background</sys:String>
-    <sys:String x:Key="PageSetup">Page Setup</sys:String>
-    <sys:String x:Key="PageSize">Page Size</sys:String>
-    <sys:String x:Key="Margins">Margins</sys:String>
-    <sys:String x:Key="Size">Size</sys:String>
-
-    <!-- =========================== -->
-    <!-- View Tab                    -->
-    <!-- =========================== -->
-    <sys:String x:Key="Views">Views</sys:String>
-    <sys:String x:Key="Zoom">Zoom</sys:String>
-    <sys:String x:Key="ZoomIn">Zoom In</sys:String>
-    <sys:String x:Key="ZoomOut">Zoom Out</sys:String>
-    <sys:String x:Key="ResetZoom">100%</sys:String>
-    <sys:String x:Key="OnePage">One Page</sys:String>
-    <sys:String x:Key="MultiplePages">Multiple Pages</sys:String>
-    <sys:String x:Key="PageWidth">Page Width</sys:String>
-
-    <!-- =========================== -->
-    <!-- Review Tab                  -->
-    <!-- =========================== -->
-    <sys:String x:Key="Comments">Comments</sys:String>
-    <sys:String x:Key="NewComment">New Comment</sys:String>
-    <sys:String x:Key="DeleteComment">Delete</sys:String>
-    <sys:String x:Key="PreviousComment">Previous</sys:String>
-    <sys:String x:Key="NextComment">Next</sys:String>
-    <sys:String x:Key="ShowComments">Show Comments</sys:String>
-
-    <!-- =========================== -->
-    <!-- Status Bar                  -->
-    <!-- =========================== -->
-    <sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
-    <sys:String x:Key="PageLabel">Page :</sys:String>
-    <sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
-    <sys:String x:Key="WordsLabel">Words</sys:String>
-    <sys:String x:Key="LanguageSwitchTooltip">Switch between English and Kannada</sys:String>
-    <sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
-    <sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
-    <sys:String x:Key="ZoomTooltip">Zoom</sys:String>
-
-    <!-- =========================== -->
-    <!-- Backstage (File Menu)       -->
-    <!-- =========================== -->
-    <sys:String x:Key="BackstageNew">New</sys:String>
-    <sys:String x:Key="BackstageOpen">Open</sys:String>
-    <sys:String x:Key="BackstageSave">Save</sys:String>
-    <sys:String x:Key="BackstageSaveAs">Save As</sys:String>
-    <sys:String x:Key="BackstagePrint">Print</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsWordDocx">Word Document</sys:String>
-    <sys:String x:Key="BackstageSaveAsWordDocxDescription">Save the file as Word document</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsWordDoc">Word 97-2003</sys:String>
-    <sys:String x:Key="BackstageSaveAsWordDocDescription">Save a copy as Word 97-2003</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsHtml">HTML Document</sys:String>
-    <sys:String x:Key="BackstageSaveAsHtmlDescription">Save the file as HTML document</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsXaml">XAML Document</sys:String>
-    <sys:String x:Key="BackstageSaveAsXamlDescription">Save the file as XAML document</sys:String>
-
-    <sys:String x:Key="BackstageSaveAsText">Text Document</sys:String>
-    <sys:String x:Key="BackstageSaveAsTextDescription">Save the file as Text document</sys:String>
-
-    <!-- =========================== -->
-    <!-- Page Layout: Custom Page Setup      -->
-    <!-- =========================== -->
-    <sys:String x:Key="EnterMarginsTitle">Enter Margins</sys:String>
-    <sys:String x:Key="EnterMarginInstruction">Enter Margins (in inches)</sys:String>
-    <sys:String x:Key="LeftLabel">Left (inch):</sys:String>
-    <sys:String x:Key="TopLabel">Top (inch):</sys:String>
-    <sys:String x:Key="RightLabel">Right (inch):</sys:String>
-    <sys:String x:Key="BottomLabel">Bottom (inch):</sys:String>
-    <sys:String x:Key="OkButton">OK</sys:String>
-    <sys:String x:Key="CancelButton">Cancel</sys:String>
+  <!-- Replace -->
+  <sys:String x:Key="Replace">Replace</sys:String>
+  <sys:String x:Key="ReplaceTooltipTitle">Replace (Ctrl+H)</sys:String>
+  <sys:String x:Key="ReplaceTooltipLine1">Search for text you'd like to change</sys:String>
+  <sys:String x:Key="ReplaceTooltipLine2">and replace it with something else.</sys:String>
 
 
+  <!-- =========================== -->
+  <!-- Insert Tab: Pages Group     -->
+  <!-- =========================== -->
+  <sys:String x:Key="Pages">Pages</sys:String>
+  <sys:String x:Key="PageBreak">Page Break</sys:String>
+  <sys:String x:Key="PageBreakToolTipHeader">Insert a Page Break</sys:String>
+  <sys:String x:Key="PageBreakToolTip">Start a new page at the cursor position.</sys:String>
 
-    <sys:String x:Key="PageWidthLabel">Page Width (in inches):</sys:String>
-    <sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
+  <!-- =========================== -->
+  <!-- Insert Tab: Tables Group    -->
+  <!-- =========================== -->
+  <sys:String x:Key="Tables">Tables</sys:String>
+  <sys:String x:Key="Table">Table</sys:String>
+  <sys:String x:Key="AddTable">Add a Table</sys:String>
+  <sys:String x:Key="AddTableTipLine1">A table is a great way to organize</sys:String>
+  <sys:String x:Key="AddTableTipLine2">information within your document.</sys:String>
+  <sys:String x:Key="InsertTable">Insert Table</sys:String>
 
+  <!-- =========================== -->
+  <!-- Insert Tab: Illustrations   -->
+  <!-- =========================== -->
+  <sys:String x:Key="Illustrations">Illustrations</sys:String>
+  <sys:String x:Key="Picture">Picture</sys:String>
+  <sys:String x:Key="FromFile">From File</sys:String>
+  <sys:String x:Key="PictureTipLine1">Insert pictures from your computer</sys:String>
+  <sys:String x:Key="PictureTipLine2">or from other computers that</sys:String>
+  <sys:String x:Key="PictureTipLine3">you're connected to.</sys:String>
 
-    <!-- =========================== -->
-    <!-- Header/Footer: Custom Setup -->
-    <!-- =========================== -->
+  <!-- =========================== -->
+  <!-- Insert Tab: Links           -->
+  <!-- =========================== -->
+  <sys:String x:Key="Links">Links</sys:String>
+  <sys:String x:Key="Hyperlink">Hyperlink</sys:String>
+  <sys:String x:Key="HyperlinkHeader">Add a Hyperlink (Ctrl+K)</sys:String>
+  <sys:String x:Key="HyperlinkTipLine1">Create a link in your document for</sys:String>
+  <sys:String x:Key="HyperlinkTipLine2">quick access to webpage and files.</sys:String>
 
-    <!-- Tab Title -->
-    <sys:String x:Key="HeaderFooterTab">Header/Footer</sys:String>
+  <!-- =========================== -->
+  <!-- Page Layout Tab             -->
+  <!-- =========================== -->
+  <sys:String x:Key="PageBackground">Page Background</sys:String>
+  <sys:String x:Key="PageSetup">Page Setup</sys:String>
+  <sys:String x:Key="PageSize">Page Size</sys:String>
+  <sys:String x:Key="Margins">Margins</sys:String>
+  <sys:String x:Key="Size">Size</sys:String>
 
-    <!-- Ribbon Group Headers -->
-    <sys:String x:Key="HeaderFooterGroup">Header/Footer</sys:String>
-    <sys:String x:Key="HeaderFooterOptions">Options</sys:String>
+  <!-- =========================== -->
+  <!-- View Tab                    -->
+  <!-- =========================== -->
+  <sys:String x:Key="Views">Views</sys:String>
+  <sys:String x:Key="Zoom">Zoom</sys:String>
+  <sys:String x:Key="ZoomIn">Zoom In</sys:String>
+  <sys:String x:Key="ZoomOut">Zoom Out</sys:String>
+  <sys:String x:Key="ResetZoom">100%</sys:String>
+  <sys:String x:Key="OnePage">One Page</sys:String>
+  <sys:String x:Key="MultiplePages">Multiple Pages</sys:String>
+  <sys:String x:Key="PageWidth">Page Width</sys:String>
 
-    <!-- Buttons -->
-    <sys:String x:Key="EditHeader">Edit Header</sys:String>
-    <sys:String x:Key="EditFooter">Edit Footer</sys:String>
-    <sys:String x:Key="RemoveHeaderFooter">Remove Header/Footer</sys:String>
+  <!-- =========================== -->
+  <!-- Review Tab                  -->
+  <!-- =========================== -->
+  <sys:String x:Key="Comments">Comments</sys:String>
+  <sys:String x:Key="NewComment">New Comment</sys:String>
+  <sys:String x:Key="DeleteComment">Delete</sys:String>
+  <sys:String x:Key="PreviousComment">Previous</sys:String>
+  <sys:String x:Key="NextComment">Next</sys:String>
+  <sys:String x:Key="ShowComments">Show Comments</sys:String>
 
-    <!-- Checkboxes -->
-    <sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
-    <sys:String x:Key="DifferentOddEvenPages">Different Odd/Even Pages</sys:String>
-    <sys:String x:Key="SuppressFirstPageHeaderFooter">Suppress Header/Footer on First Page</sys:String>
-    <sys:String x:Key="LinkToPrevious">Link to Previous</sys:String>
+  <!-- =========================== -->
+  <!-- Status Bar                  -->
+  <!-- =========================== -->
+  <sys:String x:Key="PageNumberTooltip">Page number in document.</sys:String>
+  <sys:String x:Key="PageLabel">Page :</sys:String>
+  <sys:String x:Key="WordCountTooltip">Number of words in document.</sys:String>
+  <sys:String x:Key="WordsLabel">Words</sys:String>
+  <sys:String x:Key="LanguageSwitchTooltip">Switch between English and Kannada</sys:String>
+  <sys:String x:Key="PrintLayoutTooltip">Print Layout</sys:String>
+  <sys:String x:Key="WebLayoutTooltip">Web Layout</sys:String>
+  <sys:String x:Key="ZoomTooltip">Zoom</sys:String>
 
-    <!-- =========================== -->
-    <!-- Page Number: Custom Setup -->
-    <!-- =========================== -->
+  <!-- =========================== -->
+  <!-- Backstage (File Menu)       -->
+  <!-- =========================== -->
+  <sys:String x:Key="BackstageNew">New</sys:String>
+  <sys:String x:Key="BackstageOpen">Open</sys:String>
+  <sys:String x:Key="BackstageSave">Save</sys:String>
+  <sys:String x:Key="BackstageSaveAs">Save As</sys:String>
+  <sys:String x:Key="BackstagePrint">Print</sys:String>
 
-    <!-- Tab Title -->
-    <sys:String x:Key="PageNumberGroup">Page Number</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDocx">Word Document</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDocxDescription">Save the file as Word document</sys:String>
 
-    <!-- Buttons -->
-    <sys:String x:Key="EditPageNumber">Edit Page Number</sys:String>
-    <sys:String x:Key="EditEvenPageNumber">Edit Even Page Number</sys:String>
-    <sys:String x:Key="EditOddPageNumber">Edit Odd Page Number</sys:String>
-    <sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDoc">Word 97-2003</sys:String>
+  <sys:String x:Key="BackstageSaveAsWordDocDescription">Save a copy as Word 97-2003</sys:String>
 
+  <sys:String x:Key="BackstageSaveAsHtml">HTML Document</sys:String>
+  <sys:String x:Key="BackstageSaveAsHtmlDescription">Save the file as HTML document</sys:String>
 
-    <sys:String x:Key="ExitPrompt">Do you want to save changes to the document before exiting?</sys:String>
-    <sys:String x:Key="ExitPromptTitle">Save Document</sys:String>
+  <sys:String x:Key="BackstageSaveAsXaml">XAML Document</sys:String>
+  <sys:String x:Key="BackstageSaveAsXamlDescription">Save the file as XAML document</sys:String>
+
+  <sys:String x:Key="BackstageSaveAsText">Text Document</sys:String>
+  <sys:String x:Key="BackstageSaveAsTextDescription">Save the file as Text document</sys:String>
+
+  <!-- =========================== -->
+  <!-- Page Layout: Custom Page Setup      -->
+  <!-- =========================== -->
+  <sys:String x:Key="EnterMarginsTitle">Enter Margins</sys:String>
+  <sys:String x:Key="EnterMarginInstruction">Enter Margins (in inches)</sys:String>
+  <sys:String x:Key="LeftLabel">Left (inch):</sys:String>
+  <sys:String x:Key="TopLabel">Top (inch):</sys:String>
+  <sys:String x:Key="RightLabel">Right (inch):</sys:String>
+  <sys:String x:Key="BottomLabel">Bottom (inch):</sys:String>
+  <sys:String x:Key="OkButton">OK</sys:String>
+  <sys:String x:Key="CancelButton">Cancel</sys:String>
 
 
 
-    <!-- =========================== -->
-    <!-- Nudi Manager -->
-    <!-- =========================== -->
-<sys:String x:Key="NudiManagerTab">Nudi Manager</sys:String>
-<sys:String x:Key="NudiManagerGroup">Nudi Controls</sys:String>
-<sys:String x:Key="NudiManagerGroupDescription">Manage the Kannada Nudi Engine. This engine allows you to type and render Kannada characters system-wide on your computer.</sys:String>
-<sys:String x:Key="StartNudiEngine">Start Nudi Engine</sys:String>
-<sys:String x:Key="StopNudiEngine">Stop Nudi Engine</sys:String>
-<sys:String x:Key="StartNudiTooltip">Start the Kannada Nudi engine to enable typing and rendering of Kannada characters across all applications on your system.</sys:String>
-<sys:String x:Key="StopNudiTooltip">Stop the Nudi engine when it’s no longer needed to free up system resources.</sys:String>
+  <sys:String x:Key="PageWidthLabel">Page Width (in inches):</sys:String>
+  <sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
 
 
-    <!-- =========================== -->
-    <!-- Help -->
-    <!-- =========================== -->
-  
+  <!-- =========================== -->
+  <!-- Header/Footer: Custom Setup -->
+  <!-- =========================== -->
+
+  <!-- Tab Title -->
+  <sys:String x:Key="HeaderFooterTab">Header/Footer</sys:String>
+
+  <!-- Ribbon Group Headers -->
+  <sys:String x:Key="HeaderFooterGroup">Header/Footer</sys:String>
+  <sys:String x:Key="HeaderFooterOptions">Options</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="EditHeader">Edit Header</sys:String>
+  <sys:String x:Key="EditFooter">Edit Footer</sys:String>
+  <sys:String x:Key="RemoveHeaderFooter">Remove Header/Footer</sys:String>
+  <sys:String x:Key="DifferentFirstPageButton">Different First Page</sys:String>
+  <sys:String x:Key="DifferentEvenPageButton">Different Even Page</sys:String>
+
+
+
+
+
+  <!-- Group Descriptions -->
+  <sys:String x:Key="HeaderFooterGroupDescription">Edit or remove headers and footers in the document.</sys:String>
+  <sys:String x:Key="HeaderFooterOptionsDescription">Configure special header/footer settings for first or even pages.</sys:String>
+  <sys:String x:Key="PageNumberGroupDescription">Manage and customize page numbers in the document.</sys:String>
+
+  <!-- Tooltips -->
+  <sys:String x:Key="EditHeaderTooltip">Open the header/footer section for editing.</sys:String>
+  <sys:String x:Key="RemoveHeaderFooterTooltip">Remove all header and footer content from the document.</sys:String>
+  <sys:String x:Key="DifferentFirstPageTooltip">Add or edit a unique header/footer for the first page.</sys:String>
+  <sys:String x:Key="DifferentEvenPageTooltip">Add or edit a unique header/footer for even pages.</sys:String>
+  <sys:String x:Key="LinkToPreviousTooltip">Link the current header/footer to the previous section.</sys:String>
+  <sys:String x:Key="SuppressFirstPageTooltip">Hide headers and footers on the first page.</sys:String>
+
+
+
+
+
+  <!-- Checkboxes -->
+  <sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
+  <sys:String x:Key="DifferentOddEvenPages">Different Odd/Even Pages</sys:String>
+  <sys:String x:Key="SuppressFirstPageHeaderFooter">Suppress Header/Footer on First Page</sys:String>
+  <sys:String x:Key="LinkToPrevious">Link to Previous</sys:String>
+
+  <!-- =========================== -->
+  <!-- Page Number: Custom Setup -->
+  <!-- =========================== -->
+
+  <!-- Tab Title -->
+  <sys:String x:Key="PageNumberGroup">Page Number</sys:String>
+
+  <!-- Buttons -->
+  <sys:String x:Key="EditPageNumber">Edit Page Number</sys:String>
+  <sys:String x:Key="EditEvenPageNumber">Edit Even Page Number</sys:String>
+  <sys:String x:Key="EditOddPageNumber">Edit Odd Page Number</sys:String>
+  <sys:String x:Key="DefaultPageNumber">Default Page Number</sys:String>
+
+
+  <sys:String x:Key="ExitPrompt">Do you want to save changes to the document before exiting?</sys:String>
+  <sys:String x:Key="ExitPromptTitle">Save Document</sys:String>
+
+
+
+  <!-- =========================== -->
+  <!-- Nudi Manager -->
+  <!-- =========================== -->
+  <sys:String x:Key="NudiManagerTab">Nudi Manager</sys:String>
+  <sys:String x:Key="NudiManagerGroup">Nudi Controls</sys:String>
+  <sys:String x:Key="NudiManagerGroupDescription">Manage the Kannada Nudi Engine. This engine allows you to type and render Kannada characters system-wide on your computer.</sys:String>
+  <sys:String x:Key="StartNudiEngine">Start Nudi Engine</sys:String>
+  <sys:String x:Key="StopNudiEngine">Stop Nudi Engine</sys:String>
+  <sys:String x:Key="StartNudiTooltip">Start the Kannada Nudi engine to enable typing and rendering of Kannada characters across all applications on your system.</sys:String>
+  <sys:String x:Key="StopNudiTooltip">Stop the Nudi engine when it’s no longer needed to free up system resources.</sys:String>
+
+
+  <!-- =========================== -->
+  <!-- Help -->
+  <!-- =========================== -->
+
 
   <!-- Help Tab -->
   <sys:String x:Key="HelpTab">Help</sys:String>
@@ -312,25 +335,25 @@
 
 
 
-<sys:String x:Key="AboutNudiTitle">About Nudi</sys:String>
-<sys:String x:Key="AboutNudiHeader">About Kannada Nudi Editor</sys:String>
+  <sys:String x:Key="AboutNudiTitle">About Nudi</sys:String>
+  <sys:String x:Key="AboutNudiHeader">About Kannada Nudi Editor</sys:String>
 
-<sys:String x:Key="AboutNudiDescription">
-  Kannada Nudi Editor is a rich-text editor designed to support bilingual document editing in Kannada and English. 
+  <sys:String x:Key="AboutNudiDescription">
+    Kannada Nudi Editor is a rich-text editor designed to support bilingual document editing in Kannada and English. 
   It provides advanced typography, document formatting, and localization support. 
   Developed and maintained by KAGAPA, the editor is built using .NET 8 and WPF, specifically for Windows systems.
-</sys:String>
+  </sys:String>
 
 
-<sys:String x:Key="CloseButton">Close</sys:String>
+  <sys:String x:Key="CloseButton">Close</sys:String>
 
 
-<!-- Feedback Form -->
-<sys:String x:Key="FeedbackTitle">Feedback</sys:String>
-<sys:String x:Key="EmailLabel">Enter your Email:</sys:String>
-<sys:String x:Key="FeedbackLabel">Enter Your Feedback:</sys:String>
-<sys:String x:Key="Submit">Submit</sys:String>
-<sys:String x:Key="Close">Close</sys:String>
+  <!-- Feedback Form -->
+  <sys:String x:Key="FeedbackTitle">Feedback</sys:String>
+  <sys:String x:Key="EmailLabel">Enter your Email:</sys:String>
+  <sys:String x:Key="FeedbackLabel">Enter Your Feedback:</sys:String>
+  <sys:String x:Key="Submit">Submit</sys:String>
+  <sys:String x:Key="Close">Close</sys:String>
 
 
 

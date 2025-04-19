@@ -2441,45 +2441,118 @@
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
 
+
+
+
             <Syncfusion:RibbonTab Caption="{DynamicResource HeaderFooterTab}">
+
                 <!-- Header & Footer Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterGroup}"
                                       IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource HeaderFooterGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="3">
                         <Button Content="{DynamicResource EditHeader}"
                                 Height="30"
                                 Width="130"
                                 Margin="5"
-                                Click="EditHeader_Click"/>
+                                Click="EditHeader_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource EditHeaderTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
                         <Button Content="{DynamicResource RemoveHeaderFooter}"
                                 Height="30"
                                 Width="130"
-                                Margin="5"/>
+                                Margin="5">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
                 <!-- Header/Footer Options Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterOptions}"
                                       IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource HeaderFooterOptionsDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="3">
-                        <!-- Checkbox for Different First Page -->
-                        <CheckBox Content="{DynamicResource DifferentFirstPage}"
-                                  Margin="5"/>
-                        <!-- Checkbox for Different Odd and Even Pages -->
-                        <CheckBox Content="{DynamicResource DifferentOddEvenPages}"
-                                  Margin="5"/>
-                        <!-- Checkbox for Suppress Header/Footer on First Page -->
-                        <CheckBox Content="{DynamicResource SuppressFirstPageHeaderFooter}"
-                                  Margin="5"/>
-                        <!-- Checkbox for Link to Previous -->
-                        <CheckBox Content="{DynamicResource LinkToPrevious}"
-                                  Margin="5"/>
+                        <Button Content="{DynamicResource DifferentFirstPageButton}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"
+                                Click="firstPageHeaderFooter_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource DifferentFirstPageTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                        <Button Content="{DynamicResource DifferentEvenPageButton}"
+                                Height="30"
+                                Width="130"
+                                Margin="5"
+                                Click="evenHeaderFooter_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource DifferentEvenPageTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                        <Button Content="{DynamicResource LinkToPrevious}"
+                                Height="30"
+                                Width="130"
+                                Margin="5">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource LinkToPreviousTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                        <Button Content="{DynamicResource SuppressFirstPageHeaderFooter}"
+                                Height="30"
+                                Width="130"
+                                Margin="5">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource SuppressFirstPageTooltip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
                 <!-- Page Number Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
                                       IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource PageNumberGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="3">
                         <Button Content="{DynamicResource EditPageNumber}"
                                 Height="30"
@@ -2514,13 +2587,13 @@
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource NudiManagerGroupDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <!-- Use a grid for better alignment -->
                     <Grid Margin="5"
-                            Width="150">
+                          Width="150">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="10"/>
@@ -2536,15 +2609,15 @@
                             <Button.ToolTip>
                                 <Syncfusion:ScreenTip MaxWidth="300">
                                     <TextBlock Text="{DynamicResource StartNudiTooltip}"
-                                            TextWrapping="Wrap"/>
+                                               TextWrapping="Wrap"/>
                                 </Syncfusion:ScreenTip>
                             </Button.ToolTip>
                         </Button>
 
                         <!-- Spacer -->
                         <Rectangle Grid.Row="1"
-                                Height="10"
-                                Fill="Transparent"/>
+                                   Height="10"
+                                   Fill="Transparent"/>
 
                         <!-- Stop Button -->
                         <Button Grid.Row="2"
@@ -2555,7 +2628,7 @@
                             <Button.ToolTip>
                                 <Syncfusion:ScreenTip MaxWidth="300">
                                     <TextBlock Text="{DynamicResource StopNudiTooltip}"
-                                            TextWrapping="Wrap"/>
+                                               TextWrapping="Wrap"/>
                                 </Syncfusion:ScreenTip>
                             </Button.ToolTip>
                         </Button>

@@ -193,6 +193,33 @@
   <sys:String x:Key="EditHeader">ಅಗ್ರಶೀರ್ಷಿಕೆ  ಸಂಪಾದಿಸಿ</sys:String>
   <sys:String x:Key="EditFooter">ಅಡಿ ಶೀರ್ಷಿಕೆ   ಸಂಪಾದಿಸಿ</sys:String>
   <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
+  <sys:String x:Key="DifferentFirstPageButton">ಪ್ರಥಮ ಪುಟ ವಿಭಿನ್ನ</sys:String>
+  <sys:String x:Key="DifferentEvenPageButton">ಎಷ್ಟಾದರೂ ಪುಟ ವಿಭಿನ್ನ</sys:String>
+
+
+
+
+
+  <!-- Group Descriptions -->
+  <sys:String x:Key="HeaderFooterGroupDescription">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್‌ಗಳನ್ನು ತಿದ್ದುಪಡಿ ಅಥವಾ ತೆಗೆದುಹಾಕಿ.</sys:String>
+  <sys:String x:Key="HeaderFooterOptionsDescription">ಮೊದಲ ಪುಟ ಅಥವಾ ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳಿಗೆ ವಿಶೇಷ ಹೆಡರ್/ಫೂಟರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಸಂರಚಿಸಿ.</sys:String>
+  <sys:String x:Key="PageNumberGroupDescription">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪುಟ ಸಂಖ್ಯೆಗಳನ್ನು ನಿರ್ವಹಿಸಿ ಮತ್ತು ಕಸ್ಟಮೈಸ್ ಮಾಡಿ.</sys:String>
+
+  <!-- Tooltips -->
+  <sys:String x:Key="EditHeaderTooltip">ತಿದ್ದುಪಡಿಯಾಗಿ ಹೆಡರ್/ಫೂಟರ್ ವಿಭಾಗವನ್ನು ತೆರೆದುಕೊಳ್ಳಿ.</sys:String>
+  <sys:String x:Key="RemoveHeaderFooterTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಿಂದ ಎಲ್ಲಾ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ.</sys:String>
+  <sys:String x:Key="DifferentFirstPageTooltip">ಮೊದಲ ಪುಟಕ್ಕೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>
+  <sys:String x:Key="DifferentEvenPageTooltip">ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳಿಗೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>
+  <sys:String x:Key="LinkToPreviousTooltip">ಪ್ರಸ್ತುತ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಹಿಂದಿನ ವಿಭಾಗದೊಂದಿಗೆ ಲಿಂಕ್ ಮಾಡಿ.</sys:String>
+  <sys:String x:Key="SuppressFirstPageTooltip">ಮೊದಲ ಪುಟದಲ್ಲಿ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್‌ಗಳನ್ನು ತೋರಿಸಬೇಡಿ.</sys:String>
+
+
+
+
+
+
+
+
 
   <!-- Checkboxes -->
   <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ</sys:String>
@@ -217,13 +244,13 @@
   <!-- =========================== -->
   <!-- Nudi Manager -->
   <!-- =========================== -->
-<sys:String x:Key="NudiManagerTab">ನುಡಿ ವ್ಯವಸ್ಥಾಪಕ</sys:String>
-<sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
-<sys:String x:Key="NudiManagerGroupDescription">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ. ಈ ಎಂಜಿನ್ ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ಸಿಸ್ಟಮ್ ವ್ಯಾಪಕವಾಗಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡುವುದಕ್ಕೆ ಅನುಮತಿಸುತ್ತದೆ.</sys:String>
-<sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಪ್ರಾರಂಭಿಸಿ</sys:String>
-<sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
-<sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ನಿಮ್ಮ ಸಿಸ್ಟಮ್ನ ಎಲ್ಲಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
-<sys:String x:Key="StopNudiTooltip">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿಲ್ಲಿಸಿ, ಇದು ಸಿಸ್ಟಮ್ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ.</sys:String>
+  <sys:String x:Key="NudiManagerTab">ನುಡಿ ವ್ಯವಸ್ಥಾಪಕ</sys:String>
+  <sys:String x:Key="NudiManagerGroup">ನುಡಿ ನಿಯಂತ್ರಣಗಳು</sys:String>
+  <sys:String x:Key="NudiManagerGroupDescription">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ. ಈ ಎಂಜಿನ್ ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ಸಿಸ್ಟಮ್ ವ್ಯಾಪಕವಾಗಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡುವುದಕ್ಕೆ ಅನುಮತಿಸುತ್ತದೆ.</sys:String>
+  <sys:String x:Key="StartNudiEngine">ನುಡಿ ಎಂಜಿನ್ ಪ್ರಾರಂಭಿಸಿ</sys:String>
+  <sys:String x:Key="StopNudiEngine">ನುಡಿ ಎಂಜಿನ್ ನಿಲ್ಲಿಸಿ</sys:String>
+  <sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ನಿಮ್ಮ ಸಿಸ್ಟಮ್ನ ಎಲ್ಲಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+  <sys:String x:Key="StopNudiTooltip">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿಲ್ಲಿಸಿ, ಇದು ಸಿಸ್ಟಮ್ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ.</sys:String>
 
 
   <!-- =========================== -->
@@ -246,8 +273,8 @@
 
   <sys:String x:Key="AppInfoGroup">ಅನ್ವಯ ಮಾಹಿತಿ</sys:String>
   <sys:String x:Key="AppInfoGroupDescription">ಅನ್ವಯದ ಕುರಿತು ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
- 
- 
+
+
   <!-- =========================== -->
   <!-- Help  Feedback-->
   <!-- =========================== -->
