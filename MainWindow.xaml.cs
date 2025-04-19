@@ -5,7 +5,6 @@ using Syncfusion.Windows.Tools.Controls;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
-using KannadaNudiEditor.Views.HelpTab;
 namespace KannadaNudiEditor
 {
     /// <summary>
@@ -1404,59 +1402,54 @@ namespace KannadaNudiEditor
 
 
 
-
-
         // Handle Edit Header button click to show the Header/Footer editor
-        private void EditHeader_Click(object sender, RoutedEventArgs e)
+private void EditHeader_Click(object sender, RoutedEventArgs e)
+{
+    // Retrieve the current header and footer text
+    string? existingHeader = GetCurrentHeaderText();  // Get current header text
+    string? existingFooter = GetCurrentFooterText();  // Get current footer text
+
+    // Open the HeaderFooterEditor to let the user enter new header and footer text
+    HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter);
+    bool? result = headerFooterEditor.ShowDialog();
+
+    if (result == true)
+    {
+        string headerText = headerFooterEditor.HeaderText ?? string.Empty;
+        string footerText = headerFooterEditor.FooterText ?? string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(headerText) && !string.IsNullOrWhiteSpace(footerText))
         {
-            // Retrieve the current header and footer text
-            string? existingHeader = GetCurrentHeaderText();  // Get the current header text dynamically
-            string? existingFooter = GetCurrentFooterText();  // Get the current footer text dynamically
+            // Create new HeaderFooters (just like in headerFooter_Click)
+            HeaderFooters headerFooters = new HeaderFooters();
 
-            // Open HeaderFooterEditor to let the user enter header and footer text
-            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter); // Pass existing header/footer
-            bool? result = headerFooterEditor.ShowDialog();  // Open it as a modal dialog
+            // Create and add the new header
+            ParagraphAdv headerParagraph = new ParagraphAdv();
+            SpanAdv headerSpan = new SpanAdv();
+            headerSpan.Text = headerText;
+            headerParagraph.Inlines.Add(headerSpan);
+            headerFooters.Header.Blocks.Add(headerParagraph);
 
-            // After the user has applied the header and footer, we will retrieve the header/footer values
-            if (result == true)
-            {
-                string headerText = headerFooterEditor.HeaderText ?? string.Empty;  // Safely retrieve header text
-                string footerText = headerFooterEditor.FooterText ?? string.Empty;  // Safely retrieve footer text
+            // Create and add the new footer
+            ParagraphAdv footerParagraph = new ParagraphAdv();
+            SpanAdv footerSpan = new SpanAdv();
+            footerSpan.Text = footerText;
+            footerParagraph.Inlines.Add(footerSpan);
+            headerFooters.Footer.Blocks.Add(footerParagraph);
 
-                // Only proceed if both header and footer texts are not empty
-                if (!string.IsNullOrEmpty(headerText) && !string.IsNullOrEmpty(footerText))
-                {
-                    // Get the first section
-                    SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-
-                    // Clear the existing header and footer manually
-                    sectionAdv.HeaderFooters.Header.Blocks.Clear();
-                    sectionAdv.HeaderFooters.Footer.Blocks.Clear();
-
-                    // Create and add the new header
-                    ParagraphAdv headerParagraph = new ParagraphAdv();
-                    SpanAdv headerSpan = new SpanAdv();
-                    headerSpan.Text = headerText;  // Dynamic header text from the editor
-                    headerParagraph.Inlines.Add(headerSpan);
-                    sectionAdv.HeaderFooters.Header.Blocks.Add(headerParagraph);
-
-                    // Create and add the new footer
-                    ParagraphAdv footerParagraph = new ParagraphAdv();
-                    SpanAdv footerSpan = new SpanAdv();
-                    footerSpan.Text = footerText;  // Dynamic footer text from the editor
-                    footerParagraph.Inlines.Add(footerSpan);
-                    sectionAdv.HeaderFooters.Footer.Blocks.Add(footerParagraph);
-
-                    // Apply header/footer distance
-                    sectionAdv.SectionFormat.HeaderDistance = 50;
-                    sectionAdv.SectionFormat.FooterDistance = 50;
-                }
-                else
-                {
-                    MessageBox.Show("Header and Footer cannot be empty.");
-                }
-            }
+            // Apply to the first section
+            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
+            sectionAdv.HeaderFooters = headerFooters;
+            sectionAdv.SectionFormat.HeaderDistance = 50;
+            sectionAdv.SectionFormat.FooterDistance = 50;
         }
+        else
+        {
+            MessageBox.Show("Header and Footer cannot be empty.");
+        }
+    }
+}
+
 
         // Get the current header text dynamically from the document
         private string? GetCurrentHeaderText()
@@ -1491,16 +1484,6 @@ namespace KannadaNudiEditor
             }
             return null;  // Return null if no footer text exists
         }
-
-
-
-
-
-
-
-
-
-
 
 
         private void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
@@ -1670,20 +1653,6 @@ namespace KannadaNudiEditor
             // Open support window or link to support page
             MessageBox.Show("Support link or window here.");
         }
-
-        private void AboutApp_Click(object sender, RoutedEventArgs e)
-        {
-            // Show Application Info (different from About Nudi)
-            MessageBox.Show("Application info here.");
-        }
-
-
-
-
-
-
-
-
 
 
 
