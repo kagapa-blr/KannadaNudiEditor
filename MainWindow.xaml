@@ -316,7 +316,7 @@
 
             <Syncfusion:Ribbon.BackStage>
                 <Syncfusion:Backstage>
-                    <Syncfusion:BackstageTabItem Header="Info">
+                    <Syncfusion:BackstageTabItem Header="{DynamicResource backStageInfo}">
                         <!--Back Stage tab item content can be of any type.-->
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
@@ -332,7 +332,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Information"
+                                <TextBlock Text="{DynamicResource backStageInformation}"
                                            FontFamily="NudiParijatha"
                                            FontSize="20"
                                            Margin="10"/>
@@ -352,7 +352,7 @@
                                     <Syncfusion:DropDownButton Width="87"
                                                                Height="80"
                                                                SizeForm="Large"
-                                                               Label="rotectDocument"
+                                                               Label="{DynamicResource backStageProtectDocument}"
                                                                LargeIcon="/Images/Backstage/Protect.png"
                                                                Margin="5"
                                                                BorderThickness="1">
@@ -360,12 +360,12 @@
                                                                      Icon="Images/Home/Editing/RestrictEditing.png"
                                                                      IconSize="30,30"
                                                                      Label="RestrictEditing"
-                                                                     Description="Restricts editing to this document."/>
+                                                                     Description="{DynamicResource backStageRestrictEditingDescription}"/>
                                         <Syncfusion:SimpleMenuButton x:Name="backstageEncryptDocumentButton"
                                                                      Icon="Images/Backstage/Protect.png"
                                                                      IconSize="30,30"
-                                                                     Label="EncryptWithPassword"
-                                                                     Description="Password-protect this document."
+                                                                     Label="{DynamicResource backStageEncryptWithPassword}"
+                                                                     Description="{DynamicResource backStageEncryptWithPasswordDescription}"
                                                                      Command="Syncfusion:SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand"/>
                                     </Syncfusion:DropDownButton>
                                     <StackPanel Grid.Column="1"
@@ -375,7 +375,7 @@
                                                    Grid.Column="1"
                                                    FontWeight="Bold"
                                                    Margin="3"/>
-                                        <TextBlock Text="Control what types of changes people can make to this document."
+                                        <TextBlock Text="{DynamicResource backStageControlChangesText}"
                                                    Grid.Column="1"
                                                    TextWrapping="Wrap"
                                                    Margin="3"/>
@@ -435,7 +435,7 @@
                             </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
-                    <Syncfusion:BackstageTabItem Header="=New">
+                    <Syncfusion:BackstageTabItem Header="{DynamicResource backStageNew}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -536,18 +536,18 @@
                         </Grid>
                     </Syncfusion:BackstageTabItem>
                     <Syncfusion:BackStageCommandButton  x:Name="backstageOpenButton"
-                                                        Header="Open"
+                                                        Header="{DynamicResource backStageOpen}"
                                                         Command="Syncfusion:SfRichTextBoxAdv.OpenDocumentCommand"/>
                     <Syncfusion:BackStageCommandButton x:Name="backstageSaveButton"
-                                                       Header="Save"
+                                                       Header="{DynamicResource backStageSave}"
                                                        Command="Syncfusion:SfRichTextBoxAdv.SaveDocumentCommand"/>
                     <Syncfusion:BackStageCommandButton x:Name="backstageSaveAsButton"
-                                                       Header="SaveAs"
+                                                       Header="{DynamicResource backStageSaveAs}"
                                                        Command="Syncfusion:SfRichTextBoxAdv.SaveAsDocumentCommand"/>
                     <Syncfusion:BackStageCommandButton  x:Name="backstagePrintButton"
-                                                        Header="Print"
+                                                        Header="{DynamicResource backStagePrint}"
                                                         Command="Syncfusion:SfRichTextBoxAdv.PrintDocumentCommand"/>
-                    <Syncfusion:BackstageTabItem Header="Help">
+                    <Syncfusion:BackstageTabItem Header="{DynamicResource backStageHelp}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -655,6 +655,8 @@
                     </Syncfusion:BackstageTabItem>
                 </Syncfusion:Backstage>
             </Syncfusion:Ribbon.BackStage>
+
+
 
             <Syncfusion:RibbonTab  Caption="{DynamicResource HomeTab}">
 
@@ -1938,10 +1940,6 @@
             </Syncfusion:RibbonTab>
 
 
-
-
-
-
             <Syncfusion:RibbonTab Caption="{DynamicResource InsertTab}">
 
                 <!-- Pages -->
@@ -2693,6 +2691,8 @@
 
         </Syncfusion:Ribbon>
 
+      
+
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
                                          Background="#D4D4D4"
                                          Grid.Row="1"
@@ -2716,5 +2716,8 @@
                 </Syncfusion:SpellChecker>
             </Syncfusion:SfRichTextBoxAdv.SpellChecker>
         </RichTextBoxAdv:SfRichTextBoxAdv>
+   
+   
+   
     </Grid>
 </Syncfusion:RibbonWindow>

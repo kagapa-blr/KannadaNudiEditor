@@ -328,6 +328,36 @@
 
 
 
+  <!-- Backstage Tab Headers -->
+  <sys:String x:Key="backStageInfo">ಮಾಹಿತಿ</sys:String>
+  <sys:String x:Key="backStageNew">ಹೊಸದು</sys:String>
+  <sys:String x:Key="backStageOpen">ತೆರೆ</sys:String>
+  <sys:String x:Key="backStageSave">ಉಳಿಸು</sys:String>
+  <sys:String x:Key="backStageSaveAs">ಇತರ ಹೆಸರಿನಿಂದ ಉಳಿಸು</sys:String>
+  <sys:String x:Key="backStagePrint">ಮುದ್ರಿಸು</sys:String>
+  <sys:String x:Key="backStageHelp">ಸಹಾಯ</sys:String>
+
+  <!-- Info Tab -->
+  <sys:String x:Key="backStageInformation">ಮಾಹಿತಿ</sys:String>
+  <sys:String x:Key="backStageProtectDocument">ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು ರಕ್ಷಿಸಿ</sys:String>
+  <sys:String x:Key="backStageRestrictEditing">ಸಂಪಾದನೆಯನ್ನು ನಿರ್ಬಂಧಿಸಿ</sys:String>
+  <sys:String x:Key="backStageRestrictEditingDescription">ಈ ಡಾಕ್ಯುಮೆಂಟ್ ಸಂಪಾದನೆಯನ್ನು ನಿರ್ಬಂಧಿಸುತ್ತದೆ.</sys:String>
+  <sys:String x:Key="backStageEncryptWithPassword">ಗುಪ್ತಪದದಿಂದ ರಕ್ಷಿಸಿ</sys:String>
+  <sys:String x:Key="backStageEncryptWithPasswordDescription">ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ಗೆ ಗುಪ್ತಪದವನ್ನು ಸೇರಿಸಿ.</sys:String>
+  <sys:String x:Key="backStageControlChangesText">ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ಗೆ ಯಾರು ಯಾವ ಬದಲಾವಣೆ ಮಾಡಬಹುದು ಎಂಬುದನ್ನು ನಿಯಂತ್ರಿಸಿ.</sys:String>
+
+  <!-- New Tab -->
+  <sys:String x:Key="backStageAvailableTemplates">ಲಭ್ಯವಿರುವ ಟೆಂಪ್ಲೇಟ್ಗಳು</sys:String>
+  <sys:String x:Key="backStageBlankDocument">ಖಾಲಿ ಡಾಕ್ಯುಮೆಂಟ್</sys:String>
+  <sys:String x:Key="backStageCreate">ರಚಿಸಿ</sys:String>
+  <sys:String x:Key="backStageCreateBlankDescription">ಇದು ಖಾಲಿ ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು ರಚಿಸುತ್ತದೆ.</sys:String>
+
+  <!-- Help Tab -->
+  <sys:String x:Key="backStageUserInterfaceHelp">ಬಳಕೆದಾರ ಇಂಟರ್ಫೇಸ್ ಸಹಾಯ</sys:String>
+
+
+
+
 
 
 

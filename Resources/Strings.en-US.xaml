@@ -363,4 +363,35 @@
 
 
 
+
+
+  <!-- Backstage Tab Headers -->
+  <sys:String x:Key="backStageInfo">Info</sys:String>
+  <sys:String x:Key="backStageNew">New</sys:String>
+  <sys:String x:Key="backStageOpen">Open</sys:String>
+  <sys:String x:Key="backStageSave">Save</sys:String>
+  <sys:String x:Key="backStageSaveAs">Save As</sys:String>
+  <sys:String x:Key="backStagePrint">Print</sys:String>
+  <sys:String x:Key="backStageHelp">Help</sys:String>
+
+  <!-- Info Tab -->
+  <sys:String x:Key="backStageInformation">Information</sys:String>
+  <sys:String x:Key="backStageProtectDocument">Protect Document</sys:String>
+  <sys:String x:Key="backStageRestrictEditing">Restrict Editing</sys:String>
+  <sys:String x:Key="backStageRestrictEditingDescription">Restricts editing to this document.</sys:String>
+  <sys:String x:Key="backStageEncryptWithPassword">Encrypt With Password</sys:String>
+  <sys:String x:Key="backStageEncryptWithPasswordDescription">Password-protect this document.</sys:String>
+  <sys:String x:Key="backStageControlChangesText">Control what types of changes people can make to this document.</sys:String>
+
+  <!-- New Tab -->
+  <sys:String x:Key="backStageAvailableTemplates">Available Templates</sys:String>
+  <sys:String x:Key="backStageBlankDocument">Blank Document</sys:String>
+  <sys:String x:Key="backStageCreate">Create</sys:String>
+  <sys:String x:Key="backStageCreateBlankDescription">Creates a new empty document.</sys:String>
+
+  <!-- Help Tab -->
+  <sys:String x:Key="backStageUserInterfaceHelp">User Interface Help</sys:String>
+
+
+
 </ResourceDictionary>
