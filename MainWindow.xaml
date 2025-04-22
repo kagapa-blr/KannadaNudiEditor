@@ -2691,18 +2691,17 @@
 
         </Syncfusion:Ribbon>
 
-      
 
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
+                                         xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.WPF"
                                          Background="#D4D4D4"
                                          Grid.Row="1"
                                          DocumentTitle="Untitled document"
                                          SelectionChanged="RichTextBoxAdv_SelectionChanged"
                                          LayoutType="Pages"
                                          Language="kn-IN"
-                                         AllowDrop="True"
-                                         xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.Wpf">
-            <Syncfusion:SfRichTextBoxAdv.SpellChecker>
+                                         AllowDrop="True">
+            <RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
                 <Syncfusion:SpellChecker IsEnabled="True"
                                          IgnoreUppercaseWords="False"
                                          IgnoreAlphaNumericWords="True"
@@ -2714,10 +2713,9 @@
                         <System:String>Assets\Custom_MyDictionary_kn_IN.dic</System:String>
                     </Syncfusion:SpellChecker.CustomDictionaries>
                 </Syncfusion:SpellChecker>
-            </Syncfusion:SfRichTextBoxAdv.SpellChecker>
+            </RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
         </RichTextBoxAdv:SfRichTextBoxAdv>
-   
-   
-   
+
+
     </Grid>
 </Syncfusion:RibbonWindow>
