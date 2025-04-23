@@ -24,14 +24,14 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore NuGet Packages
-      run: dotnet restore "Document Editor .NET 8.sln"
+      run: dotnet restore "KannadaNudiEditor.sln"
 
     - name: Build Solution
-      run: dotnet build "Document Editor .NET 8.sln" --configuration Release --no-restore
+      run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
 
     - name: Publish Build Output
       run: |
-        dotnet publish "Document Editor .NET 8.csproj" `
+        dotnet publish "KannadaNudiEditor.csproj" `
           --configuration Release `
           --output published
 
@@ -91,5 +91,5 @@ jobs:
       with:
         tag_name: ${{ env.NEW_VERSION }}
         files: kannadaNudi.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
