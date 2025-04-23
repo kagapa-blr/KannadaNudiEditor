@@ -28,6 +28,7 @@ namespace KannadaNudiEditor
         private RibbonButton? RibbonButton = null;
         Dictionary<string, List<double>>? pageMarginsCollection = null;
         Dictionary<string, List<double>>? pageSizesCollection = null;
+        private string currentFilePath = string.Empty;
 
 #endif
         #endregion
@@ -325,16 +326,25 @@ namespace KannadaNudiEditor
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
-        private void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            WordExport(string.Empty);
+            if (!string.IsNullOrEmpty(currentFilePath) && File.Exists(currentFilePath))
+            {
+                using (Stream stream = File.Open(currentFilePath, FileMode.Create))
+                {
+                    FormatType formatType = GetFormatType(Path.GetExtension(currentFilePath));
+                    await richTextBoxAdv.SaveAsync(stream, formatType);
+                }
+            }
             richTextBoxAdv.Focus();
+            ribbon.IsBackStageVisible = false;
         }
         /// <summary>
         /// On save as executed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+
         private void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             string extension = string.Empty;
@@ -343,7 +353,9 @@ namespace KannadaNudiEditor
             else
                 extension = e.Parameter.ToString();
             WordExport(extension);
+            ribbon.IsBackStageVisible = false;
         }
+
         /// <summary>
         /// On print executed.
         /// </summary>
@@ -373,6 +385,7 @@ namespace KannadaNudiEditor
         {
             WordImport();
             richTextBoxAdv.Focus();
+            ribbon.IsBackStageVisible = false;
         }
         /// <summary>
         /// On show encrypt document executed.
@@ -979,6 +992,8 @@ namespace KannadaNudiEditor
                     { }
 #endif
                     richTextBoxAdv.DocumentTitle = fileName.Remove(fileName.LastIndexOf("."));
+                    currentFilePath = openDialog.FileName;
+
                 }
             }
         }
@@ -1011,6 +1026,8 @@ namespace KannadaNudiEditor
                     RichTextBoxAdv.SaveAsync(fileStream, formatType);
 #else
                     await richTextBoxAdv.SaveAsync(fileStream, formatType);
+                    currentFilePath = saveDialog.FileName;
+
 #endif
                 }
                 fileStream.Close();
