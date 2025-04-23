@@ -82,7 +82,7 @@ to get started:
 2. **Switch to the Development Branch**
     - Navigate to the project directory:
       ```bash
-      cd kannada-nudi-editor
+      cd KannadaNudiEditor
       ```
     - Checkout the development branch:
       ```bash
