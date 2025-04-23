@@ -1,7 +1,4 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: Build and Release Kannada Nudi Editor (WPF)
 
 on:
   push:
@@ -9,20 +6,90 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write  # Required for pushing tags and creating releases
+
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    name: Build WPF App
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+        dotnet-version: '8.0.x'
+
+    - name: Restore NuGet Packages
+      run: dotnet restore "Document Editor .NET 8.sln"
+
+    - name: Build Solution
+      run: dotnet build "Document Editor .NET 8.sln" --configuration Release --no-restore
+
+    - name: Publish Build Output
+      run: |
+        dotnet publish "Document Editor .NET 8.csproj" `
+          --configuration Release `
+          --output published
+
+    - name: Zip Published Files
+      run: Compress-Archive -Path published\* -DestinationPath kannadaNudi.zip
+      shell: pwsh
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: kannadaNudi-build
+        path: kannadaNudi.zip
+
+  release:
+    name: Create GitHub Release
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: kannadaNudi-build
+
+    - name: Get Latest Version Tag
+      id: get_version
+      shell: pwsh
+      run: |
+        git fetch --tags
+        $LATEST_TAG = git tag -l 'v*' --sort=-v:refname | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } | Select-Object -First 1
+        if (-not $LATEST_TAG) {
+          $NEW_VERSION = "v1.0.0"
+        } else {
+          $VERSION = $LATEST_TAG.TrimStart('v')
+          $VERSION_PARTS = $VERSION.Split('.')
+          $PATCH = [int]$VERSION_PARTS[2] + 1
+          $NEW_VERSION = "v$($VERSION_PARTS[0]).$($VERSION_PARTS[1]).$PATCH"
+        }
+        echo "NEW_VERSION=$NEW_VERSION" >> $env:GITHUB_ENV
+        echo "New version: $NEW_VERSION"
+
+    - name: Create and Push New Tag
+      run: |
+        git tag ${{ env.NEW_VERSION }}
+        git push origin ${{ env.NEW_VERSION }}
+
+    - name: Wait for Tag Push
+      run: git fetch --tags
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.NEW_VERSION }}
+        files: kannadaNudi.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
