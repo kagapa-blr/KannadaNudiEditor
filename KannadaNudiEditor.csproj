@@ -28,6 +28,9 @@
     <None Update="Assets\kn_IN.dic">
        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+        <None Update="Assets\default.dic">
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

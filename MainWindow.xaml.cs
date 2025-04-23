@@ -70,8 +70,40 @@ namespace KannadaNudiEditor
             InitializePageMargins();
             InitializePageSizes();
             ApplyDefaultPageSettings();
+            ConfigureSpellChecker();
         }
         #endregion
+
+
+        private void ConfigureSpellChecker()
+        {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string dictionaryPath = Path.Combine(basePath, "Assets", "kn_IN.dic");
+            string customDictionaryPath1 = Path.Combine(basePath, "Assets", "Custom_MyDictionary_kn_IN.dic");
+            string customDictionaryPath2 = Path.Combine(basePath, "Assets", "default.dic");
+
+            // Debug: confirm paths exist
+            if (!File.Exists(dictionaryPath)) MessageBox.Show("Missing: " + dictionaryPath);
+            if (!File.Exists(customDictionaryPath1)) MessageBox.Show("Missing: " + customDictionaryPath1);
+            if (!File.Exists(customDictionaryPath2)) MessageBox.Show("Missing: " + customDictionaryPath2);
+
+            var spellChecker = new Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker
+            {
+                IsEnabled = true,
+                IgnoreUppercaseWords = false,
+                IgnoreAlphaNumericWords = true,
+                UseFrameworkSpellCheck = false,
+            };
+
+            spellChecker.Dictionaries.Add(dictionaryPath);
+            spellChecker.CustomDictionaries.Add(customDictionaryPath1);
+            spellChecker.CustomDictionaries.Add(customDictionaryPath2);
+
+            richTextBoxAdv.SpellChecker = spellChecker;
+        }
+
+
+
 
 
 
@@ -1403,52 +1435,52 @@ namespace KannadaNudiEditor
 
 
         // Handle Edit Header button click to show the Header/Footer editor
-private void EditHeader_Click(object sender, RoutedEventArgs e)
-{
-    // Retrieve the current header and footer text
-    string? existingHeader = GetCurrentHeaderText();  // Get current header text
-    string? existingFooter = GetCurrentFooterText();  // Get current footer text
-
-    // Open the HeaderFooterEditor to let the user enter new header and footer text
-    HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter);
-    bool? result = headerFooterEditor.ShowDialog();
-
-    if (result == true)
-    {
-        string headerText = headerFooterEditor.HeaderText ?? string.Empty;
-        string footerText = headerFooterEditor.FooterText ?? string.Empty;
-
-        if (!string.IsNullOrWhiteSpace(headerText) && !string.IsNullOrWhiteSpace(footerText))
+        private void EditHeader_Click(object sender, RoutedEventArgs e)
         {
-            // Create new HeaderFooters (just like in headerFooter_Click)
-            HeaderFooters headerFooters = new HeaderFooters();
+            // Retrieve the current header and footer text
+            string? existingHeader = GetCurrentHeaderText();  // Get current header text
+            string? existingFooter = GetCurrentFooterText();  // Get current footer text
 
-            // Create and add the new header
-            ParagraphAdv headerParagraph = new ParagraphAdv();
-            SpanAdv headerSpan = new SpanAdv();
-            headerSpan.Text = headerText;
-            headerParagraph.Inlines.Add(headerSpan);
-            headerFooters.Header.Blocks.Add(headerParagraph);
+            // Open the HeaderFooterEditor to let the user enter new header and footer text
+            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter);
+            bool? result = headerFooterEditor.ShowDialog();
 
-            // Create and add the new footer
-            ParagraphAdv footerParagraph = new ParagraphAdv();
-            SpanAdv footerSpan = new SpanAdv();
-            footerSpan.Text = footerText;
-            footerParagraph.Inlines.Add(footerSpan);
-            headerFooters.Footer.Blocks.Add(footerParagraph);
+            if (result == true)
+            {
+                string headerText = headerFooterEditor.HeaderText ?? string.Empty;
+                string footerText = headerFooterEditor.FooterText ?? string.Empty;
 
-            // Apply to the first section
-            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-            sectionAdv.HeaderFooters = headerFooters;
-            sectionAdv.SectionFormat.HeaderDistance = 50;
-            sectionAdv.SectionFormat.FooterDistance = 50;
+                if (!string.IsNullOrWhiteSpace(headerText) && !string.IsNullOrWhiteSpace(footerText))
+                {
+                    // Create new HeaderFooters (just like in headerFooter_Click)
+                    HeaderFooters headerFooters = new HeaderFooters();
+
+                    // Create and add the new header
+                    ParagraphAdv headerParagraph = new ParagraphAdv();
+                    SpanAdv headerSpan = new SpanAdv();
+                    headerSpan.Text = headerText;
+                    headerParagraph.Inlines.Add(headerSpan);
+                    headerFooters.Header.Blocks.Add(headerParagraph);
+
+                    // Create and add the new footer
+                    ParagraphAdv footerParagraph = new ParagraphAdv();
+                    SpanAdv footerSpan = new SpanAdv();
+                    footerSpan.Text = footerText;
+                    footerParagraph.Inlines.Add(footerSpan);
+                    headerFooters.Footer.Blocks.Add(footerParagraph);
+
+                    // Apply to the first section
+                    SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
+                    sectionAdv.HeaderFooters = headerFooters;
+                    sectionAdv.SectionFormat.HeaderDistance = 50;
+                    sectionAdv.SectionFormat.FooterDistance = 50;
+                }
+                else
+                {
+                    MessageBox.Show("Header and Footer cannot be empty.");
+                }
+            }
         }
-        else
-        {
-            MessageBox.Show("Header and Footer cannot be empty.");
-        }
-    }
-}
 
 
         // Get the current header text dynamically from the document
