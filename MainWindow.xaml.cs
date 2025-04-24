@@ -595,6 +595,8 @@ namespace KannadaNudiEditor
         /// On restrict editing.
         /// </summary>
         /// <remarks></remarks>
+
+
         private void OnRestrictEditing()
         {
             if (richTextBoxAdv != null)
@@ -613,12 +615,12 @@ namespace KannadaNudiEditor
                             {
                                 // Options that should work on read only mode should not be disabled.
                                 // Currently, Copy, Find and ShowComments options.
-                                if (ribbonBar.Header == "ClipBoard")
+                                if (ribbonBar.Header == (string)FindResource("Clipboard"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
                                         RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label != "Copy")
+                                        if (button != null && button.Label != (string)FindResource("Copy"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -627,12 +629,12 @@ namespace KannadaNudiEditor
                                         }
                                     }
                                 }
-                                else if (ribbonBar.Header == "Editing")
+                                else if (ribbonBar.Header == (string)FindResource("EditingHeader"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
                                         RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label == "Replace")
+                                        if (button != null && button.Label == (string)FindResource("Replace"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -641,12 +643,12 @@ namespace KannadaNudiEditor
                                         }
                                     }
                                 }
-                                else if (ribbonBar.Header == "Comments")
+                                else if (ribbonBar.Header == (string)FindResource("Comments"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
                                         RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label != "Show Comments")
+                                        if (button != null && button.Label != (string)FindResource("ShowComments"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -675,6 +677,9 @@ namespace KannadaNudiEditor
                 }
             }
         }
+
+
+
         /// <summary>
         /// On table picker clicked.
         /// </summary>

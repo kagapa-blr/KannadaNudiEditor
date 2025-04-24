@@ -57,7 +57,7 @@
   <sys:String x:Key="ReadOnly">ಓದಲು ಮಾತ್ರ</sys:String>
   <sys:String x:Key="ReadOnlyTooltipTitle">ಸಂಪಾದನೆ ನಿರ್ಬಂಧಿಸಿ</sys:String>
   <sys:String x:Key="ReadOnlyTooltipLine1">ಮಾಹಿತಿ ಸಂಪಾದನೆಯನ್ನು   ನಿರ್ಬಂಧಿಸಿ</sys:String>
-  <sys:String x:Key="ReadOnlyTooltipLine2">ಮತ್ತು ವಿನ್ಯಾಸ ಬದಲಾವಣೆಯನ್ನು ನಿರ್ಬಂಧಿಸಿ.</sys:String>
+  <sys:String x:Key="ReadOnlyTooltipLine2">ಮತ್ತು ವಿನ್ಯಾಸ ಬದಲಾವಣೆಯನ್ನು ನಿರ್ಬಂಧಿಸಿ</sys:String>
 
   <!-- Find -->
   <sys:String x:Key="Find">ಹುಡುಕಿ</sys:String>
