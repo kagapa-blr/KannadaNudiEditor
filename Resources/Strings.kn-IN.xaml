@@ -360,6 +360,31 @@
 
 
 
+<!-- KannadaStrings.xaml -->
+<sys:String x:Key="SpeechToTextTab">ಮಾತಿನಿಂದ ಬರವಣಿಗೆ</sys:String>
+<sys:String x:Key="KannadaSpeechGroup">ಕನ್ನಡ ಮಾತು</sys:String>
+<sys:String x:Key="EnglishSpeechGroup">ಇಂಗ್ಲಿಷ್ ಮಾತು</sys:String>
+
+<sys:String x:Key="KannadaSpeechGroupDescription">ಕನ್ನಡದ ಮಾತು ಗುರುತಿಸುವ ನಿಯಂತ್ರಣ.</sys:String>
+<sys:String x:Key="EnglishSpeechGroupDescription">ಇಂಗ್ಲಿಷ್ ಮಾತು ಗುರುತಿಸುವ ನಿಯಂತ್ರಣ.</sys:String>
+
+<sys:String x:Key="ToggleKannadaSpeech">ಕನ್ನಡ ಟಾಗಲ್</sys:String>
+<sys:String x:Key="StartKannadaSpeech">ಕನ್ನಡ ಪ್ರಾರಂಭಿಸಿ</sys:String>
+<sys:String x:Key="StopKannadaSpeech">ಕನ್ನಡ ನಿಲ್ಲಿಸಿ</sys:String>
+
+<sys:String x:Key="ToggleEnglishSpeech">ಇಂಗ್ಲಿಷ್ ಟಾಗಲ್</sys:String>
+<sys:String x:Key="StartEnglishSpeech">ಇಂಗ್ಲಿಷ್ ಪ್ರಾರಂಭಿಸಿ</sys:String>
+<sys:String x:Key="StopEnglishSpeech">ಇಂಗ್ಲಿಷ್ ನಿಲ್ಲಿಸಿ</sys:String>
+
+<sys:String x:Key="ToggleKannadaSpeechTip">ಕನ್ನಡ ಮಾತು ಇನ್‌ಪುಟ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ ಅಥವಾ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+<sys:String x:Key="StartKannadaSpeechTip">ಕನ್ನಡ ಮಾತನ್ನು ಗುರುತಿಸುವಿಕೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+<sys:String x:Key="StopKannadaSpeechTip">ಕನ್ನಡ ಮಾತು ಗುರುತಿಸುವಿಕೆಯನ್ನು ನಿಲ್ಲಿಸಿ.</sys:String>
+
+<sys:String x:Key="ToggleEnglishSpeechTip">ಇಂಗ್ಲಿಷ್ ಮಾತು ಇನ್‌ಪುಟ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ ಅಥವಾ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+<sys:String x:Key="StartEnglishSpeechTip">ಇಂಗ್ಲಿಷ್ ಮಾತು ಗುರುತಿಸುವಿಕೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
+<sys:String x:Key="StopEnglishSpeechTip">ಇಂಗ್ಲಿಷ್ ಮಾತು ಗುರುತಿಸುವಿಕೆಯನ್ನು ನಿಲ್ಲಿಸಿ.</sys:String>
+
+
 
 </ResourceDictionary>
 

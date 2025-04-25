@@ -1712,6 +1712,38 @@ namespace KannadaNudiEditor
 
 
 
+        private void ToggleKannadaSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Kannada speech recognition toggled.", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ToggleEnglishSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("English speech recognition toggled.", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void StartKannadaSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Starting Kannada speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void StopKannadaSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Stopping Kannada speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void StartEnglishSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Starting English speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void StopEnglishSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Stopping English speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
+
 
 
 

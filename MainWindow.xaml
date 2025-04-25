@@ -2557,6 +2557,93 @@
 
 
 
+            <Syncfusion:RibbonTab Caption="{DynamicResource SpeechToTextTab}">
+
+                <!-- Kannada Speech Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource KannadaSpeechGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource KannadaSpeechGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <StackPanel Margin="0"
+                                HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource StartKannadaSpeech}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="StartKannadaSpeech_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StartKannadaSpeechTip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Content="{DynamicResource StopKannadaSpeech}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="StopKannadaSpeech_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- English Speech Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource EnglishSpeechGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource EnglishSpeechGroupDescription}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <StackPanel Margin="0"
+                                HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource StartEnglishSpeech}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="StartEnglishSpeech_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StartEnglishSpeechTip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Content="{DynamicResource StopEnglishSpeech}"
+                                Height="32"
+                                Width="140"
+                                Margin="5"
+                                Click="StopEnglishSpeech_Click">
+                            <Button.ToolTip>
+                                <Syncfusion:ScreenTip MaxWidth="300">
+                                    <TextBlock Text="{DynamicResource StopEnglishSpeechTip}"
+                                               TextWrapping="Wrap"/>
+                                </Syncfusion:ScreenTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+            </Syncfusion:RibbonTab>
+
+
+
+
             <Syncfusion:RibbonTab Caption="{DynamicResource HelpTab}">
 
                 <!-- Help Group (About Nudi) -->
@@ -2684,6 +2771,8 @@
 
 
             </Syncfusion:RibbonTab>
+
+
 
 
 
