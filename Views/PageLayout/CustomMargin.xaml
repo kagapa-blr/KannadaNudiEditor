@@ -5,59 +5,137 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="{DynamicResource EnterMarginsTitle}"
-        Width="280" Height="340"
-        MinWidth="300" MinHeight="360"
+        Width="280"
+        Height="380"
+        MinWidth="300"
+        MinHeight="380"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Background="#FAFAFA"
         WindowStyle="SingleBorderWindow">
 
-    <Border CornerRadius="8" Padding="10" Background="White" BorderBrush="#DDDDDD" BorderThickness="1">
+    <Border CornerRadius="8"
+            Padding="10"
+            Background="White"
+            BorderBrush="#DDDDDD"
+            BorderThickness="1">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <!-- Instruction -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Unit Selector -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Left -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Top -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Right -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Bottom -->
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <!-- Buttons -->
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Title/Instruction -->
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                <!-- Instruction -->
+                <TextBlock Grid.Row="0"
+                           Grid.ColumnSpan="2"
                            Text="{DynamicResource EnterMarginInstruction}"
-                           FontSize="14" FontWeight="SemiBold"
+                           FontSize="14"
+                           FontWeight="SemiBold"
                            Margin="0,0,0,15"/>
 
+                <!-- Units -->
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="{DynamicResource UnitSelectUnit}"
+                           VerticalAlignment="Center"
+                           Margin="0,4"/>
+                <ComboBox Grid.Row="1"
+                          Grid.Column="1"
+                          x:Name="MarginUnitSelector"
+                          Height="26"
+                          Margin="0,4">
+                    <ComboBoxItem Content="{DynamicResource UnitCentimeters}"/>
+                    <ComboBoxItem Content="{DynamicResource UnitMillimeters}"/>
+                    <ComboBoxItem Content="{DynamicResource UnitInches}"
+                                  IsSelected="True"/>
+                </ComboBox>
+
                 <!-- Left -->
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource LeftLabel}" VerticalAlignment="Center" Margin="0,4"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="LeftMarginTextBox" Height="26" Margin="0,4"/>
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Text="{DynamicResource LeftLabel}"
+                           VerticalAlignment="Center"
+                           Margin="0,4"/>
+                <TextBox Grid.Row="2"
+                         Grid.Column="1"
+                         x:Name="LeftMarginTextBox"
+                         Height="26"
+                         Margin="0,4"/>
 
                 <!-- Top -->
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource TopLabel}" VerticalAlignment="Center" Margin="0,4"/>
-                <TextBox Grid.Row="2" Grid.Column="1" x:Name="TopMarginTextBox" Height="26" Margin="0,4"/>
+                <TextBlock Grid.Row="3"
+                           Grid.Column="0"
+                           Text="{DynamicResource TopLabel}"
+                           VerticalAlignment="Center"
+                           Margin="0,4"/>
+                <TextBox Grid.Row="3"
+                         Grid.Column="1"
+                         x:Name="TopMarginTextBox"
+                         Height="26"
+                         Margin="0,4"/>
 
                 <!-- Right -->
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource RightLabel}" VerticalAlignment="Center" Margin="0,4"/>
-                <TextBox Grid.Row="3" Grid.Column="1" x:Name="RightMarginTextBox" Height="26" Margin="0,4"/>
+                <TextBlock Grid.Row="4"
+                           Grid.Column="0"
+                           Text="{DynamicResource RightLabel}"
+                           VerticalAlignment="Center"
+                           Margin="0,4"/>
+                <TextBox Grid.Row="4"
+                         Grid.Column="1"
+                         x:Name="RightMarginTextBox"
+                         Height="26"
+                         Margin="0,4"/>
 
                 <!-- Bottom -->
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource BottomLabel}" VerticalAlignment="Center" Margin="0,4"/>
-                <TextBox Grid.Row="4" Grid.Column="1" x:Name="BottomMarginTextBox" Height="26" Margin="0,4"/>
+                <TextBlock Grid.Row="5"
+                           Grid.Column="0"
+                           Text="{DynamicResource BottomLabel}"
+                           VerticalAlignment="Center"
+                           Margin="0,4"/>
+                <TextBox Grid.Row="5"
+                         Grid.Column="1"
+                         x:Name="BottomMarginTextBox"
+                         Height="26"
+                         Margin="0,4"/>
 
                 <!-- Spacer -->
-                <Grid Grid.Row="5" Grid.ColumnSpan="2"/>
+                <Grid Grid.Row="6"
+                      Grid.ColumnSpan="2"/>
 
-                <!-- Buttons Centered -->
-                <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                    <Button Content="{DynamicResource OkButton}" Width="80" Height="28" Margin="5" Click="Ok_Click"/>
-                    <Button Content="{DynamicResource CancelButton}" Width="80" Height="28" Margin="5" Click="Cancel_Click"/>
+                <!-- Buttons -->
+                <StackPanel Grid.Row="7"
+                            Grid.ColumnSpan="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,10,0,0">
+                    <Button Content="{DynamicResource OkButton}"
+                            Width="80"
+                            Height="28"
+                            Margin="5"
+                            Click="Ok_Click"/>
+                    <Button Content="{DynamicResource CancelButton}"
+                            Width="80"
+                            Height="28"
+                            Margin="5"
+                            Click="Cancel_Click"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -128,6 +128,15 @@
   <sys:String x:Key="Margins">Margins</sys:String>
   <sys:String x:Key="Size">Size</sys:String>
 
+  <sys:String x:Key="UnitSelectUnit">Select Unit</sys:String>
+  <sys:String x:Key="UnitCentimeters">Centimeters</sys:String>
+  <sys:String x:Key="UnitMillimeters">Millimeters</sys:String>
+  <sys:String x:Key="UnitInches">Inches</sys:String>
+
+
+
+
+
   <!-- =========================== -->
   <!-- View Tab                    -->
   <!-- =========================== -->
@@ -402,29 +411,29 @@
 
 
 
-<!-- EnglishStrings.xaml -->
-<sys:String x:Key="SpeechToTextTab">Speech to Text</sys:String>
-<sys:String x:Key="KannadaSpeechGroup">Kannada Speech</sys:String>
-<sys:String x:Key="EnglishSpeechGroup">English Speech</sys:String>
+  <!-- EnglishStrings.xaml -->
+  <sys:String x:Key="SpeechToTextTab">Speech to Text</sys:String>
+  <sys:String x:Key="KannadaSpeechGroup">Kannada Speech</sys:String>
+  <sys:String x:Key="EnglishSpeechGroup">English Speech</sys:String>
 
-<sys:String x:Key="KannadaSpeechGroupDescription">Control speech recognition in Kannada.</sys:String>
-<sys:String x:Key="EnglishSpeechGroupDescription">Control speech recognition in English.</sys:String>
+  <sys:String x:Key="KannadaSpeechGroupDescription">Control speech recognition in Kannada.</sys:String>
+  <sys:String x:Key="EnglishSpeechGroupDescription">Control speech recognition in English.</sys:String>
 
-<sys:String x:Key="ToggleKannadaSpeech">Toggle Kannada</sys:String>
-<sys:String x:Key="StartKannadaSpeech">Start Kannada</sys:String>
-<sys:String x:Key="StopKannadaSpeech">Stop Kannada</sys:String>
+  <sys:String x:Key="ToggleKannadaSpeech">Toggle Kannada</sys:String>
+  <sys:String x:Key="StartKannadaSpeech">Start Kannada</sys:String>
+  <sys:String x:Key="StopKannadaSpeech">Stop Kannada</sys:String>
 
-<sys:String x:Key="ToggleEnglishSpeech">Toggle English</sys:String>
-<sys:String x:Key="StartEnglishSpeech">Start English</sys:String>
-<sys:String x:Key="StopEnglishSpeech">Stop English</sys:String>
+  <sys:String x:Key="ToggleEnglishSpeech">Toggle English</sys:String>
+  <sys:String x:Key="StartEnglishSpeech">Start English</sys:String>
+  <sys:String x:Key="StopEnglishSpeech">Stop English</sys:String>
 
-<sys:String x:Key="ToggleKannadaSpeechTip">Enable or disable Kannada speech input.</sys:String>
-<sys:String x:Key="StartKannadaSpeechTip">Start recognizing Kannada speech.</sys:String>
-<sys:String x:Key="StopKannadaSpeechTip">Stop Kannada speech recognition.</sys:String>
+  <sys:String x:Key="ToggleKannadaSpeechTip">Enable or disable Kannada speech input.</sys:String>
+  <sys:String x:Key="StartKannadaSpeechTip">Start recognizing Kannada speech.</sys:String>
+  <sys:String x:Key="StopKannadaSpeechTip">Stop Kannada speech recognition.</sys:String>
 
-<sys:String x:Key="ToggleEnglishSpeechTip">Enable or disable English speech input.</sys:String>
-<sys:String x:Key="StartEnglishSpeechTip">Start recognizing English speech.</sys:String>
-<sys:String x:Key="StopEnglishSpeechTip">Stop English speech recognition.</sys:String>
+  <sys:String x:Key="ToggleEnglishSpeechTip">Enable or disable English speech input.</sys:String>
+  <sys:String x:Key="StartEnglishSpeechTip">Start recognizing English speech.</sys:String>
+  <sys:String x:Key="StopEnglishSpeechTip">Stop English speech recognition.</sys:String>
 
 
 
