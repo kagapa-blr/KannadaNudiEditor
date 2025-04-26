@@ -187,8 +187,15 @@
 
 
 
-  <sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
-  <sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ (ಇಂಚುಗಳಲ್ಲಿ):</sys:String>
+
+
+  <sys:String x:Key="PageSelectUnitCaption">ಯೂನಿಟ್ ಆಯ್ಕೆಮಾಡಿ</sys:String>
+  <sys:String x:Key="PageUnitSelectUnit">ಯೂನಿಟ್:</sys:String>
+  <sys:String x:Key="PageUnitCentimeters">ಸೆಂಟಿಮೀಟರ್</sys:String>
+  <sys:String x:Key="PageUnitMillimeters">ಮಿಲೀಮೀಟರ್</sys:String>
+  <sys:String x:Key="PageUnitInches">ಇಂಚುಗಳು</sys:String>
+  <sys:String x:Key="PageWidthLabel">ಪುಟದ ಅಗಲ:</sys:String>
+  <sys:String x:Key="PageHeightLabel">ಪುಟದ ಎತ್ತರ:</sys:String>
   <!-- =========================== -->
   <!-- Header/Footer: Custom Setup -->
   <!-- =========================== -->

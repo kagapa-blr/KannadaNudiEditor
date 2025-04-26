@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace KannadaNudiEditor
 {
@@ -7,9 +9,10 @@ namespace KannadaNudiEditor
     /// </summary>
     public partial class PageSetupDialog : Window
     {
-        #region property
+        #region Properties
         public double PageWidthInInches { get; private set; }
         public double PageHeightInInches { get; private set; }
+        public string SelectedUnit { get; private set; } = "Inches"; // Default to Inches
         #endregion
 
         #region Constructor
@@ -20,34 +23,73 @@ namespace KannadaNudiEditor
         #endregion
 
         #region Implementation
-        /// <summary>
-        /// Called when OK button is clicked in page setup dialog.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+        // Helper: Normalize Kannada digits to English digits
+        private string NormalizeToEnglishNumbers(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            var normalized = new StringBuilder(input.Length);
+            foreach (char c in input)
+            {
+                if (c >= 0x0CE6 && c <= 0x0CEF)
+                {
+                    normalized.Append((char)('0' + (c - 0x0CE6)));
+                }
+                else
+                {
+                    normalized.Append(c);
+                }
+            }
+            return normalized.ToString();
+        }
+
+        // Convert entered value to inches based on selected unit
+        private double ConvertToInches(double value, string unit)
+        {
+            switch (unit)
+            {
+                case "Centimeters":
+                    return value / 2.54;
+                case "Millimeters":
+                    return value / 25.4;
+                default:
+                    return value; // Already inches
+            }
+        }
+
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(WidthBox.Text, out double width) &&
-                double.TryParse(HeightBox.Text, out double height))
+            // Get selected unit
+            string selectedUnit = (UnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Inches";
+
+            // Normalize width and height inputs
+            string widthText = NormalizeToEnglishNumbers(WidthBox.Text);
+            string heightText = NormalizeToEnglishNumbers(HeightBox.Text);
+
+            if (double.TryParse(widthText, out double width) &&
+                double.TryParse(heightText, out double height))
             {
-                PageWidthInInches = width;
-                PageHeightInInches = height;
+                PageWidthInInches = ConvertToInches(width, selectedUnit);
+                PageHeightInInches = ConvertToInches(height, selectedUnit);
+                SelectedUnit = selectedUnit;
+
                 DialogResult = true;
+                Close();
             }
             else
             {
-                MessageBox.Show("Please enter valid numeric values.");
+                MessageBox.Show("ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಅಗಲ ಮತ್ತು ಎತ್ತರವನ್ನು ನಮೂದಿಸಿ.\n(Please enter valid width and height.)");
             }
         }
-        /// <summary>
-        /// Called when Cancel button is clicked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
         }
+
         #endregion
     }
 }

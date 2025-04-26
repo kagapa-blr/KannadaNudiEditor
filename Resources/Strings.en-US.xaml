@@ -215,6 +215,17 @@
   <sys:String x:Key="PageHeightLabel">Page Height (in inches):</sys:String>
 
 
+
+
+<sys:String x:Key="PageSelectUnitCaption">Select Unit</sys:String>
+<sys:String x:Key="PageUnitSelectUnit">Unit:</sys:String>
+<sys:String x:Key="PageUnitCentimeters">Centimeters</sys:String>
+<sys:String x:Key="PageUnitMillimeters">Millimeters</sys:String>
+<sys:String x:Key="PageUnitInches">Inches</sys:String>
+
+
+
+
   <!-- =========================== -->
   <!-- Header/Footer: Custom Setup -->
   <!-- =========================== -->
