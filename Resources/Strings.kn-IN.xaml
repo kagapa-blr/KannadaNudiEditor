@@ -114,6 +114,11 @@
   <sys:String x:Key="UnitMillimeters">ಮಿಲಿಮೀಟರ್</sys:String>
   <sys:String x:Key="UnitInches">ಇಂಚು</sys:String>
 
+  <sys:String x:Key="SelectUnitCaption">ಅಂಚು ಘಟಕವನ್ನು ಆಯ್ಕೆಮಾಡಿ</sys:String>
+  <sys:String x:Key="UnitTipText">ಆಯ್ಕೆ ಮಾಡಿದ ಘಟಕದಲ್ಲಿ ಅಂಚು ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ (ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್ ಅಂಕೆಗಳು ಅನುಮತಿಸಲಾಗಿದೆ). OK ಒತ್ತಿ.</sys:String>
+
+
+
 
   <!-- ========== VIEW TAB ========== -->
   <sys:String x:Key="Views">ನೋಟಗಳು</sys:String>
@@ -172,7 +177,7 @@
   <!-- Page Layout: Custom Page Setup      -->
   <!-- =========================== -->
   <sys:String x:Key="EnterMarginsTitle">ಅಂಚುಗಳನ್ನು ನಮೂದಿಸಿ</sys:String>
-  <sys:String x:Key="EnterMarginInstruction">ಅಂಚುಗಳನ್ನು ಇಂಚುಗಳಲ್ಲಿ ನಮೂದಿಸಿ</sys:String>
+  <sys:String x:Key="EnterMarginInstruction">ಅಂಚುಗಳ ಅಳತೆಗಾಗಿ ಯುಕ್ತವಾದ ಏಕಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ ಮತ್ತು ಓಕೆ ಒತ್ತಿರಿ</sys:String>
   <sys:String x:Key="LeftLabel">ಎಡ:</sys:String>
   <sys:String x:Key="TopLabel">ಮೇಲ್ಮೈ:</sys:String>
   <sys:String x:Key="RightLabel">ಬಲ:</sys:String>

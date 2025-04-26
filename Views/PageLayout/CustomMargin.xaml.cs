@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace KannadaNudiEditor
 {
@@ -13,7 +15,7 @@ namespace KannadaNudiEditor
         public double BottomMarginInInches { get; set; }
         public double LeftMarginInInches { get; set; }
         public double RightMarginInInches { get; set; }
-        public string SelectedUnit { get; set; } = "Inches"; // Default unit is inches
+        public string SelectedUnit { get; set; } = "Inches"; // Default unit
         #endregion
 
         #region Constructor
@@ -24,6 +26,28 @@ namespace KannadaNudiEditor
         #endregion
 
         #region Implementation
+
+        // Helper: Convert input Kannada digits (೦೧೨೩೪೫೬೭೮೯) to English digits (0123456789)
+        private string NormalizeToEnglishNumbers(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            var normalized = new StringBuilder(input.Length);
+            foreach (char c in input)
+            {
+                // Kannada digits Unicode range: 0x0CE6 (೦) to 0x0CEF (೯)
+                if (c >= 0x0CE6 && c <= 0x0CEF)
+                {
+                    normalized.Append((char)('0' + (c - 0x0CE6)));
+                }
+                else
+                {
+                    normalized.Append(c);
+                }
+            }
+            return normalized.ToString();
+        }
 
         // Convert from cm or mm to inches
         private double ConvertToInches(double value, string unit)
@@ -41,38 +65,43 @@ namespace KannadaNudiEditor
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            // Get the selected unit from the ComboBox
-            string selectedUnit = MarginUnitSelector.SelectedItem?.ToString() ?? "Inches"; // Default to Inches if nothing selected
+            // Get the selected unit properly
+            string selectedUnit = (MarginUnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Inches";
 
-            // Try parsing the input values for margins
-            if (double.TryParse(TopMarginTextBox.Text, out double top) &&
-                double.TryParse(BottomMarginTextBox.Text, out double bottom) &&
-                double.TryParse(LeftMarginTextBox.Text, out double left) &&
-                double.TryParse(RightMarginTextBox.Text, out double right))
+            // Normalize all TextBox inputs (to support Kannada numbers)
+            string topText = NormalizeToEnglishNumbers(TopMarginTextBox.Text);
+            string bottomText = NormalizeToEnglishNumbers(BottomMarginTextBox.Text);
+            string leftText = NormalizeToEnglishNumbers(LeftMarginTextBox.Text);
+            string rightText = NormalizeToEnglishNumbers(RightMarginTextBox.Text);
+
+            // Try parsing
+            if (double.TryParse(topText, out double top) &&
+                double.TryParse(bottomText, out double bottom) &&
+                double.TryParse(leftText, out double left) &&
+                double.TryParse(rightText, out double right))
             {
-                // Convert the margins to inches based on selected unit
+                // Convert margins to inches
                 TopMarginInInches = ConvertToInches(top, selectedUnit);
                 BottomMarginInInches = ConvertToInches(bottom, selectedUnit);
                 LeftMarginInInches = ConvertToInches(left, selectedUnit);
                 RightMarginInInches = ConvertToInches(right, selectedUnit);
 
-                // Store the selected unit
                 SelectedUnit = selectedUnit;
 
-                // Close the dialog and return success
                 DialogResult = true;
                 Close();
             }
             else
             {
-                // Show a message if any input is invalid
-                MessageBox.Show("Please enter valid numerical values for all margins.");
+                // Show bilingual error message
+                MessageBox.Show("ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಚುಗಳಿಗಾಗಿ ಮಾನ್ಯ ಸಂಖ್ಯಾ ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ.\n(Please enter valid numerical values for all margins.)");
             }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
         }
         #endregion
     }

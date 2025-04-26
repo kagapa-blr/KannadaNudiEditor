@@ -133,6 +133,8 @@
   <sys:String x:Key="UnitMillimeters">Millimeters</sys:String>
   <sys:String x:Key="UnitInches">Inches</sys:String>
 
+<sys:String x:Key="SelectUnitCaption">Select Margin Unit</sys:String>
+<sys:String x:Key="UnitTipText">Enter margin values using the selected unit (supports Kannada or English numbers). Click OK to apply.</sys:String>
 
 
 

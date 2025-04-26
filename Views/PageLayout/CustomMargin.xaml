@@ -6,9 +6,9 @@
         mc:Ignorable="d"
         Title="{DynamicResource EnterMarginsTitle}"
         Width="280"
-        Height="380"
+        Height="400"
         MinWidth="300"
-        MinHeight="380"
+        MinHeight="400"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Background="#FAFAFA"
@@ -23,7 +23,10 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Instruction -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Caption -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Tip -->
                     <RowDefinition Height="Auto"/>
                     <!-- Unit Selector -->
                     <RowDefinition Height="Auto"/>
@@ -49,15 +52,33 @@
                            Text="{DynamicResource EnterMarginInstruction}"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Margin="0,0,0,15"/>
+                           Margin="0,0,0,10"/>
 
-                <!-- Units -->
+                <!-- Caption: Unit Selection -->
                 <TextBlock Grid.Row="1"
+                           Grid.ColumnSpan="2"
+                           Text="{DynamicResource SelectUnitCaption}"
+                           FontSize="13"
+                           FontWeight="Bold"
+                           Foreground="#444"
+                           Margin="0,5,0,0"/>
+
+                <!-- Tip Text -->
+                <TextBlock Grid.Row="2"
+                           Grid.ColumnSpan="2"
+                           Text="{DynamicResource UnitTipText}"
+                           FontSize="12"
+                           Foreground="Gray"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,10"/>
+
+                <!-- Unit Selector -->
+                <TextBlock Grid.Row="3"
                            Grid.Column="0"
                            Text="{DynamicResource UnitSelectUnit}"
                            VerticalAlignment="Center"
                            Margin="0,4"/>
-                <ComboBox Grid.Row="1"
+                <ComboBox Grid.Row="3"
                           Grid.Column="1"
                           x:Name="MarginUnitSelector"
                           Height="26"
@@ -69,59 +90,59 @@
                 </ComboBox>
 
                 <!-- Left -->
-                <TextBlock Grid.Row="2"
+                <TextBlock Grid.Row="4"
                            Grid.Column="0"
                            Text="{DynamicResource LeftLabel}"
                            VerticalAlignment="Center"
                            Margin="0,4"/>
-                <TextBox Grid.Row="2"
+                <TextBox Grid.Row="4"
                          Grid.Column="1"
                          x:Name="LeftMarginTextBox"
                          Height="26"
                          Margin="0,4"/>
 
                 <!-- Top -->
-                <TextBlock Grid.Row="3"
+                <TextBlock Grid.Row="5"
                            Grid.Column="0"
                            Text="{DynamicResource TopLabel}"
                            VerticalAlignment="Center"
                            Margin="0,4"/>
-                <TextBox Grid.Row="3"
+                <TextBox Grid.Row="5"
                          Grid.Column="1"
                          x:Name="TopMarginTextBox"
                          Height="26"
                          Margin="0,4"/>
 
                 <!-- Right -->
-                <TextBlock Grid.Row="4"
+                <TextBlock Grid.Row="6"
                            Grid.Column="0"
                            Text="{DynamicResource RightLabel}"
                            VerticalAlignment="Center"
                            Margin="0,4"/>
-                <TextBox Grid.Row="4"
+                <TextBox Grid.Row="6"
                          Grid.Column="1"
                          x:Name="RightMarginTextBox"
                          Height="26"
                          Margin="0,4"/>
 
                 <!-- Bottom -->
-                <TextBlock Grid.Row="5"
+                <TextBlock Grid.Row="7"
                            Grid.Column="0"
                            Text="{DynamicResource BottomLabel}"
                            VerticalAlignment="Center"
                            Margin="0,4"/>
-                <TextBox Grid.Row="5"
+                <TextBox Grid.Row="7"
                          Grid.Column="1"
                          x:Name="BottomMarginTextBox"
                          Height="26"
                          Margin="0,4"/>
 
                 <!-- Spacer -->
-                <Grid Grid.Row="6"
+                <Grid Grid.Row="8"
                       Grid.ColumnSpan="2"/>
 
                 <!-- Buttons -->
-                <StackPanel Grid.Row="7"
+                <StackPanel Grid.Row="9"
                             Grid.ColumnSpan="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Center"
