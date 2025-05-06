@@ -2490,7 +2490,16 @@
                                 Margin="5"/>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
-
+                <StackPanel Orientation="Horizontal"
+                        Grid.Row="1">
+                    <Button x:Name="removeHeaderFooter"
+                             Content="{DynamicResource RemoveHeaderFooter}"
+                            Click="removeHeaderFooter_Click"
+                            Height="30"
+                            Width="150"
+                            Margin="5"
+                            Background="Red"/>
+                </StackPanel>
             </Syncfusion:RibbonTab>
 
 

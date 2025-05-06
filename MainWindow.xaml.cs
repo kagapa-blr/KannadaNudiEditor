@@ -1747,6 +1747,46 @@ namespace KannadaNudiEditor
 
 
 
+        private void removeHeaderFooter_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (SectionAdv sectionAdv in richTextBoxAdv.Document.Sections)
+            {
+                HeaderFooters headerFooters = sectionAdv.HeaderFooters;
+
+                ClearBlocks(
+                    headerFooters.Header,
+                    headerFooters.Footer,
+                    headerFooters.EvenHeader,
+                    headerFooters.EvenFooter,
+                    headerFooters.FirstPageHeader,
+                    headerFooters.FirstPageFooter
+                );
+            }
+        }
+
+        /// <summary>
+        /// Clears the blocks of Header or Footer.
+        /// </summary>
+        /// <param name="headerFooters"></param>
+        void ClearBlocks(params HeaderFooter[] headerFooters)
+        {
+            foreach (var headerFooter in headerFooters)
+            {
+                if (headerFooter == null)
+                    continue;
+
+                for (int i = headerFooter.Blocks.Count - 1; i >= 0; i--)
+                {
+                    headerFooter.Blocks.RemoveAt(i);
+                }
+            }
+        }
+
+  
+  
+
+
+
     }
 
     /// <summary>
