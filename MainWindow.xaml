@@ -2720,15 +2720,20 @@
                                 Margin="5"
                                 Click="AboutNudi_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
+                                <ToolTip>
                                     <StackPanel>
+                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource AboutNudiTipLine1}"
-                                                   TextWrapping="Wrap"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
                                                    Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource AboutNudiTipLine2}"
-                                                   TextWrapping="Wrap"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
-                                </Syncfusion:ScreenTip>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
@@ -2750,15 +2755,20 @@
                                 Margin="5"
                                 Click="ShowDocumentation_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
+                                <ToolTip>
                                     <StackPanel>
+                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource DocumentationTipLine1}"
-                                                   TextWrapping="Wrap"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
                                                    Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource DocumentationTipLine2}"
-                                                   TextWrapping="Wrap"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
-                                </Syncfusion:ScreenTip>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
