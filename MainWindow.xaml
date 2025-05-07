@@ -2426,10 +2426,20 @@
                                 Margin="5"
                                 Click="firstPageHeaderFooter_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource DifferentFirstPageTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource DifferentFirstPageButton}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource DifferentFirstPageTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                         <Button Content="{DynamicResource DifferentEvenPageButton}"
@@ -2438,10 +2448,20 @@
                                 Margin="5"
                                 Click="evenHeaderFooter_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource DifferentEvenPageTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource DifferentEvenPageButton}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource DifferentEvenPageTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                         <Button Content="{DynamicResource LinkToPrevious}"
@@ -2449,10 +2469,25 @@
                                 Width="130"
                                 Margin="5">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource LinkToPreviousTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource LinkToPrevious}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource LinkToPreviousTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+
+
+
+
                             </Button.ToolTip>
                         </Button>
                         <Button Content="{DynamicResource SuppressFirstPageHeaderFooter}"
@@ -2460,10 +2495,20 @@
                                 Width="130"
                                 Margin="5">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource SuppressFirstPageTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource SuppressFirstPageHeaderFooter}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource SuppressFirstPageTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
@@ -2755,6 +2800,7 @@
                                 Margin="5"
                                 Click="ShowDocumentation_Click">
                             <Button.ToolTip>
+
                                 <ToolTip>
                                     <StackPanel>
                                         <!-- Tooltip Header -->
@@ -2769,6 +2815,7 @@
                                                    MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
+
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
