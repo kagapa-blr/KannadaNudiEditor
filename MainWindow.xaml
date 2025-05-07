@@ -2680,10 +2680,20 @@
                                 Margin="5"
                                 Click="StartKannadaSpeech_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StartKannadaSpeechTip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource StartKannadaSpeech}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StartKannadaSpeechTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
 
@@ -2693,10 +2703,20 @@
                                 Margin="5"
                                 Click="StopKannadaSpeech_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
@@ -2720,10 +2740,20 @@
                                 Margin="5"
                                 Click="StartEnglishSpeech_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StartEnglishSpeechTip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource StartEnglishSpeech}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StartEnglishSpeechTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
 
@@ -2733,10 +2763,20 @@
                                 Margin="5"
                                 Click="StopEnglishSpeech_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StopEnglishSpeechTip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource StopEnglishSpeech}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StopEnglishSpeechTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
