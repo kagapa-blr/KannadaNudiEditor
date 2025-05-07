@@ -2563,10 +2563,20 @@
                                 HorizontalAlignment="Stretch"
                                 Click="StartNudiEngine_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StartNudiTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource NudiManagerTab}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StartNudiTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
 
@@ -2582,10 +2592,20 @@
                                 HorizontalAlignment="Stretch"
                                 Click="StopNudiEngine_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource StopNudiTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource NudiManagerTab}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource StopNudiTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </Grid>
