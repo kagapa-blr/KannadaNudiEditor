@@ -2381,22 +2381,30 @@
                                 Margin="5"
                                 Click="EditHeader_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource EditHeaderTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
+
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource EditHeader}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource EditHeaderTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+
+
                             </Button.ToolTip>
-                        </Button>
-                        <Button Content="{DynamicResource RemoveHeaderFooter}"
-                                Height="30"
-                                Width="130"
-                                Margin="5">
-                            <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
-                                    <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
-                                               TextWrapping="Wrap"/>
-                                </Syncfusion:ScreenTip>
-                            </Button.ToolTip>
+
+
+
+
+
+
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
@@ -2490,16 +2498,37 @@
                                 Margin="5"/>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
-                <StackPanel Orientation="Horizontal"
-                        Grid.Row="1">
+
+                <StackPanel Margin="3">
+                    <!-- Button with tooltip that dynamically uses the resource -->
                     <Button x:Name="removeHeaderFooter"
-                             Content="{DynamicResource RemoveHeaderFooter}"
+                            Content="{DynamicResource RemoveHeaderFooter}"
                             Click="removeHeaderFooter_Click"
-                            Height="30"
-                            Width="150"
+                            Height="Auto"
+                            Width="Auto"
+                            MinHeight="30"
+                            MinWidth="150"
                             Margin="5"
-                            Background="Red"/>
+                            Background="Red">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <StackPanel>
+                                    <!-- Tooltip Header -->
+                                    <TextBlock Text="{DynamicResource RemoveHeaderFooter}"
+                                               FontWeight="Bold"
+                                               FontSize="12"
+                                               Margin="0,0,0,5"/>
+
+                                    <!-- Tooltip Content -->
+                                    <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
+                                               TextWrapping="WrapWithOverflow"
+                                               MaxWidth="200"/>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
                 </StackPanel>
+
             </Syncfusion:RibbonTab>
 
 
