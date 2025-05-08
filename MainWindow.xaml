@@ -2877,15 +2877,22 @@
                                 Margin="5"
                                 Click="ShowSupport_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
+
+                                <ToolTip>
                                     <StackPanel>
+                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource SupportTipLine1}"
-                                                   TextWrapping="Wrap"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
                                                    Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource SupportTipLine2}"
-                                                   TextWrapping="Wrap"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
-                                </Syncfusion:ScreenTip>
+                                </ToolTip>
+
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
@@ -2908,15 +2915,20 @@
                                 Margin="5"
                                 Click="ProvideFeedback_Click">
                             <Button.ToolTip>
-                                <Syncfusion:ScreenTip MaxWidth="300">
+                                <ToolTip>
                                     <StackPanel>
+                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource FeedbackTipLine1}"
-                                                   TextWrapping="Wrap"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
                                                    Margin="0,0,0,5"/>
+
+                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource FeedbackTipLine2}"
-                                                   TextWrapping="Wrap"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
-                                </Syncfusion:ScreenTip>
+                                </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
