@@ -1222,6 +1222,15 @@ namespace KannadaNudiEditor
             {
                 richTextBoxAdv.Document.Background.Color = e.NewColor;
             }
+            else
+            {
+                richTextBoxAdv.Document.Background.Color = Colors.Transparent;
+            }
+        }
+        private void NoColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Set the background to no color (transparent)
+            richTextBoxAdv.Document.Background.Color = Colors.White;
         }
         #endregion
         #region PageMargins Implementation
