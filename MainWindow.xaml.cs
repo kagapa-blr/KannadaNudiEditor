@@ -1224,7 +1224,7 @@ namespace KannadaNudiEditor
             }
             else
             {
-                richTextBoxAdv.Document.Background.Color = Colors.Transparent;
+                richTextBoxAdv.Document.Background.Color = Colors.White;
             }
         }
         private void NoColorButton_Click(object sender, RoutedEventArgs e)
