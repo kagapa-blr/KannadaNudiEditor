@@ -1236,7 +1236,17 @@ namespace KannadaNudiEditor
         new PageMargins { Key = "Moderate", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 0.75 in", right = "Right: 0.75 in" },
         new PageMargins { Key = "Wide", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 2 in", right = "Right: 2 in" },
         new PageMargins { Key = "Mirrored", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1 in" },
-        new PageMargins { Key = "Office 2003 Default", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1.25 in" }
+        new PageMargins { Key = "Office 2003 Default", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1.25 in" },
+        new PageMargins  {
+        Key = "Custom",
+        top = LanguageToggleButton.IsChecked == true ? "Set custom margins" : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು",
+        bottom = "",
+        left = "",
+        right = ""
+    }
+
+
+
     };
             pageMargins.ItemsSource = items;
 
@@ -1257,6 +1267,15 @@ namespace KannadaNudiEditor
         private void pageMargins_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             string selectedKey = (pageMargins.SelectedItem as PageMargins)?.Key;
+
+            if (selectedKey == "Custom")
+            {
+                // Call the CustomMarginButton_Click function when the "Custom" option is selected
+                CustomMarginButton_Click(sender, e);
+                return;
+            }
+
+
             if (!string.IsNullOrEmpty(selectedKey) && pageMarginsCollection.TryGetValue(selectedKey, out var values))
             {
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
@@ -1276,34 +1295,86 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Initializes the page sizes.
         /// </summary>
+
+
         private void InitializePageSizes()
         {
-            List<PageSize> items = new List<PageSize> {
+            List<PageSize> items = new List<PageSize>
+    {
+        // North American Sizes
         new PageSize { Key = "Letter", width = "8.5 in", height = "11 in" },
-        new PageSize { Key = "Tabloid", width = "11 in", height = "17 in" },
         new PageSize { Key = "Legal", width = "8.5 in", height = "14 in" },
-        new PageSize { Key = "Statement", width = "5.5 in", height = "8.5 in" },
+        new PageSize { Key = "Tabloid", width = "11 in", height = "17 in" },
         new PageSize { Key = "Executive", width = "7.25 in", height = "10.5 in" },
-        new PageSize { Key = "A3", width = "11.69 in", height = "16.54 in" },
-        new PageSize { Key = "A4", width = "8.27 in", height = "11.69 in" },
-        new PageSize { Key = "B4 (JIS)", width = "10.12 in", height = "14.33 in" },
-        new PageSize { Key = "B5 (JIS)", width = "7.21 in", height = "10.12 in" }
+        new PageSize { Key = "Statement", width = "5.5 in", height = "8.5 in" },
+
+        // ISO A Series
+        new PageSize { Key = "A0", width = "33.1 in", height = "46.8 in" },
+        new PageSize { Key = "A1", width = "23.4 in", height = "33.1 in" },
+        new PageSize { Key = "A2", width = "16.5 in", height = "23.4 in" },
+        new PageSize { Key = "A3", width = "11.7 in", height = "16.5 in" },
+        new PageSize { Key = "A4", width = "8.3 in", height = "11.7 in" },
+        new PageSize { Key = "A5", width = "5.8 in", height = "8.3 in" },
+        new PageSize { Key = "A6", width = "4.1 in", height = "5.8 in" },
+        new PageSize { Key = "A7", width = "2.9 in", height = "4.1 in" },
+        new PageSize { Key = "A8", width = "2.0 in", height = "2.9 in" },
+        new PageSize { Key = "A9", width = "1.5 in", height = "2.0 in" },
+        new PageSize { Key = "A10", width = "1.0 in", height = "1.5 in" },
+
+        // ISO B Series
+        new PageSize { Key = "B4 (JIS)", width = "10.1 in", height = "14.3 in" },
+        new PageSize { Key = "B5 (JIS)", width = "7.2 in", height = "10.1 in" },
+
+        // ANSI Sizes
+        new PageSize { Key = "ANSI A", width = "8.5 in", height = "11 in" },
+        new PageSize { Key = "ANSI B", width = "11 in", height = "17 in" },
+        new PageSize { Key = "ANSI C", width = "17 in", height = "22 in" },
+        new PageSize { Key = "ANSI D", width = "22 in", height = "34 in" },
+        new PageSize { Key = "ANSI E", width = "34 in", height = "44 in" },
+
+        // Custom Option
+        new PageSize { Key = "Custom", width = "", height = "" }
     };
+
             pageSize.ItemsSource = items;
 
             // Dictionary values in inches
-            pageSizesCollection = new Dictionary<string, List<double>> {
+            pageSizesCollection = new Dictionary<string, List<double>>
+    {
+        // North American Sizes
         { "Letter", new List<double> { 8.5, 11 } },
-        { "Tabloid", new List<double> { 11, 17 } },
         { "Legal", new List<double> { 8.5, 14 } },
-        { "Statement", new List<double> { 5.5, 8.5 } },
+        { "Tabloid", new List<double> { 11, 17 } },
         { "Executive", new List<double> { 7.25, 10.5 } },
-        { "A3", new List<double> { 11.69, 16.54 } },
-        { "A4", new List<double> { 8.27, 11.69 } },
-        { "B4 (JIS)", new List<double> { 10.12, 14.33 } },
-        { "B5 (JIS)", new List<double> { 7.21, 10.12 } }
+        { "Statement", new List<double> { 5.5, 8.5 } },
+
+        // ISO A Series
+        { "A0", new List<double> { 33.1, 46.8 } },
+        { "A1", new List<double> { 23.4, 33.1 } },
+        { "A2", new List<double> { 16.5, 23.4 } },
+        { "A3", new List<double> { 11.7, 16.5 } },
+        { "A4", new List<double> { 8.3, 11.7 } },
+        { "A5", new List<double> { 5.8, 8.3 } },
+        { "A6", new List<double> { 4.1, 5.8 } },
+        { "A7", new List<double> { 2.9, 4.1 } },
+        { "A8", new List<double> { 2.0, 2.9 } },
+        { "A9", new List<double> { 1.5, 2.0 } },
+        { "A10", new List<double> { 1.0, 1.5 } },
+
+        // ISO B Series
+        { "B4 (JIS)", new List<double> { 10.1, 14.3 } },
+        { "B5 (JIS)", new List<double> { 7.2, 10.1 } },
+
+        // ANSI Sizes
+        { "ANSI A", new List<double> { 8.5, 11 } },
+        { "ANSI B", new List<double> { 11, 17 } },
+        { "ANSI C", new List<double> { 17, 22 } },
+        { "ANSI D", new List<double> { 22, 34 } },
+        { "ANSI E", new List<double> { 34, 44 } }
     };
         }
+
+
 
         /// <summary>
         /// Updates the page sizes.
@@ -1311,6 +1382,17 @@ namespace KannadaNudiEditor
         private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             string selectedKey = (pageSize.SelectedItem as PageSize)?.Key;
+
+
+            if (selectedKey == "Custom")
+            {
+                // Call the CustomMarginButton_Click function when the "Custom" option is selected
+                RibbonButton_Click(sender, e);
+                return;
+            }
+
+
+            //RibbonButton_Click
             if (!string.IsNullOrEmpty(selectedKey) && pageSizesCollection.TryGetValue(selectedKey, out var values))
             {
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
@@ -1782,8 +1864,8 @@ namespace KannadaNudiEditor
             }
         }
 
-  
-  
+
+
 
 
 

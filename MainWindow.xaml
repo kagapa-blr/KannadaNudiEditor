@@ -2314,11 +2314,11 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Content="Custom Margin"
+                        <!-- <Button Content="Custom Margin"
                                 Height="30"
                                 Margin="5"
                                 Width="130"
-                                Click="CustomMarginButton_Click"/>
+                                Click="CustomMarginButton_Click"/> -->
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
@@ -2350,13 +2350,16 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button Content="Custom Size"
+                        <!-- <Button Content="Custom Size"
                                 Height="30"
                                 Margin="5"
                                 Width="130"
-                                Click="RibbonButton_Click"/>
+                                Click="RibbonButton_Click"/> -->
                     </StackPanel>
                 </Syncfusion:RibbonBar>
+            
+            
+            
             </Syncfusion:RibbonTab>
 
 
