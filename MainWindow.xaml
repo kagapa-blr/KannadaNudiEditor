@@ -2284,10 +2284,10 @@
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSetup}"
                                       IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
-                        <TextBox Text="{DynamicResource Margins}"
-                                 BorderBrush="Transparent"/>
+                        <!-- Replace TextBox with TextBlock for non-editable margins -->
+                        <TextBlock Text="{DynamicResource Margins}"
+                                   FontWeight="Bold"/>
                         <ComboBox Name="pageMargins"
-                                  Text="{DynamicResource Margins}"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
                                   Width="170"
@@ -2314,22 +2314,18 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <!-- <Button Content="Custom Margin"
-                                Height="30"
-                                Margin="5"
-                                Width="130"
-                                Click="CustomMarginButton_Click"/> -->
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
+
                 <!-- Page Size -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSize}"
-                                      IsLauncherButtonVisible="False">
+                        IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
-                        <TextBox Text="{DynamicResource Size}"
-                                 BorderBrush="Transparent"/>
+                        <!-- Replace TextBox with TextBlock for non-editable size -->
+                        <TextBlock Text="{DynamicResource Size}"
+                                FontWeight="Bold"/>
                         <ComboBox Name="pageSize"
-                                  Text="{DynamicResource Size}"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
                                   Width="170"
@@ -2339,27 +2335,22 @@
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock Text="{Binding Key}"
-                                                   FontWeight="Bold"/>
+                                                FontWeight="Bold"/>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="2"
-                                                       Text="{Binding height}"/>
+                                                    Text="{Binding height}"/>
                                             <TextBlock Margin="2"
-                                                       Text="{Binding width}"/>
+                                                    Text="{Binding width}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <!-- <Button Content="Custom Size"
-                                Height="30"
-                                Margin="5"
-                                Width="130"
-                                Click="RibbonButton_Click"/> -->
                     </StackPanel>
                 </Syncfusion:RibbonBar>
-            
-            
-            
+
+
+
             </Syncfusion:RibbonTab>
 
 
