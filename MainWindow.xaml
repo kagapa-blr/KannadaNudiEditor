@@ -2269,16 +2269,16 @@
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
 
-
             <Syncfusion:RibbonTab Caption="{DynamicResource PageLayoutTab}">
-                <!-- Page Background -->
+
+                <!-- Page Background Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageBackground}"
                         IsLauncherButtonVisible="False">
-                    <StackPanel>
+                    <StackPanel Margin="5">
                         <!-- No Color Button -->
-                        <Button Content="NO color"
+                        <Button Content="No Color"
                                 Height="30"
-                                Margin="5"
+                                Margin="5, 0"
                                 Width="130"
                                 Click="NoColorButton_Click"/>
 
@@ -2290,12 +2290,11 @@
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
-
-                <!-- Page Setup -->
+                <!-- Page Setup Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSetup}"
-                                      IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <!-- Label for Margins with professional styling -->
+                        IsLauncherButtonVisible="False">
+                    <StackPanel Margin="5">
+                        <!-- Label for Margins -->
                         <TextBlock Text="{DynamicResource Margins}"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center"
@@ -2306,7 +2305,6 @@
                         <ComboBox Name="pageMargins"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center"
-                                  Width="170"
                                   Height="30"
                                   SelectionChanged="pageMargins_SelectionChanged">
                             <ComboBox.ItemTemplate>
@@ -2316,22 +2314,22 @@
                                                    FontWeight="Bold"
                                                    Margin="0, 0, 0, 5"/>
                                         <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
+                                                HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                       Text="{Binding top}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding top}"
+                                                    FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                       Text="{Binding bottom}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding bottom}"
+                                                    FontStyle="Italic"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
+                                                HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                       Text="{Binding left}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding left}"
+                                                    FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                       Text="{Binding right}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding right}"
+                                                    FontStyle="Italic"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -2340,12 +2338,11 @@
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
-
-                <!-- Page Size -->
+                <!-- Page Size Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSize}"
-                                      IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <!-- Label for Page Size with professional styling -->
+                        IsLauncherButtonVisible="False">
+                    <StackPanel Margin="5">
+                        <!-- Label for Page Size -->
                         <TextBlock Text="{DynamicResource Size}"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center"
@@ -2356,7 +2353,6 @@
                         <ComboBox Name="pageSize"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center"
-                                  Width="170"
                                   Height="30"
                                   SelectionChanged="pageSize_SelectionChanged">
                             <ComboBox.ItemTemplate>
@@ -2366,13 +2362,13 @@
                                                    FontWeight="Bold"
                                                    Margin="0, 0, 0, 5"/>
                                         <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
+                                                HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                       Text="{Binding height}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding height}"
+                                                    FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                       Text="{Binding width}"
-                                                       FontStyle="Italic"/>
+                                                    Text="{Binding width}"
+                                                    FontStyle="Italic"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -2380,10 +2376,7 @@
                         </ComboBox>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
-
-
             </Syncfusion:RibbonTab>
-
 
 
 
