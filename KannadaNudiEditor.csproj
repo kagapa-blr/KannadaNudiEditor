@@ -141,9 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.1.39" />
-    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.1.35" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.1.37" />
-    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="29.1.37" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.5" />
+    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.2.5" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.2.5" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="29.2.5" />
   </ItemGroup>
 </Project>
