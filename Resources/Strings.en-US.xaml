@@ -46,6 +46,10 @@
   <!-- =========================== -->
   <sys:String x:Key="Paragraph">Paragraph</sys:String>
 
+  <sys:String x:Key="Sort">Sort</sys:String>
+  <sys:String x:Key="SortShortcut">Sort (Alt + D + S)</sys:String>
+  <sys:String x:Key="SortTooltipLine1">Sort the selected text or table rows</sys:String>
+  <sys:String x:Key="SortTooltipLine2">in ascending or descending order.</sys:String>
 
 
   <!-- =========================== -->
@@ -133,8 +137,8 @@
   <sys:String x:Key="UnitMillimeters">Millimeters</sys:String>
   <sys:String x:Key="UnitInches">Inches</sys:String>
 
-<sys:String x:Key="SelectUnitCaption">Select Margin Unit</sys:String>
-<sys:String x:Key="UnitTipText">Enter margin values using the selected unit (supports Kannada or English numbers). Click OK to apply.</sys:String>
+  <sys:String x:Key="SelectUnitCaption">Select Margin Unit</sys:String>
+  <sys:String x:Key="UnitTipText">Enter margin values using the selected unit (supports Kannada or English numbers). Click OK to apply.</sys:String>
 
 
 
@@ -217,11 +221,11 @@
 
 
 
-<sys:String x:Key="PageSelectUnitCaption">Select Unit</sys:String>
-<sys:String x:Key="PageUnitSelectUnit">Unit:</sys:String>
-<sys:String x:Key="PageUnitCentimeters">Centimeters</sys:String>
-<sys:String x:Key="PageUnitMillimeters">Millimeters</sys:String>
-<sys:String x:Key="PageUnitInches">Inches</sys:String>
+  <sys:String x:Key="PageSelectUnitCaption">Select Unit</sys:String>
+  <sys:String x:Key="PageUnitSelectUnit">Unit:</sys:String>
+  <sys:String x:Key="PageUnitCentimeters">Centimeters</sys:String>
+  <sys:String x:Key="PageUnitMillimeters">Millimeters</sys:String>
+  <sys:String x:Key="PageUnitInches">Inches</sys:String>
 
 
 

@@ -1762,6 +1762,24 @@
                                 </Syncfusion:ScreenTip>
                             </Syncfusion:RibbonButton.ToolTip>
                         </Syncfusion:RibbonButton>
+
+                        <Syncfusion:RibbonButton SizeForm="ExtraSmall"
+                                                 Height="22"
+                                                 Width="24"
+                                                 Padding="2"
+                                                 Label="{DynamicResource Sort}"
+                                                 SmallIcon="/Images/Home/Paragraph/sort.png">
+                            <Syncfusion:RibbonButton.ToolTip>
+                                <Syncfusion:ScreenTip Description="{DynamicResource SortShortcut}"
+                                                      MaxWidth="250">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource SortTooltipLine1}"/>
+                                        <TextBlock Text="{DynamicResource SortTooltipLine2}"/>
+                                    </StackPanel>
+                                </Syncfusion:ScreenTip>
+                            </Syncfusion:RibbonButton.ToolTip>
+                        </Syncfusion:RibbonButton>
+
                     </Syncfusion:ButtonPanel>
                     <Syncfusion:ButtonPanel Height="24"
                                             SeparatorVisibility="Collapsed">
@@ -2273,7 +2291,7 @@
 
                 <!-- Page Background Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageBackground}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="5">
                         <!-- No Color Button -->
                         <Button Content="No Color"
@@ -2292,7 +2310,7 @@
 
                 <!-- Page Setup Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSetup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="5">
                         <!-- Label for Margins -->
                         <TextBlock Text="{DynamicResource Margins}"
@@ -2314,22 +2332,22 @@
                                                    FontWeight="Bold"
                                                    Margin="0, 0, 0, 5"/>
                                         <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Left">
+                                                    HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                    Text="{Binding top}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding top}"
+                                                       FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                    Text="{Binding bottom}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding bottom}"
+                                                       FontStyle="Italic"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Left">
+                                                    HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                    Text="{Binding left}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding left}"
+                                                       FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                    Text="{Binding right}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding right}"
+                                                       FontStyle="Italic"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -2340,7 +2358,7 @@
 
                 <!-- Page Size Section -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageSize}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="5">
                         <!-- Label for Page Size -->
                         <TextBlock Text="{DynamicResource Size}"
@@ -2362,13 +2380,13 @@
                                                    FontWeight="Bold"
                                                    Margin="0, 0, 0, 5"/>
                                         <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Left">
+                                                    HorizontalAlignment="Left">
                                             <TextBlock Margin="2"
-                                                    Text="{Binding height}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding height}"
+                                                       FontStyle="Italic"/>
                                             <TextBlock Margin="2"
-                                                    Text="{Binding width}"
-                                                    FontStyle="Italic"/>
+                                                       Text="{Binding width}"
+                                                       FontStyle="Italic"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -2482,6 +2500,7 @@
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
+
                         <Button Content="{DynamicResource LinkToPrevious}"
                                 Height="30"
                                 Width="130"
@@ -2508,6 +2527,7 @@
 
                             </Button.ToolTip>
                         </Button>
+
                         <Button Content="{DynamicResource SuppressFirstPageHeaderFooter}"
                                 Height="30"
                                 Width="130"

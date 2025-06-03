@@ -37,108 +37,15 @@
 
 
 
-  <ItemGroup>
-    <Resource Include="Assets\Default.png" />
-    <Resource Include="Assets\PrintLayout.png" />
-    <Resource Include="Assets\RTE.png" />
-    <!-- <Resource Include="Assets\Syncfusion.png" /> -->
-    <Resource Include="Assets\nudi.png" />
-    <Resource Include="Assets\SyncLogo.png" />
-    <Resource Include="Assets\WebLayout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Backstage\AddDigitalSignature.png" />
-    <Resource Include="Images\Backstage\Help.png" />
-    <Resource Include="Images\Backstage\HtmlIcon.png" />
-    <Resource Include="Images\Backstage\New32.png" />
-    <Resource Include="Images\Backstage\Open32.png" />
-    <Resource Include="Images\Backstage\Print32.png" />
-    <Resource Include="Images\Backstage\Protect.png" />
-    <Resource Include="Images\Backstage\RestrictAccess.png" />
-    <Resource Include="Images\Backstage\Save32.png" />
-    <Resource Include="Images\Backstage\SaveAs32.png" />
-    <Resource Include="Images\Backstage\Started.png" />
-    <Resource Include="Images\Backstage\TextDocument32.png" />
-    <Resource Include="Images\Backstage\Word2007.png" />
-    <Resource Include="Images\Backstage\Word2010.png" />
-    <Resource Include="Images\Backstage\XamlIcon.png" />
-    <Resource Include="Images\Home\Clipboard\Copy16.png" />
-    <Resource Include="Images\Home\Clipboard\Cut16.png" />
-    <Resource Include="Images\Home\Clipboard\Paste16.png" />
-    <Resource Include="Images\Home\Clipboard\Paste32.png" />
-    <Resource Include="Images\Home\Editing\Find.png" />
-    <Resource Include="Images\Home\Editing\Replace.png" />
-    <Resource Include="Images\Home\Editing\RestrictEditing.png" />
-    <Resource Include="Images\Home\Editing\Select.png" />
-    <Resource Include="Images\Home\Font\Bold16.png" />
-    <Resource Include="Images\Home\Font\FontDialog.png" />
-    <Resource Include="Images\Home\Font\Fonts16.png" />
-    <Resource Include="Images\Home\Font\GrowFont16.png" />
-    <Resource Include="Images\Home\Font\HighlightColor16.png" />
-    <Resource Include="Images\Home\Font\Italic16.png" />
-    <Resource Include="Images\Home\Font\ShrinkFont16.png" />
-    <Resource Include="Images\Home\Font\Strikethrough16.png" />
-    <Resource Include="Images\Home\Font\Subscript16.png" />
-    <Resource Include="Images\Home\Font\Superscript16.png" />
-    <Resource Include="Images\Home\Font\Underline16.png" />
-    <Resource Include="Images\Home\Paragraph\AlignTextCenter16.png" />
-    <Resource Include="Images\Home\Paragraph\AlignTextJustify16.png" />
-    <Resource Include="Images\Home\Paragraph\AlignTextLeft16.png" />
-    <Resource Include="Images\Home\Paragraph\AlignTextRight16.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets16.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Arrow.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Circle.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Dot.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Flower.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Image.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_None.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Square.png" />
-    <Resource Include="Images\Home\Paragraph\Bullets\Bullet_Tick.png" />
-    <Resource Include="Images\Home\Paragraph\DecreaseIndent16.png" />
-    <Resource Include="Images\Home\Paragraph\IncreaseIndent16.png" />
-    <Resource Include="Images\Home\Paragraph\LineSpacing16.png" />
-    <Resource Include="Images\Home\Paragraph\List16.png" />
-    <Resource Include="Images\Home\Paragraph\List\List_Bullets.png" />
-    <Resource Include="Images\Home\Paragraph\List\List_Multilevel.png" />
-    <Resource Include="Images\Home\Paragraph\List\List_Normal.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering16.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_LowLetter_Brace.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_LowLetter_Dot.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_LowRoman.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_None.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_Number_Brace.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_Number_Dot.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_UpLetter.png" />
-    <Resource Include="Images\Home\Paragraph\Numbering\Numbering_UpRoman.png" />
-    <Resource Include="Images\Home\Paragraph\ParagraphDialog.png" />
-    <Resource Include="Images\Insert\Hyperlink32.png" />
-    <Resource Include="Images\Insert\CollapsePages.png" />
-    <Resource Include="Images\Insert\PageBreak16.png" />
-    <Resource Include="Images\Insert\Picture32.png" />
-    <Resource Include="Images\Insert\Table16.png" />
-    <Resource Include="Images\Insert\Table32.png" />
-    <Resource Include="Images\Page Layout\pagesetup.jpg" />
-    <Resource Include="Images\QAT\Redo16.png" />
-    <Resource Include="Images\QAT\Save16.png" />
-    <Resource Include="Images\QAT\Undo16.png" />
-    <Resource Include="Images\Review\Spelling.png" />
-    <Resource Include="Images\Review\DeleteComment.png" />
-    <Resource Include="Images\Review\NewComment.png" />
-    <Resource Include="Images\Review\NextComment.png" />
-    <Resource Include="Images\Review\PreviousComment.png" />
-    <Resource Include="Images\Review\ShowComments.png" />
-    <Resource Include="Images\RTE.png" />
-    <!-- <Resource Include="Images\Syncfusion.png" /> -->
-    <Resource Include="Images\nudi.png" />
-    <Resource Include="Images\View\FlowLayout.png" />
-    <Resource Include="Images\View\MultiplePages.png" />
-    <Resource Include="Images\View\OnePage.png" />
-    <Resource Include="Images\View\PageLayout.png" />
-    <Resource Include="Images\View\PageWidth.png" />
-    <Resource Include="Images\View\ResetZoom.png" />
-    <Resource Include="Images\View\ZoomIn.png" />
-    <Resource Include="Images\View\ZoomOut.png" />
-  </ItemGroup>
+ <ItemGroup>
+  <Resource Include="Images\**\*.png" />
+  <Resource Include="Assets\**\*.png" />
+</ItemGroup>
+
+ 
+
+ 
+ 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.7" />

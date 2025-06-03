@@ -39,6 +39,10 @@
   <!-- Paragraph -->
   <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
 
+  <sys:String x:Key="Sort">ವಿಂಗಡಿಸಿ</sys:String>
+  <sys:String x:Key="SortShortcut">ವಿಂಗಡಿಸಿ (Alt + D + S)</sys:String>
+  <sys:String x:Key="SortTooltipLine1">ಆಯ್ದ ಪಠ್ಯ ಅಥವಾ ಕೋಷ್ಠಕದ ಸಾಲುಗಳನ್ನು</sys:String>
+  <sys:String x:Key="SortTooltipLine2">ಏರಿಕೆಯಿಂದ ಇಳಿಕೆಗೆ ಅಥವಾ ಇಳಿಕೆಯಿಂದ ಏರಿಕೆಗೆ ವಿಂಗಡಿಸಿ.</sys:String>
 
 
   <!-- =========================== -->
