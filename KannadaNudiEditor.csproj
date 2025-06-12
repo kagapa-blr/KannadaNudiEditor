@@ -48,9 +48,9 @@
  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.7" />
-    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.2.7" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.2.7" />
-    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="29.2.7" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.10" />
+    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.2.10" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.2.10" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="29.2.10" />
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+
 # Kannada Nudi Editor
 
 **Kannada Nudi Editor** is a powerful and user-friendly text editor designed to make writing in Kannada effortless.
@@ -55,7 +56,23 @@ for millions of users to communicate effortlessly.
 - Collaborate with a community of passionate developers.
 - Gain experience by working on a feature-rich editor with advanced text-processing capabilities.
 
-Let’s build something amazing together! 💖
+Let’s build something amazing together! 
+
+---
+
+## 📦 NuGet Dependencies
+
+To make sure all required packages are available, run the following commands in the root of your project:
+
+```bash
+dotnet add package Newtonsoft.Json
+dotnet add package Syncfusion.SfRichTextBoxAdv.WPF
+dotnet add package Syncfusion.SfRichTextRibbon.WPF
+dotnet add package Syncfusion.SfSkinManager.WPF
+dotnet add package Syncfusion.Themes.Windows11Light.WPF
+```
+
+These commands will install the latest stable versions of the required NuGet packages for the project.
 
 ---
 
@@ -114,4 +131,4 @@ Thank you for contributing to **Kannada Nudi Editor**! 🙏
 
 ---
 
-**Maintained and developed by [KAGAPA](https://kagapa.com/).**  
+**Maintained and developed by [KAGAPA](https://kagapa.com/).**
