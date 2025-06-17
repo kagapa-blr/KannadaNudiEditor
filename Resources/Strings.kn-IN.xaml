@@ -39,10 +39,34 @@
   <!-- Paragraph -->
   <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
 
-  <sys:String x:Key="Sort">ವಿಂಗಡಿಸಿ</sys:String>
-  <sys:String x:Key="SortShortcut">ವಿಂಗಡಿಸಿ (Alt + D + S)</sys:String>
-  <sys:String x:Key="SortTooltipLine1">ಆಯ್ದ ಪಠ್ಯ ಅಥವಾ ಕೋಷ್ಠಕದ ಸಾಲುಗಳನ್ನು</sys:String>
-  <sys:String x:Key="SortTooltipLine2">ಏರಿಕೆಯಿಂದ ಇಳಿಕೆಗೆ ಅಥವಾ ಇಳಿಕೆಯಿಂದ ಏರಿಕೆಗೆ ವಿಂಗಡಿಸಿ.</sys:String>
+<sys:String x:Key="Sort">ವಿಂಗಡಿಸಿ</sys:String>
+<sys:String x:Key="SortBy">ವಿಂಗಡಿಸಲು</sys:String>
+<sys:String x:Key="ThenBy">ನಂತರ</sys:String>
+<sys:String x:Key="Type">ಪ್ರಕಾರ:</sys:String>
+<sys:String x:Key="Paragraphs">ಪ್ಯಾರಾಗಳ</sys:String>
+<sys:String x:Key="Headings">ಶೀರ್ಷಿಕೆಗಳು</sys:String>
+<sys:String x:Key="Field1">ಕ್ಷೇತ್ರ ೧</sys:String>
+<sys:String x:Key="Text">ಪಠ್ಯ</sys:String>
+<sys:String x:Key="Number">ಸಂಖ್ಯೆ</sys:String>
+<sys:String x:Key="Date">ದಿನಾಂಕ</sys:String>
+<sys:String x:Key="Ascending">ಏರಿಕೆಯ ಕ್ರಮ</sys:String>
+<sys:String x:Key="Descending">ಇಳಿಕೆಯ ಕ್ರಮ</sys:String>
+<sys:String x:Key="MyListHas">ನನ್ನ ಪಟ್ಟಿಯಲ್ಲಿ ಇದೆ</sys:String>
+<sys:String x:Key="HeaderRow">ಶೀರ್ಷಿಕೆ ಸಾಲು</sys:String>
+<sys:String x:Key="NoHeaderRow">ಶೀರ್ಷಿಕೆ ಇಲ್ಲದ ಸಾಲು</sys:String>
+<sys:String x:Key="OK">ಸರಿ</sys:String>
+<sys:String x:Key="Cancel">ರದ್ದುಮಾಡು</sys:String>
+
+
+
+
+
+
+
+
+
+
+
 
 
   <!-- =========================== -->

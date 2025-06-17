@@ -1768,7 +1768,9 @@
                                                  Width="24"
                                                  Padding="2"
                                                  Label="{DynamicResource Sort}"
-                                                 SmallIcon="/Images/Home/Paragraph/sort.png">
+                                                 SmallIcon="/Images/Home/Paragraph/sort.png"
+                                                   Click="SortButton_Click">
+                                                 
                             <Syncfusion:RibbonButton.ToolTip>
                                 <Syncfusion:ScreenTip Description="{DynamicResource SortShortcut}"
                                                       MaxWidth="250">

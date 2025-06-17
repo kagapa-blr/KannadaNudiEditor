@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
+using KannadaNudiEditor.Views.Sort;
+
 namespace KannadaNudiEditor
 {
     /// <summary>
@@ -1772,6 +1774,7 @@ namespace KannadaNudiEditor
 
 
 
+
         private void AboutNudi_Click(object sender, RoutedEventArgs e)
         {
             var window = new Views.HelpTab.AboutNudiWindow();
@@ -1872,6 +1875,19 @@ namespace KannadaNudiEditor
                 }
             }
         }
+
+
+
+
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sortWindow = new SortWindow();
+            sortWindow.Owner = this;
+            sortWindow.ShowDialog();
+        }
+
+
 
 
 

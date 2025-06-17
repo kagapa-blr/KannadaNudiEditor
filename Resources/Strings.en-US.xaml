@@ -45,11 +45,27 @@
   <!-- Home Tab: Paragraph Group   -->
   <!-- =========================== -->
   <sys:String x:Key="Paragraph">Paragraph</sys:String>
-
   <sys:String x:Key="Sort">Sort</sys:String>
-  <sys:String x:Key="SortShortcut">Sort (Alt + D + S)</sys:String>
-  <sys:String x:Key="SortTooltipLine1">Sort the selected text or table rows</sys:String>
-  <sys:String x:Key="SortTooltipLine2">in ascending or descending order.</sys:String>
+  <sys:String x:Key="SortBy">Sort By</sys:String>
+  <sys:String x:Key="ThenBy">Then By</sys:String>
+  <sys:String x:Key="Type">Type:</sys:String>
+  <sys:String x:Key="Paragraphs">Paragraphs</sys:String>
+  <sys:String x:Key="Headings">Headings</sys:String>
+  <sys:String x:Key="Field1">Field 1</sys:String>
+  <sys:String x:Key="Text">Text</sys:String>
+  <sys:String x:Key="Number">Number</sys:String>
+  <sys:String x:Key="Date">Date</sys:String>
+  <sys:String x:Key="Ascending">Ascending</sys:String>
+  <sys:String x:Key="Descending">Descending</sys:String>
+  <sys:String x:Key="MyListHas">My list has</sys:String>
+  <sys:String x:Key="HeaderRow">Header row</sys:String>
+  <sys:String x:Key="NoHeaderRow">No header row</sys:String>
+  <sys:String x:Key="OK">OK</sys:String>
+  <sys:String x:Key="Cancel">Cancel</sys:String>
+
+
+
+
 
 
   <!-- =========================== -->
