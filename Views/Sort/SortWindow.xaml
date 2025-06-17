@@ -3,26 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource Sort}"
         MinHeight="500"
-        MinWidth="700"
+        MinWidth="600"
         Height="550"
-        Width="800"
+        Width="600"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterOwner">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Info Button -->
             <RowDefinition Height="Auto"/>
+            <!-- Sort By -->
             <RowDefinition Height="Auto"/>
+            <!-- Then By 1 -->
             <RowDefinition Height="Auto"/>
+            <!-- Then By 2 -->
+            <RowDefinition Height="Auto"/>
+            <!-- My List Has -->
             <RowDefinition Height="*"/>
+            <!-- Spacer -->
             <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
         </Grid.RowDefinitions>
+
+        <!-- Info Button -->
+        <Button Grid.Row="0"
+                Content="🛈"
+                ToolTip="{DynamicResource SortHelp}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Width="30"
+                Height="30"
+                Margin="0,0,0,10"
+                Click="InfoButton_Click"/>
 
         <!-- Sort By Group -->
         <GroupBox Header="{DynamicResource SortSortBy}"
                   FontWeight="Bold"
-                  Grid.Row="0"
+                  Grid.Row="1"
                   Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -56,15 +75,15 @@
                 </ComboBox>
 
                 <StackPanel Grid.Column="4"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            Orientation="Vertical"
+                            HorizontalAlignment="Left"
+                            Margin="10,0">
                     <RadioButton x:Name="sortByAsc"
                                  Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
-                                 Margin="10,0"/>
+                                 Margin="0,0,0,5"/>
                     <RadioButton x:Name="sortByDesc"
-                                 Content="{DynamicResource SortDescending}"
-                                 Margin="10,0"/>
+                                 Content="{DynamicResource SortDescending}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -72,7 +91,7 @@
         <!-- Then By 1 -->
         <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Padding="10"
                   Margin="0,10,0,0">
             <Grid>
@@ -95,15 +114,15 @@
                           Grid.Column="2"
                           Margin="5,0"/>
                 <StackPanel Grid.Column="4"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            Orientation="Vertical"
+                            HorizontalAlignment="Left"
+                            Margin="10,0">
                     <RadioButton x:Name="thenByAsc1"
                                  Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
-                                 Margin="10,0"/>
+                                 Margin="0,0,0,5"/>
                     <RadioButton x:Name="thenByDesc1"
-                                 Content="{DynamicResource SortDescending}"
-                                 Margin="10,0"/>
+                                 Content="{DynamicResource SortDescending}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -111,7 +130,7 @@
         <!-- Then By 2 -->
         <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
-                  Grid.Row="2"
+                  Grid.Row="3"
                   Padding="10"
                   Margin="0,10,0,0">
             <Grid>
@@ -134,15 +153,15 @@
                           Grid.Column="2"
                           Margin="5,0"/>
                 <StackPanel Grid.Column="4"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            Orientation="Vertical"
+                            HorizontalAlignment="Left"
+                            Margin="10,0">
                     <RadioButton x:Name="thenByAsc2"
                                  Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
-                                 Margin="10,0"/>
+                                 Margin="0,0,0,5"/>
                     <RadioButton x:Name="thenByDesc2"
-                                 Content="{DynamicResource SortDescending}"
-                                 Margin="10,0"/>
+                                 Content="{DynamicResource SortDescending}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -150,7 +169,7 @@
         <!-- My List Has -->
         <GroupBox Header="{DynamicResource SortMyListHas}"
                   FontWeight="Bold"
-                  Grid.Row="3"
+                  Grid.Row="4"
                   Padding="10"
                   Margin="0,10,0,0">
             <StackPanel Orientation="Horizontal">
@@ -166,10 +185,10 @@
         </GroupBox>
 
         <!-- Spacer -->
-        <Grid Grid.Row="4"/>
+        <Grid Grid.Row="5"/>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="5"
+        <StackPanel Grid.Row="6"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,20,0,0">

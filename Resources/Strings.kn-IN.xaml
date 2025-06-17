@@ -64,6 +64,8 @@
   <sys:String x:Key="SortSortColumnOnly">ಕೇವಲ ಕಾಲಮ್ ವಿಂಗಡಿಸಿ</sys:String>
   <sys:String x:Key="SortCaseSensitive">ಕ್ಷರ ಸಂವೇದಿ</sys:String>
   <sys:String x:Key="SortLanguage">ವಿಂಗಡಿಸುವ ಭಾಷೆ</sys:String>
+  <sys:String x:Key="SortHelp">ವಿಂಗಡಿಸುವ ಕುರಿತು ಸಹಾಯ</sys:String>
+
 
 
 
