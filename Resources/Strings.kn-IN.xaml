@@ -39,24 +39,31 @@
   <!-- Paragraph -->
   <sys:String x:Key="Paragraph">ಪ್ಯಾರಾಗ್ರಾಫ್</sys:String>
 
-<sys:String x:Key="Sort">ವಿಂಗಡಿಸಿ</sys:String>
-<sys:String x:Key="SortBy">ವಿಂಗಡಿಸಲು</sys:String>
-<sys:String x:Key="ThenBy">ನಂತರ</sys:String>
-<sys:String x:Key="Type">ಪ್ರಕಾರ:</sys:String>
-<sys:String x:Key="Paragraphs">ಪ್ಯಾರಾಗಳ</sys:String>
-<sys:String x:Key="Headings">ಶೀರ್ಷಿಕೆಗಳು</sys:String>
-<sys:String x:Key="Field1">ಕ್ಷೇತ್ರ ೧</sys:String>
-<sys:String x:Key="Text">ಪಠ್ಯ</sys:String>
-<sys:String x:Key="Number">ಸಂಖ್ಯೆ</sys:String>
-<sys:String x:Key="Date">ದಿನಾಂಕ</sys:String>
-<sys:String x:Key="Ascending">ಏರಿಕೆಯ ಕ್ರಮ</sys:String>
-<sys:String x:Key="Descending">ಇಳಿಕೆಯ ಕ್ರಮ</sys:String>
-<sys:String x:Key="MyListHas">ನನ್ನ ಪಟ್ಟಿಯಲ್ಲಿ ಇದೆ</sys:String>
-<sys:String x:Key="HeaderRow">ಶೀರ್ಷಿಕೆ ಸಾಲು</sys:String>
-<sys:String x:Key="NoHeaderRow">ಶೀರ್ಷಿಕೆ ಇಲ್ಲದ ಸಾಲು</sys:String>
-<sys:String x:Key="OK">ಸರಿ</sys:String>
-<sys:String x:Key="Cancel">ರದ್ದುಮಾಡು</sys:String>
-
+  <sys:String x:Key="Sort">ವಿಂಗಡನೆ</sys:String>
+  <sys:String x:Key="SortSortBy">ಇದರಿಂದ ವಿಂಗಡಿಸಿ</sys:String>
+  <sys:String x:Key="SortThenBy">ನಂತರ ಇದರಿಂದ</sys:String>
+  <sys:String x:Key="SortText">ಪಠ್ಯ</sys:String>
+  <sys:String x:Key="SortNumber">ಸಂಖ್ಯೆ</sys:String>
+  <sys:String x:Key="SortDate">ದಿನಾಂಕ</sys:String>
+  <sys:String x:Key="SortAscending">ಆರೋಹಣ ಕ್ರಮ</sys:String>
+  <sys:String x:Key="SortDescending">ಅವರೋಹಣ ಕ್ರಮ</sys:String>
+  <sys:String x:Key="SortType">ಪ್ರಕಾರ</sys:String>
+  <sys:String x:Key="SortParagraphs">ಪ್ಯಾರಾಗಳು</sys:String>
+  <sys:String x:Key="SortHeadings">ಶೀರ್ಷಿಕೆಗಳು</sys:String>
+  <sys:String x:Key="SortField1">ಫೀಲ್ಡ್ 1</sys:String>
+  <sys:String x:Key="SortMyListHas">ನನ್ನ ಪಟ್ಟಿಯಲ್ಲಿ ಇದೆ</sys:String>
+  <sys:String x:Key="SortHeaderRow">ಹೆಡರ್ ಸಾಲು</sys:String>
+  <sys:String x:Key="SortNoHeaderRow">ಹೆಡರ್ ಇಲ್ಲದ ಸಾಲು</sys:String>
+  <sys:String x:Key="SortOptions">ಆಯ್ಕೆಗಳು</sys:String>
+  <sys:String x:Key="SortOK">ಸರಿ</sys:String>
+  <sys:String x:Key="SortCancel">ರದ್ದುಮಾಡಿ</sys:String>
+  <sys:String x:Key="SortSeparateBy">ಈ ಮೂಲಕ ಫೀಲ್ಡ್ ವಿಭಜಿಸಿ</sys:String>
+  <sys:String x:Key="SortTabs">ಟ್ಯಾಬ್‌ಗಳು</sys:String>
+  <sys:String x:Key="SortComma">ಅಲ್ಪವಿರಾಮ</sys:String>
+  <sys:String x:Key="SortOther">ಇತರೆ</sys:String>
+  <sys:String x:Key="SortSortColumnOnly">ಕೇವಲ ಕಾಲಮ್ ವಿಂಗಡಿಸಿ</sys:String>
+  <sys:String x:Key="SortCaseSensitive">ಕ್ಷರ ಸಂವೇದಿ</sys:String>
+  <sys:String x:Key="SortLanguage">ವಿಂಗಡಿಸುವ ಭಾಷೆ</sys:String>
 
 
 

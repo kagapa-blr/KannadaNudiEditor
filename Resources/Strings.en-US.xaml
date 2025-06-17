@@ -46,22 +46,30 @@
   <!-- =========================== -->
   <sys:String x:Key="Paragraph">Paragraph</sys:String>
   <sys:String x:Key="Sort">Sort</sys:String>
-  <sys:String x:Key="SortBy">Sort By</sys:String>
-  <sys:String x:Key="ThenBy">Then By</sys:String>
-  <sys:String x:Key="Type">Type:</sys:String>
-  <sys:String x:Key="Paragraphs">Paragraphs</sys:String>
-  <sys:String x:Key="Headings">Headings</sys:String>
-  <sys:String x:Key="Field1">Field 1</sys:String>
-  <sys:String x:Key="Text">Text</sys:String>
-  <sys:String x:Key="Number">Number</sys:String>
-  <sys:String x:Key="Date">Date</sys:String>
-  <sys:String x:Key="Ascending">Ascending</sys:String>
-  <sys:String x:Key="Descending">Descending</sys:String>
-  <sys:String x:Key="MyListHas">My list has</sys:String>
-  <sys:String x:Key="HeaderRow">Header row</sys:String>
-  <sys:String x:Key="NoHeaderRow">No header row</sys:String>
-  <sys:String x:Key="OK">OK</sys:String>
-  <sys:String x:Key="Cancel">Cancel</sys:String>
+  <sys:String x:Key="SortSortBy">Sort by</sys:String>
+  <sys:String x:Key="SortThenBy">Then by</sys:String>
+  <sys:String x:Key="SortText">Text</sys:String>
+  <sys:String x:Key="SortNumber">Number</sys:String>
+  <sys:String x:Key="SortDate">Date</sys:String>
+  <sys:String x:Key="SortAscending">Ascending</sys:String>
+  <sys:String x:Key="SortDescending">Descending</sys:String>
+  <sys:String x:Key="SortType">Type</sys:String>
+  <sys:String x:Key="SortParagraphs">Paragraphs</sys:String>
+  <sys:String x:Key="SortHeadings">Headings</sys:String>
+  <sys:String x:Key="SortField1">Field 1</sys:String>
+  <sys:String x:Key="SortMyListHas">My list has</sys:String>
+  <sys:String x:Key="SortHeaderRow">Header row</sys:String>
+  <sys:String x:Key="SortNoHeaderRow">No header row</sys:String>
+  <sys:String x:Key="SortOptions">Options</sys:String>
+  <sys:String x:Key="SortOK">OK</sys:String>
+  <sys:String x:Key="SortCancel">Cancel</sys:String>
+  <sys:String x:Key="SortSeparateBy">Separate fields using</sys:String>
+  <sys:String x:Key="SortTabs">Tabs</sys:String>
+  <sys:String x:Key="SortComma">Comma</sys:String>
+  <sys:String x:Key="SortOther">Other</sys:String>
+  <sys:String x:Key="SortSortColumnOnly">Sort column only</sys:String>
+  <sys:String x:Key="SortCaseSensitive">Case sensitive</sys:String>
+  <sys:String x:Key="SortLanguage">Sorting language</sys:String>
 
 
 

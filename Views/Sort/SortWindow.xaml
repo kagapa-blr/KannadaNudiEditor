@@ -12,21 +12,15 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Sort By -->
             <RowDefinition Height="Auto"/>
-            <!-- Then By 1 -->
             <RowDefinition Height="Auto"/>
-            <!-- Then By 2 -->
             <RowDefinition Height="Auto"/>
-            <!-- My List Has -->
             <RowDefinition Height="*"/>
-            <!-- Spacer -->
             <RowDefinition Height="Auto"/>
-            <!-- Buttons -->
         </Grid.RowDefinitions>
 
         <!-- Sort By Group -->
-        <GroupBox Header="{DynamicResource SortBy}"
+        <GroupBox Header="{DynamicResource SortSortBy}"
                   FontWeight="Bold"
                   Grid.Row="0"
                   Padding="10">
@@ -43,12 +37,12 @@
                           Grid.Column="0"
                           Margin="0,0,10,0"
                           SelectedIndex="0">
-                    <ComboBoxItem Content="{DynamicResource Paragraphs}"/>
-                    <ComboBoxItem Content="{DynamicResource Headings}"/>
-                    <ComboBoxItem Content="{DynamicResource Field1}"/>
+                    <ComboBoxItem Content="{DynamicResource SortParagraphs}"/>
+                    <ComboBoxItem Content="{DynamicResource SortHeadings}"/>
+                    <ComboBoxItem Content="{DynamicResource SortField1}"/>
                 </ComboBox>
 
-                <TextBlock Text="{DynamicResource Type}"
+                <TextBlock Text="{DynamicResource SortType}"
                            VerticalAlignment="Center"
                            Grid.Column="1"
                            Margin="10,0"/>
@@ -56,27 +50,27 @@
                           Grid.Column="2"
                           Margin="5,0"
                           SelectedIndex="0">
-                    <ComboBoxItem Content="{DynamicResource Text}"/>
-                    <ComboBoxItem Content="{DynamicResource Number}"/>
-                    <ComboBoxItem Content="{DynamicResource Date}"/>
+                    <ComboBoxItem Content="{DynamicResource SortText}"/>
+                    <ComboBoxItem Content="{DynamicResource SortNumber}"/>
+                    <ComboBoxItem Content="{DynamicResource SortDate}"/>
                 </ComboBox>
 
                 <StackPanel Grid.Column="4"
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
                     <RadioButton x:Name="sortByAsc"
-                                 Content="{DynamicResource Ascending}"
+                                 Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
                                  Margin="10,0"/>
                     <RadioButton x:Name="sortByDesc"
-                                 Content="{DynamicResource Descending}"
+                                 Content="{DynamicResource SortDescending}"
                                  Margin="10,0"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
 
-        <!-- Then By Group 1 -->
-        <GroupBox Header="{DynamicResource ThenBy}"
+        <!-- Then By 1 -->
+        <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
                   Grid.Row="1"
                   Padding="10"
@@ -93,7 +87,7 @@
                 <ComboBox x:Name="thenByField1"
                           Grid.Column="0"
                           Margin="0,0,10,0"/>
-                <TextBlock Text="{DynamicResource Type}"
+                <TextBlock Text="{DynamicResource SortType}"
                            VerticalAlignment="Center"
                            Grid.Column="1"
                            Margin="10,0"/>
@@ -104,18 +98,18 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
                     <RadioButton x:Name="thenByAsc1"
-                                 Content="{DynamicResource Ascending}"
+                                 Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
                                  Margin="10,0"/>
                     <RadioButton x:Name="thenByDesc1"
-                                 Content="{DynamicResource Descending}"
+                                 Content="{DynamicResource SortDescending}"
                                  Margin="10,0"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
 
-        <!-- Then By Group 2 -->
-        <GroupBox Header="{DynamicResource ThenBy}"
+        <!-- Then By 2 -->
+        <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
                   Grid.Row="2"
                   Padding="10"
@@ -132,7 +126,7 @@
                 <ComboBox x:Name="thenByField2"
                           Grid.Column="0"
                           Margin="0,0,10,0"/>
-                <TextBlock Text="{DynamicResource Type}"
+                <TextBlock Text="{DynamicResource SortType}"
                            VerticalAlignment="Center"
                            Grid.Column="1"
                            Margin="10,0"/>
@@ -143,29 +137,29 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
                     <RadioButton x:Name="thenByAsc2"
-                                 Content="{DynamicResource Ascending}"
+                                 Content="{DynamicResource SortAscending}"
                                  IsChecked="True"
                                  Margin="10,0"/>
                     <RadioButton x:Name="thenByDesc2"
-                                 Content="{DynamicResource Descending}"
+                                 Content="{DynamicResource SortDescending}"
                                  Margin="10,0"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
 
-        <!-- My List Has Group -->
-        <GroupBox Header="{DynamicResource MyListHas}"
+        <!-- My List Has -->
+        <GroupBox Header="{DynamicResource SortMyListHas}"
                   FontWeight="Bold"
                   Grid.Row="3"
                   Padding="10"
                   Margin="0,10,0,0">
             <StackPanel Orientation="Horizontal">
                 <RadioButton x:Name="hasHeaderRow"
-                             Content="{DynamicResource HeaderRow}"
+                             Content="{DynamicResource SortHeaderRow}"
                              IsChecked="True"
                              GroupName="Header"/>
                 <RadioButton x:Name="noHeaderRow"
-                             Content="{DynamicResource NoHeaderRow}"
+                             Content="{DynamicResource SortNoHeaderRow}"
                              GroupName="Header"
                              Margin="20,0,0,0"/>
             </StackPanel>
@@ -174,16 +168,16 @@
         <!-- Spacer -->
         <Grid Grid.Row="4"/>
 
-        <!-- OK / Cancel Buttons -->
+        <!-- Buttons -->
         <StackPanel Grid.Row="5"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,20,0,0">
-            <Button Content="{DynamicResource OK}"
+            <Button Content="{DynamicResource SortOK}"
                     Width="90"
                     Margin="0,0,10,0"
                     Click="OkButton_Click"/>
-            <Button Content="{DynamicResource Cancel}"
+            <Button Content="{DynamicResource SortCancel}"
                     Width="90"
                     Click="CancelButton_Click"/>
         </StackPanel>
