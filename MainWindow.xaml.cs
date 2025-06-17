@@ -1882,9 +1882,11 @@ namespace KannadaNudiEditor
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            var sortWindow = new SortWindow();
+            bool isEnglish = LanguageToggleButton.IsChecked == true;
+            var sortWindow = new SortWindow(isEnglish);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
+
         }
 
 
