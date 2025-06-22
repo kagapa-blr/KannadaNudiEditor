@@ -76,6 +76,48 @@ These commands will install the latest stable versions of the required NuGet pac
 
 ---
 
+
+---
+
+## Python Environment Setup for Speech-to-Text
+
+The Speech-to-Text feature uses a Python script. Follow the steps below to set up the environment and build the executable.
+
+### Setup Instructions
+
+```powershell
+# Create a Python virtual environment
+python -m venv venv
+
+# Temporarily allow script execution (PowerShell users only)
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+
+# Activate the virtual environment
+.env\Scripts\Activate.ps1
+
+# Install required Python packages
+pip install SpeechRecognition PyAudio
+pip install pyinstaller
+
+# Build the executable from recognize_mic.py
+pyinstaller --onefile recognize_mic.py
+```
+
+### Output
+
+After the build completes, the `.exe` file will be located in the `dist` folder:
+
+```
+dist/
+└── recognize_mic.exe
+```
+
+Ensure that `recognize_mic.py` is located in the same directory before running the commands above.
+
+---
+
+
+
 ## 🚀 How to Use Kannada Nudi Editor
 
 1. **Download and Install**
