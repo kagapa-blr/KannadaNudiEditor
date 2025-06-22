@@ -5,6 +5,7 @@ using Syncfusion.Windows.Tools.Controls;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
 using KannadaNudiEditor.Views.Sort;
+using System.Windows.Media.Imaging;
 
 namespace KannadaNudiEditor
 {
@@ -34,6 +36,21 @@ namespace KannadaNudiEditor
 
 #endif
         #endregion
+
+
+        private Process? _speechProcess;
+        private StreamWriter? _pythonInput;
+        private Task? _outputReaderTask;
+
+
+        private bool _isListeningKannada = false;
+        private bool _isListeningEnglish = false;
+
+
+
+
+
+
 
 
 
@@ -1810,35 +1827,158 @@ namespace KannadaNudiEditor
 
 
 
+
+        // Add these class-level fields in MainWindow.xaml.cs
+
+        private string _activeLanguage = null;
+
+
+
+        private void StartPythonProcess(string languageCode)
+        {
+            if (_speechProcess != null && !_speechProcess.HasExited && _activeLanguage == languageCode)
+                return; // Already running with the same language
+
+            StopPythonProcess(); // Stop if another language is running
+
+            var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "recognize_mic.exe");
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = languageCode,
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8
+            };
+
+            _speechProcess = new Process { StartInfo = psi, EnableRaisingEvents = true };
+            _speechProcess.Start();
+            _pythonInput = _speechProcess.StandardInput;
+            _activeLanguage = languageCode;
+
+            _outputReaderTask = Task.Run(async () =>
+            {
+                while (!_speechProcess.HasExited && !_speechProcess.StandardOutput.EndOfStream)
+                {
+                    var line = await _speechProcess.StandardOutput.ReadLineAsync();
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            richTextBoxAdv.Selection.InsertText(line + " ");
+                        });
+                    }
+                }
+            });
+
+            Task.Run(async () =>
+            {
+                var errorBuilder = new StringBuilder();
+
+                while (!_speechProcess.StandardError.EndOfStream)
+                {
+                    var err = await _speechProcess.StandardError.ReadLineAsync();
+                    if (!string.IsNullOrWhiteSpace(err))
+                    {
+                        errorBuilder.AppendLine(err);
+                    }
+                }
+
+                string errorMessage = errorBuilder.ToString().Trim();
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        MessageBox.Show(errorMessage, "Speech Recognition Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    });
+                }
+            });
+        }
+
         private void ToggleKannadaSpeech_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Kannada speech recognition toggled.", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!_isListeningKannada)
+            {
+                StartPythonProcess("kn-IN");
+                _pythonInput?.WriteLine("start");
+                KannadaSpeechButton.Content = "Stop Kannada";
+            }
+            else
+            {
+                _pythonInput?.WriteLine("stop");
+                KannadaSpeechButton.Content = "Start Kannada";
+            }
+            _isListeningKannada = !_isListeningKannada;
+            _isListeningEnglish = false;
         }
 
         private void ToggleEnglishSpeech_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("English speech recognition toggled.", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!_isListeningEnglish)
+            {
+                StartPythonProcess("en-IN");
+                _pythonInput?.WriteLine("start");
+                EnglishSpeechButton.Content = "Stop English";
+            }
+            else
+            {
+                _pythonInput?.WriteLine("stop");
+                EnglishSpeechButton.Content = "Start English";
+            }
+            _isListeningEnglish = !_isListeningEnglish;
+            _isListeningKannada = false;
         }
 
-        private void StartKannadaSpeech_Click(object sender, RoutedEventArgs e)
+        private void StopPythonProcess()
         {
-            MessageBox.Show("Starting Kannada speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                if (_speechProcess != null && !_speechProcess.HasExited)
+                {
+                    _pythonInput?.WriteLine("exit");
+                    _speechProcess.WaitForExit(2000);
+                    _speechProcess.Kill(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error stopping Python process: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                _speechProcess?.Dispose();
+                _speechProcess = null;
+                _pythonInput = null;
+                _outputReaderTask = null;
+                _activeLanguage = null;
+                _isListeningKannada = false;
+                _isListeningEnglish = false;
+            }
         }
 
-        private void StopKannadaSpeech_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Stopping Kannada speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
 
-        private void StartEnglishSpeech_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Starting English speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
 
-        private void StopEnglishSpeech_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Stopping English speech recognition...", "Speech To Text", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

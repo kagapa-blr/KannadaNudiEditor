@@ -3,49 +3,49 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <RootNamespace>KannadaNudiEditor</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-      <ApplicationIcon>Assets\nudi.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\nudi.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <!-- Remove unnecessary files from default inclusion -->
   <ItemGroup>
     <None Remove="Assets\kannadaKeyboard.exe" />
     <None Remove="Images\Page Layout\pagesetup.jpg" />
   </ItemGroup>
 
+  <!-- Explicitly include EXEs, Python script, and dictionary files -->
   <ItemGroup>
-    <EmbeddedResource Include="Assets\kannadaKeyboard.exe">
+    <Content Include="Assets\kannadaKeyboard.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
+    </Content>
+  <Content Include="Assets\recognize_mic.exe">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
 
 
-  <ItemGroup>
     <None Update="Assets\Custom_MyDictionary_kn_IN.dic">
-       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+
     <None Update="Assets\kn_IN.dic">
-       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-        <None Update="Assets\default.dic">
-       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
+    <None Update="Assets\default.dic">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
+  <!-- Resource images -->
+  <ItemGroup>
+    <Resource Include="Images\**\*.png" />
+    <Resource Include="Assets\**\*.png" />
+  </ItemGroup>
 
-
-
- <ItemGroup>
-  <Resource Include="Images\**\*.png" />
-  <Resource Include="Assets\**\*.png" />
-</ItemGroup>
-
- 
-
- 
- 
+  <!-- NuGet Packages -->
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.11" />

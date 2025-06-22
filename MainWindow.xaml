@@ -1769,8 +1769,8 @@
                                                  Padding="2"
                                                  Label="{DynamicResource Sort}"
                                                  SmallIcon="/Images/Home/Paragraph/sort.png"
-                                                   Click="SortButton_Click">
-                                                 
+                                                 Click="SortButton_Click">
+
                             <Syncfusion:RibbonButton.ToolTip>
                                 <Syncfusion:ScreenTip Description="{DynamicResource SortShortcut}"
                                                       MaxWidth="250">
@@ -2698,132 +2698,67 @@
             </Syncfusion:RibbonTab>
 
 
-
-
             <Syncfusion:RibbonTab Caption="{DynamicResource SpeechToTextTab}">
 
                 <!-- Kannada Speech Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource KannadaSpeechGroup}"
-                                      IsLauncherButtonVisible="False">
+                        IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource KannadaSpeechGroupDescription}"
-                                       TextWrapping="Wrap"/>
+                                    TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
-                        <Button Content="{DynamicResource StartKannadaSpeech}"
+                            HorizontalAlignment="Center">
+                        <!-- Toggle Kannada Speech Button -->
+                        <Button x:Name="KannadaSpeechButton"
                                 Height="32"
-                                Width="140"
+                                Width="32"
                                 Margin="5"
-                                Click="StartKannadaSpeech_Click">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource StartKannadaSpeech}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource StartKannadaSpeechTip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-
-                        <Button Content="{DynamicResource StopKannadaSpeech}"
-                                Height="32"
-                                Width="140"
-                                Margin="5"
-                                Click="StopKannadaSpeech_Click">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource StopKannadaSpeechTip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
+                                Click="ToggleKannadaSpeech_Click"
+                                ToolTip="{DynamicResource StartKannadaSpeechTip}">
+                            <Image x:Name="KannadaSpeechIcon"
+                                   Source="/Images/speechToText/start-microphone.png"
+                                   Width="24"
+                                    Height="24"
+                                   VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
                 <!-- English Speech Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource EnglishSpeechGroup}"
-                                      IsLauncherButtonVisible="False">
+                        IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource EnglishSpeechGroupDescription}"
-                                       TextWrapping="Wrap"/>
+                                    TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
-                        <Button Content="{DynamicResource StartEnglishSpeech}"
+                            HorizontalAlignment="Center">
+                        <!-- Toggle English Speech Button -->
+                        <Button x:Name="EnglishSpeechButton"
                                 Height="32"
-                                Width="140"
+                                Width="32"
                                 Margin="5"
-                                Click="StartEnglishSpeech_Click">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource StartEnglishSpeech}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource StartEnglishSpeechTip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-
-                        <Button Content="{DynamicResource StopEnglishSpeech}"
-                                Height="32"
-                                Width="140"
-                                Margin="5"
-                                Click="StopEnglishSpeech_Click">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource StopEnglishSpeech}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource StopEnglishSpeechTip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
+                                Click="ToggleEnglishSpeech_Click"
+                                ToolTip="{DynamicResource StartEnglishSpeechTip}">
+                            <Image x:Name="EnglishSpeechIcon"
+                                   Source="/Images/speechToText/start-microphone.png"
+                                   Width="24"
+                                    Height="24"
+                                   VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
             </Syncfusion:RibbonTab>
-
 
 
 
@@ -3001,7 +2936,8 @@
                 <Syncfusion:SpellChecker IsEnabled="True"
                                          IgnoreUppercaseWords="False"
                                          IgnoreAlphaNumericWords="True"
-                                         UseFrameworkSpellCheck="False">
+                                         UseFrameworkSpellCheck="False"
+                                         IgnoreURIs="true">
 
 
                 </Syncfusion:SpellChecker>
