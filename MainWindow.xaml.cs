@@ -1075,6 +1075,10 @@ namespace KannadaNudiEditor
             {
                 fontFamilySource.Add(fontfamily.Source);
             }
+
+            // Sort alphabetically
+            fontFamilySource.Sort();
+
             return fontFamilySource;
         }
         internal DocumentStyle GetStyle(string styleName)
@@ -1883,7 +1887,7 @@ namespace KannadaNudiEditor
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             bool isEnglish = LanguageToggleButton.IsChecked == true;
-            var sortWindow = new SortWindow(isEnglish);
+            var sortWindow = new SortWindow(isEnglish, richTextBoxAdv);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
 
