@@ -384,6 +384,7 @@ namespace KannadaNudiEditor
         {
             richTextBoxAdv.PrintDocument();
             richTextBoxAdv.Focus();
+            ribbon.IsBackStageVisible = false;
         }
         /// <summary>
         /// On new executed.
@@ -392,8 +393,10 @@ namespace KannadaNudiEditor
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
         private void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            richTextBoxAdv.Document = new DocumentAdv();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
             richTextBoxAdv.Focus();
+            ribbon.IsBackStageVisible = false;
         }
         /// <summary>
         /// On open executed.
@@ -414,8 +417,31 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            CloseBackstage();
             SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand.Execute(null, richTextBoxAdv);
         }
+
+
+
+
+        void OnlineHelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchUri(new Uri("https://help.syncfusion.com/wpf").AbsoluteUri);
+            CloseBackstage();
+        }
+        /// <summary>
+        /// On getting started button clicked.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
+        /// <remarks></remarks>
+        void GettingStartedButton_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchUri(new Uri("https://help.syncfusion.com/wpf/sfrichtextboxadv/getting-started").AbsoluteUri);
+            CloseBackstage();
+        }
+
+
         /// <summary>
         /// Wires up the events.
         /// </summary>

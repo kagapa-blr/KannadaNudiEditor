@@ -360,6 +360,7 @@
                                                                      Icon="Images/Home/Editing/RestrictEditing.png"
                                                                      IconSize="30,30"
                                                                      Label="RestrictEditing"
+                                                                     Click="BackstageRestrictEditingButton_Click"
                                                                      Description="{DynamicResource backStageRestrictEditingDescription}"/>
                                         <Syncfusion:SimpleMenuButton x:Name="backstageEncryptDocumentButton"
                                                                      Icon="Images/Backstage/Protect.png"
@@ -396,6 +397,7 @@
                                     HorizontalAlignment="Left"/>
                             <Grid  Grid.Column="2">
                                 <Button x:Name="rteButton"
+                                        Click="BackstageButton_Click"
                                         Margin="20 30"
                                         Height="250"
                                         Width="390"
@@ -582,6 +584,7 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Syncfusion:RibbonButton x:Name="onlineHelpButton"
+                                                             Click="OnlineHelpButton_Click"
                                                              SizeForm="Large"
                                                              Width="87"
                                                              LargeIcon="/Images/Backstage/Help.png"
@@ -617,6 +620,7 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Syncfusion:RibbonButton x:Name="gettingStartedButton"
+                                         Click="GettingStartedButton_Click"
                                                              SizeForm="Large"
                                                              Width="87"
                                                              Height="80"
@@ -2639,6 +2643,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- Start Button -->
@@ -2702,16 +2707,16 @@
 
                 <!-- Kannada Speech Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource KannadaSpeechGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource KannadaSpeechGroupDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                            HorizontalAlignment="Center">
+                                HorizontalAlignment="Center">
                         <!-- Toggle Kannada Speech Button -->
                         <Button x:Name="KannadaSpeechButton"
                                 Height="32"
@@ -2722,25 +2727,25 @@
                             <Image x:Name="KannadaSpeechIcon"
                                    Source="/Images/speechToText/start-microphone.png"
                                    Width="24"
-                                    Height="24"
+                                   Height="24"
                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
+                                   HorizontalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
                 <!-- English Speech Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource EnglishSpeechGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource EnglishSpeechGroupDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                            HorizontalAlignment="Center">
+                                HorizontalAlignment="Center">
                         <!-- Toggle English Speech Button -->
                         <Button x:Name="EnglishSpeechButton"
                                 Height="32"
@@ -2751,9 +2756,9 @@
                             <Image x:Name="EnglishSpeechIcon"
                                    Source="/Images/speechToText/start-microphone.png"
                                    Width="24"
-                                    Height="24"
+                                   Height="24"
                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
+                                   HorizontalAlignment="Center"/>
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
