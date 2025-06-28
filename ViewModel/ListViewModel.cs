@@ -18,7 +18,7 @@ namespace KannadaNudiEditor
     internal class ListViewModel : INotifyPropertyChanged
     {
         #region Fields
-        private string listName;
+        private string? listName;
 
         private SfRichTextBoxAdv? richTextBoxAdv = null;
 

@@ -8,7 +8,7 @@ namespace KannadaNudiEditor.Views.Sort
     {
         private readonly bool isEnglish;
         private readonly SfRichTextBoxAdv richTextBoxAdv; // ✅ Using correct type
-        private SortHelpWindow helpWindow;
+        private SortHelpWindow? helpWindow;
 
         public SortWindow(bool isEnglishLanguage, SfRichTextBoxAdv richTextBox)
         {

@@ -1856,7 +1856,7 @@ namespace KannadaNudiEditor
 
         // Add these class-level fields in MainWindow.xaml.cs
 
-        private string _activeLanguage = null;
+        private string? _activeLanguage = null;
 
 
 
