@@ -480,4 +480,15 @@
 
 
 
+
+  <!-- spellcheck -->
+
+        <sys:String x:Key="SpellCheck_Tab">Spell Check</sys:String>
+        <sys:String x:Key="SpellCheck_EnableHeader">Enable Spell Check</sys:String>
+        <sys:String x:Key="SpellCheck_DisableHeader">Disable Spell Check</sys:String>
+        <sys:String x:Key="SpellCheck_EnableTip">Turn ON spell checking for supported fields.</sys:String>
+        <sys:String x:Key="SpellCheck_DisableTip">Turn OFF spell checking.</sys:String>
+        <sys:String x:Key="SpellCheck_EnableTooltip">Enable Spell Check</sys:String>
+        <sys:String x:Key="SpellCheck_DisableTooltip">Disable Spell Check</sys:String>
+
 </ResourceDictionary>

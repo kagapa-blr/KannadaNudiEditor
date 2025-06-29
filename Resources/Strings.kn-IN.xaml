@@ -441,5 +441,14 @@
 
 
 
+
+  <sys:String x:Key="SpellCheck_Tab">ಅಕ್ಷರ ಪರಿಶೀಲನೆ</sys:String>
+  <sys:String x:Key="SpellCheck_EnableHeader_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheck_DisableHeader_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheck_EnableTip_KN">ಮದ್ದೆಪಡಿಸಿದ ಕ್ಷೇತ್ರಗಳಿಗಾಗಿ ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+  <sys:String x:Key="SpellCheck_DisableTip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+  <sys:String x:Key="SpellCheck_EnableTooltip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheck_DisableTooltip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+
 </ResourceDictionary>
 

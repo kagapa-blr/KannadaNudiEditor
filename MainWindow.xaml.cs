@@ -95,6 +95,11 @@ namespace KannadaNudiEditor
         #endregion
 
 
+
+
+
+        private Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker spellChecker;
+
         private void ConfigureSpellChecker()
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -102,14 +107,15 @@ namespace KannadaNudiEditor
             string customDictionaryPath1 = Path.Combine(basePath, "Assets", "Custom_MyDictionary_kn_IN.dic");
             string customDictionaryPath2 = Path.Combine(basePath, "Assets", "default.dic");
 
-            // Debug: confirm paths exist
+            // Optional: Debug missing files
             if (!File.Exists(dictionaryPath)) MessageBox.Show("Missing: " + dictionaryPath);
             if (!File.Exists(customDictionaryPath1)) MessageBox.Show("Missing: " + customDictionaryPath1);
             if (!File.Exists(customDictionaryPath2)) MessageBox.Show("Missing: " + customDictionaryPath2);
 
-            var spellChecker = new Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker
+            // Create spell checker instance (but don't enable it)
+            spellChecker = new Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker
             {
-                IsEnabled = true,
+                IsEnabled = false, // Initially off
                 IgnoreUppercaseWords = false,
                 IgnoreAlphaNumericWords = true,
                 UseFrameworkSpellCheck = false,
@@ -119,8 +125,10 @@ namespace KannadaNudiEditor
             spellChecker.CustomDictionaries.Add(customDictionaryPath1);
             spellChecker.CustomDictionaries.Add(customDictionaryPath2);
 
+            // Assign to RichTextBoxAdv
             richTextBoxAdv.SpellChecker = spellChecker;
         }
+
 
 
 
@@ -2063,6 +2071,25 @@ namespace KannadaNudiEditor
 
 
 
+
+
+        private void EnableSpellCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (spellChecker != null)
+            {
+                spellChecker.IsEnabled = true;
+                MessageBox.Show("Spell check enabled");
+            }
+        }
+
+        private void DisableSpellCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (spellChecker != null)
+            {
+                spellChecker.IsEnabled = false;
+                MessageBox.Show("Spell check disabled");
+            }
+        }
 
 
 

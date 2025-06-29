@@ -620,7 +620,7 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Syncfusion:RibbonButton x:Name="gettingStartedButton"
-                                         Click="GettingStartedButton_Click"
+                                                             Click="GettingStartedButton_Click"
                                                              SizeForm="Large"
                                                              Width="87"
                                                              Height="80"
@@ -2920,6 +2920,63 @@
             </Syncfusion:RibbonTab>
 
 
+            <Syncfusion:RibbonTab Caption="Spell Check">
+
+                <!-- Enable Spell Check Group -->
+                <Syncfusion:RibbonBar Header="Enable Spell Check"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="Turn ON spell checking for supported fields."
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <StackPanel Margin="0"
+                                HorizontalAlignment="Center">
+                        <Button x:Name="EnableSpellCheckButton"
+                                Height="32"
+                                Width="32"
+                                Margin="5"
+                                Click="EnableSpellCheck_Click"
+                                ToolTip="Enable Spell Check">
+                            <Image Source="/Images/spellcheck/start-spellcheck.png"
+                                   Width="24"
+                                   Height="24"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Disable Spell Check Group -->
+                <Syncfusion:RibbonBar Header="Disable Spell Check"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="Turn OFF spell checking."
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <StackPanel Margin="0"
+                                HorizontalAlignment="Center">
+                        <Button x:Name="DisableSpellCheckButton"
+                                Height="32"
+                                Width="32"
+                                Margin="5"
+                                Click="DisableSpellCheck_Click"
+                                ToolTip="Disable Spell Check">
+                            <Image Source="/Images/spellcheck/stop-spellcheck.png"
+                                   Width="24"
+                                   Height="24"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+            </Syncfusion:RibbonTab>
 
 
 
