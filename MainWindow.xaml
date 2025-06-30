@@ -2920,26 +2920,40 @@
             </Syncfusion:RibbonTab>
 
 
-            <Syncfusion:RibbonTab Caption="Spell Check">
+            <Syncfusion:RibbonTab Caption="{DynamicResource SpellCheckTab}">
 
                 <!-- Enable Spell Check Group -->
-                <Syncfusion:RibbonBar Header="Enable Spell Check"
+                <Syncfusion:RibbonBar Header="{DynamicResource SpellCheckEnableHeader}"
                                       IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="Turn ON spell checking for supported fields."
+                            <TextBlock Text="{DynamicResource SpellCheckEnableTip}"
                                        TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
+                            HorizontalAlignment="Center">
                         <Button x:Name="EnableSpellCheckButton"
                                 Height="32"
                                 Width="32"
                                 Margin="5"
-                                Click="EnableSpellCheck_Click"
-                                ToolTip="Enable Spell Check">
+                                Click="EnableSpellCheck_Click">
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource SpellCheckEnableHeader}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource SpellCheckEnableTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
                             <Image Source="/Images/spellcheck/start-spellcheck.png"
                                    Width="24"
                                    Height="24"
@@ -2950,23 +2964,37 @@
                 </Syncfusion:RibbonBar>
 
                 <!-- Disable Spell Check Group -->
-                <Syncfusion:RibbonBar Header="Disable Spell Check"
+                <Syncfusion:RibbonBar Header="{DynamicResource SpellCheckDisableHeader}"
                                       IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="Turn OFF spell checking."
+                            <TextBlock Text="{DynamicResource SpellCheckDisableTip}"
                                        TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
+                            HorizontalAlignment="Center">
                         <Button x:Name="DisableSpellCheckButton"
                                 Height="32"
                                 Width="32"
                                 Margin="5"
-                                Click="DisableSpellCheck_Click"
-                                ToolTip="Disable Spell Check">
+                                Click="DisableSpellCheck_Click">
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <!-- Tooltip Header -->
+                                        <TextBlock Text="{DynamicResource SpellCheckDisableHeader}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+                                        <!-- Tooltip Content -->
+                                        <TextBlock Text="{DynamicResource SpellCheckDisableTip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
                             <Image Source="/Images/spellcheck/stop-spellcheck.png"
                                    Width="24"
                                    Height="24"
@@ -2977,9 +3005,6 @@
                 </Syncfusion:RibbonBar>
 
             </Syncfusion:RibbonTab>
-
-
-
 
 
         </Syncfusion:Ribbon>

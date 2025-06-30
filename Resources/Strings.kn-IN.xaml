@@ -416,9 +416,9 @@
 
 
   <!-- KannadaStrings.xaml -->
-  <sys:String x:Key="SpeechToTextTab">ವಾಗಾಕ್ಷರ</sys:String>
-  <sys:String x:Key="KannadaSpeechGroup">ಕನ್ನಡ ವಾಗಾಕ್ಷರ</sys:String>
-  <sys:String x:Key="EnglishSpeechGroup">ಇಂಗ್ಲಿಷ್ ವಾಗಾಕ್ಷರ</sys:String>
+  <sys:String x:Key="SpeechToTextTab">ವಾಗಕ್ಷರ</sys:String>
+  <sys:String x:Key="KannadaSpeechGroup">ಕನ್ನಡ ವಾಗಕ್ಷರ</sys:String>
+  <sys:String x:Key="EnglishSpeechGroup">ಇಂಗ್ಲಿಷ್ ವಾಗಕ್ಷರ</sys:String>
 
   <sys:String x:Key="KannadaSpeechGroupDescription">ಕನ್ನಡದ ಮಾತು ಗುರುತಿಸುವ ನಿಯಂತ್ರಣ.</sys:String>
   <sys:String x:Key="EnglishSpeechGroupDescription">ಇಂಗ್ಲಿಷ್ ಮಾತು ಗುರುತಿಸುವ ನಿಯಂತ್ರಣ.</sys:String>
@@ -442,13 +442,13 @@
 
 
 
-  <sys:String x:Key="SpellCheck_Tab">ಅಕ್ಷರ ಪರಿಶೀಲನೆ</sys:String>
-  <sys:String x:Key="SpellCheck_EnableHeader_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheck_DisableHeader_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheck_EnableTip_KN">ಮದ್ದೆಪಡಿಸಿದ ಕ್ಷೇತ್ರಗಳಿಗಾಗಿ ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
-  <sys:String x:Key="SpellCheck_DisableTip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
-  <sys:String x:Key="SpellCheck_EnableTooltip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheck_DisableTooltip_KN">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckTab">ಪದ ಪರೀಕ್ಷೆ</sys:String>
+  <sys:String x:Key="SpellCheckEnableHeader">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckDisableHeader">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckEnableTip">ಮದ್ದೆಪಡಿಸಿದ ಕ್ಷೇತ್ರಗಳಿಗಾಗಿ ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+  <sys:String x:Key="SpellCheckDisableTip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
+  <sys:String x:Key="SpellCheckEnableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckDisableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
 
 </ResourceDictionary>
 
