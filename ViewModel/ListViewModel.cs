@@ -32,7 +32,7 @@ namespace KannadaNudiEditor
         /// </summary>
         /// <value></value>
         /// <remarks></remarks>
-        public string ListName
+        public string? ListName
         {
             get
             {

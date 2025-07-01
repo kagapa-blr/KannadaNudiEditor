@@ -46,7 +46,7 @@ namespace KannadaNudiEditor
         private bool _isListeningKannada = false;
         private bool _isListeningEnglish = false;
 
-
+        private SpellChecker spellChecker;
 
 
 
@@ -98,7 +98,6 @@ namespace KannadaNudiEditor
 
 
 
-        private Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker spellChecker;
 
         private void ConfigureSpellChecker()
         {
@@ -113,7 +112,7 @@ namespace KannadaNudiEditor
             if (!File.Exists(customDictionaryPath2)) MessageBox.Show("Missing: " + customDictionaryPath2);
 
             // Create spell checker instance (but don't enable it)
-            spellChecker = new Syncfusion.Windows.Controls.RichTextBoxAdv.SpellChecker
+            spellChecker = new SpellChecker
             {
                 IsEnabled = false, // Initially off
                 IgnoreUppercaseWords = false,
