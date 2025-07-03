@@ -3,30 +3,62 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
         Title="{DynamicResource HeaderFooterTab}"
         Height="300"
-        Width="400">
-    <Grid>
-        <StackPanel Margin="10">
-            <!-- Header Text Input -->
-            <TextBlock Text="{DynamicResource EditHeader}"
-                    Margin="0,10"/>
-            <TextBox x:Name="HeaderTextBox"
-                    Margin="0,5"
-                    Height="30"/>
+        Width="450"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#f9f9f9"
+        FontFamily="Segoe UI"
+        FontSize="14">
 
-            <!-- Footer Text Input -->
-            <TextBlock Text="{DynamicResource EditFooter}"
-                    Margin="0,10"/>
-            <TextBox x:Name="FooterTextBox"
-                    Margin="0,5"
-                    Height="30"/>
+        <Grid Margin="20">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- Apply Button -->
-            <Button Content="Apply"
-                    Margin="0,20"
-                    Height="40"
-                    Click="ApplyButton_Click"/>
-        </StackPanel>
-    </Grid>
+                <GroupBox Header="{DynamicResource EditHeader}"
+                                Grid.Row="0"
+                                Margin="0,0,0,10"
+                                Padding="10">
+                        <TextBox x:Name="HeaderTextBox"
+                                        Height="30"/>
+                </GroupBox>
+
+                <GroupBox Header="{DynamicResource EditFooter}"
+                                Grid.Row="1"
+                                Margin="0,0,0,20"
+                                Padding="10">
+                        <TextBox x:Name="FooterTextBox"
+                                        Height="30"/>
+                </GroupBox>
+
+                <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Content="Apply"
+                                Width="100"
+                                Height="35"
+                                Margin="0,0,10,0"
+                                Click="ApplyButton_Click"
+                                Background="#0078D7"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+
+                        <Button Content="Cancel"
+                                Width="100"
+                                Height="35"
+                                Click="CancelButton_Click"
+                                Background="#e0e0e0"
+                                Foreground="Black"
+                                FontWeight="Normal"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+                </StackPanel>
+        </Grid>
 </Window>
