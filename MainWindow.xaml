@@ -2933,7 +2933,7 @@
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                            HorizontalAlignment="Center">
+                                HorizontalAlignment="Center">
                         <Button x:Name="EnableSpellCheckButton"
                                 Height="32"
                                 Width="32"
@@ -2974,7 +2974,7 @@
                     </Syncfusion:RibbonBar.ToolTip>
 
                     <StackPanel Margin="0"
-                            HorizontalAlignment="Center">
+                                HorizontalAlignment="Center">
                         <Button x:Name="DisableSpellCheckButton"
                                 Height="32"
                                 Width="32"
@@ -3011,6 +3011,7 @@
 
 
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
+                                         PreviewKeyDown="richTextBoxAdv_PreviewKeyDown"
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.WPF"
                                          Background="#D4D4D4"
                                          Grid.Row="1"
