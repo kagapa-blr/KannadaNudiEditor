@@ -3011,7 +3011,7 @@
 
 
         <RichTextBoxAdv:SfRichTextBoxAdv x:Name="richTextBoxAdv"
-                                         PreviewKeyDown="richTextBoxAdv_PreviewKeyDown"
+                                         AcceptsTab="True"
                                          xmlns:RichTextBoxAdv="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.WPF"
                                          Background="#D4D4D4"
                                          Grid.Row="1"

@@ -2100,36 +2100,6 @@ namespace KannadaNudiEditor
 
 
 
-        private void richTextBoxAdv_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Tab)
-            {
-                e.Handled = true;
-
-                bool isShiftPressed = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift;
-
-                if (isShiftPressed)
-                {
-                    // Decrease indent
-                    if (Syncfusion.Windows.Controls.RichTextBoxAdv.SfRichTextBoxAdv.DecreaseIndentCommand.CanExecute(null, richTextBoxAdv))
-                    {
-                        Syncfusion.Windows.Controls.RichTextBoxAdv.SfRichTextBoxAdv.DecreaseIndentCommand.Execute(null, richTextBoxAdv);
-                    }
-                }
-                else
-                {
-                    // Increase indent
-                    if (Syncfusion.Windows.Controls.RichTextBoxAdv.SfRichTextBoxAdv.IncreaseIndentCommand.CanExecute(null, richTextBoxAdv))
-                    {
-                        Syncfusion.Windows.Controls.RichTextBoxAdv.SfRichTextBoxAdv.IncreaseIndentCommand.Execute(null, richTextBoxAdv);
-                    }
-                }
-            }
-        }
-
-
-
-
 
 
 
