@@ -34,6 +34,18 @@ namespace KannadaNudiEditor
         Dictionary<string, List<double>>? pageSizesCollection = null;
         private string currentFilePath = string.Empty;
 
+        #region Page Fields
+        private string customTopMargin;
+        private string customBottomMargin;
+        private string customLeftMargin;
+        private string customRightMargin;
+        private string customMarginUnit;
+
+        private string customPageHeight;
+        private string customPageWidth;
+        private string customSizeUnit;
+        #endregion
+
 #endif
         #endregion
 
@@ -1326,6 +1338,40 @@ namespace KannadaNudiEditor
     };
         }
 
+
+
+
+
+        /// <summary>
+        /// Handled for mutiple time clicking of Custom options in Page margin and size.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pageMargins_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DependencyObject current = e.OriginalSource as DependencyObject;
+
+            // Traverse up the visual tree until we find a ComboBoxItem or reach the root
+            while (current != null && current is not ComboBoxItem)
+            {
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            // If we found a ComboBoxItem and its data context is a PageMargins object with Key == "Custom"
+            if (current is ComboBoxItem marginComboBoxItem &&
+                marginComboBoxItem.DataContext is PageMargins { Key: "Custom" })
+            {
+                CustomMarginButton_Click(sender, null);
+                e.Handled = true;
+            }
+            else if (current is ComboBoxItem sizeComboBoxItem &&
+                sizeComboBoxItem.DataContext is PageSize { Key: "Custom" })
+            {
+                RibbonButton_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
         /// <summary>
         /// Updates the page margins.
         /// </summary>
@@ -1343,6 +1389,10 @@ namespace KannadaNudiEditor
 
             if (!string.IsNullOrEmpty(selectedKey) && pageMarginsCollection.TryGetValue(selectedKey, out var values))
             {
+
+                //When other options are selected,empty all the margin options.
+                customTopMargin = customBottomMargin = customLeftMargin = customRightMargin = customMarginUnit = string.Empty;
+
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
                     section.SectionFormat.PageMargin = new Thickness(
@@ -1460,6 +1510,9 @@ namespace KannadaNudiEditor
             //RibbonButton_Click
             if (!string.IsNullOrEmpty(selectedKey) && pageSizesCollection.TryGetValue(selectedKey, out var values))
             {
+                //When other options are clicked, reset the values to default.
+                customPageWidth = customPageHeight = customSizeUnit = string.Empty;
+
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
                     section.SectionFormat.PageSize = new Size(
@@ -1511,13 +1564,17 @@ namespace KannadaNudiEditor
         /// <param name="e"></param>
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
-            PageSetupDialog dialog = new PageSetupDialog
+            PageSetupDialog dialog = new PageSetupDialog(customPageWidth, customPageHeight, customSizeUnit)
             {
                 Owner = this
             };
 
             if (dialog.ShowDialog() == true)
             {
+                //Update the fields to display the predefined values on next click on custom options.
+                customPageWidth = dialog.WidthBox.Text;
+                customPageHeight = dialog.HeightBox.Text;
+                customSizeUnit = dialog.SelectedUnit;
                 double widthInInches = dialog.PageWidthInInches;
                 double heightInInches = dialog.PageHeightInInches;
 
@@ -1577,9 +1634,16 @@ namespace KannadaNudiEditor
 
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
-            CustomMargin dialog = new CustomMargin();
+            CustomMargin dialog = new CustomMargin(customTopMargin, customBottomMargin, customLeftMargin, customRightMargin, customMarginUnit);
             if (dialog.ShowDialog() == true)
             {
+                //Update the fields to display the predefined values on next click on custom options.
+                customTopMargin = dialog.TopMarginTextBox.Text;
+                customBottomMargin = dialog.BottomMarginTextBox.Text;
+                customLeftMargin = dialog.LeftMarginTextBox.Text;
+                customRightMargin = dialog.RightMarginTextBox.Text;
+                customMarginUnit = dialog.SelectedUnit;
+
                 // Get the margin values from the dialog (in inches)
                 double topMarginInInches = dialog.TopMarginInInches;
                 double bottomMarginInInches = dialog.BottomMarginInInches;

@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Media3D;
 
 namespace KannadaNudiEditor
 {
@@ -16,9 +17,23 @@ namespace KannadaNudiEditor
         #endregion
 
         #region Constructor
-        public PageSetupDialog()
+        public PageSetupDialog(string width, string height, string unit)
         {
             InitializeComponent();
+
+            //Whenever dialog is laucnhed will display the predefined user values.
+            WidthBox.Text = width;
+            HeightBox.Text = height;
+
+            // Set the selected unit in the ComboBox
+            foreach (ComboBoxItem item in UnitSelector.Items)
+            {
+                if (item.Content.ToString().Equals(unit, StringComparison.OrdinalIgnoreCase))
+                {
+                    UnitSelector.SelectedItem = item;
+                    break;
+                }
+            }
         }
         #endregion
 

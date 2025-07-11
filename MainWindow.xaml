@@ -2330,7 +2330,8 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center"
                                   Height="30"
-                                  SelectionChanged="pageMargins_SelectionChanged">
+                                  SelectionChanged="pageMargins_SelectionChanged"
+                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -2378,7 +2379,8 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center"
                                   Height="30"
-                                  SelectionChanged="pageSize_SelectionChanged">
+                                  SelectionChanged="pageSize_SelectionChanged"
+                                   PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>

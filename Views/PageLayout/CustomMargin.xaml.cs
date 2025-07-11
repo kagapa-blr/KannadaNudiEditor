@@ -19,9 +19,25 @@ namespace KannadaNudiEditor
         #endregion
 
         #region Constructor
-        public CustomMargin()
+        public CustomMargin(string top, string bottom, string left, string right, string unit)
         {
             InitializeComponent();
+
+            //Whenever dialog is laucnhed will display the predefined user values.
+            TopMarginTextBox.Text = top;
+            BottomMarginTextBox.Text = bottom;
+            LeftMarginTextBox.Text = left;
+            RightMarginTextBox.Text = right;
+
+            // Set the selected unit in the ComboBox
+            foreach (ComboBoxItem item in MarginUnitSelector.Items)
+            {
+                if (item.Content.ToString().Equals(unit, StringComparison.OrdinalIgnoreCase))
+                {
+                    MarginUnitSelector.SelectedItem = item;
+                    break;
+                }
+            }
         }
         #endregion
 
