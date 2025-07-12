@@ -16,6 +16,7 @@ using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
 using KannadaNudiEditor.Views.Sort;
 using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
 
 namespace KannadaNudiEditor
 {
@@ -63,7 +64,9 @@ namespace KannadaNudiEditor
 
 
 
-
+        // field so every handler can see it
+        private PageMargins _customMarginsItem;
+        private ObservableCollection<PageMargins> _marginItems;   // replaces List
 
 
         #region Constructor
@@ -1305,38 +1308,54 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Initializes the page margins.
         /// </summary>
+
         private void InitializePageMargins()
         {
-            List<PageMargins> items = new List<PageMargins> {
-        new PageMargins { Key = "Normal", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1 in", right = "Right: 1 in" },
-        new PageMargins { Key = "Narrow", top = "Top: 0.5 in", bottom = "Bottom: 0.5 in", left = "Left: 0.5 in", right = "Right: 0.5 in" },
-        new PageMargins { Key = "Moderate", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 0.75 in", right = "Right: 0.75 in" },
-        new PageMargins { Key = "Wide", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 2 in", right = "Right: 2 in" },
-        new PageMargins { Key = "Mirrored", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1 in" },
-        new PageMargins { Key = "Office 2003 Default", top = "Top: 1 in", bottom = "Bottom: 1 in", left = "Left: 1.25 in", right = "Right: 1.25 in" },
-        new PageMargins  {
-        Key = "Custom",
-        top = LanguageToggleButton.IsChecked == true ? "Set custom margins" : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು",
-        bottom = "",
-        left = "",
-        right = ""
-    }
+            // ——— live custom row ———
+            _customMarginsItem = new PageMargins
+            {
+                Key = "Custom",
+                top = LanguageToggleButton.IsChecked == true
+                          ? "Set custom margins"
+                          : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು",
+                bottom = "",
+                left = "",
+                right = ""
+            };
 
-
-
+            // ——— all items ———
+            _marginItems = new ObservableCollection<PageMargins>
+    {
+        new PageMargins { Key="Normal",   top="Top: 1 in",   bottom="Bottom: 1 in",
+                          left="Left: 1 in",  right="Right: 1 in" },
+        new PageMargins { Key="Narrow",   top="Top: 0.5 in", bottom="Bottom: 0.5 in",
+                          left="Left: 0.5 in", right="Right: 0.5 in" },
+        new PageMargins { Key="Moderate", top="Top: 1 in",   bottom="Bottom: 1 in",
+                          left="Left: 0.75 in", right="Right: 0.75 in" },
+        new PageMargins { Key="Wide",     top="Top: 1 in",   bottom="Bottom: 1 in",
+                          left="Left: 2 in",  right="Right: 2 in" },
+        new PageMargins { Key="Mirrored", top="Top: 1 in",   bottom="Bottom: 1 in",
+                          left="Left: 1.25 in", right="Right: 1 in" },
+        new PageMargins { Key="Office 2003 Default",
+                          top="Top: 1 in", bottom="Bottom: 1 in",
+                          left="Left: 1.25 in", right="Right: 1.25 in" },
+        _customMarginsItem                                         // <‑‑ keep last
     };
-            pageMargins.ItemsSource = items;
 
-            // Dictionary values in inches
-            pageMarginsCollection = new Dictionary<string, List<double>> {
-        { "Normal", new List<double> { 1, 1, 1, 1 } },
-        { "Narrow", new List<double> { 0.5, 0.5, 0.5, 0.5 } },
-        { "Moderate", new List<double> { 1, 1, 0.75, 0.75 } },
-        { "Wide", new List<double> { 1, 1, 2, 2 } },
-        { "Mirrored", new List<double> { 1, 1, 1.25, 1 } },
-        { "Office 2003 Default", new List<double> { 1, 1, 1.25, 1.25 } }
+            pageMargins.ItemsSource = _marginItems;                       // <‑‑ bind
+
+            // preset numeric lookup (inches)
+            pageMarginsCollection = new Dictionary<string, List<double>>
+    {
+        { "Normal",   new(){1,1,1,1} },
+        { "Narrow",   new(){0.5,0.5,0.5,0.5} },
+        { "Moderate", new(){1,1,0.75,0.75} },
+        { "Wide",     new(){1,1,2,2} },
+        { "Mirrored", new(){1,1,1.25,1} },
+        { "Office 2003 Default", new(){1,1,1.25,1.25} }
     };
         }
+
 
         /// <summary>
         /// Handled for mutiple time clicking of Custom options in Page margin and size.
@@ -1371,36 +1390,55 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Updates the page margins.
         /// </summary>
+
+
+
         private void pageMargins_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             string selectedKey = (pageMargins.SelectedItem as PageMargins)?.Key;
 
+            //  DO NOT open dialog here — it’s already handled in PreviewMouseDown
             if (selectedKey == "Custom")
-            {
-                // Call the CustomMarginButton_Click function when the "Custom" option is selected
-                CustomMarginButton_Click(sender, e);
                 return;
-            }
 
-
-            if (!string.IsNullOrEmpty(selectedKey) && pageMarginsCollection.TryGetValue(selectedKey, out var values))
+            if (!string.IsNullOrEmpty(selectedKey) &&
+                pageMarginsCollection.TryGetValue(selectedKey, out var values))
             {
-
-                //When other options are selected,empty all the margin options.
                 customTopMargin = customBottomMargin = customLeftMargin = customRightMargin = customMarginUnit = string.Empty;
+
+                _customMarginsItem.top = LanguageToggleButton.IsChecked == true
+                                            ? "Set custom margins"
+                                            : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು";
+                _customMarginsItem.bottom = _customMarginsItem.left = _customMarginsItem.right = "";
+
+                CollectionViewSource.GetDefaultView(_marginItems).Refresh();
 
                 foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
                 {
                     section.SectionFormat.PageMargin = new Thickness(
-                        values[2] * 96, // Left
-                        values[0] * 96, // Top
-                        values[3] * 96, // Right
-                        values[1] * 96  // Bottom
-                    );
+                        values[2] * 96,
+                        values[0] * 96,
+                        values[3] * 96,
+                        values[1] * 96);
                 }
             }
         }
+
+
+
+
+
         #endregion
+
+
+
+
+
+
+
+
+
+
 
         #region PageSizes Implementation
         /// <summary>
@@ -1412,38 +1450,53 @@ namespace KannadaNudiEditor
 
 
 
+
+
+
+
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
-            CustomMargin dialog = new CustomMargin(customTopMargin, customBottomMargin, customLeftMargin, customRightMargin, customMarginUnit);
-            if (dialog.ShowDialog() == true)
+            var dialog = new CustomMargin(customTopMargin, customBottomMargin,
+                                          customLeftMargin, customRightMargin,
+                                          customMarginUnit);
+
+            if (dialog.ShowDialog() != true) return;
+
+            // remember raw text
+            customTopMargin = dialog.TopMarginTextBox.Text;
+            customBottomMargin = dialog.BottomMarginTextBox.Text;
+            customLeftMargin = dialog.LeftMarginTextBox.Text;
+            customRightMargin = dialog.RightMarginTextBox.Text;
+            customMarginUnit = dialog.SelectedUnit;
+
+            // —— update Custom row text ——
+            _customMarginsItem.top = $"Top: {customTopMargin} {customMarginUnit}";   // <<< NEW
+            _customMarginsItem.bottom = $"Bottom: {customBottomMargin} {customMarginUnit}"; // <<< NEW
+            _customMarginsItem.left = $"Left: {customLeftMargin} {customMarginUnit}"; // <<< NEW
+            _customMarginsItem.right = $"Right: {customRightMargin} {customMarginUnit}"; // <<< NEW
+            CollectionViewSource.GetDefaultView(_marginItems).Refresh();                 // <<< NEW
+
+            pageMargins.SelectedItem = _customMarginsItem;                              // <<< NEW (keeps Custom selected)
+
+            // apply to document
+            const double dpi = 96;
+            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
             {
-                //Update the fields to display the predefined values on next click on custom options.
-                customTopMargin = dialog.TopMarginTextBox.Text;
-                customBottomMargin = dialog.BottomMarginTextBox.Text;
-                customLeftMargin = dialog.LeftMarginTextBox.Text;
-                customRightMargin = dialog.RightMarginTextBox.Text;
-                customMarginUnit = dialog.SelectedUnit;
-
-                // Get the margin values from the dialog (in inches)
-                double topMarginInInches = dialog.TopMarginInInches;
-                double bottomMarginInInches = dialog.BottomMarginInInches;
-                double leftMarginInInches = dialog.LeftMarginInInches;
-                double rightMarginInInches = dialog.RightMarginInInches;
-
-                // Convert the margins from inches to pixels (96 DPI)
-                const double dpi = 96;
-                double topMarginInPixels = topMarginInInches * dpi;
-                double bottomMarginInPixels = bottomMarginInInches * dpi;
-                double leftMarginInPixels = leftMarginInInches * dpi;
-                double rightMarginInPixels = rightMarginInInches * dpi;
-
-                // Apply the converted margin values to the document's sections
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-                {
-                    section.SectionFormat.PageMargin = new Thickness(leftMarginInPixels, topMarginInPixels, rightMarginInPixels, bottomMarginInPixels);
-                }
+                section.SectionFormat.PageMargin = new Thickness(
+                    dialog.LeftMarginInInches * dpi,
+                    dialog.TopMarginInInches * dpi,
+                    dialog.RightMarginInInches * dpi,
+                    dialog.BottomMarginInInches * dpi);
             }
         }
+
+
+
+
+
+
+
+
 
 
 
