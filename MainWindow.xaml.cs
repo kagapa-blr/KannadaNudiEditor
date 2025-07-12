@@ -1338,10 +1338,6 @@ namespace KannadaNudiEditor
     };
         }
 
-
-
-
-
         /// <summary>
         /// Handled for mutiple time clicking of Custom options in Page margin and size.
         /// </summary>
@@ -1410,6 +1406,49 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Initializes the page sizes.
         /// </summary>
+
+
+
+
+
+
+        private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
+        {
+            CustomMargin dialog = new CustomMargin(customTopMargin, customBottomMargin, customLeftMargin, customRightMargin, customMarginUnit);
+            if (dialog.ShowDialog() == true)
+            {
+                //Update the fields to display the predefined values on next click on custom options.
+                customTopMargin = dialog.TopMarginTextBox.Text;
+                customBottomMargin = dialog.BottomMarginTextBox.Text;
+                customLeftMargin = dialog.LeftMarginTextBox.Text;
+                customRightMargin = dialog.RightMarginTextBox.Text;
+                customMarginUnit = dialog.SelectedUnit;
+
+                // Get the margin values from the dialog (in inches)
+                double topMarginInInches = dialog.TopMarginInInches;
+                double bottomMarginInInches = dialog.BottomMarginInInches;
+                double leftMarginInInches = dialog.LeftMarginInInches;
+                double rightMarginInInches = dialog.RightMarginInInches;
+
+                // Convert the margins from inches to pixels (96 DPI)
+                const double dpi = 96;
+                double topMarginInPixels = topMarginInInches * dpi;
+                double bottomMarginInPixels = bottomMarginInInches * dpi;
+                double leftMarginInPixels = leftMarginInInches * dpi;
+                double rightMarginInPixels = rightMarginInInches * dpi;
+
+                // Apply the converted margin values to the document's sections
+                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                {
+                    section.SectionFormat.PageMargin = new Thickness(leftMarginInPixels, topMarginInPixels, rightMarginInPixels, bottomMarginInPixels);
+                }
+            }
+        }
+
+
+
+
+
 
 
         private void InitializePageSizes()
@@ -1630,40 +1669,6 @@ namespace KannadaNudiEditor
             }
         }
 
-
-
-        private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
-        {
-            CustomMargin dialog = new CustomMargin(customTopMargin, customBottomMargin, customLeftMargin, customRightMargin, customMarginUnit);
-            if (dialog.ShowDialog() == true)
-            {
-                //Update the fields to display the predefined values on next click on custom options.
-                customTopMargin = dialog.TopMarginTextBox.Text;
-                customBottomMargin = dialog.BottomMarginTextBox.Text;
-                customLeftMargin = dialog.LeftMarginTextBox.Text;
-                customRightMargin = dialog.RightMarginTextBox.Text;
-                customMarginUnit = dialog.SelectedUnit;
-
-                // Get the margin values from the dialog (in inches)
-                double topMarginInInches = dialog.TopMarginInInches;
-                double bottomMarginInInches = dialog.BottomMarginInInches;
-                double leftMarginInInches = dialog.LeftMarginInInches;
-                double rightMarginInInches = dialog.RightMarginInInches;
-
-                // Convert the margins from inches to pixels (96 DPI)
-                const double dpi = 96;
-                double topMarginInPixels = topMarginInInches * dpi;
-                double bottomMarginInPixels = bottomMarginInInches * dpi;
-                double leftMarginInPixels = leftMarginInInches * dpi;
-                double rightMarginInPixels = rightMarginInInches * dpi;
-
-                // Apply the converted margin values to the document's sections
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-                {
-                    section.SectionFormat.PageMargin = new Thickness(leftMarginInPixels, topMarginInPixels, rightMarginInPixels, bottomMarginInPixels);
-                }
-            }
-        }
 
 
 
