@@ -83,10 +83,14 @@
                           x:Name="MarginUnitSelector"
                           Height="26"
                           Margin="0,4">
-                    <ComboBoxItem Content="{DynamicResource UnitCentimeters}"/>
-                    <ComboBoxItem Content="{DynamicResource UnitMillimeters}"/>
+                    <!-- NEW -->
+                    <ComboBoxItem Content="{DynamicResource UnitCentimeters}"
+                            Tag="cm"/>
+                    <ComboBoxItem Content="{DynamicResource UnitMillimeters}"
+                            Tag="mm"/>
                     <ComboBoxItem Content="{DynamicResource UnitInches}"
-                                  IsSelected="True"/>
+                            Tag="in"
+                            IsSelected="True"/>
                 </ComboBox>
 
                 <!-- Left -->

@@ -1356,12 +1356,6 @@ namespace KannadaNudiEditor
     };
         }
 
-
-        /// <summary>
-        /// Handled for mutiple time clicking of Custom options in Page margin and size.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void pageMargins_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             DependencyObject current = e.OriginalSource as DependencyObject;
@@ -1386,12 +1380,6 @@ namespace KannadaNudiEditor
                 e.Handled = true;
             }
         }
-
-        /// <summary>
-        /// Updates the page margins.
-        /// </summary>
-
-
 
         private void pageMargins_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -1423,79 +1411,65 @@ namespace KannadaNudiEditor
                 }
             }
         }
-
-
-
-
-
-        #endregion
-
-
-
-
-
-
-
-
-
-
-
-        #region PageSizes Implementation
-        /// <summary>
-        /// Initializes the page sizes.
-        /// </summary>
-
-
-
-
-
-
+        private static double UnitToDipFactor(string unit)
+        {
+            const double dpi = 96.0;            // 1 inch = 96 device‑independent pixels
+            return unit switch
+            {
+                "cm" => dpi / 2.54,
+                "mm" => dpi / 25.4,
+                _ => dpi                   // inches
+            };
+        }
 
 
 
 
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CustomMargin(customTopMargin, customBottomMargin,
-                                          customLeftMargin, customRightMargin,
-                                          customMarginUnit);
+            var dlg = new CustomMargin(customTopMargin, customBottomMargin,
+                                       customLeftMargin, customRightMargin,
+                                       customMarginUnit);
 
-            if (dialog.ShowDialog() != true) return;
+            if (dlg.ShowDialog() != true) return;
 
-            // remember raw text
-            customTopMargin = dialog.TopMarginTextBox.Text;
-            customBottomMargin = dialog.BottomMarginTextBox.Text;
-            customLeftMargin = dialog.LeftMarginTextBox.Text;
-            customRightMargin = dialog.RightMarginTextBox.Text;
-            customMarginUnit = dialog.SelectedUnit;
+            // Remember raw text for next dialog launch
+            customTopMargin = dlg.Top.ToString();
+            customBottomMargin = dlg.Bottom.ToString();
+            customLeftMargin = dlg.Left.ToString();
+            customRightMargin = dlg.Right.ToString();
+            customMarginUnit = dlg.Unit;                    // "in" | "cm" | "mm"
 
-            // —— update Custom row text ——
-            _customMarginsItem.top = $"Top: {customTopMargin} {customMarginUnit}";   // <<< NEW
-            _customMarginsItem.bottom = $"Bottom: {customBottomMargin} {customMarginUnit}"; // <<< NEW
-            _customMarginsItem.left = $"Left: {customLeftMargin} {customMarginUnit}"; // <<< NEW
-            _customMarginsItem.right = $"Right: {customRightMargin} {customMarginUnit}"; // <<< NEW
-            CollectionViewSource.GetDefaultView(_marginItems).Refresh();                 // <<< NEW
+            // ---------- Update the “Custom” row in ComboBox ----------
+            string unitLabel = dlg.Unit switch { "cm" => "cm", "mm" => "mm", _ => "in" };
+            _customMarginsItem.top = $"Top:    {customTopMargin} {unitLabel}";
+            _customMarginsItem.bottom = $"Bottom: {customBottomMargin} {unitLabel}";
+            _customMarginsItem.left = $"Left:   {customLeftMargin} {unitLabel}";
+            _customMarginsItem.right = $"Right:  {customRightMargin} {unitLabel}";
+            CollectionViewSource.GetDefaultView(_marginItems).Refresh();
+            pageMargins.SelectedItem = _customMarginsItem;    // keep the Custom row selected
 
-            pageMargins.SelectedItem = _customMarginsItem;                              // <<< NEW (keeps Custom selected)
+            // ---------- Apply margin to document ----------
+            double factor = UnitToDipFactor(dlg.Unit);
 
-            // apply to document
-            const double dpi = 96;
             foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
             {
                 section.SectionFormat.PageMargin = new Thickness(
-                    dialog.LeftMarginInInches * dpi,
-                    dialog.TopMarginInInches * dpi,
-                    dialog.RightMarginInInches * dpi,
-                    dialog.BottomMarginInInches * dpi);
+                    dlg.Left * factor,
+                    dlg.Top * factor,
+                    dlg.Right * factor,
+                    dlg.Bottom * factor);
             }
         }
 
 
+        #endregion
 
 
-
-
-
+        #region PageSizes Implementation
+        /// <summary>
+        /// Initializes the page sizes.
+        /// </summary>
 
 
 

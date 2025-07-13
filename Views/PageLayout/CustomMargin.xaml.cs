@@ -18,6 +18,14 @@ namespace KannadaNudiEditor
         public string SelectedUnit { get; set; } = "Inches"; // Default unit
         #endregion
 
+
+
+        public double Top { get; private set; }
+        public double Bottom { get; private set; }
+        public double Left { get; private set; }
+        public double Right { get; private set; }
+        public string Unit { get; private set; } = "in";   // “in” | “cm” | “mm”
+
         #region Constructor
         public CustomMargin(string top, string bottom, string left, string right, string unit)
         {
@@ -32,12 +40,13 @@ namespace KannadaNudiEditor
             // Set the selected unit in the ComboBox
             foreach (ComboBoxItem item in MarginUnitSelector.Items)
             {
-                if (item.Content.ToString().Equals(unit, StringComparison.OrdinalIgnoreCase))
+                if (item.Tag?.ToString() == unit.ToLower())
                 {
                     MarginUnitSelector.SelectedItem = item;
                     break;
                 }
             }
+
         }
         #endregion
 
@@ -66,7 +75,7 @@ namespace KannadaNudiEditor
         }
 
         // Convert from cm or mm to inches
-        private double ConvertToInches(double value, string unit)
+        private double ConvertToInches1(double value, string unit)
         {
             switch (unit)
             {
@@ -79,40 +88,41 @@ namespace KannadaNudiEditor
             }
         }
 
+
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            // Get the selected unit properly
-            string selectedUnit = (MarginUnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Inches";
+            // get neutral unit ("in" | "cm" | "mm")
+            string unitTag = (MarginUnitSelector.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "in";
 
-            // Normalize all TextBox inputs (to support Kannada numbers)
-            string topText = NormalizeToEnglishNumbers(TopMarginTextBox.Text);
-            string bottomText = NormalizeToEnglishNumbers(BottomMarginTextBox.Text);
-            string leftText = NormalizeToEnglishNumbers(LeftMarginTextBox.Text);
-            string rightText = NormalizeToEnglishNumbers(RightMarginTextBox.Text);
+            // Kannada → ASCII digits
+            string topTxt = NormalizeToEnglishNumbers(TopMarginTextBox.Text);
+            string bottomTxt = NormalizeToEnglishNumbers(BottomMarginTextBox.Text);
+            string leftTxt = NormalizeToEnglishNumbers(LeftMarginTextBox.Text);
+            string rightTxt = NormalizeToEnglishNumbers(RightMarginTextBox.Text);
 
-            // Try parsing
-            if (double.TryParse(topText, out double top) &&
-                double.TryParse(bottomText, out double bottom) &&
-                double.TryParse(leftText, out double left) &&
-                double.TryParse(rightText, out double right))
+            if (double.TryParse(topTxt, out double top) &&
+                double.TryParse(bottomTxt, out double bottom) &&
+                double.TryParse(leftTxt, out double left) &&
+                double.TryParse(rightTxt, out double right))
             {
-                // Convert margins to inches
-                TopMarginInInches = ConvertToInches(top, selectedUnit);
-                BottomMarginInInches = ConvertToInches(bottom, selectedUnit);
-                LeftMarginInInches = ConvertToInches(left, selectedUnit);
-                RightMarginInInches = ConvertToInches(right, selectedUnit);
-
-                SelectedUnit = selectedUnit;
+                Top = top;
+                Bottom = bottom;
+                Left = left;
+                Right = right;
+                Unit = unitTag;
 
                 DialogResult = true;
                 Close();
             }
             else
             {
-                // Show bilingual error message
-                MessageBox.Show("ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಚುಗಳಿಗಾಗಿ ಮಾನ್ಯ ಸಂಖ್ಯಾ ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ.\n(Please enter valid numerical values for all margins.)");
+                MessageBox.Show("ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಚುಗಳಿಗಾಗಿ ಮಾನ್ಯ ಸಂಖ್ಯಾ ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ.\n" +
+                                "(Please enter valid numerical values for all margins.)");
             }
         }
+
+
+
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
