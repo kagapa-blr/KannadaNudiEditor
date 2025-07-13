@@ -71,7 +71,7 @@ namespace KannadaNudiEditor.Helpers
         /// <summary>
         /// All known predefined page sizes (excluding the custom option).
         /// </summary>
-        public static IReadOnlyCollection<PageSizeInfo> All => _pageSizes.Values;
+        public static IReadOnlyCollection<PageSizeInfo> All => (IReadOnlyCollection<PageSizeInfo>)_pageSizes.Values;
 
         public static bool TryGet(string key, out PageSizeInfo pageSize) => _pageSizes.TryGetValue(key, out pageSize);
 

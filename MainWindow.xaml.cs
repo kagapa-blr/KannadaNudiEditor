@@ -1575,13 +1575,8 @@ namespace KannadaNudiEditor
         {
             string selectedKey = (pageSize.SelectedItem as PageSize)?.Key;
 
-
             if (selectedKey == "Custom")
-            {
-                // Call the CustomMarginButton_Click function when the "Custom" option is selected
-                RibbonButton_Click(sender, e);
                 return;
-            }
 
 
             //RibbonButton_Click
@@ -1625,34 +1620,38 @@ namespace KannadaNudiEditor
 
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
-            PageSetupDialog dialog = new PageSetupDialog(customPageWidth, customPageHeight, customSizeUnit)
-            {
-                Owner = this
-            };
+            //var dialog = new PageSetupDialog(customPageWidth, customPageHeight, customSizeUnit) { Owner = this };
+            CustomPageSize dialog = new CustomPageSize(customPageWidth, customPageHeight, customSizeUnit);
 
             if (dialog.ShowDialog() == true)
             {
-                //Update the fields to display the predefined values on next click on custom options.
+                // Save what the user typed so the dialog re‑opens pre‑filled next time
                 customPageWidth = dialog.WidthBox.Text;
                 customPageHeight = dialog.HeightBox.Text;
                 customSizeUnit = dialog.SelectedUnit;
-                double widthInInches = dialog.PageWidthInInches;
-                double heightInInches = dialog.PageHeightInInches;
 
-                // Convert the inches values to pixels, as SfRichTextBoxAdv preseve elements in pixels.
-                const double dpi = 96;
-                double widthInPixels = widthInInches * dpi;
-                double heightInPixels = heightInInches * dpi;
-
-                // Apply the converted values to the document
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                // Convert the user numbers to pixels
+                const double dpi = 96.0;
+                double factor = dialog.SelectedUnit switch
                 {
-                    section.SectionFormat.PageSize = new Size(widthInPixels, heightInPixels);
-                }
+                    "Centimeters" => dpi / 2.54,
+                    "Millimeters" => dpi / 25.4,
+                    _ => dpi // Inches or default
+                };
+
+                double widthPx = dialog.PageWidth * factor;
+                double heightPx = dialog.PageHeight * factor;
+
+                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                    section.SectionFormat.PageSize = new Size(widthPx, heightPx);
+
+                // 🔽 Make sure "Custom" is selected in the dropdown
+                pageSize.SelectedIndex = pageSize.Items.Cast<PageSize>().ToList().FindIndex(p => p.Key == "Custom");
             }
+
+
+
         }
-
-
 
 
 
