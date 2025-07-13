@@ -2372,7 +2372,7 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Margin="0, 0, 0, 5"/>
+                                   Margin="0,0,0,5"/>
 
                         <!-- ComboBox for selecting page size -->
                         <ComboBox Name="pageSize"
@@ -2380,13 +2380,13 @@
                                   VerticalAlignment="Center"
                                   Height="30"
                                   SelectionChanged="pageSize_SelectionChanged"
-                                   PreviewMouseDown="pageMargins_PreviewMouseDown">
+                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock Text="{Binding Key}"
                                                    FontWeight="Bold"
-                                                   Margin="0, 0, 0, 5"/>
+                                                   Margin="0,0,0,5"/>
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Left">
                                             <TextBlock Margin="2"

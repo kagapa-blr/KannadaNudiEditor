@@ -70,6 +70,15 @@ namespace KannadaNudiEditor
         private ObservableCollection<PageMargins> _marginItems;   // replaces List
 
 
+        private PageSize? _customSizeItem; // Holds the "Custom" row instance
+        private ObservableCollection<PageSize>? _sizeItems; // Binds to pageSize.ItemsSource
+
+        // Near top of MainWindow class
+        private bool _ignorePageSizeChange = false;
+
+
+
+
         #region Constructor
         public MainWindow()
         {
@@ -1481,183 +1490,6 @@ namespace KannadaNudiEditor
 
         #endregion
 
-
-        #region PageSizes Implementation
-        /// <summary>
-        /// Initializes the page sizes.
-        /// </summary>
-
-
-
-
-
-
-
-
-        private void InitializePageSizes()
-        {
-            List<PageSize> items = new List<PageSize>
-    {
-        // North American Sizes
-        new PageSize { Key = "Letter", width = "8.5 in", height = "11 in" },
-        new PageSize { Key = "Legal", width = "8.5 in", height = "14 in" },
-        new PageSize { Key = "Tabloid", width = "11 in", height = "17 in" },
-        new PageSize { Key = "Executive", width = "7.25 in", height = "10.5 in" },
-        new PageSize { Key = "Statement", width = "5.5 in", height = "8.5 in" },
-
-        // ISO A Series
-        new PageSize { Key = "A0", width = "33.1 in", height = "46.8 in" },
-        new PageSize { Key = "A1", width = "23.4 in", height = "33.1 in" },
-        new PageSize { Key = "A2", width = "16.5 in", height = "23.4 in" },
-        new PageSize { Key = "A3", width = "11.7 in", height = "16.5 in" },
-        new PageSize { Key = "A4", width = "8.3 in", height = "11.7 in" },
-        new PageSize { Key = "A5", width = "5.8 in", height = "8.3 in" },
-        new PageSize { Key = "A6", width = "4.1 in", height = "5.8 in" },
-        new PageSize { Key = "A7", width = "2.9 in", height = "4.1 in" },
-        new PageSize { Key = "A8", width = "2.0 in", height = "2.9 in" },
-        new PageSize { Key = "A9", width = "1.5 in", height = "2.0 in" },
-        new PageSize { Key = "A10", width = "1.0 in", height = "1.5 in" },
-
-        // ISO B Series
-        new PageSize { Key = "B4 (JIS)", width = "10.1 in", height = "14.3 in" },
-        new PageSize { Key = "B5 (JIS)", width = "7.2 in", height = "10.1 in" },
-
-        // ANSI Sizes
-        new PageSize { Key = "ANSI A", width = "8.5 in", height = "11 in" },
-        new PageSize { Key = "ANSI B", width = "11 in", height = "17 in" },
-        new PageSize { Key = "ANSI C", width = "17 in", height = "22 in" },
-        new PageSize { Key = "ANSI D", width = "22 in", height = "34 in" },
-        new PageSize { Key = "ANSI E", width = "34 in", height = "44 in" },
-
-        // Custom Option
-        new PageSize { Key = "Custom", width = "", height = "" }
-    };
-
-            pageSize.ItemsSource = items;
-
-            // Dictionary values in inches
-            pageSizesCollection = new Dictionary<string, List<double>>
-    {
-        // North American Sizes
-        { "Letter", new List<double> { 8.5, 11 } },
-        { "Legal", new List<double> { 8.5, 14 } },
-        { "Tabloid", new List<double> { 11, 17 } },
-        { "Executive", new List<double> { 7.25, 10.5 } },
-        { "Statement", new List<double> { 5.5, 8.5 } },
-
-        // ISO A Series
-        { "A0", new List<double> { 33.1, 46.8 } },
-        { "A1", new List<double> { 23.4, 33.1 } },
-        { "A2", new List<double> { 16.5, 23.4 } },
-        { "A3", new List<double> { 11.7, 16.5 } },
-        { "A4", new List<double> { 8.3, 11.7 } },
-        { "A5", new List<double> { 5.8, 8.3 } },
-        { "A6", new List<double> { 4.1, 5.8 } },
-        { "A7", new List<double> { 2.9, 4.1 } },
-        { "A8", new List<double> { 2.0, 2.9 } },
-        { "A9", new List<double> { 1.5, 2.0 } },
-        { "A10", new List<double> { 1.0, 1.5 } },
-
-        // ISO B Series
-        { "B4 (JIS)", new List<double> { 10.1, 14.3 } },
-        { "B5 (JIS)", new List<double> { 7.2, 10.1 } },
-
-        // ANSI Sizes
-        { "ANSI A", new List<double> { 8.5, 11 } },
-        { "ANSI B", new List<double> { 11, 17 } },
-        { "ANSI C", new List<double> { 17, 22 } },
-        { "ANSI D", new List<double> { 22, 34 } },
-        { "ANSI E", new List<double> { 34, 44 } }
-    };
-        }
-
-        private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            string selectedKey = (pageSize.SelectedItem as PageSize)?.Key;
-
-            if (selectedKey == "Custom")
-                return;
-
-
-            //RibbonButton_Click
-            if (!string.IsNullOrEmpty(selectedKey) && pageSizesCollection.TryGetValue(selectedKey, out var values))
-            {
-                //When other options are clicked, reset the values to default.
-                customPageWidth = customPageHeight = customSizeUnit = string.Empty;
-
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-                {
-                    section.SectionFormat.PageSize = new Size(
-                        values[0] * 96, // Width
-                        values[1] * 96  // Height
-                    );
-                }
-            }
-        }
-        #endregion
-
-
-        private void ApplyDefaultPageSettings()
-        {
-            // Default to A4 (595.3 x 841.9 pt → converted to pixels)
-            double a4Width = (595.3 * 96) / 72;
-            double a4Height = (841.9 * 96) / 72;
-
-            // Default margin: 1 inch = 72 pt → converted to pixels
-            double margin = (72 * 96) / 72;
-
-            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-            {
-                section.SectionFormat.PageSize = new Size(a4Width, a4Height);
-                section.SectionFormat.PageMargin = new Thickness(margin, margin, margin, margin);
-            }
-
-            // Optional: Set ComboBoxes to reflect default selections
-            pageSize.SelectedIndex = pageSize.Items.Cast<PageSize>().ToList().FindIndex(p => p.Key == "A4");
-            pageMargins.SelectedIndex = pageMargins.Items.Cast<PageMargins>().ToList().FindIndex(m => m.Key == "Normal");
-        }
-
-
-        private void RibbonButton_Click(object sender, RoutedEventArgs e)
-        {
-            //var dialog = new PageSetupDialog(customPageWidth, customPageHeight, customSizeUnit) { Owner = this };
-            CustomPageSize dialog = new CustomPageSize(customPageWidth, customPageHeight, customSizeUnit);
-
-            if (dialog.ShowDialog() == true)
-            {
-                // Save what the user typed so the dialog re‑opens pre‑filled next time
-                customPageWidth = dialog.WidthBox.Text;
-                customPageHeight = dialog.HeightBox.Text;
-                customSizeUnit = dialog.SelectedUnit;
-
-                // Convert the user numbers to pixels
-                const double dpi = 96.0;
-                double factor = dialog.SelectedUnit switch
-                {
-                    "Centimeters" => dpi / 2.54,
-                    "Millimeters" => dpi / 25.4,
-                    _ => dpi // Inches or default
-                };
-
-                double widthPx = dialog.PageWidth * factor;
-                double heightPx = dialog.PageHeight * factor;
-
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-                    section.SectionFormat.PageSize = new Size(widthPx, heightPx);
-
-                // 🔽 Make sure "Custom" is selected in the dropdown
-                pageSize.SelectedIndex = pageSize.Items.Cast<PageSize>().ToList().FindIndex(p => p.Key == "Custom");
-            }
-
-
-
-        }
-
-
-
-
-
-
         private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             string message;
@@ -1694,6 +1526,166 @@ namespace KannadaNudiEditor
 
 
 
+
+
+
+
+
+        #region PageSizes Implementation
+
+        private (double widthIn, double heightIn) GetCurrentSizeInInches()
+        {
+            const double dpi = 96.0;
+            var first = richTextBoxAdv.Document.Sections.OfType<SectionAdv>().FirstOrDefault();
+            return first == null
+                ? (8.3, 11.7)                                   // fallback = A4
+                : (first.SectionFormat.PageSize.Width / dpi,
+                   first.SectionFormat.PageSize.Height / dpi);
+        }
+
+        /// <summary>Populate the ComboBox from <see cref="PageSizeHelper"/> and set up lookups.</summary>
+        private void InitializePageSizes()
+        {
+            // 1️⃣  Build rows from helper
+            var predefined = PageSizeHelper.All
+                .Select(ps => new PageSize
+                {
+                    Key = ps.Key,
+                    width = $"{ps.WidthInInches} in",
+                    height = $"{ps.HeightInInches} in"
+                })
+                .ToList();
+
+            // 2️⃣  Live custom row
+            predefined.Add(new PageSize { Key = "Custom", width = "", height = "" });
+
+            _customSizeItem = predefined.Last();
+            _sizeItems = new ObservableCollection<PageSize>(predefined);
+            pageSize.ItemsSource = _sizeItems;
+
+            // 3️⃣  Quick‑lookup dictionary (inches)
+            pageSizesCollection = PageSizeHelper.All
+                .ToDictionary(p => p.Key,
+                              p => new List<double> { p.WidthInInches, p.HeightInInches },
+                              StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Called when the user selects a predefined size in the ComboBox.</summary>
+        private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (_ignorePageSizeChange) return;                       // programmatic change
+
+            string key = (pageSize.SelectedItem as PageSize)?.Key;
+            if (key == "Custom" || string.IsNullOrWhiteSpace(key)) return;
+
+            if (pageSizesCollection.TryGetValue(key, out var v))
+            {
+                customPageWidth = customPageHeight = customSizeUnit = string.Empty;
+
+                foreach (SectionAdv s in richTextBoxAdv.Document.Sections.OfType<SectionAdv>())
+                    s.SectionFormat.PageSize = new Size(v[0] * 96, v[1] * 96);
+            }
+        }
+
+        /// <summary>Applies defaults (A4 + normal margins) to a new/empty document.</summary>
+        private void ApplyDefaultPageSettings()
+        {
+            const double dpi = 96.0;
+            double a4WidthPx = 8.3 * dpi;           // 8.3 in → px
+            double a4HeightPx = 11.7 * dpi;          // 11.7 in → px
+            double marginPx = dpi;                 // 1 inch
+
+            if (richTextBoxAdv.Document.Sections.Count == 0)
+                richTextBoxAdv.Document.Sections.Add(new SectionAdv());
+
+            foreach (SectionAdv s in richTextBoxAdv.Document.Sections.OfType<SectionAdv>())
+            {
+                s.SectionFormat.PageSize = new Size(a4WidthPx, a4HeightPx);
+                s.SectionFormat.PageMargin = new Thickness(marginPx);
+            }
+
+            // sync UI without triggering SelectionChanged
+            _ignorePageSizeChange = true;
+            pageSize.SelectedItem = _sizeItems?.FirstOrDefault(p => p.Key == "A4");
+            pageMargins.SelectedIndex = pageMargins.Items
+                .Cast<PageMargins>()
+                .ToList()
+                .FindIndex(m => m.Key == "Normal");
+            _ignorePageSizeChange = false;
+        }
+
+
+
+
+
+
+
+
+        private void RibbonButton_Click(object? sender, RoutedEventArgs? e)
+        {
+            const double dpi = 96.0;
+
+            double wIn, hIn;
+            string dlgUnit = string.IsNullOrWhiteSpace(customSizeUnit) ? "in" : customSizeUnit.ToLower();
+
+            if (!double.TryParse(customPageWidth, out wIn) ||
+                !double.TryParse(customPageHeight, out hIn))
+            {
+                (wIn, hIn) = GetCurrentSizeInInches();
+                dlgUnit = "in";
+            }
+
+            double toUnitFactor = dlgUnit switch
+            {
+                "cm" => 2.54,
+                "mm" => 25.4,
+                _ => 1.0
+            };
+
+            string wStr = (wIn * toUnitFactor).ToString("0.###");
+            string hStr = (hIn * toUnitFactor).ToString("0.###");
+
+            var dlg = new CustomPageSize(wStr, hStr, dlgUnit) { Owner = this };
+            if (dlg.ShowDialog() != true) return;
+
+            customPageWidth = dlg.WidthBox.Text;
+            customPageHeight = dlg.HeightBox.Text;
+            customSizeUnit = dlg.Unit.ToLower();  // "cm", "mm", or "in"
+
+            double dipFactor = dlg.Unit switch
+            {
+                "cm" => dpi / 2.54,
+                "mm" => dpi / 25.4,
+                _ => dpi
+            };
+
+            double widthPx = dlg.PageWidth * dipFactor;
+            double heightPx = dlg.PageHeight * dipFactor;
+
+            foreach (SectionAdv s in richTextBoxAdv.Document.Sections.OfType<SectionAdv>())
+                s.SectionFormat.PageSize = new Size(widthPx, heightPx);
+
+            if (_customSizeItem != null)
+            {
+                _customSizeItem.width = $"{dlg.PageWidth:0.###} {dlg.Unit}";
+                _customSizeItem.height = $"{dlg.PageHeight:0.###} {dlg.Unit}";
+                CollectionViewSource.GetDefaultView(_sizeItems!).Refresh();
+            }
+
+            pageSize.SelectedItem = _customSizeItem;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
 
         // Handle Edit Header button click to show the Header/Footer editor
         private void EditHeader_Click(object sender, RoutedEventArgs e)
@@ -2194,28 +2186,10 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
-
-
-
     }
 
 
-    /// <summary>
-    /// Represents page size with properties for height, width, and a key identifier.
-    /// </summary>
-    public class PageSize
-    {
-        public string? Key { get; set; }
-        public string? height { get; set; }
-        public string? width { get; set; }
-        public override string ToString()
-        {
-            return $"{Key}: {height}, {width}";
-        }
-    }
+
+
+
 }

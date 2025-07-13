@@ -5,38 +5,14 @@ using System.Windows.Controls;
 
 namespace KannadaNudiEditor
 {
-    /// <summary>
-    /// Interaction logic for CustomPageSize.xaml
-    /// </summary>
     public partial class CustomPageSize : Window
     {
-        #region Properties ───────────────────────────────────────────────
-
-        /// <summary>
-        /// Page width exactly as the user typed it, in <see cref="SelectedUnit"/>.
-        /// </summary>
         public double PageWidth { get; private set; }
-
-        /// <summary>
-        /// Page height exactly as the user typed it, in <see cref="SelectedUnit"/>.
-        /// </summary>
         public double PageHeight { get; private set; }
+        public string SelectedUnit { get; private set; } = "in";
 
-        /// <summary>
-        /// The unit selected by the user (e.g., "Inches", "Centimeters", "Millimeters").
-        /// </summary>
-        public string SelectedUnit { get; private set; } = "Inches";
+        public string Unit => SelectedUnit;
 
-        #endregion
-
-        #region Constructor ──────────────────────────────────────────────
-
-        /// <summary>
-        /// Initializes the dialog with pre-filled values.
-        /// </summary>
-        /// <param name="width">Previously used width as string</param>
-        /// <param name="height">Previously used height as string</param>
-        /// <param name="unit">Previously selected unit</param>
         public CustomPageSize(string width, string height, string unit)
         {
             InitializeComponent();
@@ -46,7 +22,7 @@ namespace KannadaNudiEditor
 
             foreach (ComboBoxItem item in UnitSelector.Items)
             {
-                if (item.Content.ToString().Equals(unit, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(item.Content?.ToString(), unit, StringComparison.OrdinalIgnoreCase))
                 {
                     UnitSelector.SelectedItem = item;
                     break;
@@ -54,23 +30,14 @@ namespace KannadaNudiEditor
             }
         }
 
-        #endregion
-
-        #region Helpers ─────────────────────────────────────────────────
-
-        /// <summary>
-        /// Converts Kannada numerals to standard English numerals.
-        /// </summary>
         private static string NormalizeToEnglishNumbers(string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                return input;
+            if (string.IsNullOrWhiteSpace(input)) return input;
 
             var builder = new StringBuilder(input.Length);
-
             foreach (char c in input)
             {
-                if (c >= 0x0CE6 && c <= 0x0CEF) // Kannada 0–9
+                if (c >= 0x0CE6 && c <= 0x0CEF)
                     builder.Append((char)('0' + (c - 0x0CE6)));
                 else
                     builder.Append(c);
@@ -79,14 +46,9 @@ namespace KannadaNudiEditor
             return builder.ToString();
         }
 
-        #endregion
-
-        #region Event Handlers ──────────────────────────────────────────
-
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            string selectedUnit =
-                (UnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Inches";
+            string selectedUnit = (UnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "in";
 
             string widthText = NormalizeToEnglishNumbers(WidthBox.Text);
             string heightText = NormalizeToEnglishNumbers(HeightBox.Text);
@@ -97,7 +59,6 @@ namespace KannadaNudiEditor
                 PageWidth = width;
                 PageHeight = height;
                 SelectedUnit = selectedUnit;
-
                 DialogResult = true;
                 Close();
             }
@@ -117,7 +78,5 @@ namespace KannadaNudiEditor
             DialogResult = false;
             Close();
         }
-
-        #endregion
     }
 }
