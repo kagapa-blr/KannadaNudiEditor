@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,7 +16,16 @@ namespace KannadaNudiEditor
         public double Bottom { get; private set; }
         public double Left { get; private set; }
         public double Right { get; private set; }
-        public string Unit { get; private set; } = "in"; // "in" | "cm" | "mm"
+        public string Unit { get; private set; } = "in";   // "in" | "cm" | "mm"
+
+        #endregion
+
+        #region Private State (fallback values)
+
+        private readonly string _initialTop;
+        private readonly string _initialBottom;
+        private readonly string _initialLeft;
+        private readonly string _initialRight;
 
         #endregion
 
@@ -25,13 +35,16 @@ namespace KannadaNudiEditor
         {
             InitializeComponent();
 
-            // Prefill user values
+            _initialTop = top;
+            _initialBottom = bottom;
+            _initialLeft = left;
+            _initialRight = right;
+
             TopMarginTextBox.Text = top;
             BottomMarginTextBox.Text = bottom;
             LeftMarginTextBox.Text = left;
             RightMarginTextBox.Text = right;
 
-            // Set unit selection based on neutral tag
             foreach (ComboBoxItem item in MarginUnitSelector.Items)
             {
                 if (item.Tag?.ToString() == unit.ToLower())
@@ -44,35 +57,30 @@ namespace KannadaNudiEditor
 
         #endregion
 
-        #region Event Handlers
+        #region Event Handlers
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            string unitTag = (MarginUnitSelector.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "in";
+            // Selected unit tag ("in" | "cm" | "mm")
+            Unit = (MarginUnitSelector.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "in";
 
-            string topText = NormalizeToEnglishNumbers(TopMarginTextBox.Text);
-            string bottomText = NormalizeToEnglishNumbers(BottomMarginTextBox.Text);
-            string leftText = NormalizeToEnglishNumbers(LeftMarginTextBox.Text);
-            string rightText = NormalizeToEnglishNumbers(RightMarginTextBox.Text);
+            bool isValid = true;
 
-            if (double.TryParse(topText, out double top) &&
-                double.TryParse(bottomText, out double bottom) &&
-                double.TryParse(leftText, out double left) &&
-                double.TryParse(rightText, out double right))
+            Top = ParseOrFallback(TopMarginTextBox.Text, _initialTop, ref isValid);
+            Bottom = ParseOrFallback(BottomMarginTextBox.Text, _initialBottom, ref isValid);
+            Left = ParseOrFallback(LeftMarginTextBox.Text, _initialLeft, ref isValid);
+            Right = ParseOrFallback(RightMarginTextBox.Text, _initialRight, ref isValid);
+
+            if (isValid)
             {
-                Top = top;
-                Bottom = bottom;
-                Left = left;
-                Right = right;
-                Unit = unitTag;
-
                 DialogResult = true;
                 Close();
             }
             else
             {
-                MessageBox.Show("ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಚುಗಳಿಗಾಗಿ ಮಾನ್ಯ ಸಂಖ್ಯಾ ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ.\n" +
-                                "(Please enter valid numerical values for all margins.)");
+                MessageBox.Show(
+                    "ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಚುಗಳಿಗಾಗಿ ಮಾನ್ಯ ಸಂಖ್ಯಾ ಮೌಲ್ಯಗಳನ್ನು ನಮೂದಿಸಿ.\n" +
+                    "(Please enter valid numerical values for all margins.)");
             }
         }
 
@@ -86,7 +94,10 @@ namespace KannadaNudiEditor
 
         #region Helpers
 
-        private string NormalizeToEnglishNumbers(string input)
+        /// <summary>
+        /// Converts Kannada digits to ASCII digits.
+        /// </summary>
+        private static string NormalizeToEnglishNumbers(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return input;
@@ -94,12 +105,27 @@ namespace KannadaNudiEditor
             var sb = new StringBuilder(input.Length);
             foreach (char c in input)
             {
-                if (c >= 0x0CE6 && c <= 0x0CEF) // Kannada digits
+                if (c >= 0x0CE6 && c <= 0x0CEF)   // Kannada digits
                     sb.Append((char)('0' + (c - 0x0CE6)));
                 else
                     sb.Append(c);
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Tries to parse the text; if empty, uses fallback; sets flag false if invalid.
+        /// </summary>
+        private static double ParseOrFallback(string raw, string fallback, ref bool ok)
+        {
+            string text = string.IsNullOrWhiteSpace(raw) ? fallback : raw;
+            text = NormalizeToEnglishNumbers(text).Trim();
+
+            if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                return value;
+
+            ok = false;
+            return 0;
         }
 
         #endregion

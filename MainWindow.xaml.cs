@@ -17,6 +17,7 @@ using KannadaNudiEditor.Views.HeaderFooter;
 using KannadaNudiEditor.Views.Sort;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace KannadaNudiEditor
 {
@@ -1427,38 +1428,68 @@ namespace KannadaNudiEditor
 
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new CustomMargin(customTopMargin, customBottomMargin,
-                                       customLeftMargin, customRightMargin,
-                                       customMarginUnit);
+            const double dpi = 96.0;   // 1 inch = 96 device‑independent pixels
 
-            if (dlg.ShowDialog() != true) return;
+            // 1️⃣ —— Get current page margins (first section) ————————————————
+           var firstSection = richTextBoxAdv.Document?.Sections?.FirstOrDefault() as SectionAdv;
 
-            // Remember raw text for next dialog launch
-            customTopMargin = dlg.Top.ToString();
-            customBottomMargin = dlg.Bottom.ToString();
-            customLeftMargin = dlg.Left.ToString();
-            customRightMargin = dlg.Right.ToString();
-            customMarginUnit = dlg.Unit;                    // "in" | "cm" | "mm"
 
-            // ---------- Update the “Custom” row in ComboBox ----------
+            if (firstSection == null) return;
+
+            Thickness current = firstSection.SectionFormat.PageMargin;
+
+            double leftInches = current.Left / dpi;
+            double topInches = current.Top / dpi;
+            double rightInches = current.Right / dpi;
+            double bottomInches = current.Bottom / dpi;
+
+            // 2️⃣ —— Determine which unit we want to display in the dialog ——————
+            string unit = string.IsNullOrWhiteSpace(customMarginUnit) ? "in" : customMarginUnit.ToLower();
+
+            double toUnitFactor = unit switch
+            {
+                "cm" => 2.54,
+                "mm" => 25.4,
+                _ => 1.0            // inches
+            };
+
+            // 3️⃣ —— Convert current margins into that unit ————————————————
+            string leftStr = (leftInches * toUnitFactor).ToString("0.##");
+            string topStr = (topInches * toUnitFactor).ToString("0.##");
+            string rightStr = (rightInches * toUnitFactor).ToString("0.##");
+            string bottomStr = (bottomInches * toUnitFactor).ToString("0.##");
+
+            // 4️⃣ —— Launch dialog pre‑filled with detected values ————————————
+            var dlg = new CustomMargin(topStr, bottomStr, leftStr, rightStr, unit);
+
+            if (dlg.ShowDialog() != true) return;   // user hit Cancel
+
+            // 5️⃣ —— Remember what the user typed (for next launch & ribbon row) —
+            customTopMargin = dlg.TopMarginTextBox.Text;
+            customBottomMargin = dlg.BottomMarginTextBox.Text;
+            customLeftMargin = dlg.LeftMarginTextBox.Text;
+            customRightMargin = dlg.RightMarginTextBox.Text;
+            customMarginUnit = dlg.Unit;          // "in" | "cm" | "mm"
+
+            // 6️⃣ —— Update the “Custom” row text in the ComboBox ————————————
             string unitLabel = dlg.Unit switch { "cm" => "cm", "mm" => "mm", _ => "in" };
-            _customMarginsItem.top = $"Top:    {customTopMargin} {unitLabel}";
+            _customMarginsItem.top = $"Top: {customTopMargin} {unitLabel}";
             _customMarginsItem.bottom = $"Bottom: {customBottomMargin} {unitLabel}";
-            _customMarginsItem.left = $"Left:   {customLeftMargin} {unitLabel}";
-            _customMarginsItem.right = $"Right:  {customRightMargin} {unitLabel}";
+            _customMarginsItem.left = $"Left: {customLeftMargin} {unitLabel}";
+            _customMarginsItem.right = $"Right: {customRightMargin} {unitLabel}";
             CollectionViewSource.GetDefaultView(_marginItems).Refresh();
-            pageMargins.SelectedItem = _customMarginsItem;    // keep the Custom row selected
+            pageMargins.SelectedItem = _customMarginsItem;
 
-            // ---------- Apply margin to document ----------
-            double factor = UnitToDipFactor(dlg.Unit);
+            // 7️⃣ —— Apply new margins to every section ————————————————
+            double dipFactor = UnitToDipFactor(dlg.Unit);      // helper from earlier
 
             foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
             {
                 section.SectionFormat.PageMargin = new Thickness(
-                    dlg.Left * factor,
-                    dlg.Top * factor,
-                    dlg.Right * factor,
-                    dlg.Bottom * factor);
+                    dlg.Left * dipFactor,
+                    dlg.Top * dipFactor,
+                    dlg.Right * dipFactor,
+                    dlg.Bottom * dipFactor);
             }
         }
 

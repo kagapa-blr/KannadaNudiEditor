@@ -238,6 +238,7 @@
   <sys:String x:Key="BottomLabel">Bottom (inch):</sys:String>
   <sys:String x:Key="OkButton">OK</sys:String>
   <sys:String x:Key="CancelButton">Cancel</sys:String>
+  <sys:String x:Key="CurrentMarginInfo">These fields are pre-filled with the current margins applied to the document. You can adjust them as needed.</sys:String>
 
 
 

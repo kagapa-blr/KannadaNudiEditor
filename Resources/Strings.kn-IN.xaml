@@ -221,6 +221,7 @@
   <sys:String x:Key="BottomLabel">ಕೆಳ:</sys:String>
   <sys:String x:Key="OkButton">ಸರಿ</sys:String>
   <sys:String x:Key="CancelButton">ರದ್ದುಮಾಡಿ</sys:String>
+  <sys:String x:Key="CurrentMarginInfo">ಈ ಕ್ಷೇತ್ರಗಳು ದಸ್ತಾವೇಜಿನಲ್ಲಿ ಈಗಾಗಲೇ ಅನ್ವಯಿಸಲಾದ ಅಂಚು ಮೌಲ್ಯಗಳಿಂದ ಪೂರ್ವನಿರ್ದಿಷ್ಟವಾಗಿವೆ. ಅಗತ್ಯವಿದ್ದರೆ ಅವುಗಳನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಬಹುದು.</sys:String>
 
 
 
