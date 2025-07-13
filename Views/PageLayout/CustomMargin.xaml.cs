@@ -97,6 +97,7 @@ namespace KannadaNudiEditor
         /// <summary>
         /// Converts Kannada digits to ASCII digits.
         /// </summary>
+       
         private static string NormalizeToEnglishNumbers(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -112,6 +113,8 @@ namespace KannadaNudiEditor
             }
             return sb.ToString();
         }
+
+
 
         /// <summary>
         /// Tries to parse the text; if empty, uses fallback; sets flag false if invalid.

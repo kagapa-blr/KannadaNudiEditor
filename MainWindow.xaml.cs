@@ -1543,7 +1543,6 @@ namespace KannadaNudiEditor
                    first.SectionFormat.PageSize.Height / dpi);
         }
 
-        /// <summary>Populate the ComboBox from <see cref="PageSizeHelper"/> and set up lookups.</summary>
         private void InitializePageSizes()
         {
             // 1️⃣  Build rows from helper
@@ -1615,12 +1614,6 @@ namespace KannadaNudiEditor
         }
 
 
-
-
-
-
-
-
         private void RibbonButton_Click(object? sender, RoutedEventArgs? e)
         {
             const double dpi = 96.0;
@@ -1665,6 +1658,9 @@ namespace KannadaNudiEditor
             foreach (SectionAdv s in richTextBoxAdv.Document.Sections.OfType<SectionAdv>())
                 s.SectionFormat.PageSize = new Size(widthPx, heightPx);
 
+            // Optional: Force redraw (only UpdateLayout is publicly available)
+            richTextBoxAdv.UpdateLayout();
+
             if (_customSizeItem != null)
             {
                 _customSizeItem.width = $"{dlg.PageWidth:0.###} {dlg.Unit}";
@@ -1683,9 +1679,12 @@ namespace KannadaNudiEditor
 
 
 
-
-
         #endregion
+
+
+
+
+
 
         // Handle Edit Header button click to show the Header/Footer editor
         private void EditHeader_Click(object sender, RoutedEventArgs e)

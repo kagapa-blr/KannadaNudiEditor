@@ -30,21 +30,26 @@ namespace KannadaNudiEditor
             }
         }
 
+
+
+
+
         private static string NormalizeToEnglishNumbers(string input)
         {
-            if (string.IsNullOrWhiteSpace(input)) return input;
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
 
-            var builder = new StringBuilder(input.Length);
+            var sb = new StringBuilder(input.Length);
             foreach (char c in input)
             {
-                if (c >= 0x0CE6 && c <= 0x0CEF)
-                    builder.Append((char)('0' + (c - 0x0CE6)));
+                if (c >= 0x0CE6 && c <= 0x0CEF)   // Kannada digits
+                    sb.Append((char)('0' + (c - 0x0CE6)));
                 else
-                    builder.Append(c);
+                    sb.Append(c);
             }
-
-            return builder.ToString();
+            return sb.ToString();
         }
+
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
