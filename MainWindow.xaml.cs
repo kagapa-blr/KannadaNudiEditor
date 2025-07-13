@@ -1313,53 +1313,23 @@ namespace KannadaNudiEditor
         private void InitializePageMargins()
         {
             // ——— live custom row ———
-            _customMarginsItem = new PageMargins
-            {
-                Key = "Custom",
-                top = LanguageToggleButton.IsChecked == true
-                          ? "Set custom margins"
-                          : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು",
-                bottom = "",
-                left = "",
-                right = ""
-            };
+            _customMarginsItem = PageMarginHelper.GetPresetMargins(LanguageToggleButton.IsChecked == true)
+                .FirstOrDefault(p => p.Key == "Custom");
 
             // ——— all items ———
-            _marginItems = new ObservableCollection<PageMargins>
-    {
-        new PageMargins { Key="Normal",   top="Top: 1 in",   bottom="Bottom: 1 in",
-                          left="Left: 1 in",  right="Right: 1 in" },
-        new PageMargins { Key="Narrow",   top="Top: 0.5 in", bottom="Bottom: 0.5 in",
-                          left="Left: 0.5 in", right="Right: 0.5 in" },
-        new PageMargins { Key="Moderate", top="Top: 1 in",   bottom="Bottom: 1 in",
-                          left="Left: 0.75 in", right="Right: 0.75 in" },
-        new PageMargins { Key="Wide",     top="Top: 1 in",   bottom="Bottom: 1 in",
-                          left="Left: 2 in",  right="Right: 2 in" },
-        new PageMargins { Key="Mirrored", top="Top: 1 in",   bottom="Bottom: 1 in",
-                          left="Left: 1.25 in", right="Right: 1 in" },
-        new PageMargins { Key="Office 2003 Default",
-                          top="Top: 1 in", bottom="Bottom: 1 in",
-                          left="Left: 1.25 in", right="Right: 1.25 in" },
-        _customMarginsItem                                         // <‑‑ keep last
-    };
+            _marginItems = new ObservableCollection<PageMargins>(
+                PageMarginHelper.GetPresetMargins(LanguageToggleButton.IsChecked == true)
+            );
 
-            pageMargins.ItemsSource = _marginItems;                       // <‑‑ bind
+            pageMargins.ItemsSource = _marginItems;  // <‑‑ bind
 
             // preset numeric lookup (inches)
-            pageMarginsCollection = new Dictionary<string, List<double>>
-    {
-        { "Normal",   new(){1,1,1,1} },
-        { "Narrow",   new(){0.5,0.5,0.5,0.5} },
-        { "Moderate", new(){1,1,0.75,0.75} },
-        { "Wide",     new(){1,1,2,2} },
-        { "Mirrored", new(){1,1,1.25,1} },
-        { "Office 2003 Default", new(){1,1,1.25,1.25} }
-    };
+            pageMarginsCollection = PageMarginHelper.GetMarginValues();
         }
 
         private void pageMargins_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            DependencyObject current = e.OriginalSource as DependencyObject;
+            DependencyObject? current = e.OriginalSource as DependencyObject;
 
             // Traverse up the visual tree until we find a ComboBoxItem or reach the root
             while (current != null && current is not ComboBoxItem)
@@ -1412,6 +1382,7 @@ namespace KannadaNudiEditor
                 }
             }
         }
+
         private static double UnitToDipFactor(string unit)
         {
             const double dpi = 96.0;            // 1 inch = 96 device‑independent pixels
@@ -1424,15 +1395,12 @@ namespace KannadaNudiEditor
         }
 
 
-
-
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
             const double dpi = 96.0;   // 1 inch = 96 device‑independent pixels
 
             // 1️⃣ —— Get current page margins (first section) ————————————————
-           var firstSection = richTextBoxAdv.Document?.Sections?.FirstOrDefault() as SectionAdv;
-
+            var firstSection = richTextBoxAdv.Document?.Sections?.FirstOrDefault() as SectionAdv;
 
             if (firstSection == null) return;
 
@@ -2239,22 +2207,6 @@ namespace KannadaNudiEditor
 
     }
 
-    /// <summary>
-    /// Represents page margins with properties for top, bottom, left, and right margins, along with a key identifier.
-    /// </summary>
-    public class PageMargins
-    {
-        public string? Key { get; set; }
-        public string? top { get; set; }
-        public string? bottom { get; set; }
-        public string? left { get; set; }
-        public string? right { get; set; }
-        public override string ToString()
-        {
-            return $"{Key}: {top}, {bottom}, {left}, {right}";
-        }
-
-    }
 
     /// <summary>
     /// Represents page size with properties for height, width, and a key identifier.
