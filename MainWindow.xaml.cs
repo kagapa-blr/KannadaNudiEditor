@@ -45,7 +45,9 @@ namespace KannadaNudiEditor
 
         private string customPageHeight;
         private string customPageWidth;
-        private string customSizeUnit;
+       
+        private string customSizeUnit = "in";   // default once at startup
+
         #endregion
 
 #endif
