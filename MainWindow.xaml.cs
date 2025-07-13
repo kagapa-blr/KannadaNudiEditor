@@ -1282,12 +1282,28 @@ namespace KannadaNudiEditor
         }
         #endregion
 
+
+
+
+        private void LanguageToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            LanguageManager.SwitchLanguage("en-US");
+            LanguageToggleButton.Content = "EN";
+        }
+
+        private void LanguageToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LanguageManager.SwitchLanguage("kn-IN");
+            LanguageToggleButton.Content = "ಕ";
+        }
+
+
+
+
+
+
         #region PageColor Implementation
-        /// <summary>
-        /// Updates the page color.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void pageColorColorPicker_ColorChanged(object sender, SelectedBrushChangedEventArgs e)
         {
             if (e.NewColor != null)
@@ -1304,6 +1320,7 @@ namespace KannadaNudiEditor
             // Set the background to no color (transparent)
             richTextBoxAdv.Document.Background.Color = Colors.White;
         }
+
         #endregion
         #region PageMargins Implementation
         /// <summary>
@@ -1554,11 +1571,6 @@ namespace KannadaNudiEditor
     };
         }
 
-
-
-        /// <summary>
-        /// Updates the page sizes.
-        /// </summary>
         private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             string selectedKey = (pageSize.SelectedItem as PageSize)?.Key;
@@ -1610,23 +1622,7 @@ namespace KannadaNudiEditor
             pageMargins.SelectedIndex = pageMargins.Items.Cast<PageMargins>().ToList().FindIndex(m => m.Key == "Normal");
         }
 
-        private void LanguageToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            LanguageManager.SwitchLanguage("en-US");
-            LanguageToggleButton.Content = "EN";
-        }
 
-        private void LanguageToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            LanguageManager.SwitchLanguage("kn-IN");
-            LanguageToggleButton.Content = "ಕ";
-        }
-
-        /// <summary>
-        /// Launches the page setup dialog on click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
             PageSetupDialog dialog = new PageSetupDialog(customPageWidth, customPageHeight, customSizeUnit)
@@ -1656,11 +1652,13 @@ namespace KannadaNudiEditor
             }
         }
 
-        /// <summary>
-        /// Called on closing the ribbon window applictaion.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
+
+
+
+
+
+
         private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             string message;
