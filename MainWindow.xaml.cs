@@ -45,7 +45,7 @@ namespace KannadaNudiEditor
 
         private string customPageHeight;
         private string customPageWidth;
-       
+
         private string customSizeUnit = "in";   // default once at startup
 
         #endregion
@@ -1533,7 +1533,7 @@ namespace KannadaNudiEditor
 
 
 
-        #region PageSizes Implementation
+        #region PageSizes Implementation
 
         private (double widthIn, double heightIn) GetCurrentSizeInInches()
         {
@@ -1544,6 +1544,7 @@ namespace KannadaNudiEditor
                 : (first.SectionFormat.PageSize.Width / dpi,
                    first.SectionFormat.PageSize.Height / dpi);
         }
+
 
         private void InitializePageSizes()
         {
@@ -1615,21 +1616,32 @@ namespace KannadaNudiEditor
             _ignorePageSizeChange = false;
         }
 
-
         private void RibbonButton_Click(object? sender, RoutedEventArgs? e)
         {
             const double dpi = 96.0;
 
-            double wIn, hIn;
-            string dlgUnit = string.IsNullOrWhiteSpace(customSizeUnit) ? "in" : customSizeUnit.ToLower();
+            // Step 1: Start with current page size in inches
+            var (wIn, hIn) = GetCurrentSizeInInches();
 
-            if (!double.TryParse(customPageWidth, out wIn) ||
-                !double.TryParse(customPageHeight, out hIn))
+            // Step 2: If user had manually entered custom values earlier, override
+            if (double.TryParse(customPageWidth, out double inputWidth) &&
+                double.TryParse(customPageHeight, out double inputHeight) &&
+                !string.IsNullOrWhiteSpace(customSizeUnit))
             {
-                (wIn, hIn) = GetCurrentSizeInInches();
-                dlgUnit = "in";
+                string unit = customSizeUnit.ToLower();
+                double factor = unit switch
+                {
+                    "cm" => 1.0 / 2.54,
+                    "mm" => 1.0 / 25.4,
+                    _ => 1.0
+                };
+
+                wIn = inputWidth * factor;
+                hIn = inputHeight * factor;
             }
 
+            // Step 3: Show dialog in selected unit (default to inches)
+            string dlgUnit = string.IsNullOrWhiteSpace(customSizeUnit) ? "in" : customSizeUnit.ToLower();
             double toUnitFactor = dlgUnit switch
             {
                 "cm" => 2.54,
@@ -1641,13 +1653,16 @@ namespace KannadaNudiEditor
             string hStr = (hIn * toUnitFactor).ToString("0.###");
 
             var dlg = new CustomPageSize(wStr, hStr, dlgUnit) { Owner = this };
-            if (dlg.ShowDialog() != true) return;
+            if (dlg.ShowDialog() != true)
+                return;
 
+            // Step 4: Save user input
             customPageWidth = dlg.WidthBox.Text;
             customPageHeight = dlg.HeightBox.Text;
-            customSizeUnit = dlg.Unit.ToLower();  // "cm", "mm", or "in"
+            customSizeUnit = dlg.Unit.ToLower(); // cm / mm / in
 
-            double dipFactor = dlg.Unit switch
+            // Step 5: Convert to DIP (pixels)
+            double dipFactor = customSizeUnit switch
             {
                 "cm" => dpi / 2.54,
                 "mm" => dpi / 25.4,
@@ -1658,11 +1673,13 @@ namespace KannadaNudiEditor
             double heightPx = dlg.PageHeight * dipFactor;
 
             foreach (SectionAdv s in richTextBoxAdv.Document.Sections.OfType<SectionAdv>())
+            {
                 s.SectionFormat.PageSize = new Size(widthPx, heightPx);
+            }
 
-            // Optional: Force redraw (only UpdateLayout is publicly available)
             richTextBoxAdv.UpdateLayout();
 
+            // Step 6: Update the "Custom" row in dropdown
             if (_customSizeItem != null)
             {
                 _customSizeItem.width = $"{dlg.PageWidth:0.###} {dlg.Unit}";
@@ -1672,8 +1689,6 @@ namespace KannadaNudiEditor
 
             pageSize.SelectedItem = _customSizeItem;
         }
-
-
 
 
 

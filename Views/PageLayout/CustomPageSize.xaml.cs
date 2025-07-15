@@ -22,12 +22,13 @@ namespace KannadaNudiEditor
 
             foreach (ComboBoxItem item in UnitSelector.Items)
             {
-                if (string.Equals(item.Content?.ToString(), unit, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(item.Tag?.ToString(), unit, StringComparison.OrdinalIgnoreCase))
                 {
                     UnitSelector.SelectedItem = item;
                     break;
                 }
             }
+
         }
 
 
@@ -53,7 +54,8 @@ namespace KannadaNudiEditor
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            string selectedUnit = (UnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "in";
+            // string selectedUnit = (UnitSelector.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "in";
+            string selectedUnit = (UnitSelector.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "in";
 
             string widthText = NormalizeToEnglishNumbers(WidthBox.Text);
             string heightText = NormalizeToEnglishNumbers(HeightBox.Text);
