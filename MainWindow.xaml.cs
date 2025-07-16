@@ -1198,7 +1198,8 @@ namespace KannadaNudiEditor
             grid.RowDefinitions.Add(rowDefinition2);
 
             TextBlock styleFormat = new TextBlock();
-            styleFormat.Text = "AaBbCcDdEe";
+            //styleFormat.Text = "AaBbCcDdEe";
+            styleFormat.Text = "ಅಆಇಈಉಊಋಎ";
 
             styleFormat.FontWeight = paragraphStyle.CharacterFormat.Bold ? FontWeights.Bold : FontWeights.Normal;
             styleFormat.FontStyle = paragraphStyle.CharacterFormat.Italic ? FontStyles.Italic : FontStyles.Normal;
