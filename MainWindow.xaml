@@ -549,6 +549,115 @@
                     <Syncfusion:BackStageCommandButton  x:Name="backstagePrintButton"
                                                         Header="{DynamicResource backStagePrint}"
                                                         Command="Syncfusion:SfRichTextBoxAdv.PrintDocumentCommand"/>
+
+
+
+                    <Syncfusion:BackstageTabItem Header="{DynamicResource backStageExport}">
+                        <Grid Margin="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{DynamicResource backStageExportOptions}"
+                                           FontFamily="NudiParijatha"
+                                           FontSize="20"
+                                           Margin="10"/>
+
+                                <Rectangle Grid.Row="1"
+                                           Stroke="Gray"
+                                           StrokeThickness="1"
+                                           StrokeDashArray="5"
+                                           HorizontalAlignment="Stretch"
+                                           Margin="10"
+                                           Height="1"/>
+
+                                <Grid Grid.Row="2"
+                                      Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Syncfusion:RibbonButton x:Name="exportToPdfButton"
+                                                             SizeForm="Large"
+                                                             Width="87"
+                                                             Height="80"
+                                                             Margin="5"
+                                                             Label="{DynamicResource backStageExportToPdf}"
+                                                             BorderBrush="#FFA1A2A4"
+                                                             BorderThickness="1"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                Margin="3">
+                                        <TextBlock Text="{DynamicResource backStageExportToPdf}"
+                                                   FontWeight="Bold"
+                                                   Margin="3"/>
+                                        <TextBlock Text="{DynamicResource backStageExportToPdfDescription}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="3"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Row="3"
+                                      Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Syncfusion:RibbonButton x:Name="exportToMarkdownButton"
+                                                             SizeForm="Large"
+                                                             Width="87"
+                                                             Height="80"
+                                                             Margin="5"
+                                                             Label="{DynamicResource backStageExportToMarkdown}"
+                                                             BorderBrush="#FFA1A2A4"
+                                                             BorderThickness="1"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                Margin="3">
+                                        <TextBlock Text="{DynamicResource backStageExportToMarkdown}"
+                                                   FontWeight="Bold"
+                                                   Margin="3"/>
+                                        <TextBlock Text="{DynamicResource backStageExportToMarkdownDescription}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="3"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+
+                            <Border BorderThickness="0.5"
+                                    BorderBrush="#FFBCBCBC"
+                                    Margin="15"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"/>
+
+                            <Grid Grid.Column="2"
+                                  VerticalAlignment="Top"
+                                  HorizontalAlignment="Left"
+                                  Margin="20,5,0,0">
+                                <TextBlock Text="{DynamicResource backStageExportRightHint}"
+                                           FontStyle="Italic"
+                                           FontSize="14"
+                                           TextWrapping="Wrap"
+                                           Width="300"/>
+                            </Grid>
+                        </Grid>
+                    </Syncfusion:BackstageTabItem>
+
+
+
+
                     <Syncfusion:BackstageTabItem Header="{DynamicResource backStageHelp}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
@@ -657,6 +766,10 @@
                                     HorizontalAlignment="Left"/>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
+
+
+
+
                 </Syncfusion:Backstage>
             </Syncfusion:Ribbon.BackStage>
 
@@ -2068,11 +2181,11 @@
 
                 <!-- Header & Footer Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource HeaderFooterGroupDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
@@ -2086,12 +2199,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource EditHeader}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource EditHeaderTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2101,11 +2214,11 @@
 
                 <!-- Header/Footer Options Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterOptions}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource HeaderFooterOptionsDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
@@ -2119,12 +2232,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource DifferentFirstPageButton}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource DifferentFirstPageTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2138,12 +2251,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource DifferentEvenPageButton}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource DifferentEvenPageTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2156,12 +2269,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource LinkToPrevious}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource LinkToPreviousTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2174,12 +2287,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource SuppressFirstPageHeaderFooter}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource SuppressFirstPageTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2189,11 +2302,11 @@
 
                 <!-- Page Number Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
                             <TextBlock Text="{DynamicResource PageNumberGroupDescription}"
-                                    TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
@@ -2219,7 +2332,7 @@
 
                 <!-- Remove Header/Footer -->
                 <Syncfusion:RibbonBar Header="{DynamicResource RemoveHeaderFooter}"
-                        IsLauncherButtonVisible="False">
+                                      IsLauncherButtonVisible="False">
                     <StackPanel Margin="3">
                         <Button x:Name="removeHeaderFooter"
                                 Content="{DynamicResource RemoveHeaderFooter}"
@@ -2234,12 +2347,12 @@
                                 <ToolTip>
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource RemoveHeaderFooter}"
-                                                FontWeight="Bold"
-                                                FontSize="12"
-                                                Margin="0,0,0,5"/>
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
                                         <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
-                                                TextWrapping="WrapWithOverflow"
-                                                MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>

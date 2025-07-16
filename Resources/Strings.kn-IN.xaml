@@ -413,6 +413,15 @@
 
 
 
+  <!-- Export Backstage -  -->
+  <sys:String x:Key="backStageExport">ರಫ್ತು</sys:String>
+  <sys:String x:Key="backStageExportOptions">ರಫ್ತು ಆಯ್ಕೆಗಳು</sys:String>
+  <sys:String x:Key="backStageExportToPdf">PDF ಗೆ ರಫ್ತು ಮಾಡಿ</sys:String>
+  <sys:String x:Key="backStageExportToPdfDescription">ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು PDF ರೂಪದಲ್ಲಿ ಉಳಿಸಿ.</sys:String>
+  <sys:String x:Key="backStageExportToMarkdown">Markdown ಗೆ ರಫ್ತು ಮಾಡಿ</sys:String>
+  <sys:String x:Key="backStageExportToMarkdownDescription">ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು Markdown (.md) ರೂಪದಲ್ಲಿ ಉಳಿಸಿ.</sys:String>
+  <sys:String x:Key="backStageExportRightHint">ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಲು ರಫ್ತು ರೂಪವನ್ನು ಆಯ್ಕೆಮಾಡಿ.</sys:String>
+
 
 
 
