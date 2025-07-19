@@ -14,6 +14,7 @@ namespace KannadaNudiEditor
 
         public App()
         {
+            SimpleLogger.Log("App startup complete");
             // Global UI thread exception handler
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
@@ -26,8 +27,14 @@ namespace KannadaNudiEditor
             try
             {
                 SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JEaF5cXmRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXhfeXRTRGVfWEZzXktWYEk=");
+                SimpleLogger.Log("Application starting...");
 
                 base.OnStartup(e);
+
+                AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
+                {
+                    SimpleLogger.LogException(ex.ExceptionObject as Exception, "Unhandled Exception");
+                };
 
                 LaunchKannadaKeyboard();
 
