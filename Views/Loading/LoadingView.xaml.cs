@@ -25,22 +25,23 @@ namespace KannadaNudiEditor.Views.Loading
                 WindowStyle = WindowStyle.None,
                 AllowsTransparency = true,
                 Background = null,
-                IsHitTestVisible = false, // Allows mouse click pass-through
+                IsHitTestVisible = false, // Optional if you want mouse passthrough
                 ShowInTaskbar = false,
                 ResizeMode = ResizeMode.NoResize,
                 Width = actualOwner?.ActualWidth ?? 800,
                 Height = actualOwner?.ActualHeight ?? 600,
-                Left = actualOwner?.Left ?? 0,
-                Top = actualOwner?.Top ?? 0,
                 Content = loadingView,
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.Manual
             };
 
-            // Block input to the main window
             if (actualOwner != null)
             {
                 actualOwner.IsEnabled = false;
+
+                // Center overlay on the owner window
+                _popupWindow.Left = actualOwner.Left + (actualOwner.ActualWidth - _popupWindow.Width) / 2;
+                _popupWindow.Top = actualOwner.Top + (actualOwner.ActualHeight - _popupWindow.Height) / 2;
             }
 
             _popupWindow.Show();
@@ -51,9 +52,7 @@ namespace KannadaNudiEditor.Views.Loading
             if (_popupWindow != null)
             {
                 if (_popupWindow.Owner != null)
-                {
                     _popupWindow.Owner.IsEnabled = true;
-                }
 
                 _popupWindow.Close();
                 _popupWindow = null;
