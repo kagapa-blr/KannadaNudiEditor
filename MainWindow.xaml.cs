@@ -376,81 +376,39 @@ namespace KannadaNudiEditor
 
 
 
-        /// <summary>
-        /// On save executed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
-        private async void OnSaveExecuted1(object sender, ExecutedRoutedEventArgs e)
+
+        private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(currentFilePath) && File.Exists(currentFilePath))
+            LoadingView.Show();
+            await Task.Delay(100);
+
+            await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, () =>
             {
-                using (Stream stream = File.Open(currentFilePath, FileMode.Create))
-                {
-                    FormatType formatType = GetFormatType(Path.GetExtension(currentFilePath));
-                    await richTextBoxAdv.SaveAsync(stream, formatType);
-                }
-            }
+                // You can use the default ".docx" or get extension from context
+                NudiFileManager.SaveAs(".docx", WordExport);
+            });
+
+            LoadingView.Hide();
             richTextBoxAdv.Focus();
             ribbon.IsBackStageVisible = false;
         }
-        /// <summary>
-        /// On save as executed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
-        private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+
+
+
+
+        private async void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            try
-            {
-                if (!string.IsNullOrEmpty(currentFilePath) && File.Exists(currentFilePath))
-                {
-                    LoadingView.Show();
-                    await Task.Delay(100); // ensure UI loads
+            LoadingView.Show();
+            await Task.Delay(100);
 
-                    // Use FileAccess.Write and FileShare.None to avoid conflicts
-                    using (FileStream stream = new FileStream(currentFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
-                    {
-                        FormatType formatType = GetFormatType(Path.GetExtension(currentFilePath));
-                        await richTextBoxAdv.SaveAsync(stream, formatType);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Invalid file path. Use 'Save As' instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-            catch (IOException ioEx)
-            {
-                MessageBox.Show($"File is being used by another process:\n{ioEx.Message}", "File In Use", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to save the file:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                LoadingView.Hide();
-                richTextBoxAdv.Focus();
-                ribbon.IsBackStageVisible = false;
-            }
-        }
+            string extension = e?.Parameter?.ToString() ?? ".docx";
+            NudiFileManager.SaveAs(extension, WordExport);
 
-
-
-
-
-
-        private void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            string extension = string.Empty;
-            if (e.Parameter == null)
-                extension = ".docx";
-            else
-                extension = e.Parameter.ToString();
-            WordExport(extension);
+            LoadingView.Hide();
+            richTextBoxAdv.Focus();
             ribbon.IsBackStageVisible = false;
         }
+
 
         /// <summary>
         /// On print executed.
