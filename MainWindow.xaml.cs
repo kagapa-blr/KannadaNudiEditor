@@ -502,7 +502,6 @@ namespace KannadaNudiEditor
         }
 
 
-
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
@@ -544,11 +543,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
         private async void mdSave_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
@@ -584,38 +578,37 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
-
-
-
-
-
         void OnlineHelpButton_Click(object sender, RoutedEventArgs e)
         {
-            LaunchUri(new Uri("https://help.syncfusion.com/wpf").AbsoluteUri);
-            CloseBackstage();
+            LoadingView.Show();
+
+            try
+            {
+                LaunchUri(new Uri("https://kagapa.com/").AbsoluteUri);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                CloseBackstage();
+            }
         }
-        /// <summary>
-        /// On getting started button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
         void GettingStartedButton_Click(object sender, RoutedEventArgs e)
         {
-            LaunchUri(new Uri("https://help.syncfusion.com/wpf/sfrichtextboxadv/getting-started").AbsoluteUri);
-            CloseBackstage();
+            LoadingView.Show();
+
+            try
+            {
+                LaunchUri(new Uri("https://kagapa.com/").AbsoluteUri);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                CloseBackstage();
+            }
         }
 
 
-        /// <summary>
-        /// Wires up the events.
-        /// </summary>
-        /// <remarks></remarks>
         private void WireUpEvents()
         {
             increaseFontSizeButton.Click += IncreaseFontSizeButton_Click;
