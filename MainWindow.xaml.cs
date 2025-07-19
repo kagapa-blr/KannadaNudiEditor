@@ -411,29 +411,89 @@ namespace KannadaNudiEditor
 
 
 
-        private void OnPrintExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OnPrintExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            richTextBoxAdv.PrintDocument();
-            richTextBoxAdv.Focus();
-            ribbon.IsBackStageVisible = false;
+            try
+            {
+                // Show loading view
+                LoadingView.Show();
+
+                await Task.Run(() =>
+                {
+                    // Run print operation on background thread
+                    Dispatcher.Invoke(() =>
+                    {
+                        richTextBoxAdv.PrintDocument();
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Printing failed:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Ensure UI restored
+                LoadingView.Hide();
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
         }
 
-        private void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
+
+        private async void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            richTextBoxAdv.Focus();
-            ribbon.IsBackStageVisible = false;
+            try
+            {
+                // Show loading
+                LoadingView.Show();
+
+                await Task.Run(() =>
+                {
+                    // Simulate slight delay if needed (optional)
+                    System.Threading.Thread.Sleep(100);
+                });
+
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open new window:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
         }
 
-        private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
+
+        private async void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadingView.Show(); // Show loading
-            WordImport();
-            richTextBoxAdv.Focus();
-            ribbon.IsBackStageVisible = false;
-            LoadingView.Hide(); // Always hide
+            try
+            {
+                LoadingView.Show(); // Show loading UI
+
+                await Task.Run(() =>
+                {
+                    // Run WordImport in background thread
+                    Application.Current.Dispatcher.Invoke(() => WordImport());
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while opening document:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide(); // Hide loading in any case
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
         }
+
 
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -489,12 +549,39 @@ namespace KannadaNudiEditor
 
 
 
-        private void mdSave_Click(object sender, RoutedEventArgs e)
+        private async void mdSave_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
-            DocumentExportHelper.ExportToMarkdown(richTextBoxAdv);
 
+            SaveFileDialog saveDialog = new SaveFileDialog
+            {
+                Filter = "Markdown File (*.md)|*.md",
+                Title = "Save as Markdown"
+            };
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                string filePath = saveDialog.FileName;
+
+                try
+                {
+                    LoadingView.Show();
+
+                    await Task.Run(() =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            DocumentExportHelper.ExportToMarkdown(richTextBoxAdv, filePath);
+                        });
+                    });
+                }
+                finally
+                {
+                    LoadingView.Hide();
+                }
+            }
         }
+
 
 
 

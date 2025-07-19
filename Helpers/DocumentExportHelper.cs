@@ -29,37 +29,27 @@ namespace KannadaNudiEditor.Helpers
         }
 
 
-
-        public static void ExportToMarkdown(SfRichTextBoxAdv richTextBox)
+        public static void ExportToMarkdown(SfRichTextBoxAdv richTextBox, string filePath)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog
+            try
             {
-                Filter = "Markdown File (*.md)|*.md",
-                Title = "Save as Markdown"
-            };
+                using MemoryStream docStream = new MemoryStream();
+                richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
+                docStream.Position = 0;
 
-            if (saveDialog.ShowDialog() == true)
+                using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
+                document.Save(filePath, Syncfusion.DocIO.FormatType.Markdown);
+
+                MessageBox.Show("Markdown exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowFileInExplorer(filePath);
+            }
+            catch (Exception ex)
             {
-                string filePath = saveDialog.FileName;
-
-                try
-                {
-                    using MemoryStream docStream = new MemoryStream();
-                    richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
-                    docStream.Position = 0; // Reset position
-
-                    using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
-                    document.Save(filePath, Syncfusion.DocIO.FormatType.Markdown);
-
-                    MessageBox.Show("Markdown exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    ShowFileInExplorer(filePath);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to export Markdown:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                MessageBox.Show($"Failed to export Markdown:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
 
         private static void ShowFileInExplorer(string filePath)
         {
