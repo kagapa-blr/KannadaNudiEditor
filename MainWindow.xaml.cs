@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Linq;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
+using KannadaNudiEditor.Views.Loading;
 
 namespace KannadaNudiEditor
 {
@@ -380,7 +381,7 @@ namespace KannadaNudiEditor
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
-        private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OnSaveExecuted1(object sender, ExecutedRoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(currentFilePath) && File.Exists(currentFilePath))
             {
@@ -398,6 +399,47 @@ namespace KannadaNudiEditor
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+        private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(currentFilePath) && File.Exists(currentFilePath))
+                {
+                    LoadingView.Show();
+                    await Task.Delay(100); // ensure UI loads
+
+                    // Use FileAccess.Write and FileShare.None to avoid conflicts
+                    using (FileStream stream = new FileStream(currentFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        FormatType formatType = GetFormatType(Path.GetExtension(currentFilePath));
+                        await richTextBoxAdv.SaveAsync(stream, formatType);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid file path. Use 'Save As' instead.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (IOException ioEx)
+            {
+                MessageBox.Show($"File is being used by another process:\n{ioEx.Message}", "File In Use", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save the file:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
+        }
+
+
+
+
+
 
         private void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -440,9 +482,11 @@ namespace KannadaNudiEditor
         /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
         private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            LoadingView.Show(); // Show loading
             WordImport();
             richTextBoxAdv.Focus();
             ribbon.IsBackStageVisible = false;
+            LoadingView.Hide(); // Always hide
         }
         /// <summary>
         /// On show encrypt document executed.
