@@ -11,39 +11,24 @@ namespace KannadaNudiEditor.Helpers
 {
     public static class DocumentExportHelper
     {
-        public static void ExportToPdf(SfRichTextBoxAdv richTextBox)
+
+
+
+        public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog
-            {
-                Filter = "PDF Document (*.pdf)|*.pdf",
-                Title = "Save as PDF"
-            };
+            using MemoryStream docStream = new MemoryStream();
+            richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
+            docStream.Position = 0;
 
-            if (saveDialog.ShowDialog() == true)
-            {
-                string filePath = saveDialog.FileName;
+            using WordDocument document = new(docStream, Syncfusion.DocIO.FormatType.Docx);
+            using DocToPDFConverter converter = new DocToPDFConverter();
+            using PdfDocument pdfDocument = converter.ConvertToPDF(document);
+            pdfDocument.Save(filePath);
 
-                try
-                {
-                    using MemoryStream docStream = new MemoryStream();
-                    // Save using RichTextBoxAdv's FormatType
-                    richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
-                    docStream.Position = 0; // Reset position before reading
-
-                    using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
-                    using DocToPDFConverter converter = new DocToPDFConverter();
-                    using PdfDocument pdfDocument = converter.ConvertToPDF(document);
-                    pdfDocument.Save(filePath);
-
-                    MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    ShowFileInExplorer(filePath);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to export PDF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            ShowFileInExplorer(filePath);
         }
+
+
 
         public static void ExportToMarkdown(SfRichTextBoxAdv richTextBox)
         {

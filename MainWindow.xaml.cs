@@ -410,22 +410,14 @@ namespace KannadaNudiEditor
         }
 
 
-        /// <summary>
-        /// On print executed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+
         private void OnPrintExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             richTextBoxAdv.PrintDocument();
             richTextBoxAdv.Focus();
             ribbon.IsBackStageVisible = false;
         }
-        /// <summary>
-        /// On new executed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+
         private void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             MainWindow mainWindow = new MainWindow();
@@ -433,11 +425,7 @@ namespace KannadaNudiEditor
             richTextBoxAdv.Focus();
             ribbon.IsBackStageVisible = false;
         }
-        /// <summary>
-        /// On open executed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ExecutedRoutedEventArgs"/> instance containing the event data.</param>
+
         private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             LoadingView.Show(); // Show loading
@@ -446,12 +434,7 @@ namespace KannadaNudiEditor
             ribbon.IsBackStageVisible = false;
             LoadingView.Hide(); // Always hide
         }
-        /// <summary>
-        /// On show encrypt document executed.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.Input.ExecutedRoutedEventArgs">ExecutedRoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             CloseBackstage();
@@ -460,14 +443,51 @@ namespace KannadaNudiEditor
 
 
 
-
-        private void pdfSave_Click(object sender, RoutedEventArgs e)
+        private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
-            DocumentExportHelper.ExportToPdf(richTextBoxAdv);
 
+            SaveFileDialog saveDialog = new SaveFileDialog
+            {
+                Filter = "PDF Document (*.pdf)|*.pdf",
+                Title = "Save as PDF"
+            };
 
+            if (saveDialog.ShowDialog() == true)
+            {
+                string filePath = saveDialog.FileName;
+
+                try
+                {
+                    // Show loading only after user selects file
+                    LoadingView.Show();
+                    await Task.Delay(50); // Optional: allow UI to render loader
+
+                    // Run export on background thread
+                    await Task.Run(() =>
+                    {
+                        DocumentExportHelper.ExportToPdf(richTextBoxAdv, filePath);
+                    });
+
+                    MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to export PDF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    LoadingView.Hide(); // Hide after processing
+                }
+            }
         }
+
+
+
+
+
+
+
 
         private void mdSave_Click(object sender, RoutedEventArgs e)
         {
