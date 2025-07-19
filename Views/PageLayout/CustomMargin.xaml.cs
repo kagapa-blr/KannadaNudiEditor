@@ -12,9 +12,9 @@ namespace KannadaNudiEditor
     {
         #region Public Properties
 
-        public double Top { get; private set; }
+        public new double Top { get; private set; }
         public double Bottom { get; private set; }
-        public double Left { get; private set; }
+        public new double Left { get; private set; }
         public double Right { get; private set; }
         public string Unit { get; private set; } = "in";   // "in" | "cm" | "mm"
 

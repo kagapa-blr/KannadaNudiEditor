@@ -48,6 +48,7 @@
   <!-- NuGet Packages -->
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="30.1.40" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="29.2.11" />
     <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="29.2.11" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="29.2.11" />

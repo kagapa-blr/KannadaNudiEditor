@@ -595,6 +595,7 @@
                                                              Margin="5"
                                                              Label="{DynamicResource backStageExportToPdf}"
                                                              BorderBrush="#FFA1A2A4"
+                                                             Click="pdfSave_Click"
                                                              BorderThickness="1"/>
 
                                     <StackPanel Grid.Column="1"
@@ -622,6 +623,7 @@
                                                              Margin="5"
                                                              Label="{DynamicResource backStageExportToMarkdown}"
                                                              BorderBrush="#FFA1A2A4"
+                                                             Click="mdSave_Click"
                                                              BorderThickness="1"/>
 
                                     <StackPanel Grid.Column="1"

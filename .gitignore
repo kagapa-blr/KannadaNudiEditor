@@ -5,3 +5,4 @@ obj/
 *.spec
 build
 dist
+*.pdf

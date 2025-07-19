@@ -18,6 +18,7 @@ using KannadaNudiEditor.Views.Sort;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PageSize = KannadaNudiEditor.Helpers.PageSize;
 
 namespace KannadaNudiEditor
 {
@@ -454,6 +455,32 @@ namespace KannadaNudiEditor
             CloseBackstage();
             SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand.Execute(null, richTextBoxAdv);
         }
+
+
+
+
+        private void pdfSave_Click(object sender, RoutedEventArgs e)
+        {
+            CloseBackstage();
+            DocumentExportHelper.ExportToPdf(richTextBoxAdv);
+
+
+        }
+
+        private void mdSave_Click(object sender, RoutedEventArgs e)
+        {
+            CloseBackstage();
+            DocumentExportHelper.ExportToMarkdown(richTextBoxAdv);
+
+        }
+
+
+
+
+
+
+
+
 
 
 
