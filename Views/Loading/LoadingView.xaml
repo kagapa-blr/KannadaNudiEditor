@@ -7,29 +7,28 @@
              Width="Auto"
              Height="Auto"
              Background="#80000080">
-    <!-- Semi-transparent dark overlay -->
     <Grid HorizontalAlignment="Center"
           VerticalAlignment="Center">
         <Border Width="220"
                 Height="220"
                 Padding="30"
-                Background="#FAFAFA"
+                Background="#FFFAE3"
                 CornerRadius="14"
                 BorderBrush="#CCCCCC"
                 BorderThickness="1">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-                <!-- Spinner -->
                 <Grid Width="60"
                       Height="60">
                     <Ellipse Width="60"
                              Height="60"
-                             Stroke="#E0E0E0"
+                             Stroke="#FFD700"
                              StrokeThickness="6"/>
+
                     <Ellipse Width="60"
                              Height="60"
-                             Stroke="#007ACC"
+                             Stroke="#FF0000"
                              StrokeThickness="6"
                              StrokeDashArray="2 4">
                         <Ellipse.RenderTransform>
@@ -51,16 +50,14 @@
                     </Ellipse>
                 </Grid>
 
-                <!-- Loading Text -->
-                <TextBlock Text="Loading..."
-                           FontWeight="Bold"
-                           FontSize="18"
-                           Foreground="#222222"
-                           HorizontalAlignment="Center"
-                           Margin="0,20,0,4"/>
+                <TextBlock  Text="{DynamicResource LoadingTitle}"
+                            FontWeight="Bold"
+                            FontSize="18"
+                            Foreground="#222222"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,4"/>
 
-                <!-- Subtext -->
-                <TextBlock Text="Please wait while we process your request"
+                <TextBlock Text="{DynamicResource LoadingDescription}"
                            FontSize="13"
                            Foreground="#666666"
                            TextAlignment="Center"

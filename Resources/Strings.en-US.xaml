@@ -498,4 +498,11 @@
   <sys:String x:Key="SpellCheckEnableTooltip">Enable Spell Check</sys:String>
   <sys:String x:Key="SpellCheckDisableTooltip">Disable Spell Check</sys:String>
 
+
+
+
+
+  <sys:String x:Key="LoadingTitle">Loading...</sys:String>
+  <sys:String x:Key="LoadingDescription">Please wait while we process your request</sys:String>
+
 </ResourceDictionary>

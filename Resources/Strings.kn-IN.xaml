@@ -460,5 +460,11 @@
   <sys:String x:Key="SpellCheckEnableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
   <sys:String x:Key="SpellCheckDisableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
 
+
+<sys:String x:Key="LoadingTitle">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</sys:String>
+<sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ಕಾಯಿರಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ</sys:String>
+
+
+
 </ResourceDictionary>
 
