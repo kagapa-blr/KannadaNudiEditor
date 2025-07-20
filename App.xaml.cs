@@ -33,8 +33,16 @@ namespace KannadaNudiEditor
 
                 AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
                 {
-                    SimpleLogger.LogException(ex.ExceptionObject as Exception, "Unhandled Exception");
+                    if (ex.ExceptionObject is Exception exception)
+                    {
+                        SimpleLogger.LogException(exception, "Unhandled Exception");
+                    }
+                    else
+                    {
+                        SimpleLogger.Log("Unhandled Exception occurred but was not an Exception type.");
+                    }
                 };
+
 
                 LaunchKannadaKeyboard();
 
