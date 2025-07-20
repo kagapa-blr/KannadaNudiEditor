@@ -125,9 +125,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
         private void ConfigureSpellChecker()
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -156,11 +153,6 @@ namespace KannadaNudiEditor
             // Assign to RichTextBoxAdv
             richTextBoxAdv.SpellChecker = spellChecker;
         }
-
-
-
-
-
 
 
         #region Events
@@ -239,21 +231,15 @@ namespace KannadaNudiEditor
                 }
             }
         }
-        /// <summary>
-        /// Called when [loaded].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+
+
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (ribbon != null)
                 ribbon.Loaded += Ribbon_Loaded;
         }
-        /// <summary>
-        /// Handles the RequestNavigate event of the richTextBoxAdv control.
-        /// </summary>
-        /// <param name="obj">The source of the event.</param>
-        /// <param name="args">The <see cref="Syncfusion.Windows.Controls.RichTextBoxAdv.RequestNavigateEventArgs"/> instance containing the event data.</param>
+
         void RichTextBoxAdv_RequestNavigate(object obj, Syncfusion.Windows.Controls.RichTextBoxAdv.RequestNavigateEventArgs args)
         {
             if (args.Hyperlink.LinkType == Syncfusion.Windows.Controls.RichTextBoxAdv.HyperlinkType.Webpage || args.Hyperlink.LinkType == Syncfusion.Windows.Controls.RichTextBoxAdv.HyperlinkType.Email)
@@ -262,10 +248,6 @@ namespace KannadaNudiEditor
                 LaunchUri(args.Hyperlink.NavigationLink);
         }
 
-        /// <summary>
-        /// Launches the URI.
-        /// </summary>
-        /// <param name="uri">The URI.</param>
         private void LaunchUri(string navigationLink)
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -641,12 +623,8 @@ namespace KannadaNudiEditor
             zoomOutButton.Click += ZoomOutButton_Click;
             InitListOptions();
         }
-        /// <summary>
-        /// Called on increase font size button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
+
         void IncreaseFontSizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (richTextBoxAdv != null)
@@ -667,12 +645,7 @@ namespace KannadaNudiEditor
                     fontSizeComboBox.SelectedIndex += 1;
             }
         }
-        /// <summary>
-        /// Called on decrease font size button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
         void DecreaseFontSizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (richTextBoxAdv != null)
@@ -690,24 +663,12 @@ namespace KannadaNudiEditor
                     richTextBoxAdv.Selection.CharacterFormat.FontSize = fontSizeSource.OrderBy(d => Math.Abs(d - richTextBoxAdv.Selection.CharacterFormat.FontSize)).ElementAt(0);
             }
         }
-        /// <summary>
-        /// Called on font color picker color changed.
-        /// </summary>
-        /// <param name="d"></param>
-        /// <param name="e">An <see cref="T:System.Windows.DependencyPropertyChangedEventArgs">DependencyPropertyChangedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
         void FontColorPicker_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SplitButton splitbutton = (SplitButton)fontColorPicker.Parent;
             if (splitbutton != null)
                 splitbutton.IsDropDownOpen = false;
         }
-        /// <summary>
-        /// Called on font color split button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
         void FontColorSplitButton_Click(object sender, RoutedEventArgs e)
         {
             if (fontColorPicker != null && richTextBoxAdv != null)
@@ -718,12 +679,8 @@ namespace KannadaNudiEditor
                     richTextBoxAdv.Selection.CharacterFormat.FontColor = Color.FromArgb(0x00, 0xff, 0x00, 0x00);
             }
         }
-        /// <summary>
-        /// Called on highlight color split button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
+
         void HighlightColorSplitButton_Click(object sender, RoutedEventArgs e)
         {
             if (richTextBoxAdv != null && richTextBoxAdv.Selection.CharacterFormat.HighlightColor != HighlightColor.NoColor)
@@ -731,22 +688,11 @@ namespace KannadaNudiEditor
             else
                 richTextBoxAdv.Selection.CharacterFormat.HighlightColor = HighlightColor.Yellow;
         }
-        /// <summary>
-        /// Called on backstage button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
         void BackstageButton_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
         }
-        /// <summary>
-        /// Called on new document button clicked.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">An <see cref="T:System.Windows.RoutedEventArgs">RoutedEventArgs</see> that contains the event data.</param>
-        /// <remarks></remarks>
+
         void NewDocumentButton_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
@@ -898,7 +844,7 @@ namespace KannadaNudiEditor
         {
             if (richTextBoxAdv != null && sender is TablePickerUI)
             {
-                TablePickerUI tablePicker = sender as TablePickerUI;
+                TablePickerUI? tablePicker = sender as TablePickerUI;
                 int[] tableSize = new int[] { tablePicker.SelectedCell.Row + 1, tablePicker.SelectedCell.Column + 1 };
                 tablePicker.CommandParameter = tableSize;
                 CloseDropDown(tablePicker.Parent);
@@ -1441,8 +1387,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
         #region PageColor Implementation
 
         private void pageColorColorPicker_ColorChanged(object sender, SelectedBrushChangedEventArgs e)
@@ -1464,9 +1408,6 @@ namespace KannadaNudiEditor
 
         #endregion
         #region PageMargins Implementation
-        /// <summary>
-        /// Initializes the page margins.
-        /// </summary>
 
         private void InitializePageMargins()
         {
@@ -1514,15 +1455,17 @@ namespace KannadaNudiEditor
         {
             string selectedKey = (pageMargins.SelectedItem as PageMargins)?.Key;
 
-            //  DO NOT open dialog here — it’s already handled in PreviewMouseDown
+            // Skip if "Custom" was selected, already handled in mouse preview
             if (selectedKey == "Custom")
                 return;
 
             if (!string.IsNullOrEmpty(selectedKey) &&
                 pageMarginsCollection.TryGetValue(selectedKey, out var values))
             {
+                // Clear any previously saved custom values
                 customTopMargin = customBottomMargin = customLeftMargin = customRightMargin = customMarginUnit = string.Empty;
 
+                // Reset the "Custom" label
                 _customMarginsItem.top = LanguageToggleButton.IsChecked == true
                                             ? "Set custom margins"
                                             : "ಗ್ರಾಹಕೀಯ ಅಂಚುಗಳು";
@@ -1530,13 +1473,23 @@ namespace KannadaNudiEditor
 
                 CollectionViewSource.GetDefaultView(_marginItems).Refresh();
 
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                // Apply selected margins to all sections with loading indicator
+                try
                 {
-                    section.SectionFormat.PageMargin = new Thickness(
-                        values[2] * 96,
-                        values[0] * 96,
-                        values[3] * 96,
-                        values[1] * 96);
+                    LoadingView.Show();
+                    foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                    {
+                        section.SectionFormat.PageMargin = new Thickness(
+                            values[2] * 96, // Left
+                            values[0] * 96, // Top
+                            values[3] * 96, // Right
+                            values[1] * 96  // Bottom
+                        );
+                    }
+                }
+                finally
+                {
+                    LoadingView.Hide();
                 }
             }
         }
@@ -1555,11 +1508,10 @@ namespace KannadaNudiEditor
 
         private void CustomMarginButton_Click(object sender, RoutedEventArgs e)
         {
-            const double dpi = 96.0;   // 1 inch = 96 device‑independent pixels
+            const double dpi = 96.0;
 
-            // 1️⃣ —— Get current page margins (first section) ————————————————
+            // Get the current page margins from the first section
             var firstSection = richTextBoxAdv.Document?.Sections?.FirstOrDefault() as SectionAdv;
-
             if (firstSection == null) return;
 
             Thickness current = firstSection.SectionFormat.PageMargin;
@@ -1569,35 +1521,34 @@ namespace KannadaNudiEditor
             double rightInches = current.Right / dpi;
             double bottomInches = current.Bottom / dpi;
 
-            // 2️⃣ —— Determine which unit we want to display in the dialog ——————
+            // Determine the display unit
             string unit = string.IsNullOrWhiteSpace(customMarginUnit) ? "in" : customMarginUnit.ToLower();
 
             double toUnitFactor = unit switch
             {
                 "cm" => 2.54,
                 "mm" => 25.4,
-                _ => 1.0            // inches
+                _ => 1.0
             };
 
-            // 3️⃣ —— Convert current margins into that unit ————————————————
+            // Convert margins to display unit strings
             string leftStr = (leftInches * toUnitFactor).ToString("0.##");
             string topStr = (topInches * toUnitFactor).ToString("0.##");
             string rightStr = (rightInches * toUnitFactor).ToString("0.##");
             string bottomStr = (bottomInches * toUnitFactor).ToString("0.##");
 
-            // 4️⃣ —— Launch dialog pre‑filled with detected values ————————————
+            // Launch the custom margin dialog
             var dlg = new CustomMargin(topStr, bottomStr, leftStr, rightStr, unit);
+            if (dlg.ShowDialog() != true) return;
 
-            if (dlg.ShowDialog() != true) return;   // user hit Cancel
-
-            // 5️⃣ —— Remember what the user typed (for next launch & ribbon row) —
+            // Save the entered values
             customTopMargin = dlg.TopMarginTextBox.Text;
             customBottomMargin = dlg.BottomMarginTextBox.Text;
             customLeftMargin = dlg.LeftMarginTextBox.Text;
             customRightMargin = dlg.RightMarginTextBox.Text;
-            customMarginUnit = dlg.Unit;          // "in" | "cm" | "mm"
+            customMarginUnit = dlg.Unit;
 
-            // 6️⃣ —— Update the “Custom” row text in the ComboBox ————————————
+            // Update the ComboBox display text for the "Custom" option
             string unitLabel = dlg.Unit switch { "cm" => "cm", "mm" => "mm", _ => "in" };
             _customMarginsItem.top = $"Top: {customTopMargin} {unitLabel}";
             _customMarginsItem.bottom = $"Bottom: {customBottomMargin} {unitLabel}";
@@ -1606,16 +1557,23 @@ namespace KannadaNudiEditor
             CollectionViewSource.GetDefaultView(_marginItems).Refresh();
             pageMargins.SelectedItem = _customMarginsItem;
 
-            // 7️⃣ —— Apply new margins to every section ————————————————
-            double dipFactor = UnitToDipFactor(dlg.Unit);      // helper from earlier
-
-            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+            // Apply margins to all sections with loading indicator
+            double dipFactor = UnitToDipFactor(dlg.Unit);
+            try
             {
-                section.SectionFormat.PageMargin = new Thickness(
-                    dlg.Left * dipFactor,
-                    dlg.Top * dipFactor,
-                    dlg.Right * dipFactor,
-                    dlg.Bottom * dipFactor);
+                LoadingView.Show();
+                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                {
+                    section.SectionFormat.PageMargin = new Thickness(
+                        dlg.Left * dipFactor,
+                        dlg.Top * dipFactor,
+                        dlg.Right * dipFactor,
+                        dlg.Bottom * dipFactor);
+                }
+            }
+            finally
+            {
+                LoadingView.Hide();
             }
         }
 
