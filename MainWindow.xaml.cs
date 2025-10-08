@@ -15,9 +15,7 @@ using System.Windows.Media;
 using KannadaNudiEditor.Helpers;
 using KannadaNudiEditor.Views.HeaderFooter;
 using KannadaNudiEditor.Views.Sort;
-using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
-using System.Linq;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
 
@@ -32,8 +30,8 @@ namespace KannadaNudiEditor
 #if !Framework3_5
         Task<bool>? loadAsync = null;
         CancellationTokenSource? cancellationTokenSource = null;
-        private RibbonGallery? ribbonGallery = null;
-        private RibbonButton? RibbonButton = null;
+        private readonly RibbonGallery? ribbonGallery = null;
+        private readonly RibbonButton? RibbonButton = null;
         Dictionary<string, List<double>>? pageMarginsCollection = null;
         Dictionary<string, List<double>>? pageSizesCollection = null;
         private string currentFilePath = string.Empty;
@@ -80,7 +78,7 @@ namespace KannadaNudiEditor
         // Near top of MainWindow class
         private bool _ignorePageSizeChange = false;
 
-
+        private bool _isDocumentModified = false;
 
 
         #region Constructor
@@ -120,6 +118,7 @@ namespace KannadaNudiEditor
             InitializePageSizes();
             ApplyDefaultPageSettings();
             ConfigureSpellChecker();
+            SimpleLogger.Log("MainWindow initialized.");
         }
         #endregion
 
@@ -163,6 +162,8 @@ namespace KannadaNudiEditor
                 ribbonGallery.Items.Clear();
                 AddRibbonGalleryItems();
             }
+            _isDocumentModified = true;
+            SimpleLogger.Log("RichTextBoxAdv_DocumentChanged called ...");
         }
 
         private void Ribbon_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -246,6 +247,7 @@ namespace KannadaNudiEditor
                 LaunchUri(new Uri(args.Hyperlink.NavigationLink).AbsoluteUri);
             else if (args.Hyperlink.LinkType == HyperlinkType.File && File.Exists(args.Hyperlink.NavigationLink))
                 LaunchUri(args.Hyperlink.NavigationLink);
+            _isDocumentModified = true;
         }
 
         private void LaunchUri(string navigationLink)
@@ -279,6 +281,7 @@ namespace KannadaNudiEditor
                     }
                 }
             }
+            _isDocumentModified = true;
         }
         /// <summary>
         /// update the page and word counts of RichTextBoxAdv
@@ -361,37 +364,76 @@ namespace KannadaNudiEditor
 
         private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadingView.Show();
-            await Task.Delay(100);
-
-            await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, () =>
+            try
             {
-                // You can use the default ".docx" or get extension from context
-                NudiFileManager.SaveAs(".docx", WordExport);
-            });
+                LoadingView.Show();
+                await Task.Delay(100);
 
-            LoadingView.Hide();
-            richTextBoxAdv.Focus();
-            ribbon.IsBackStageVisible = false;
+                bool saveSuccess = await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, () =>
+                {
+                    NudiFileManager.SaveAs(".docx", WordExport);
+                });
+
+                if (saveSuccess)
+                {
+                    _isDocumentModified = false;
+                    SimpleLogger.Log($"Document saved successfully to '{currentFilePath ?? "new file"}'.");
+                }
+                else
+                {
+                    string msg = "Document save was canceled or failed. Please check file permissions or path.";
+                    MessageBox.Show(msg, "Save Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    SimpleLogger.Log(msg);
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = $"Unexpected error while saving:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}";
+                MessageBox.Show(errorMsg, "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, "Unexpected error during Save operation");
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
         }
-
-
-
-
         private async void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            LoadingView.Show();
-            await Task.Delay(100);
+            try
+            {
+                LoadingView.Show();
+                await Task.Delay(100);
 
-            string extension = e?.Parameter?.ToString() ?? ".docx";
-            NudiFileManager.SaveAs(extension, WordExport);
+                string extension = e?.Parameter?.ToString() ?? ".docx";
 
-            LoadingView.Hide();
-            richTextBoxAdv.Focus();
-            ribbon.IsBackStageVisible = false;
+                try
+                {
+                    NudiFileManager.SaveAs(extension, WordExport);
+                    _isDocumentModified = false;
+                    SimpleLogger.Log($"Document saved successfully using 'Save As' with extension '{extension}'.");
+                }
+                catch (Exception exSaveAs)
+                {
+                    string msg = $"Save As failed:\n{exSaveAs.Message}\n\nStack Trace:\n{exSaveAs.StackTrace}";
+                    MessageBox.Show(msg, "Save As Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    SimpleLogger.LogException(exSaveAs, "Save As failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = $"Unexpected error during Save As:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}";
+                MessageBox.Show(errorMsg, "Save As Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, "Unexpected error during Save As operation");
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv.Focus();
+                ribbon.IsBackStageVisible = false;
+            }
         }
-
-
 
         private async void OnPrintExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -1582,6 +1624,13 @@ namespace KannadaNudiEditor
 
         private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // If no changes, just close
+            if (_isDocumentModified == false)
+            {
+                SimpleLogger.Log("Window closing: no unsaved changes.");
+                return;
+            }
+
             string message;
             string caption;
 
@@ -1596,25 +1645,48 @@ namespace KannadaNudiEditor
                 caption = "ಕಡತವನ್ನು ಉಳಿಸಿ";
             }
 
+            // Show prompt to user
             MessageBoxResult result = MessageBox.Show(
                 message,
                 caption,
                 MessageBoxButton.YesNoCancel,
                 MessageBoxImage.Warning);
 
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    SimpleLogger.Log("User chose to save changes before closing.");
+                    try
+                    {
+                        // Call the saving command
+                        SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
 
-            if (result == MessageBoxResult.Yes)
-            {
-                // Call the saving dialog of SfRichTextBoxAdv.
-                SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
-            }
-            else if (result == MessageBoxResult.Cancel)
-            {
-                e.Cancel = true; // Cancel closing
+                        // Reset the flag after save
+                        _isDocumentModified = false;
+
+                        SimpleLogger.Log("Document saved successfully before closing.");
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleLogger.LogException(ex, "Error saving document before closing");
+                        MessageBox.Show($"Failed to save document:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                                        "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        // Cancel closing if save failed
+                        e.Cancel = true;
+                    }
+                    break;
+
+                case MessageBoxResult.No:
+                    SimpleLogger.Log("User chose not to save changes and closed the window.");
+                    break;
+
+                case MessageBoxResult.Cancel:
+                    SimpleLogger.Log("User canceled the window close operation.");
+                    e.Cancel = true;
+                    break;
             }
         }
-
-
 
 
 
