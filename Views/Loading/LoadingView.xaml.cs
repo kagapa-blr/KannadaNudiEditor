@@ -14,7 +14,7 @@ namespace KannadaNudiEditor.Views.Loading
 
         public static void Show(Window? owner = null)
         {
-            if (_popupWindow != null) return;
+            if (_popupWindow != null) return; // Already visible
 
             var loadingView = new LoadingView();
             var actualOwner = owner ?? Application.Current.MainWindow;
@@ -25,38 +25,48 @@ namespace KannadaNudiEditor.Views.Loading
                 WindowStyle = WindowStyle.None,
                 AllowsTransparency = true,
                 Background = null,
-                IsHitTestVisible = false, // Optional if you want mouse passthrough
                 ShowInTaskbar = false,
                 ResizeMode = ResizeMode.NoResize,
-                Width = actualOwner?.ActualWidth ?? 800,
-                Height = actualOwner?.ActualHeight ?? 600,
                 Content = loadingView,
                 Topmost = true,
-                WindowStartupLocation = WindowStartupLocation.Manual
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Width = actualOwner?.ActualWidth ?? 800,
+                Height = actualOwner?.ActualHeight ?? 600
             };
 
             if (actualOwner != null)
-            {
                 actualOwner.IsEnabled = false;
 
-                // Center overlay on the owner window
-                _popupWindow.Left = actualOwner.Left + (actualOwner.ActualWidth - _popupWindow.Width) / 2;
-                _popupWindow.Top = actualOwner.Top + (actualOwner.ActualHeight - _popupWindow.Height) / 2;
-            }
-
             _popupWindow.Show();
+
+            // Keep overlay position in sync when owner moves/resizes
+            if (actualOwner != null)
+            {
+                actualOwner.LocationChanged += (_, _) => UpdatePosition(actualOwner);
+                actualOwner.SizeChanged += (_, _) => UpdatePosition(actualOwner);
+            }
         }
 
         public static void Hide()
         {
-            if (_popupWindow != null)
-            {
-                if (_popupWindow.Owner != null)
-                    _popupWindow.Owner.IsEnabled = true;
+            if (_popupWindow == null) return;
 
-                _popupWindow.Close();
-                _popupWindow = null;
-            }
+            var owner = _popupWindow.Owner;
+            if (owner != null)
+                owner.IsEnabled = true;
+
+            _popupWindow.Close();
+            _popupWindow = null;
+        }
+
+        private static void UpdatePosition(Window owner)
+        {
+            if (_popupWindow == null) return;
+
+            _popupWindow.Left = owner.Left;
+            _popupWindow.Top = owner.Top;
+            _popupWindow.Width = owner.ActualWidth;
+            _popupWindow.Height = owner.ActualHeight;
         }
     }
 }

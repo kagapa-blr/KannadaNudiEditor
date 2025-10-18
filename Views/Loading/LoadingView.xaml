@@ -4,30 +4,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Width="Auto"
-             Height="Auto"
              Background="#80000080">
-    <Grid HorizontalAlignment="Center"
-          VerticalAlignment="Center">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border Width="220"
                 Height="220"
                 Padding="30"
                 Background="#FFFAE3"
                 CornerRadius="14"
                 BorderBrush="#CCCCCC"
-                BorderThickness="1">
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+                BorderThickness="1"
+                Effect="{DynamicResource DropShadowEffect}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <Grid Width="60"
-                      Height="60">
-                    <Ellipse Width="60"
-                             Height="60"
+                <Grid Width="60" Height="60">
+                    <Ellipse Width="60" Height="60"
                              Stroke="#FFD700"
                              StrokeThickness="6"/>
 
-                    <Ellipse Width="60"
-                             Height="60"
+                    <Ellipse Width="60" Height="60"
                              Stroke="#FF0000"
                              StrokeThickness="6"
                              StrokeDashArray="2 4">
@@ -40,9 +34,9 @@
                                     <Storyboard RepeatBehavior="Forever">
                                         <DoubleAnimation
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-                                            From="0"
-                                            To="360"
-                                            Duration="0:0:1"/>
+                                            From="0" To="360"
+                                            Duration="0:0:1.2"
+                                            EasingFunction="{x:Null}"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -50,16 +44,16 @@
                     </Ellipse>
                 </Grid>
 
-                <TextBlock  Text="{DynamicResource LoadingTitle}"
-                            FontWeight="Bold"
-                            FontSize="18"
-                            Foreground="#222222"
-                            HorizontalAlignment="Center"
-                            Margin="0,20,0,4"/>
+                <TextBlock Text="{DynamicResource LoadingTitle}"
+                           FontWeight="Bold"
+                           FontSize="18"
+                           Foreground="#222"
+                           HorizontalAlignment="Center"
+                           Margin="0,20,0,4"/>
 
                 <TextBlock Text="{DynamicResource LoadingDescription}"
                            FontSize="13"
-                           Foreground="#666666"
+                           Foreground="#555"
                            TextAlignment="Center"
                            HorizontalAlignment="Center"
                            TextWrapping="Wrap"
