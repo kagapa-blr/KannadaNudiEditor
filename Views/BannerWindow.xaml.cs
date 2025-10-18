@@ -7,16 +7,23 @@ namespace KannadaNudiEditor.Views
         public BannerWindow()
         {
             InitializeComponent();
-            this.Loaded += BannerWindow_Loaded;
         }
 
-        private async void BannerWindow_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Shows the banner window.
+        /// </summary>
+        public void ShowBanner()
         {
-            await Task.Delay(3000); // Show banner for 3 seconds
+            this.Show();
+        }
 
-            var main = new MainWindow();
-            main.Show();
-            this.Close();
+        /// <summary>
+        /// Closes the banner window.
+        /// </summary>  
+        public void CloseBanner()
+        {
+            if (this.IsVisible)
+                this.Close();
         }
     }
 }

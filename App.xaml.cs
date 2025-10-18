@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
@@ -15,6 +14,7 @@ namespace KannadaNudiEditor
         public App()
         {
             SimpleLogger.Log("App startup complete");
+
             // Global UI thread exception handler
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
 
@@ -22,39 +22,62 @@ namespace KannadaNudiEditor
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
             try
             {
+                // Register Syncfusion license
                 SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JEaF5cXmRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXZedXRVRmFdUUd/WUFWYEk=");
                 SimpleLogger.Log("Application starting...");
 
                 base.OnStartup(e);
 
+                // Global unhandled exception logging
                 AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
                 {
                     if (ex.ExceptionObject is Exception exception)
-                    {
                         SimpleLogger.LogException(exception, "Unhandled Exception");
-                    }
                     else
-                    {
                         SimpleLogger.Log("Unhandled Exception occurred but was not an Exception type.");
-                    }
                 };
 
-
+                // Launch Kannada Keyboard in background
                 LaunchKannadaKeyboard();
 
+                // Show banner
                 var banner = new BannerWindow();
                 banner.Show();
+
+                // Yield to let WPF render banner immediately
+                await Dispatcher.Yield(DispatcherPriority.Render);
+
+                // Initialize editor in background without blocking UI
+                await Task.Run(() => InitializeEditor());
+
+                // Show main editor window
+                var main = new MainWindow();
+                main.Show();
+                SimpleLogger.Log("Nudi Editor main window loaded successfully.");
+
+                // Keep banner visible for 2–3 seconds
+                await Task.Delay(2500);
+
+                // Smooth fade-out before closing banner
+                var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+                fadeOut.Completed += (s, a) => banner.Close();
+                banner.BeginAnimation(UIElement.OpacityProperty, fadeOut);
             }
             catch (Exception ex)
             {
                 ShowError("Unexpected error during application startup.", ex);
-                Shutdown(); // Ensure app doesn't remain running in corrupted state
+                Shutdown(); // Ensure app doesn't remain running in a corrupted state
             }
         }
+
+
+
 
         private void LaunchKannadaKeyboard()
         {
@@ -96,6 +119,13 @@ namespace KannadaNudiEditor
             }
         }
 
+        private static void InitializeEditor()
+        {
+            // Simulate heavy editor initialization
+            // Replace this with actual editor loading logic (fonts, dictionaries, plugins, etc.)
+            Thread.Sleep(3000);
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
@@ -130,7 +160,7 @@ namespace KannadaNudiEditor
                 MessageBox.Show("An unknown error occurred.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void ShowError(string title, Exception ex)
+        private static void ShowError(string title, Exception ex)
         {
             string message = $"{title}\n\n{ex.Message}\n\nDetails:\n{ex.StackTrace}";
             MessageBox.Show(message, "Unexpected Error", MessageBoxButton.OK, MessageBoxImage.Error);

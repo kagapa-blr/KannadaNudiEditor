@@ -11,13 +11,25 @@
         AllowsTransparency="True"
         ShowInTaskbar="False">
 
-    <Border Background="White"
-            CornerRadius="18"
+    <Border CornerRadius="18"
             Padding="30"
             SnapsToDevicePixels="True"
             BorderBrush="#DDD"
             BorderThickness="1">
-        
+
+        <!-- Karnataka-inspired gradient background -->
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0"
+                    EndPoint="0,1">
+                <GradientStop Color="#FFEB3B"
+                        Offset="0.0"/>
+                <!-- Brighter Yellow -->
+                <GradientStop Color="#E53935"
+                        Offset="1.0"/>
+                <!-- Rich Red -->
+            </LinearGradientBrush>
+        </Border.Background>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -28,24 +40,31 @@
 
             <!-- Title -->
             <TextBlock Text="ನುಡಿ ಸಂಪಾದಕ"
-                       FontSize="26"
-                       FontWeight="SemiBold"
-                       Foreground="#2E3B4E"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#1B2A41"
                        HorizontalAlignment="Center"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,10">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black"
+                            BlurRadius="4"
+                            ShadowDepth="1"
+                            Opacity="0.3"/>
+                </TextBlock.Effect>
+            </TextBlock>
 
             <!-- Subtitle -->
             <TextBlock Text="Nudi Editor is loading, please wait..."
-                       FontSize="15"
+                       FontSize="16"
                        FontStyle="Italic"
-                       Foreground="#555"
+                       Foreground="#2E3B4E"
                        HorizontalAlignment="Center"
                        Grid.Row="1"
-                       Margin="0,0,0,20"/>
+                       Margin="0,0,0,25"/>
 
-            <!-- Progress bar (no CornerRadius) -->
+            <!-- Progress bar -->
             <ProgressBar Grid.Row="2"
-                         Height="8"
+                         Height="10"
                          Margin="40,0,40,0"
                          IsIndeterminate="True"
                          Foreground="#0078D7"
@@ -54,9 +73,10 @@
 
             <!-- Footer -->
             <TextBlock Grid.Row="3"
-                       Text="ಕನ್ನಡ ಗಣಕ ಪರಿಷತ್ತು – Developed and maintained by"
-                       FontSize="12"
-                       Foreground="#888"
+                       Text="ಕನ್ನಡ ಗಣಕ ಪರಿಷತ್ತು – Developed and maintained by KAGAPA"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Foreground="#1B2A41"
                        HorizontalAlignment="Center"
                        Margin="0,20,0,0"/>
         </Grid>
