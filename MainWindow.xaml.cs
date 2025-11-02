@@ -1861,95 +1861,87 @@ namespace KannadaNudiEditor
 
 
 
-
-
-        // Handle Edit Header button click to show the Header/Footer editor
         private void EditHeader_Click(object sender, RoutedEventArgs e)
         {
-            // Retrieve the current header and footer text
-            string? existingHeader = GetCurrentHeaderText();
-            string? existingFooter = GetCurrentFooterText();
+            var currentHeaderText = GetCurrentHeaderText();
+            var currentFooterText = GetCurrentFooterText();
 
-            // Open the editor window
-            HeaderFooterEditor headerFooterEditor = new HeaderFooterEditor(existingHeader, existingFooter);
-            bool? result = headerFooterEditor.ShowDialog();
-
-            if (result == true)
+            var editor = new HeaderFooterEditor(currentHeaderText, currentFooterText);
+            if (editor.ShowDialog() == true)
             {
-                string headerText = headerFooterEditor.HeaderText ?? string.Empty;
-                string footerText = headerFooterEditor.FooterText ?? string.Empty;
+                var section = richTextBoxAdv.Document.Sections[0];
 
-                // Create new HeaderFooters
-                HeaderFooters headerFooters = new HeaderFooters();
+                // Create or clear existing header
+                if (section.HeaderFooters == null)
+                    section.HeaderFooters = new HeaderFooters();
 
-                // Apply header if provided
-                if (!string.IsNullOrWhiteSpace(headerText))
+                section.HeaderFooters.Header.Blocks.Clear();
+                if (!string.IsNullOrWhiteSpace(editor.HeaderText))
                 {
-                    ParagraphAdv headerParagraph = new ParagraphAdv();
-                    SpanAdv headerSpan = new SpanAdv { Text = headerText };
-                    headerParagraph.Inlines.Add(headerSpan);
-                    headerFooters.Header.Blocks.Add(headerParagraph);
+                    var headerPara = new ParagraphAdv();
+                    var headerSpan = new SpanAdv { Text = editor.HeaderText };
+                    headerPara.Inlines.Add(headerSpan);
+                    section.HeaderFooters.Header.Blocks.Add(headerPara);
                 }
 
-                // Apply footer if provided
-                if (!string.IsNullOrWhiteSpace(footerText))
+                // Create or clear existing footer
+                section.HeaderFooters.Footer.Blocks.Clear();
+                if (!string.IsNullOrWhiteSpace(editor.FooterText))
                 {
-                    ParagraphAdv footerParagraph = new ParagraphAdv();
-                    SpanAdv footerSpan = new SpanAdv { Text = footerText };
-                    footerParagraph.Inlines.Add(footerSpan);
-                    headerFooters.Footer.Blocks.Add(footerParagraph);
+                    var footerPara = new ParagraphAdv();
+                    var footerSpan = new SpanAdv { Text = editor.FooterText };
+                    footerPara.Inlines.Add(footerSpan);
+                    section.HeaderFooters.Footer.Blocks.Add(footerPara);
                 }
 
-                // Apply to the document only if header or footer is present
-                if (headerFooters.Header.Blocks.Count > 0 || headerFooters.Footer.Blocks.Count > 0)
+                // Remove HeaderFooters if both are empty
+                if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
                 {
-                    SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-                    sectionAdv.HeaderFooters = headerFooters;
-                    sectionAdv.SectionFormat.HeaderDistance = 50;
-                    sectionAdv.SectionFormat.FooterDistance = 50;
+                    section.HeaderFooters = null;
+                    MessageBox.Show("No header or footer text entered.");
                 }
                 else
                 {
-                    MessageBox.Show("No header or footer text entered.");
+                    // Set distances for spacing
+                    section.SectionFormat.HeaderDistance = 50;
+                    section.SectionFormat.FooterDistance = 50;
                 }
+
+                // Force UI refresh
+                richTextBoxAdv.InvalidateVisual();
+                richTextBoxAdv.UpdateLayout();
             }
         }
-
-
-        // Get the current header text dynamically from the document
         private string? GetCurrentHeaderText()
         {
-            // Retrieve the first block of the header (if any)
-            var header = richTextBoxAdv.Document.Sections[0].HeaderFooters.Header;
-            if (header.Blocks.Count > 0)
+            var header = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Header;
+            if (header != null && header.Blocks.Count > 0)
             {
-                var firstBlock = header.Blocks[0] as ParagraphAdv;
-                if (firstBlock != null && firstBlock.Inlines.Count > 0)
+                ParagraphAdv para = header.Blocks[0] as ParagraphAdv;
+                if (para != null && para.Inlines.Count > 0)
                 {
-                    var span = firstBlock.Inlines[0] as SpanAdv;
-                    return span?.Text;  // Return the current header text
+                    SpanAdv span = para.Inlines[0] as SpanAdv;
+                    if (span != null)
+                        return span.Text;
                 }
             }
-            return null;  // Return null if no header text exists
+            return null;
         }
-
-        // Get the current footer text dynamically from the document
         private string? GetCurrentFooterText()
         {
-            // Retrieve the first block of the footer (if any)
-            var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters.Footer;
-            if (footer.Blocks.Count > 0)
+            var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Footer;
+            if (footer != null && footer.Blocks.Count > 0)
             {
-                var firstBlock = footer.Blocks[0] as ParagraphAdv;
-                if (firstBlock != null && firstBlock.Inlines.Count > 0)
+                ParagraphAdv para = footer.Blocks[0] as ParagraphAdv;
+                if (para != null && para.Inlines.Count > 0)
                 {
-                    var span = firstBlock.Inlines[0] as SpanAdv;
-                    return span?.Text;  // Return the current footer text
+                    SpanAdv? span = para.Inlines[0] as SpanAdv;
+                    if (span != null)
+                        return span.Text;
                 }
             }
-            return null;  // Return null if no footer text exists
+            return null;
         }
-
 
         private void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
         {
