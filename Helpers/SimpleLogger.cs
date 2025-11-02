@@ -5,7 +5,7 @@ public static class SimpleLogger
 {
     private static readonly string BaseLogFolder = GetRootLogFolder();
     private static readonly string DateFolder = Path.Combine(BaseLogFolder, DateTime.Now.ToString("dd-MM-yyyy"));
-    private static string LogFilePath;
+    private static readonly string LogFilePath;
 
     static SimpleLogger()
     {

@@ -29,7 +29,7 @@ namespace KannadaNudiEditor
             try
             {
                 // Register Syncfusion license
-                SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JEaF5cXmRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWXZedXRVRmFdUUd/WUFWYEk=");
+                SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF5cXGRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWH5ecnRdRWFYUkFzXEJWYEg=");
                 SimpleLogger.Log("Application starting...");
 
                 base.OnStartup(e);
