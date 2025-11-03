@@ -1,64 +1,65 @@
 <Window x:Class="KannadaNudiEditor.Views.HeaderFooter.HeaderFooterEditor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        Title="{DynamicResource HeaderFooterTab}"
-        Height="300"
-        Width="450"
+        xmlns:sf="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextBoxAdv.WPF"
+        Title="Header &amp; Footer Editor"
+        Height="480"
+        Width="600"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
-        Background="#f9f9f9"
+        Background="#FAFAFA"
         FontFamily="Segoe UI"
         FontSize="14">
 
-        <Grid Margin="20">
+        <Grid Margin="16">
                 <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="160"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="160"/>
                         <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <GroupBox Header="{DynamicResource EditHeader}"
-                                Grid.Row="0"
-                                Margin="0,0,0,10"
-                                Padding="10">
-                        <TextBox x:Name="HeaderTextBox"
-                                        Height="30"/>
-                </GroupBox>
+                <TextBlock Text="Header"
+                           FontWeight="Bold"
+                           FontSize="15"
+                           Margin="0,0,0,4"/>
+                <sf:SfRichTextBoxAdv x:Name="HeaderEditor"
+                                     Grid.Row="1"
+                                     Background="White"
+                                     BorderBrush="#C4C4C4"
+                                     BorderThickness="1"
+                                     EnableMiniToolBar="True"/>
 
-                <GroupBox Header="{DynamicResource EditFooter}"
-                                Grid.Row="1"
-                                Margin="0,0,0,20"
-                                Padding="10">
-                        <TextBox x:Name="FooterTextBox"
-                                        Height="30"/>
-                </GroupBox>
+                <TextBlock Text="Footer"
+                           Grid.Row="2"
+                           FontWeight="Bold"
+                           FontSize="15"
+                           Margin="0,10,0,4"/>
+                <sf:SfRichTextBoxAdv x:Name="FooterEditor"
+                                     Grid.Row="3"
+                                     Background="White"
+                                     BorderBrush="#C4C4C4"
+                                     BorderThickness="1"
+                                     EnableMiniToolBar="True"/>
 
-                <StackPanel Grid.Row="2"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Right">
+                <StackPanel Grid.Row="4"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,16,0,0">
                         <Button Content="Apply"
-                                Width="100"
-                                Height="35"
-                                Margin="0,0,10,0"
-                                Click="ApplyButton_Click"
+                                Width="120"
+                                Margin="0,0,8,0"
                                 Background="#0078D7"
                                 Foreground="White"
                                 FontWeight="SemiBold"
-                                BorderThickness="0"
-                                Cursor="Hand"/>
-
+                                Padding="8"
+                                Click="ApplyButton_Click"/>
                         <Button Content="Cancel"
-                                Width="100"
-                                Height="35"
-                                Click="CancelButton_Click"
-                                Background="#e0e0e0"
+                                Width="120"
+                                Background="#E5E5E5"
                                 Foreground="Black"
-                                FontWeight="Normal"
-                                BorderThickness="0"
-                                Cursor="Hand"/>
+                                Padding="8"
+                                Click="CancelButton_Click"/>
                 </StackPanel>
         </Grid>
 </Window>

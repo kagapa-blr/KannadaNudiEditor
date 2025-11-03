@@ -1,40 +1,54 @@
+using System.IO;
+using System.Text;
 using System.Windows;
+using Syncfusion.Windows.Controls.RichTextBoxAdv;
 
 namespace KannadaNudiEditor.Views.HeaderFooter
 {
     public partial class HeaderFooterEditor : Window
     {
-        public string? HeaderText { get; private set; }
-        public string? FooterText { get; private set; }
+        public string HeaderText { get; private set; } = "";
+        public string FooterText { get; private set; } = "";
 
         public HeaderFooterEditor(string? initialHeader, string? initialFooter)
         {
             InitializeComponent();
 
-            HeaderTextBox.Text = initialHeader ?? string.Empty;
-            FooterTextBox.Text = initialFooter ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(initialHeader))
+                LoadTextIntoEditor(HeaderEditor, initialHeader);
+
+            if (!string.IsNullOrWhiteSpace(initialFooter))
+                LoadTextIntoEditor(FooterEditor, initialFooter);
         }
 
-        // Handle Apply button click to update the header/footer
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            // Retrieve the header and footer texts
-            HeaderText = HeaderTextBox.Text;
-            FooterText = FooterTextBox.Text;
+            HeaderText = GetTextFromEditor(HeaderEditor);
+            FooterText = GetTextFromEditor(FooterEditor);
 
-            // Accept any combination (header only, footer only, both, or neither)
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
-
-
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false; // Optionally indicate cancellation
-            this.Close();              // Close the window
+            DialogResult = false;
+            Close();
         }
 
+        private void LoadTextIntoEditor(SfRichTextBoxAdv editor, string text)
+        {
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(text));
+            editor.Load(ms, FormatType.Txt);
+        }
 
+        private string GetTextFromEditor(SfRichTextBoxAdv editor)
+        {
+            using var ms = new MemoryStream();
+            editor.Save(ms, FormatType.Txt);
+            ms.Position = 0;
+            using var reader = new StreamReader(ms, Encoding.UTF8);
+                return reader.ReadToEnd();
+        }
     }
 }
