@@ -1862,7 +1862,6 @@ namespace KannadaNudiEditor
 
         private async void EditHeader_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 SimpleLogger.Log("Opening Header/Footer editor dialog.");
@@ -1877,103 +1876,31 @@ namespace KannadaNudiEditor
                 {
                     SimpleLogger.Log("Header/Footer editor dialog closed with Apply.");
 
-                    await Task.Delay(50); // Small delay to allow UI to update loading overlay
+                    await Task.Delay(50);
 
                     await Task.Run(() =>
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            var section = richTextBoxAdv.Document.Sections[0];
-
-                            if (section.HeaderFooters == null)
-                            {
-                                section.HeaderFooters = new HeaderFooters();
-                                SimpleLogger.Log("HeaderFooters object created.");
-                            }
-
-                            section.HeaderFooters.Header.Blocks.Clear();
-                            section.HeaderFooters.Footer.Blocks.Clear();
-
-                            // Header
-                            if (!string.IsNullOrWhiteSpace(editor.HeaderText))
-                            {
-                                SimpleLogger.Log("Applying header text.");
-                                var tempHeader = new SfRichTextBoxAdv();
-                                using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText)))
-                                {
-                                    tempHeader.Load(ms, FormatType.Rtf);
-                                    SimpleLogger.Log("Header text loaded into temp editor.");
-                                }
-                                var srcSection = tempHeader.Document.Sections.FirstOrDefault() as SectionAdv;
-                                if (srcSection != null)
-                                {
-                                    foreach (var block in srcSection.Blocks.ToList())
-                                        section.HeaderFooters.Header.Blocks.Add(block);
-                                    SimpleLogger.Log($"Header applied with {section.HeaderFooters.Header.Blocks.Count} blocks.");
-                                }
-                                else
-                                {
-                                    SimpleLogger.Log("Header source section is null.");
-                                }
-                            }
-                            else
-                            {
-                                SimpleLogger.Log("Empty header text, skipping apply.");
-                            }
-
-                            // Footer
-                            if (!string.IsNullOrWhiteSpace(editor.FooterText))
-                            {
-                                SimpleLogger.Log("Applying footer text.");
-                                var tempFooter = new SfRichTextBoxAdv();
-                                using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText)))
-                                {
-                                    tempFooter.Load(ms, FormatType.Rtf);
-                                    SimpleLogger.Log("Footer text loaded into temp editor.");
-                                }
-                                var srcSection = tempFooter.Document.Sections.FirstOrDefault() as SectionAdv;
-                                if (srcSection != null)
-                                {
-                                    foreach (var block in srcSection.Blocks.ToList())
-                                        section.HeaderFooters.Footer.Blocks.Add(block);
-                                    SimpleLogger.Log($"Footer applied with {section.HeaderFooters.Footer.Blocks.Count} blocks.");
-                                }
-                                else
-                                {
-                                    SimpleLogger.Log("Footer source section is null.");
-                                }
-                            }
-                            else
-                            {
-                                SimpleLogger.Log("Empty footer text, skipping apply.");
-                            }
-
-                            // Cleanup
-                            if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
-                            {
-                                section.HeaderFooters = null;
-                                SimpleLogger.Log("No header or footer entered, HeaderFooters cleared.");
-                                MessageBox.Show("No header or footer text entered.");
-                            }
-                            else
-                            {
-                                section.SectionFormat.HeaderDistance = 50;
-                                section.SectionFormat.FooterDistance = 50;
-                                SimpleLogger.Log("Header/Footer distances set to 50.");
-                            }
                             LoadingView.Show();
-                            // Force layout refresh by toggling page size
-                            var currentSize = section.SectionFormat.PageSize;
-                            var tempSize = new Size(currentSize.Width + 1, currentSize.Height + 1);
 
-                            section.SectionFormat.PageSize = tempSize;
-                            section.SectionFormat.PageSize = currentSize;
+                            editor.ApplyHeaderFooterToDocument(richTextBoxAdv, () =>
+                            {
+                                var section = richTextBoxAdv.Document.Sections[0];
+                                // Page size toggle refresh
+                                var currentSize = section.SectionFormat.PageSize;
+                                var tempSize = new Size(currentSize.Width + 1, currentSize.Height + 1);
+                                section.SectionFormat.PageSize = tempSize;
+                                section.SectionFormat.PageSize = currentSize;
 
-                            richTextBoxAdv.InvalidateVisual();
-                            richTextBoxAdv.UpdateLayout();
-                            UpdateRichTextBoxAdvItems();
+                                richTextBoxAdv.InvalidateVisual();
+                                richTextBoxAdv.UpdateLayout();
+                                UpdateRichTextBoxAdvItems();
 
-                            SimpleLogger.Log("RichTextBox UI refreshed with page size toggle.");
+                                SimpleLogger.Log("RichTextBox UI refreshed with page size toggle.");
+                            });
+
+                            LoadingView.Hide();
                         });
                     });
                 }
