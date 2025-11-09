@@ -1905,6 +1905,14 @@ namespace KannadaNudiEditor
                                 section.HeaderFooters.Header.Blocks.Add(block);
                             SimpleLogger.Log($"Header applied with {section.HeaderFooters.Header.Blocks.Count} blocks.");
                         }
+                        else
+                        {
+                            SimpleLogger.Log("Header source section is null.");
+                        }
+                    }
+                    else
+                    {
+                        SimpleLogger.Log("Empty header text, skipping apply.");
                     }
 
                     // === FOOTER ===
@@ -1925,9 +1933,17 @@ namespace KannadaNudiEditor
                                 section.HeaderFooters.Footer.Blocks.Add(block);
                             SimpleLogger.Log($"Footer applied with {section.HeaderFooters.Footer.Blocks.Count} blocks.");
                         }
+                        else
+                        {
+                            SimpleLogger.Log("Footer source section is null.");
+                        }
+                    }
+                    else
+                    {
+                        SimpleLogger.Log("Empty footer text, skipping apply.");
                     }
 
-                    // Cleanup or formatting
+                    // Cleanup
                     if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
                     {
                         section.HeaderFooters = null;
@@ -1941,9 +1957,24 @@ namespace KannadaNudiEditor
                         SimpleLogger.Log("Header/Footer distances set to 50.");
                     }
 
-                    richTextBoxAdv.InvalidateVisual();
-                    richTextBoxAdv.UpdateLayout();
-                    SimpleLogger.Log("RichTextBox UI refreshed.");
+                    // Force layout refresh by toggling page size
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        var currentSize = section.SectionFormat.PageSize;
+                        var tempSize = new Size(currentSize.Width + 1, currentSize.Height + 1);
+
+                        // Set temp size
+                        section.SectionFormat.PageSize = tempSize;
+
+                        // Reset to original size
+                        section.SectionFormat.PageSize = currentSize;
+
+                        richTextBoxAdv.InvalidateVisual();
+                        richTextBoxAdv.UpdateLayout();
+                        UpdateRichTextBoxAdvItems();
+
+                        SimpleLogger.Log("RichTextBox UI refreshed with page size toggle.");
+                    });
                 }
                 else
                 {
@@ -1963,16 +1994,23 @@ namespace KannadaNudiEditor
             {
                 var header = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Header;
                 if (header == null || header.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentHeaderText found no header blocks.");
                     return null;
+                }
 
                 var tempEditor = new SfRichTextBoxAdv();
                 var tempSection = tempEditor.Document.Sections[0];
+
                 foreach (var block in header.Blocks.ToList())
+                {
                     tempSection.Blocks.Add(block);
+                }
 
                 using var ms = new MemoryStream();
                 tempEditor.Save(ms, FormatType.Rtf);
                 ms.Position = 0;
+
                 using var reader = new StreamReader(ms, Encoding.UTF8);
                 var result = reader.ReadToEnd();
                 SimpleLogger.Log($"GetCurrentHeaderText retrieved {result.Length} chars.");
@@ -1991,16 +2029,23 @@ namespace KannadaNudiEditor
             {
                 var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Footer;
                 if (footer == null || footer.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentFooterText found no footer blocks.");
                     return null;
+                }
 
                 var tempEditor = new SfRichTextBoxAdv();
                 var tempSection = tempEditor.Document.Sections[0];
+
                 foreach (var block in footer.Blocks.ToList())
+                {
                     tempSection.Blocks.Add(block);
+                }
 
                 using var ms = new MemoryStream();
                 tempEditor.Save(ms, FormatType.Rtf);
                 ms.Position = 0;
+
                 using var reader = new StreamReader(ms, Encoding.UTF8);
                 var result = reader.ReadToEnd();
                 SimpleLogger.Log($"GetCurrentFooterText retrieved {result.Length} chars.");
@@ -2012,6 +2057,8 @@ namespace KannadaNudiEditor
                 return null;
             }
         }
+
+
 
 
 
