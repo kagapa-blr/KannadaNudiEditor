@@ -1871,30 +1871,43 @@ namespace KannadaNudiEditor
             {
                 var section = richTextBoxAdv.Document.Sections[0];
 
-                // Create or clear existing header
                 if (section.HeaderFooters == null)
                     section.HeaderFooters = new HeaderFooters();
 
                 section.HeaderFooters.Header.Blocks.Clear();
+                section.HeaderFooters.Footer.Blocks.Clear();
+
+                // === HEADER ===
                 if (!string.IsNullOrWhiteSpace(editor.HeaderText))
                 {
-                    var headerPara = new ParagraphAdv();
-                    var headerSpan = new SpanAdv { Text = editor.HeaderText };
-                    headerPara.Inlines.Add(headerSpan);
-                    section.HeaderFooters.Header.Blocks.Add(headerPara);
+                    var tempHeader = new SfRichTextBoxAdv();
+                    using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText)))
+                        tempHeader.Load(ms, FormatType.Rtf);
+
+                    var srcSection = tempHeader.Document.Sections.FirstOrDefault() as SectionAdv;
+                    if (srcSection != null)
+                    {
+                        foreach (var block in srcSection.Blocks.ToList())
+                            section.HeaderFooters.Header.Blocks.Add(block);
+                    }
                 }
 
-                // Create or clear existing footer
-                section.HeaderFooters.Footer.Blocks.Clear();
+                // === FOOTER ===
                 if (!string.IsNullOrWhiteSpace(editor.FooterText))
                 {
-                    var footerPara = new ParagraphAdv();
-                    var footerSpan = new SpanAdv { Text = editor.FooterText };
-                    footerPara.Inlines.Add(footerSpan);
-                    section.HeaderFooters.Footer.Blocks.Add(footerPara);
+                    var tempFooter = new SfRichTextBoxAdv();
+                    using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText)))
+                        tempFooter.Load(ms, FormatType.Rtf);
+
+                    var srcSection = tempFooter.Document.Sections.FirstOrDefault() as SectionAdv;
+                    if (srcSection != null)
+                    {
+                        foreach (var block in srcSection.Blocks.ToList())
+                            section.HeaderFooters.Footer.Blocks.Add(block);
+                    }
                 }
 
-                // Remove HeaderFooters if both are empty
+                // Cleanup or formatting
                 if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
                 {
                     section.HeaderFooters = null;
@@ -1902,46 +1915,59 @@ namespace KannadaNudiEditor
                 }
                 else
                 {
-                    // Set distances for spacing
                     section.SectionFormat.HeaderDistance = 50;
                     section.SectionFormat.FooterDistance = 50;
                 }
 
-                // Force UI refresh
                 richTextBoxAdv.InvalidateVisual();
                 richTextBoxAdv.UpdateLayout();
             }
         }
+
         private string? GetCurrentHeaderText()
         {
             var header = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Header;
-            if (header != null && header.Blocks.Count > 0)
-            {
-                ParagraphAdv para = header.Blocks[0] as ParagraphAdv;
-                if (para != null && para.Inlines.Count > 0)
-                {
-                    SpanAdv span = para.Inlines[0] as SpanAdv;
-                    if (span != null)
-                        return span.Text;
-                }
-            }
-            return null;
+            if (header == null || header.Blocks.Count == 0)
+                return null;
+
+            var tempEditor = new SfRichTextBoxAdv();
+            var tempSection = tempEditor.Document.Sections[0];
+            foreach (var block in header.Blocks.ToList())
+                tempSection.Blocks.Add(block);
+
+            using var ms = new MemoryStream();
+            tempEditor.Save(ms, FormatType.Rtf);
+            ms.Position = 0;
+            using var reader = new StreamReader(ms, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
+
         private string? GetCurrentFooterText()
         {
             var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Footer;
-            if (footer != null && footer.Blocks.Count > 0)
-            {
-                ParagraphAdv para = footer.Blocks[0] as ParagraphAdv;
-                if (para != null && para.Inlines.Count > 0)
-                {
-                    SpanAdv? span = para.Inlines[0] as SpanAdv;
-                    if (span != null)
-                        return span.Text;
-                }
-            }
-            return null;
+            if (footer == null || footer.Blocks.Count == 0)
+                return null;
+
+            var tempEditor = new SfRichTextBoxAdv();
+            var tempSection = tempEditor.Document.Sections[0];
+            foreach (var block in footer.Blocks.ToList())
+                tempSection.Blocks.Add(block);
+
+            using var ms = new MemoryStream();
+            tempEditor.Save(ms, FormatType.Rtf);
+            ms.Position = 0;
+            using var reader = new StreamReader(ms, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
+
+
+
+
+
+
+
+
+
 
         private void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
         {

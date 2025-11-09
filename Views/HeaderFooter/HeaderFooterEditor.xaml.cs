@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -36,19 +37,31 @@ namespace KannadaNudiEditor.Views.HeaderFooter
             Close();
         }
 
+        /// <summary>
+        /// Loads text into the SfRichTextBoxAdv. Supports RTF (preferred) or plain text fallback.
+        /// </summary>
         private void LoadTextIntoEditor(SfRichTextBoxAdv editor, string text)
         {
             using var ms = new MemoryStream(Encoding.UTF8.GetBytes(text));
-            editor.Load(ms, FormatType.Txt);
+
+            // Auto-detect format
+            var format = text.TrimStart().StartsWith(@"{\rtf", StringComparison.OrdinalIgnoreCase)
+                ? FormatType.Rtf
+                : FormatType.Txt;
+
+            editor.Load(ms, format);
         }
 
+        /// <summary>
+        /// Gets text content from SfRichTextBoxAdv in RTF format (preserves formatting).
+        /// </summary>
         private string GetTextFromEditor(SfRichTextBoxAdv editor)
         {
             using var ms = new MemoryStream();
-            editor.Save(ms, FormatType.Txt);
+            editor.Save(ms, FormatType.Rtf); // Always save as RTF to keep formatting
             ms.Position = 0;
             using var reader = new StreamReader(ms, Encoding.UTF8);
-                return reader.ReadToEnd();
+            return reader.ReadToEnd();
         }
     }
 }
