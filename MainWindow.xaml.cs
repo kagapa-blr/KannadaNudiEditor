@@ -1860,112 +1860,158 @@ namespace KannadaNudiEditor
 
 
 
-
         private void EditHeader_Click(object sender, RoutedEventArgs e)
         {
-            var currentHeaderText = GetCurrentHeaderText();
-            var currentFooterText = GetCurrentFooterText();
-
-            var editor = new HeaderFooterEditor(currentHeaderText, currentFooterText);
-            if (editor.ShowDialog() == true)
+            try
             {
-                var section = richTextBoxAdv.Document.Sections[0];
+                SimpleLogger.Log("Opening Header/Footer editor dialog.");
 
-                if (section.HeaderFooters == null)
-                    section.HeaderFooters = new HeaderFooters();
+                var currentHeaderText = GetCurrentHeaderText();
+                var currentFooterText = GetCurrentFooterText();
+                SimpleLogger.Log($"Current header length: {currentHeaderText?.Length ?? 0}, footer length: {currentFooterText?.Length ?? 0}");
 
-                section.HeaderFooters.Header.Blocks.Clear();
-                section.HeaderFooters.Footer.Blocks.Clear();
+                var editor = new HeaderFooterEditor(currentHeaderText, currentFooterText);
 
-                // === HEADER ===
-                if (!string.IsNullOrWhiteSpace(editor.HeaderText))
+                if (editor.ShowDialog() == true)
                 {
-                    var tempHeader = new SfRichTextBoxAdv();
-                    using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText)))
-                        tempHeader.Load(ms, FormatType.Rtf);
+                    SimpleLogger.Log("Header/Footer editor dialog closed with Apply.");
 
-                    var srcSection = tempHeader.Document.Sections.FirstOrDefault() as SectionAdv;
-                    if (srcSection != null)
+                    var section = richTextBoxAdv.Document.Sections[0];
+
+                    if (section.HeaderFooters == null)
                     {
-                        foreach (var block in srcSection.Blocks.ToList())
-                            section.HeaderFooters.Header.Blocks.Add(block);
+                        section.HeaderFooters = new HeaderFooters();
+                        SimpleLogger.Log("HeaderFooters object created.");
                     }
-                }
 
-                // === FOOTER ===
-                if (!string.IsNullOrWhiteSpace(editor.FooterText))
-                {
-                    var tempFooter = new SfRichTextBoxAdv();
-                    using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText)))
-                        tempFooter.Load(ms, FormatType.Rtf);
+                    section.HeaderFooters.Header.Blocks.Clear();
+                    section.HeaderFooters.Footer.Blocks.Clear();
 
-                    var srcSection = tempFooter.Document.Sections.FirstOrDefault() as SectionAdv;
-                    if (srcSection != null)
+                    // === HEADER ===
+                    if (!string.IsNullOrWhiteSpace(editor.HeaderText))
                     {
-                        foreach (var block in srcSection.Blocks.ToList())
-                            section.HeaderFooters.Footer.Blocks.Add(block);
-                    }
-                }
+                        SimpleLogger.Log("Applying header text.");
+                        var tempHeader = new SfRichTextBoxAdv();
+                        using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText)))
+                        {
+                            tempHeader.Load(ms, FormatType.Rtf);
+                            SimpleLogger.Log("Header text loaded into temp editor.");
+                        }
 
-                // Cleanup or formatting
-                if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
-                {
-                    section.HeaderFooters = null;
-                    MessageBox.Show("No header or footer text entered.");
+                        var srcSection = tempHeader.Document.Sections.FirstOrDefault() as SectionAdv;
+                        if (srcSection != null)
+                        {
+                            foreach (var block in srcSection.Blocks.ToList())
+                                section.HeaderFooters.Header.Blocks.Add(block);
+                            SimpleLogger.Log($"Header applied with {section.HeaderFooters.Header.Blocks.Count} blocks.");
+                        }
+                    }
+
+                    // === FOOTER ===
+                    if (!string.IsNullOrWhiteSpace(editor.FooterText))
+                    {
+                        SimpleLogger.Log("Applying footer text.");
+                        var tempFooter = new SfRichTextBoxAdv();
+                        using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText)))
+                        {
+                            tempFooter.Load(ms, FormatType.Rtf);
+                            SimpleLogger.Log("Footer text loaded into temp editor.");
+                        }
+
+                        var srcSection = tempFooter.Document.Sections.FirstOrDefault() as SectionAdv;
+                        if (srcSection != null)
+                        {
+                            foreach (var block in srcSection.Blocks.ToList())
+                                section.HeaderFooters.Footer.Blocks.Add(block);
+                            SimpleLogger.Log($"Footer applied with {section.HeaderFooters.Footer.Blocks.Count} blocks.");
+                        }
+                    }
+
+                    // Cleanup or formatting
+                    if (section.HeaderFooters.Header.Blocks.Count == 0 && section.HeaderFooters.Footer.Blocks.Count == 0)
+                    {
+                        section.HeaderFooters = null;
+                        SimpleLogger.Log("No header or footer entered, HeaderFooters cleared.");
+                        MessageBox.Show("No header or footer text entered.");
+                    }
+                    else
+                    {
+                        section.SectionFormat.HeaderDistance = 50;
+                        section.SectionFormat.FooterDistance = 50;
+                        SimpleLogger.Log("Header/Footer distances set to 50.");
+                    }
+
+                    richTextBoxAdv.InvalidateVisual();
+                    richTextBoxAdv.UpdateLayout();
+                    SimpleLogger.Log("RichTextBox UI refreshed.");
                 }
                 else
                 {
-                    section.SectionFormat.HeaderDistance = 50;
-                    section.SectionFormat.FooterDistance = 50;
+                    SimpleLogger.Log("Header/Footer editor dialog cancelled.");
                 }
-
-                richTextBoxAdv.InvalidateVisual();
-                richTextBoxAdv.UpdateLayout();
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in EditHeader_Click: {ex}");
+                MessageBox.Show($"An error occurred while editing header/footer:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private string? GetCurrentHeaderText()
         {
-            var header = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Header;
-            if (header == null || header.Blocks.Count == 0)
+            try
+            {
+                var header = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Header;
+                if (header == null || header.Blocks.Count == 0)
+                    return null;
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+                foreach (var block in header.Blocks.ToList())
+                    tempSection.Blocks.Add(block);
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+                SimpleLogger.Log($"GetCurrentHeaderText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentHeaderText: {ex}");
                 return null;
-
-            var tempEditor = new SfRichTextBoxAdv();
-            var tempSection = tempEditor.Document.Sections[0];
-            foreach (var block in header.Blocks.ToList())
-                tempSection.Blocks.Add(block);
-
-            using var ms = new MemoryStream();
-            tempEditor.Save(ms, FormatType.Rtf);
-            ms.Position = 0;
-            using var reader = new StreamReader(ms, Encoding.UTF8);
-            return reader.ReadToEnd();
+            }
         }
 
         private string? GetCurrentFooterText()
         {
-            var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Footer;
-            if (footer == null || footer.Blocks.Count == 0)
+            try
+            {
+                var footer = richTextBoxAdv.Document.Sections[0].HeaderFooters?.Footer;
+                if (footer == null || footer.Blocks.Count == 0)
+                    return null;
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+                foreach (var block in footer.Blocks.ToList())
+                    tempSection.Blocks.Add(block);
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+                SimpleLogger.Log($"GetCurrentFooterText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentFooterText: {ex}");
                 return null;
-
-            var tempEditor = new SfRichTextBoxAdv();
-            var tempSection = tempEditor.Document.Sections[0];
-            foreach (var block in footer.Blocks.ToList())
-                tempSection.Blocks.Add(block);
-
-            using var ms = new MemoryStream();
-            tempEditor.Save(ms, FormatType.Rtf);
-            ms.Position = 0;
-            using var reader = new StreamReader(ms, Encoding.UTF8);
-            return reader.ReadToEnd();
+            }
         }
-
-
-
-
-
-
-
 
 
 
