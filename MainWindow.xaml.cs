@@ -1993,67 +1993,353 @@ namespace KannadaNudiEditor
 
 
 
-
-        private void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
+        private async void evenHeaderFooter_Click(object sender, RoutedEventArgs e)
         {
-            // Defines the header and footer. 
-            HeaderFooters headerFooters = new HeaderFooters();
+            try
+            {
+                SimpleLogger.Log("Opening Even Page Header/Footer editor dialog.");
 
-            //// Defines the Even header. 
-            ParagraphAdv headerParagraph = new ParagraphAdv();
-            SpanAdv headerSpan = new SpanAdv();
-            headerSpan.Text = "Even Page Header";
-            headerParagraph.Inlines.Add(headerSpan);
-            headerFooters.EvenHeader.Blocks.Add(headerParagraph);
+                string? currentEvenHeader = GetCurrentEvenHeaderText();
+                string? currentEvenFooter = GetCurrentEvenFooterText();
+                SimpleLogger.Log($"Current even header length: {currentEvenHeader?.Length ?? 0}, even footer length: {currentEvenFooter?.Length ?? 0}");
 
-            // Defines the Even footer. 
-            ParagraphAdv footerParagraph = new ParagraphAdv();
-            SpanAdv footerSpan = new SpanAdv();
-            footerSpan.Text = "Even Page Footer";
-            footerParagraph.Inlines.Add(footerSpan);
-            headerFooters.EvenFooter.Blocks.Add(footerParagraph);
+                var editor = new HeaderFooterEditor(currentEvenHeader, currentEvenFooter);
 
-            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-            sectionAdv.HeaderFooters = headerFooters;
-            // sets this bool value for preservation of Even Header and Footer.
-            sectionAdv.SectionFormat.DifferentOddAndEvenPages = true;
-            sectionAdv.SectionFormat.HeaderDistance = 50;
-            sectionAdv.SectionFormat.FooterDistance = 50;
+                bool? dialogResult = editor.ShowDialog();
+                if (dialogResult != true)
+                {
+                    SimpleLogger.Log("Even Header/Footer editor dialog cancelled.");
+                    return;
+                }
+
+                SimpleLogger.Log("Even Header/Footer editor dialog closed with Apply.");
+                await Task.Delay(50);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    LoadingView.Show();
+
+                    var sections = richTextBoxAdv?.Document?.Sections;
+                    if (sections == null || sections.Count == 0)
+                    {
+                        SimpleLogger.Log("No sections found – aborting.");
+                        LoadingView.Hide();
+                        return;
+                    }
+
+                    foreach (var node in sections)
+                    {
+                        if (node is SectionAdv sectionAdv)
+                        {
+                            if (sectionAdv.HeaderFooters == null)
+                            {
+                                sectionAdv.HeaderFooters = new HeaderFooters();
+                                SimpleLogger.Log("Created new HeaderFooters for section.");
+                            }
+
+                            sectionAdv.HeaderFooters.EvenHeader?.Blocks.Clear();
+                            sectionAdv.HeaderFooters.EvenFooter?.Blocks.Clear();
+
+                            sectionAdv.HeaderFooters.EvenHeader ??= new HeaderFooter();
+                            sectionAdv.HeaderFooters.EvenFooter ??= new HeaderFooter();
+
+                            if (!string.IsNullOrWhiteSpace(editor.HeaderText))
+                            {
+                                using var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText));
+                                var tempEditor = new SfRichTextBoxAdv();
+                                tempEditor.Load(ms, FormatType.Rtf);
+                                var srcSection = tempEditor.Document.Sections[0];
+                                foreach (var block in srcSection.Blocks.OfType<BlockAdv>().ToList())
+                                    sectionAdv.HeaderFooters.EvenHeader.Blocks.Add(block);
+                                SimpleLogger.Log($"Loaded even header with {sectionAdv.HeaderFooters.EvenHeader.Blocks.Count} blocks.");
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(editor.FooterText))
+                            {
+                                using var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText));
+                                var tempEditor = new SfRichTextBoxAdv();
+                                tempEditor.Load(ms, FormatType.Rtf);
+                                var srcSection = tempEditor.Document.Sections[0];
+                                foreach (var block in srcSection.Blocks.OfType<BlockAdv>().ToList())
+                                    sectionAdv.HeaderFooters.EvenFooter.Blocks.Add(block);
+                                SimpleLogger.Log($"Loaded even footer with {sectionAdv.HeaderFooters.EvenFooter.Blocks.Count} blocks.");
+                            }
+
+                            sectionAdv.SectionFormat.DifferentOddAndEvenPages = true;
+                            sectionAdv.SectionFormat.DifferentFirstPage = false;
+                            sectionAdv.SectionFormat.HeaderDistance = 50;
+                            sectionAdv.SectionFormat.FooterDistance = 50;
+                        }
+                        else
+                        {
+                            SimpleLogger.Log("Skipped non-section node while applying even header/footer.");
+                        }
+                    }
+
+                    richTextBoxAdv.InvalidateVisual();
+                    richTextBoxAdv.UpdateLayout();
+                    UpdateRichTextBoxAdvItems();
+
+                    SimpleLogger.Log("Even Page Header/Footer applied successfully.");
+                    LoadingView.Hide();
+                });
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in evenHeaderFooter_Click: {ex}");
+                MessageBox.Show($"Error applying Even Page Header/Footer:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoadingView.Hide();
+            }
         }
-        /// <summary>
-        ///  Adds First Page Header and Footer into the SfRichTextBoxAdv.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void firstPageHeaderFooter_Click(object sender, RoutedEventArgs e)
+
+        private async void firstPageHeaderFooter_Click(object sender, RoutedEventArgs e)
         {
-            // Defines the header and footer. 
-            HeaderFooters headerFooters = new HeaderFooters();
+            try
+            {
+                SimpleLogger.Log("Opening First Page Header/Footer editor dialog.");
 
-            //// Defines the First page header. 
-            ParagraphAdv headerParagraph = new ParagraphAdv();
-            SpanAdv headerSpan = new SpanAdv();
-            headerSpan.Text = "First Page Header";
-            headerParagraph.Inlines.Add(headerSpan);
-            headerFooters.FirstPageHeader.Blocks.Add(headerParagraph);
+                string? currentFirstHeader = GetCurrentFirstHeaderText();
+                string? currentFirstFooter = GetCurrentFirstFooterText();
+                SimpleLogger.Log($"Current first page header length: {currentFirstHeader?.Length ?? 0}, footer length: {currentFirstFooter?.Length ?? 0}");
 
-            // Defines the First page footer. 
-            ParagraphAdv footerParagraph = new ParagraphAdv();
-            SpanAdv footerSpan = new SpanAdv();
-            footerSpan.Text = "First Page Footer";
-            footerParagraph.Inlines.Add(footerSpan);
-            headerFooters.FirstPageFooter.Blocks.Add(footerParagraph);
+                var editor = new HeaderFooterEditor(currentFirstHeader, currentFirstFooter);
 
-            SectionAdv sectionAdv = richTextBoxAdv.Document.Sections[0];
-            sectionAdv.HeaderFooters = headerFooters;
-            // sets this bool value for preservation of First page Header and Footer.
-            sectionAdv.SectionFormat.DifferentFirstPage = true;
-            sectionAdv.SectionFormat.HeaderDistance = 50;
-            sectionAdv.SectionFormat.FooterDistance = 50;
+                bool? dialogResult = editor.ShowDialog();
+                if (dialogResult != true)
+                {
+                    SimpleLogger.Log("First Page Header/Footer editor dialog cancelled.");
+                    return;
+                }
+
+                SimpleLogger.Log("First Page Header/Footer editor dialog closed with Apply.");
+                await Task.Delay(50);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    LoadingView.Show();
+
+                    var sections = richTextBoxAdv?.Document?.Sections;
+                    if (sections == null || sections.Count == 0)
+                    {
+                        SimpleLogger.Log("No sections found – aborting.");
+                        LoadingView.Hide();
+                        return;
+                    }
+
+                    foreach (var node in sections)
+                    {
+                        if (node is SectionAdv sectionAdv)
+                        {
+                            if (sectionAdv.HeaderFooters == null)
+                            {
+                                sectionAdv.HeaderFooters = new HeaderFooters();
+                                SimpleLogger.Log("Created new HeaderFooters for section.");
+                            }
+
+                            sectionAdv.HeaderFooters.FirstPageHeader?.Blocks.Clear();
+                            sectionAdv.HeaderFooters.FirstPageFooter?.Blocks.Clear();
+
+                            sectionAdv.HeaderFooters.FirstPageHeader ??= new HeaderFooter();
+                            sectionAdv.HeaderFooters.FirstPageFooter ??= new HeaderFooter();
+
+                            if (!string.IsNullOrWhiteSpace(editor.HeaderText))
+                            {
+                                using var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.HeaderText));
+                                var tempEditor = new SfRichTextBoxAdv();
+                                tempEditor.Load(ms, FormatType.Rtf);
+                                var srcSection = tempEditor.Document.Sections[0];
+                                foreach (var block in srcSection.Blocks.OfType<BlockAdv>().ToList())
+                                    sectionAdv.HeaderFooters.FirstPageHeader.Blocks.Add(block);
+                                SimpleLogger.Log($"Loaded first page header with {sectionAdv.HeaderFooters.FirstPageHeader.Blocks.Count} blocks.");
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(editor.FooterText))
+                            {
+                                using var ms = new MemoryStream(Encoding.UTF8.GetBytes(editor.FooterText));
+                                var tempEditor = new SfRichTextBoxAdv();
+                                tempEditor.Load(ms, FormatType.Rtf);
+                                var srcSection = tempEditor.Document.Sections[0];
+                                foreach (var block in srcSection.Blocks.OfType<BlockAdv>().ToList())
+                                    sectionAdv.HeaderFooters.FirstPageFooter.Blocks.Add(block);
+                                SimpleLogger.Log($"Loaded first page footer with {sectionAdv.HeaderFooters.FirstPageFooter.Blocks.Count} blocks.");
+                            }
+
+                            sectionAdv.SectionFormat.DifferentFirstPage = true;
+                            sectionAdv.SectionFormat.DifferentOddAndEvenPages = false;
+                            sectionAdv.SectionFormat.HeaderDistance = 50;
+                            sectionAdv.SectionFormat.FooterDistance = 50;
+                        }
+                        else
+                        {
+                            SimpleLogger.Log("Skipped non-section node while applying first page header/footer.");
+                        }
+                    }
+
+                    richTextBoxAdv.InvalidateVisual();
+                    richTextBoxAdv.UpdateLayout();
+                    UpdateRichTextBoxAdvItems();
+
+                    SimpleLogger.Log("First Page Header/Footer applied successfully.");
+                    LoadingView.Hide();
+                });
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in firstPageHeaderFooter_Click: {ex}");
+                MessageBox.Show($"Error applying First Page Header/Footer:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoadingView.Hide();
+            }
         }
 
 
 
+
+
+
+        private string? GetCurrentEvenHeaderText()
+        {
+            try
+            {
+                var evenHeader = richTextBoxAdv?.Document?.Sections[0].HeaderFooters?.EvenHeader;
+                if (evenHeader == null || evenHeader.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentEvenHeaderText found no even header blocks.");
+                    return null;
+                }
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+
+                foreach (var block in evenHeader.Blocks.ToList())
+                {
+                    tempSection.Blocks.Add(block);
+                }
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+
+                SimpleLogger.Log($"GetCurrentEvenHeaderText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentEvenHeaderText: {ex}");
+                return null;
+            }
+        }
+
+        private string? GetCurrentEvenFooterText()
+        {
+            try
+            {
+                var evenFooter = richTextBoxAdv?.Document?.Sections[0].HeaderFooters?.EvenFooter;
+                if (evenFooter == null || evenFooter.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentEvenFooterText found no even footer blocks.");
+                    return null;
+                }
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+
+                foreach (var block in evenFooter.Blocks.ToList())
+                {
+                    tempSection.Blocks.Add(block);
+                }
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+
+                SimpleLogger.Log($"GetCurrentEvenFooterText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentEvenFooterText: {ex}");
+                return null;
+            }
+        }
+
+
+        private string? GetCurrentFirstHeaderText()
+        {
+            try
+            {
+                var firstPageHeader = richTextBoxAdv.Document.Sections[0].HeaderFooters?.FirstPageHeader;
+                if (firstPageHeader == null || firstPageHeader.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentFirstHeaderText found no first page header blocks.");
+                    return null;
+                }
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+
+                foreach (var block in firstPageHeader.Blocks.ToList())
+                {
+                    tempSection.Blocks.Add(block);
+                }
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+
+                SimpleLogger.Log($"GetCurrentFirstHeaderText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentFirstHeaderText: {ex}");
+                return null;
+            }
+        }
+
+        private string? GetCurrentFirstFooterText()
+        {
+            try
+            {
+                var firstPageFooter = richTextBoxAdv.Document.Sections[0].HeaderFooters?.FirstPageFooter;
+                if (firstPageFooter == null || firstPageFooter.Blocks.Count == 0)
+                {
+                    SimpleLogger.Log("GetCurrentFirstFooterText found no first page footer blocks.");
+                    return null;
+                }
+
+                var tempEditor = new SfRichTextBoxAdv();
+                var tempSection = tempEditor.Document.Sections[0];
+
+                foreach (var block in firstPageFooter.Blocks.ToList())
+                {
+                    tempSection.Blocks.Add(block);
+                }
+
+                using var ms = new MemoryStream();
+                tempEditor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+
+                using var reader = new StreamReader(ms, Encoding.UTF8);
+                var result = reader.ReadToEnd();
+
+                SimpleLogger.Log($"GetCurrentFirstFooterText retrieved {result.Length} chars.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error in GetCurrentFirstFooterText: {ex}");
+                return null;
+            }
+        }
 
 
 
