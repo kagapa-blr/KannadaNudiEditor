@@ -285,7 +285,9 @@
   <sys:String x:Key="PageNumberGroupDescription">Manage and customize page numbers in the document.</sys:String>
 
   <!-- Tooltips -->
-  <sys:String x:Key="EditHeaderTooltip">Open the header/footer section for editing.</sys:String>
+  <sys:String x:Key="EditHeaderTooltip">
+    Open the header or footer editor. Any changes you make will be applied to all pages in the document.
+  </sys:String>
   <sys:String x:Key="RemoveHeaderFooterTooltip">Remove all header and footer content from the document.</sys:String>
   <sys:String x:Key="DifferentFirstPageTooltip">Add or edit a unique header/footer for the first page.</sys:String>
   <sys:String x:Key="DifferentEvenPageTooltip">Add or edit a unique header/footer for even pages.</sys:String>

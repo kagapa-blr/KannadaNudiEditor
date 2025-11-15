@@ -239,16 +239,16 @@
   <!-- =========================== -->
 
   <!-- Tab Title -->
-  <sys:String x:Key="HeaderFooterTab">ಅಗ್ರಶೀರ್ಷಿಕೆ / ಅಡಿ ಶೀರ್ಷಿಕೆ</sys:String>
+  <sys:String x:Key="HeaderFooterTab">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿಶೀರ್ಷಿಕೆ</sys:String>
 
   <!-- Ribbon Group Headers -->
-  <sys:String x:Key="HeaderFooterGroup">ಹೆಡರ್/ಫೂಟರ್</sys:String>
+  <sys:String x:Key="HeaderFooterGroup">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿಶೀರ್ಷಿಕೆ</sys:String>
   <sys:String x:Key="HeaderFooterOptions">ಆಯ್ಕೆಗಳು</sys:String>
 
   <!-- Buttons -->
-  <sys:String x:Key="EditHeader">ಅಗ್ರಶೀರ್ಷಿಕೆ  ಸಂಪಾದಿಸಿ</sys:String>
-  <sys:String x:Key="EditFooter">ಅಡಿ ಶೀರ್ಷಿಕೆ   ಸಂಪಾದಿಸಿ</sys:String>
-  <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
+  <sys:String x:Key="EditHeader">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿಶೀರ್ಷಿಕೆ</sys:String>
+  <sys:String x:Key="EditFooter">ಅಡಿಶೀರ್ಷಿಕೆ ಸಂಪಾದಿಸಿ</sys:String>
+  <sys:String x:Key="RemoveHeaderFooter">ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿಶೀರ್ಷಿಕೆ ಅಳಿಸಿ</sys:String>
   <sys:String x:Key="DifferentFirstPageButton">ಪ್ರಥಮ ಪುಟ ವಿಭಿನ್ನ</sys:String>
   <sys:String x:Key="DifferentEvenPageButton">ಎಷ್ಟಾದರೂ ಪುಟ ವಿಭಿನ್ನ</sys:String>
 
@@ -257,12 +257,15 @@
 
 
   <!-- Group Descriptions -->
-  <sys:String x:Key="HeaderFooterGroupDescription">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್‌ಗಳನ್ನು ತಿದ್ದುಪಡಿ ಅಥವಾ ತೆಗೆದುಹಾಕಿ.</sys:String>
+  <sys:String x:Key="HeaderFooterGroupDescription">ಕಡತದಲ್ಲಿ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್‌ಗಳನ್ನು ತಿದ್ದುಪಡಿ ಅಥವಾ ತೆಗೆದುಹಾಕಿ.</sys:String>
   <sys:String x:Key="HeaderFooterOptionsDescription">ಮೊದಲ ಪುಟ ಅಥವಾ ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳಿಗೆ ವಿಶೇಷ ಹೆಡರ್/ಫೂಟರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಸಂರಚಿಸಿ.</sys:String>
   <sys:String x:Key="PageNumberGroupDescription">ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಪುಟ ಸಂಖ್ಯೆಗಳನ್ನು ನಿರ್ವಹಿಸಿ ಮತ್ತು ಕಸ್ಟಮೈಸ್ ಮಾಡಿ.</sys:String>
 
   <!-- Tooltips -->
-  <sys:String x:Key="EditHeaderTooltip">ತಿದ್ದುಪಡಿಯಾಗಿ ಹೆಡರ್/ಫೂಟರ್ ವಿಭಾಗವನ್ನು ತೆರೆದುಕೊಳ್ಳಿ.</sys:String>
+  <sys:String x:Key="EditHeaderTooltip">
+    ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿಶೀರ್ಷಿಕೆ ಅನ್ನು ತಿದ್ದುಪಡಿ ಮಾಡಲು ಸಂಬಂಧಿತ ವಿಭಾಗವನ್ನು ತೆರೆಯಿರಿ. ಮಾಡಿದ ಬದಲಾವಣೆಗಳು ಎಲ್ಲಾ ಪುಟಗಳಿಗೆ ಅನ್ವಯಿಸುತ್ತವೆ.
+  </sys:String>
+
   <sys:String x:Key="RemoveHeaderFooterTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಿಂದ ಎಲ್ಲಾ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ.</sys:String>
   <sys:String x:Key="DifferentFirstPageTooltip">ಮೊದಲ ಪುಟಕ್ಕೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>
   <sys:String x:Key="DifferentEvenPageTooltip">ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳಿಗೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>

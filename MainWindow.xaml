@@ -2181,7 +2181,8 @@
                     </Syncfusion:RibbonButton>
                 </Syncfusion:RibbonBar>
 
-                <!-- Header & Footer Group -->
+
+                <!-- Header & Footer Group (Improved, Icons Only) -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterGroup}"
                                       IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
@@ -2191,12 +2192,20 @@
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
-                    <StackPanel Margin="3">
-                        <Button Content="{DynamicResource EditHeader}"
-                                Height="30"
-                                Width="130"
-                                Margin="5"
+                    <StackPanel Margin="6"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                        <!-- Edit Header -->
+                        <Button Height="40"
+                                Width="40"
+                                Margin="6"
                                 Click="EditHeader_Click">
+                            <Image Source="/Images/Insert/document-header.png"
+                                   Width="22"
+                                   Height="22"
+                                   Stretch="Uniform"/>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
@@ -2211,8 +2220,35 @@
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
+
+                        <!-- Remove Header/Footer -->
+                        <Button x:Name="removeHeaderFooter"
+                                Height="40"
+                                Width="40"
+                                Margin="6"
+                                Click="removeHeaderFooter_Click">
+                            <Image Source="/Images/Insert/remove-icon.png"
+                                   Width="22"
+                                   Height="22"
+                                   Stretch="Uniform"/>
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource RemoveHeaderFooter}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
                     </StackPanel>
                 </Syncfusion:RibbonBar>
+
 
                 <!-- Header/Footer Options Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource HeaderFooterOptions}"
@@ -2224,12 +2260,17 @@
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
-                    <StackPanel Margin="3">
-                        <Button Content="{DynamicResource DifferentFirstPageButton}"
-                                Height="30"
-                                Width="130"
+                    <StackPanel Margin="3"
+                                Orientation="Horizontal">
+
+                        <!-- Different First Page -->
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
                                 Click="firstPageHeaderFooter_Click">
+                            <Image Source="/Images/Insert/firstpage-icon.png"
+                                   Width="22"
+                                   Height="22"/>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
@@ -2244,11 +2285,15 @@
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
-                        <Button Content="{DynamicResource DifferentEvenPageButton}"
-                                Height="30"
-                                Width="130"
+
+                        <!-- Different Even Page -->
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
                                 Click="evenHeaderFooter_Click">
+                            <Image Source="/Images/Insert/evenpages-icon.png"
+                                   Width="22"
+                                   Height="22"/>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
@@ -2263,44 +2308,12 @@
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
-                        <Button Content="{DynamicResource LinkToPrevious}"
-                                Height="30"
-                                Width="130"
-                                Margin="5">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <TextBlock Text="{DynamicResource LinkToPrevious}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="{DynamicResource LinkToPreviousTooltip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Content="{DynamicResource SuppressFirstPageHeaderFooter}"
-                                Height="30"
-                                Width="130"
-                                Margin="5">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <TextBlock Text="{DynamicResource SuppressFirstPageHeaderFooter}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="{DynamicResource SuppressFirstPageTooltip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
+
                     </StackPanel>
                 </Syncfusion:RibbonBar>
+
+
+
 
                 <!-- Page Number Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
@@ -2332,35 +2345,6 @@
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
-                <!-- Remove Header/Footer -->
-                <Syncfusion:RibbonBar Header="{DynamicResource RemoveHeaderFooter}"
-                                      IsLauncherButtonVisible="False">
-                    <StackPanel Margin="3">
-                        <Button x:Name="removeHeaderFooter"
-                                Content="{DynamicResource RemoveHeaderFooter}"
-                                Click="removeHeaderFooter_Click"
-                                Height="Auto"
-                                Width="Auto"
-                                MinHeight="30"
-                                MinWidth="150"
-                                Margin="5"
-                                Background="Red">
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <TextBlock Text="{DynamicResource RemoveHeaderFooter}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="{DynamicResource RemoveHeaderFooterTooltip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-                    </StackPanel>
-                </Syncfusion:RibbonBar>
 
             </Syncfusion:RibbonTab>
 
