@@ -2093,18 +2093,6 @@ namespace KannadaNudiEditor
         }
 
 
-
-
-        private void DifferentFirstPage_Checked(object sender, RoutedEventArgs e)
-        {
-            // Handle checked logic for "Different First Page"
-        }
-
-        private void DifferentFirstPage_Unchecked(object sender, RoutedEventArgs e)
-        {
-            // Handle unchecked logic for "Different First Page"
-        }
-
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
         {
             string exeFileName = "kannadaKeyboard.exe";
@@ -2138,7 +2126,6 @@ namespace KannadaNudiEditor
             }
         }
 
-
         private void StopNudiEngine_Click(object sender, RoutedEventArgs e)
         {
             // Check if the "kannadaKeyboard.exe" process is running
@@ -2167,11 +2154,6 @@ namespace KannadaNudiEditor
         {
             return Process.GetProcessesByName(processName).Length > 0;
         }
-
-
-
-
-
 
 
         private void AboutNudi_Click(object sender, RoutedEventArgs e)
