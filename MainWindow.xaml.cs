@@ -2070,6 +2070,74 @@ namespace KannadaNudiEditor
 
 
 
+        private void removeHeaderFooter_Click(object sender, RoutedEventArgs e)
+        {
+            // Open the dialog to let user select which headers/footers to clear
+            var dialog = new ClearHeaderFooterDialog
+            {
+                Owner = this
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            // Map dialog selection to actual clearing
+            ClearHeaderFooter(dialog.SelectedType);
+        }
+
+        private void ClearHeaderFooter(ClearHeaderFooterDialog.DialogHeaderFooterType type)
+        {
+            if (richTextBoxAdv?.Document?.Sections == null)
+                return;
+
+            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+            {
+                var hf = section.HeaderFooters;
+                if (hf == null)
+                    continue;
+
+                switch (type)
+                {
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.AllPages:
+                        ClearBlocks(hf.Header, hf.Footer, hf.EvenHeader, hf.EvenFooter, hf.FirstPageHeader, hf.FirstPageFooter);
+                        break;
+
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.EvenPages:
+                        ClearBlocks(hf.EvenHeader, hf.EvenFooter);
+                        break;
+
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.FirstPage:
+                        ClearBlocks(hf.FirstPageHeader, hf.FirstPageFooter);
+                        break;
+                }
+
+                // Optional: remove HeaderFooters object if all blocks are empty
+                if ((hf.Header?.Blocks.Count ?? 0) == 0 &&
+                    (hf.Footer?.Blocks.Count ?? 0) == 0 &&
+                    (hf.EvenHeader?.Blocks.Count ?? 0) == 0 &&
+                    (hf.EvenFooter?.Blocks.Count ?? 0) == 0 &&
+                    (hf.FirstPageHeader?.Blocks.Count ?? 0) == 0 &&
+                    (hf.FirstPageFooter?.Blocks.Count ?? 0) == 0)
+                {
+                    section.HeaderFooters = null;
+                }
+            }
+
+            ForceDocumentRefresh();
+        }
+
+        private void ClearBlocks(params HeaderFooter[] headerFooters)
+        {
+            foreach (var headerFooter in headerFooters)
+            {
+                if (headerFooter == null)
+                    continue;
+
+                for (int i = headerFooter.Blocks.Count - 1; i >= 0; i--)
+                    headerFooter.Blocks.RemoveAt(i);
+            }
+        }
+
         private void ForceDocumentRefresh()
         {
             try
@@ -2080,17 +2148,19 @@ namespace KannadaNudiEditor
                 using var ms = new MemoryStream();
                 richTextBoxAdv.Save(ms, FormatType.Rtf);
                 ms.Position = 0;
-
-                // Re-load same document back into editor — this re-parses and re-renders everything.
                 richTextBoxAdv.Load(ms, FormatType.Rtf);
-
-                SimpleLogger.Log("ForceDocumentRefresh: Document reloaded to refresh view.");
             }
             catch (Exception ex)
             {
                 SimpleLogger.Log($"ForceDocumentRefresh failed: {ex}");
             }
         }
+
+
+
+
+
+
 
 
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
@@ -2341,44 +2411,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-        private void removeHeaderFooter_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (SectionAdv sectionAdv in richTextBoxAdv.Document.Sections)
-            {
-                HeaderFooters headerFooters = sectionAdv.HeaderFooters;
-
-                ClearBlocks(
-                    headerFooters.Header,
-                    headerFooters.Footer,
-                    headerFooters.EvenHeader,
-                    headerFooters.EvenFooter,
-                    headerFooters.FirstPageHeader,
-                    headerFooters.FirstPageFooter
-                );
-            }
-        }
-
-        /// <summary>
-        /// Clears the blocks of Header or Footer.
-        /// </summary>
-        /// <param name="headerFooters"></param>
-        void ClearBlocks(params HeaderFooter[] headerFooters)
-        {
-            foreach (var headerFooter in headerFooters)
-            {
-                if (headerFooter == null)
-                    continue;
-
-                for (int i = headerFooter.Blocks.Count - 1; i >= 0; i--)
-                {
-                    headerFooter.Blocks.RemoveAt(i);
-                }
-            }
-        }
 
 
 
