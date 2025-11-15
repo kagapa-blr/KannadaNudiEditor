@@ -1930,7 +1930,7 @@ namespace KannadaNudiEditor
                     richTextBoxAdv.UpdateLayout();
 
                     // Full logical refresh
-                    ForceDocumentRefresh();
+                    ForceDocumentRefresh(richTextBoxAdv);
                     SimpleLogger.Log($"{type} Header/Footer applied and refreshed successfully.");
                     LoadingView.Hide();
 
@@ -2068,77 +2068,7 @@ namespace KannadaNudiEditor
 
 
 
-
-
-        private void removeHeaderFooter_Click(object sender, RoutedEventArgs e)
-        {
-            // Open the dialog to let user select which headers/footers to clear
-            var dialog = new ClearHeaderFooterDialog
-            {
-                Owner = this
-            };
-
-            if (dialog.ShowDialog() != true)
-                return;
-
-            // Map dialog selection to actual clearing
-            ClearHeaderFooter(dialog.SelectedType);
-        }
-
-        private void ClearHeaderFooter(ClearHeaderFooterDialog.DialogHeaderFooterType type)
-        {
-            if (richTextBoxAdv?.Document?.Sections == null)
-                return;
-
-            foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
-            {
-                var hf = section.HeaderFooters;
-                if (hf == null)
-                    continue;
-
-                switch (type)
-                {
-                    case ClearHeaderFooterDialog.DialogHeaderFooterType.AllPages:
-                        ClearBlocks(hf.Header, hf.Footer, hf.EvenHeader, hf.EvenFooter, hf.FirstPageHeader, hf.FirstPageFooter);
-                        break;
-
-                    case ClearHeaderFooterDialog.DialogHeaderFooterType.EvenPages:
-                        ClearBlocks(hf.EvenHeader, hf.EvenFooter);
-                        break;
-
-                    case ClearHeaderFooterDialog.DialogHeaderFooterType.FirstPage:
-                        ClearBlocks(hf.FirstPageHeader, hf.FirstPageFooter);
-                        break;
-                }
-
-                // Optional: remove HeaderFooters object if all blocks are empty
-                if ((hf.Header?.Blocks.Count ?? 0) == 0 &&
-                    (hf.Footer?.Blocks.Count ?? 0) == 0 &&
-                    (hf.EvenHeader?.Blocks.Count ?? 0) == 0 &&
-                    (hf.EvenFooter?.Blocks.Count ?? 0) == 0 &&
-                    (hf.FirstPageHeader?.Blocks.Count ?? 0) == 0 &&
-                    (hf.FirstPageFooter?.Blocks.Count ?? 0) == 0)
-                {
-                    section.HeaderFooters = null;
-                }
-            }
-
-            ForceDocumentRefresh();
-        }
-
-        private void ClearBlocks(params HeaderFooter[] headerFooters)
-        {
-            foreach (var headerFooter in headerFooters)
-            {
-                if (headerFooter == null)
-                    continue;
-
-                for (int i = headerFooter.Blocks.Count - 1; i >= 0; i--)
-                    headerFooter.Blocks.RemoveAt(i);
-            }
-        }
-
-        private void ForceDocumentRefresh()
+        private void RefreshAllPagesEditor()
         {
             try
             {
@@ -2159,6 +2089,147 @@ namespace KannadaNudiEditor
 
 
 
+        private void removeHeaderFooter_Click(object sender, RoutedEventArgs e)
+        {
+            // Show dialog to let user select which headers/footers to clear
+            var dialog = new ClearHeaderFooterDialog
+            {
+                Owner = this
+            };
+
+            if (dialog.ShowDialog() != true)
+            {
+                SimpleLogger.Log("User cancelled clearing headers/footers.");
+                return;
+            }
+
+            SimpleLogger.Log($"User selected to clear: {dialog.SelectedType}");
+
+            try
+            {
+                LoadingView.Show(this);
+                SimpleLogger.Log("LoadingView shown. Clearing headers/footers...");
+
+                // Clear headers/footers on the UI thread
+                ClearHeaderFooter(richTextBoxAdv, dialog.SelectedType);
+
+                SimpleLogger.Log("Header/footer clearing completed.");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error while clearing headers/footers: {ex}");
+                MessageBox.Show($"Error clearing headers/footers:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                SimpleLogger.Log("LoadingView hidden.");
+            }
+        }
+
+        /// <summary>
+        /// Clears headers/footers on the provided editor based on the dialog selection.
+        /// </summary>
+        private void ClearHeaderFooter(SfRichTextBoxAdv editor, ClearHeaderFooterDialog.DialogHeaderFooterType type)
+        {
+            if (editor?.Document?.Sections == null || editor.Document.Sections.Count == 0)
+            {
+                SimpleLogger.Log("No document or sections found to clear headers/footers.");
+                return;
+            }
+
+            int sectionIndex = 1;
+            foreach (var section in editor.Document.Sections.OfType<SectionAdv>())
+            {
+                SimpleLogger.Log($"Processing Section #{sectionIndex}");
+
+                if (section.HeaderFooters == null)
+                {
+                    SimpleLogger.Log("Section has no headers/footers. Skipping.");
+                    sectionIndex++;
+                    continue;
+                }
+
+                switch (type)
+                {
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.AllPages:
+                        section.HeaderFooters.Header?.Blocks.Clear();
+                        section.HeaderFooters.Footer?.Blocks.Clear();
+                        section.HeaderFooters.EvenHeader?.Blocks.Clear();
+                        section.HeaderFooters.EvenFooter?.Blocks.Clear();
+                        section.HeaderFooters.FirstPageHeader?.Blocks.Clear();
+                        section.HeaderFooters.FirstPageFooter?.Blocks.Clear();
+                        section.SectionFormat.DifferentFirstPage = false;
+                        section.SectionFormat.DifferentOddAndEvenPages = false;
+                        SimpleLogger.Log("Cleared headers/footers on all pages.");
+                        break;
+
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.EvenPages:
+                        section.HeaderFooters.EvenHeader?.Blocks.Clear();
+                        section.HeaderFooters.EvenFooter?.Blocks.Clear();
+                        section.SectionFormat.DifferentOddAndEvenPages = true;
+                        SimpleLogger.Log("Cleared headers/footers on even pages.");
+                        break;
+
+                    case ClearHeaderFooterDialog.DialogHeaderFooterType.FirstPage:
+                        section.HeaderFooters.FirstPageHeader?.Blocks.Clear();
+                        section.HeaderFooters.FirstPageFooter?.Blocks.Clear();
+                        section.SectionFormat.DifferentFirstPage = true;
+                        SimpleLogger.Log("Cleared headers/footers on first page.");
+                        break;
+                }
+
+                // Remove HeaderFooters object if all blocks are empty
+                if (IsHeaderFooterEmpty(section.HeaderFooters))
+                {
+                    section.HeaderFooters = null;
+                    SimpleLogger.Log("HeaderFooters removed from section as all blocks are empty.");
+                }
+
+                sectionIndex++;
+            }
+
+            // Refresh the editor to apply changes
+            Application.Current.Dispatcher.Invoke(() => ForceDocumentRefresh(editor));
+        }
+
+        /// <summary>
+        /// Checks if a HeaderFooters object has any blocks.
+        /// </summary>
+        private bool IsHeaderFooterEmpty(Syncfusion.Windows.Controls.RichTextBoxAdv.HeaderFooters hf)
+        {
+            return (hf.Header?.Blocks.Count ?? 0) == 0 &&
+                   (hf.Footer?.Blocks.Count ?? 0) == 0 &&
+                   (hf.EvenHeader?.Blocks.Count ?? 0) == 0 &&
+                   (hf.EvenFooter?.Blocks.Count ?? 0) == 0 &&
+                   (hf.FirstPageHeader?.Blocks.Count ?? 0) == 0 &&
+                   (hf.FirstPageFooter?.Blocks.Count ?? 0) == 0;
+        }
+
+        /// <summary>
+        /// Forces the RichTextBoxAdv to refresh the document after clearing headers/footers.
+        /// </summary>
+        private void ForceDocumentRefresh(SfRichTextBoxAdv editor)
+        {
+            try
+            {
+                if (editor?.Document == null)
+                {
+                    SimpleLogger.Log("Cannot refresh document: RichTextBoxAdv or Document is null.");
+                    return;
+                }
+
+                using var ms = new MemoryStream();
+                editor.Save(ms, FormatType.Rtf);
+                ms.Position = 0;
+                editor.Load(ms, FormatType.Rtf);
+                SimpleLogger.Log("Document refresh completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"ForceDocumentRefresh failed: {ex}");
+            }
+        }
 
 
 
