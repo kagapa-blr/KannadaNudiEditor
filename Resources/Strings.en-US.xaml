@@ -291,7 +291,7 @@
   <sys:String x:Key="RemoveHeaderFooterTooltip">Remove all header and footer content from the document.</sys:String>
   <sys:String x:Key="DifferentFirstPageTooltip">Add or edit a unique header/footer for the first page.</sys:String>
   <sys:String x:Key="DifferentEvenPageTooltip">Add or edit a unique header/footer for even pages.</sys:String>
-  <sys:String x:Key="LinkToPreviousTooltip">Link the current header/footer to the previous section.</sys:String>
+
   <sys:String x:Key="SuppressFirstPageTooltip">Hide headers and footers on the first page.</sys:String>
 
 
@@ -307,7 +307,7 @@
   <sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
   <sys:String x:Key="DifferentOddEvenPages">Different Odd/Even Pages</sys:String>
   <sys:String x:Key="SuppressFirstPageHeaderFooter">Suppress Header/Footer on First Page</sys:String>
-  <sys:String x:Key="LinkToPrevious">Link to Previous</sys:String>
+
 
   <!-- =========================== -->
   <!-- Page Number: Custom Setup -->

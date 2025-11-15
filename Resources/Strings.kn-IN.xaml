@@ -269,7 +269,6 @@
   <sys:String x:Key="RemoveHeaderFooterTooltip">ಡಾಕ್ಯುಮೆಂಟ್‌ನಿಂದ ಎಲ್ಲಾ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್ ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಿ.</sys:String>
   <sys:String x:Key="DifferentFirstPageTooltip">ಮೊದಲ ಪುಟಕ್ಕೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>
   <sys:String x:Key="DifferentEvenPageTooltip">ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳಿಗೆ ವಿಶಿಷ್ಟ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಸೇರಿಸಿ ಅಥವಾ ತಿದ್ದುಪಡಿ ಮಾಡಿ.</sys:String>
-  <sys:String x:Key="LinkToPreviousTooltip">ಪ್ರಸ್ತುತ ಹೆಡರ್/ಫೂಟರ್ ಅನ್ನು ಹಿಂದಿನ ವಿಭಾಗದೊಂದಿಗೆ ಲಿಂಕ್ ಮಾಡಿ.</sys:String>
   <sys:String x:Key="SuppressFirstPageTooltip">ಮೊದಲ ಪುಟದಲ್ಲಿ ಹೆಡರ್ ಮತ್ತು ಫೂಟರ್‌ಗಳನ್ನು ತೋರಿಸಬೇಡಿ.</sys:String>
 
 
@@ -291,7 +290,7 @@
   <sys:String x:Key="DifferentFirstPage">ಭಿನ್ನ ಪ್ರಥಮ ಪುಟ</sys:String>
   <sys:String x:Key="DifferentOddEvenPages">ಬೆಸ/ಸಮ ಸಂಖ್ಯೆಯ ಪುಟಗಳು</sys:String>
   <sys:String x:Key="SuppressFirstPageHeaderFooter">ಮೊದಲ ಪುಟದ ಅಗ್ರಶೀರ್ಷಿಕೆ/ಅಡಿ ಶೀರ್ಷಿಕೆ ಅಡಗಿಸಿ</sys:String>
-  <sys:String x:Key="LinkToPrevious">ಹಿಂದಿನದರೊಂದಿಗೆ  ಜೋಡಿಸಿ</sys:String>
+
 
   <!-- =========================== -->
   <!-- Page Number: Custom Setup -->
