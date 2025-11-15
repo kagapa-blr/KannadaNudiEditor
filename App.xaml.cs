@@ -34,37 +34,25 @@ namespace KannadaNudiEditor
 
                 base.OnStartup(e);
 
-                // Global unhandled exception logging
-                AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
-                {
-                    if (ex.ExceptionObject is Exception exception)
-                        SimpleLogger.LogException(exception, "Unhandled Exception");
-                    else
-                        SimpleLogger.Log("Unhandled Exception occurred but was not an Exception type.");
-                };
-
-                // Launch Kannada Keyboard in background
-                LaunchKannadaKeyboard();
+                // Launch Kannada Keyboard
+                //LaunchKannadaKeyboard();
 
                 // Show banner
                 var banner = new BannerWindow();
                 banner.Show();
 
-                // Yield to let WPF render banner immediately
+                // Yield to render banner immediately
                 await Dispatcher.Yield(DispatcherPriority.Render);
 
-                // Initialize editor in background without blocking UI
+                // Initialize editor on background thread
                 await Task.Run(() => InitializeEditor());
 
-                // Show main editor window
+                // Once initialization is done, show main window
                 var main = new MainWindow();
                 main.Show();
                 SimpleLogger.Log("Nudi Editor main window loaded successfully.");
 
-                // Keep banner visible for 2–3 seconds
-                await Task.Delay(2500);
-
-                // Smooth fade-out before closing banner
+                // Fade out banner now that main window is loaded
                 var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
                 fadeOut.Completed += (s, a) => banner.Close();
                 banner.BeginAnimation(UIElement.OpacityProperty, fadeOut);
@@ -72,11 +60,9 @@ namespace KannadaNudiEditor
             catch (Exception ex)
             {
                 ShowError("Unexpected error during application startup.", ex);
-                Shutdown(); // Ensure app doesn't remain running in a corrupted state
+                Shutdown();
             }
         }
-
-
 
 
         private void LaunchKannadaKeyboard()
