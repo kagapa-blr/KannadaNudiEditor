@@ -272,7 +272,14 @@
 
 
 
-
+  <!-- Header Footer User info  -->
+  <sys:String x:Key="HeaderFooterInfoGuide">
+    ಫಾರ್ಮ್ಯಾಟಿಂಗ್ ಮತ್ತು ಶೈಲಿ ಬದಲಾವಣೆಗಳಿಗೆ ಮಿನಿ ಟೂಲ್‍ಬಾರ್ ತೆಗೆಯಲು
+    ಎಡಿಟರ್ ಒಳಗೆ ಬಲ-ಕ್ಲಿಕ್ ಮಾಡಿ.
+    ಬದಲಾವಣೆಗಳನ್ನು ಮಾಡಿದ ನಂತರ Apply ಒತ್ತಿರಿ.
+    ಕೆಲವೊಮ್ಮೆ ಬದಲಾವಣೆಗಳು ತಕ್ಷಣ ಮುಖ್ಯ ಎಡಿಟರ್‌ನಲ್ಲಿ ಕಾಣುವುದಿಲ್ಲ.
+    ಫೈಲ್‌ನ್ನು Save ಮಾಡಿ, ಪುನಃ ತೆರೆಯುವುದರಿಂದ Header/Footer ಬದಲಾವಣೆಗಳು ಖಚಿತವಾಗಿ ಕಾಣಿಸುತ್ತವೆ.
+  </sys:String>
 
 
 
@@ -461,8 +468,8 @@
   <sys:String x:Key="SpellCheckDisableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
 
 
-<sys:String x:Key="LoadingTitle">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</sys:String>
-<sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ಕಾಯಿರಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ</sys:String>
+  <sys:String x:Key="LoadingTitle">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</sys:String>
+  <sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ಕಾಯಿರಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ</sys:String>
 
 
 

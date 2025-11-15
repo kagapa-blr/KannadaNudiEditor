@@ -293,8 +293,13 @@
   <sys:String x:Key="SuppressFirstPageTooltip">Hide headers and footers on the first page.</sys:String>
 
 
-
-
+  <!-- Header Footer User info  -->
+  <sys:String x:Key="HeaderFooterInfoGuide">
+    Please use Right-Click to open the Mini Toolbar for formatting and style options.
+    After making changes, click Apply.
+    Sometimes changes may not appear immediately in the editor.
+    Save the file and reopen it to ensure Header/Footer changes are fully applied.
+  </sys:String>
 
   <!-- Checkboxes -->
   <sys:String x:Key="DifferentFirstPage">Different First Page</sys:String>
