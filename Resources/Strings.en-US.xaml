@@ -312,6 +312,8 @@
   <!-- =========================== -->
   <!-- Page Number: Custom Setup -->
   <!-- =========================== -->
+  <sys:String x:Key="InsertPageNumber">Page Number</sys:String>
+  <sys:String x:Key="InsertPageNumberTooltip">Button to insert page number</sys:String>
 
   <!-- Tab Title -->
   <sys:String x:Key="PageNumberGroup">Page Number</sys:String>

@@ -2314,7 +2314,6 @@
 
 
 
-
                 <!-- Page Number Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource PageNumberGroup}"
                                       IsLauncherButtonVisible="False">
@@ -2325,12 +2324,32 @@
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
-                    <StackPanel Margin="3">
-                        <Button Content="{DynamicResource InsertPageNumber}"
-                                Height="30"
-                                Width="150"
+                    <StackPanel Margin="3"
+                                Orientation="Horizontal">
+
+                        <!-- Insert Page Number Button -->
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
-                                Click="InsertPageNumber_Click"/>
+                                Click="InsertPageNumber_Click">
+                            <Image Source="/Images/Insert/pagenumber-icon.png"
+                                   Width="22"
+                                   Height="22"/>
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource InsertPageNumber}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,5"/>
+                                        <TextBlock Text="{DynamicResource InsertPageNumberTooltip}"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 

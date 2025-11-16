@@ -298,6 +298,8 @@
 
   <!-- Tab Title -->
   <sys:String x:Key="PageNumberGroup">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+  <sys:String x:Key="InsertPageNumber">ಪುಟ ಸಂಖ್ಯೆ</sys:String>
+  <sys:String x:Key="InsertPageNumberTooltip">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸೇರಿಸಲು ಬಟನ್</sys:String>
 
   <!-- Buttons -->
   <sys:String x:Key="EditPageNumber">ಪುಟ ಸಂಖ್ಯೆಯನ್ನು ಸಂಪಾದಿಸಿ</sys:String>
@@ -385,11 +387,6 @@
 
 
   <sys:String x:Key="CloseButton">ಮುಚ್ಚು</sys:String>
-
-
-
-
-
 
 
 
