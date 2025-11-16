@@ -18,6 +18,8 @@ using KannadaNudiEditor.Views.Sort;
 using System.Collections.ObjectModel;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
+using KannadaNudiEditor.Views.PageNumber;
+
 
 namespace KannadaNudiEditor
 {
@@ -2232,6 +2234,43 @@ namespace KannadaNudiEditor
         }
 
 
+
+
+        private void InsertPageNumber_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                PageNumberDialog dlg = new();
+                if (dlg.ShowDialog() == false || string.IsNullOrWhiteSpace(dlg.PageNumberPlaceholder))
+                    return;
+
+                SimpleLogger.Log($"User selected placeholder: {dlg.PageNumberPlaceholder}");
+
+                // Read actual page count from RichTextBoxAdv (REAL pages)
+                int totalPages = richTextBoxAdv.PageCount;
+
+                SimpleLogger.Log($"Document has {totalPages} real pages (from RichTextBoxAdv).");
+
+                bool insertAtTop = dlg.rbTop.IsChecked == true;
+                string target = insertAtTop ? "HEADER" : "FOOTER";
+
+                // Log one line per REAL PAGE
+                for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+                {
+                    SimpleLogger.Log(
+                        $"Simulated: Insert page number '{dlg.PageNumberPlaceholder}' " +
+                        $"into {target} for Page {pageNumber} of {totalPages}"
+                    );
+                }
+
+                SimpleLogger.Log("Simulation complete. No document update done.");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "InsertPageNumber_Click error");
+                MessageBox.Show("Failed to insert page number.", "Error");
+            }
+        }
 
 
         private void StartNudiEngine_Click(object sender, RoutedEventArgs e)

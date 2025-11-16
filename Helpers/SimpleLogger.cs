@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Syncfusion.DocIO.DLS;
 
 public static class SimpleLogger
 {
@@ -44,6 +45,12 @@ public static class SimpleLogger
     {
         Log($"[ERROR] {context} {ex.Message}\n{ex.StackTrace}");
     }
+
+    internal static void Log(IWParagraph para)
+    {
+        throw new NotImplementedException();
+    }
+
 
     private static string GetRootLogFolder()
     {
