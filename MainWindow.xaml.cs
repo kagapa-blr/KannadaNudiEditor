@@ -2263,6 +2263,12 @@ namespace KannadaNudiEditor
                     );
                 }
 
+                MessageBox.Show(
+                    "Note: Page Number Insertion is not yet fully implemented.\nIt will be available very soon.",
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
                 SimpleLogger.Log("Simulation complete. No document update done.");
             }
             catch (Exception ex)

@@ -35,7 +35,7 @@ namespace KannadaNudiEditor
                 base.OnStartup(e);
 
                 // Launch Kannada Keyboard
-                //LaunchKannadaKeyboard();
+                LaunchKannadaKeyboard();
 
                 // Show banner
                 var banner = new BannerWindow();
