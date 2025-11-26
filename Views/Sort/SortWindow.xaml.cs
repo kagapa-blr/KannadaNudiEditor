@@ -32,8 +32,6 @@ namespace KannadaNudiEditor.Views.Sort
             {
                 var selection = richTextBoxAdv.Selection;
 
-
-
                 if (selection == null || selection.IsEmpty)
                 {
                     string msg = isEnglish
@@ -47,7 +45,7 @@ namespace KannadaNudiEditor.Views.Sort
                 string selectedText = selection.Text ?? string.Empty;
                 SimpleLogger.Log($"Raw selected text: '{selectedText}'");
 
-                var lines = selectedText.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+                var lines = selectedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
                 if (lines.Length > 1)
                 {
@@ -60,7 +58,7 @@ namespace KannadaNudiEditor.Views.Sort
                             continue;
 
                         var wordsInLine = trimmedLine
-                            .Split([' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']'],
+                            .Split(new[] { ' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' },
                                    StringSplitOptions.RemoveEmptyEntries);
 
                         SimpleLogger.Log($"Line '{trimmedLine}' has {wordsInLine.Length} words.");
@@ -84,7 +82,7 @@ namespace KannadaNudiEditor.Views.Sort
                 }
 
                 var words = selectedText
-                    .Split([' ', '\t', '\r', '\n', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']'],
+                    .Split(new[] { ' ', '\t', '\r', '\n', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' },
                            StringSplitOptions.RemoveEmptyEntries)
                     .ToList();
 
@@ -98,10 +96,19 @@ namespace KannadaNudiEditor.Views.Sort
                     return;
                 }
 
+                // Log all words individually
                 SimpleLogger.Log($"Total words found: {words.Count}");
                 foreach (var w in words)
                 {
                     SimpleLogger.Log($"Word: {w}");
+                }
+
+                // Sort words alphabetically and log
+                var sortedWords = words.OrderBy(w => w, StringComparer.CurrentCulture).ToList();
+                SimpleLogger.Log("Words sorted alphabetically:");
+                foreach (var w in sortedWords)
+                {
+                    SimpleLogger.Log($"Sorted Word: {w}");
                 }
 
                 string doneMsg = isEnglish
@@ -115,6 +122,7 @@ namespace KannadaNudiEditor.Views.Sort
                 MessageBox.Show("Error occurred.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
 
 
