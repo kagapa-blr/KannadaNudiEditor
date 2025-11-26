@@ -106,6 +106,16 @@ namespace KannadaNudiEditor.Views.Sort
                     MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
+                // If only one word is selected, log and show message, no sorting/replacement
+                if (words.Count == 1)
+                {
+                    SimpleLogger.Log($"Single word selected: {words[0]}");
+                    string msg = isEnglish
+                        ? "Single word selected, no sorting/replacement needed."
+                        : "ಏಕ ಪದ ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ, ಕ್ರಮವಿಧಾನ ಅಥವಾ ಬದಲಾವಣೆ ಅಗತ್ಯವಿಲ್ಲ.";
+                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
 
                 // Log all words before sorting
                 SimpleLogger.Log($"Total words found: {words.Count}");
