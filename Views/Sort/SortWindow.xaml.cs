@@ -19,125 +19,106 @@ namespace KannadaNudiEditor.Views.Sort
             InitializeComponent();
             isEnglish = isEnglishLanguage;
             richTextBoxAdv = richTextBox;
+            SimpleLogger.Log("SortWindow initialized.");
         }
+
+
+
+
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            var selection = richTextBoxAdv.Selection;
-            if (selection == null || selection.IsEmpty)
+            try
             {
-                string msg = isEnglish ? "Please select paragraphs to sort." : "ದಯವಿಟ್ಟು ಸರಿಕ್ರಮಿಸಲು ಪ್ಯಾರಾಗ್ರಾಫ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
-                MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-                return;
-            }
+                var selection = richTextBoxAdv.Selection;
 
-            ParagraphAdv? startPara = selection.Start.Paragraph as ParagraphAdv;
-            ParagraphAdv? endPara = selection.End.Paragraph as ParagraphAdv;
 
-            if (startPara == null || endPara == null)
-            {
-                string msg = isEnglish ? "No paragraph found in selection." : "ಆಯ್ಕೆ ಪ್ರದೇಶದಲ್ಲಿ ಪ್ಯಾರಾಗ್ರಾಫ್ ಸಿಗಲಿಲ್ಲ.";
-                MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-                return;
-            }
 
-            SectionAdv? targetSection = null;
-            List<ParagraphAdv> paragraphs = new List<ParagraphAdv>();
-            bool collecting = false;
-
-            // Find the section that contains the start paragraph, and collect paragraphs until end
-            foreach (var sec in richTextBoxAdv.Document.Sections)
-            {
-                if (sec is SectionAdv section)
+                if (selection == null || selection.IsEmpty)
                 {
-                    foreach (var block in section.Blocks)
+                    string msg = isEnglish
+                        ? "Please select some words."
+                        : "ದಯವಿಟ್ಟು ಕೆಲವು ಪದಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ";
+
+                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                string selectedText = selection.Text ?? string.Empty;
+                SimpleLogger.Log($"Raw selected text: '{selectedText}'");
+
+                var lines = selectedText.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+
+                if (lines.Length > 1)
+                {
+                    bool allLinesValid = true;
+
+                    foreach (var line in lines)
                     {
-                        if (block == startPara)
-                        {
-                            collecting = true;
-                            targetSection = section;
-                        }
+                        var trimmedLine = line.Trim();
+                        if (string.IsNullOrEmpty(trimmedLine))
+                            continue;
 
-                        if (collecting && block is ParagraphAdv para)
-                        {
-                            paragraphs.Add(para);
-                        }
+                        var wordsInLine = trimmedLine
+                            .Split([' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']'],
+                                   StringSplitOptions.RemoveEmptyEntries);
 
-                        if (block == endPara)
+                        SimpleLogger.Log($"Line '{trimmedLine}' has {wordsInLine.Length} words.");
+
+                        if (wordsInLine.Length != 1)
                         {
-                            collecting = false;
+                            allLinesValid = false;
                             break;
                         }
                     }
 
-                    if (targetSection != null)
-                        break;
+                    if (!allLinesValid)
+                    {
+                        SimpleLogger.Log("One or more lines contain multiple words.");
+                        string multiWordLineMsg = isEnglish
+                            ? "Each line must contain exactly one word."
+                            : "ಪ್ರತಿ ಸಾಲು ಒಂದು ಪದ ಮಾತ್ರ ಹೊಂದಿರಬೇಕು";
+                        MessageBox.Show(multiWordLineMsg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
                 }
-            }
 
-            if (targetSection == null || paragraphs.Count <= 1)
-            {
-                string msg = isEnglish ? "Need at least two paragraphs to sort." : "ಸರಿಕ್ರಮಿಸಲು ಕನಿಷ್ಠ ಎರಡು ಪ್ಯಾರಾಗ್ರಾಫ್ ಬೇಕು.";
-                MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-                return;
-            }
+                var words = selectedText
+                    .Split([' ', '\t', '\r', '\n', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']'],
+                           StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
 
-            // Prepare sort data
-            var paragraphData = paragraphs.Select(p =>
-            {
-                string text = string.Concat(p.Inlines.OfType<SpanAdv>().Select(s => s.Text)).Trim();
-                char firstChar = text.FirstOrDefault(c => !char.IsWhiteSpace(c));
-                bool isKannadaChar = firstChar >= '\u0C80' && firstChar <= '\u0CFF';
-
-                CultureInfo culture = isKannadaChar
-                    ? CultureInfo.GetCultureInfo("kn-IN")
-                    : CultureInfo.GetCultureInfo("en-US");
-
-                return new { Paragraph = p, Text = text, Culture = culture };
-            }).ToList();
-
-            var sorted = paragraphData
-                .OrderBy(x => x.Text, Comparer<string>.Create((a, b) =>
+                if (words.Count == 0)
                 {
-                    var cA = paragraphData.First(z => z.Text == a).Culture;
-                    var cB = paragraphData.First(z => z.Text == b).Culture;
-                    return StringComparer.Create(cA, true).Compare(a, b);
-                }))
-                .ToList();
+                    string msg = isEnglish
+                        ? "No words found in selection."
+                        : "ಆಯ್ಕೆ ಮಾಡಿದ ಪ್ರದೇಶದಲ್ಲಿ ಯಾವುದೇ ಪದ ಸಿಗಲಿಲ್ಲ";
 
-            // Remove old paragraphs from the section
-            foreach (var p in paragraphs)
-            {
-                targetSection.Blocks.Remove(p);
-            }
-
-            // Insert sorted paragraphs back in the same spot
-            // Decide insertion index = original index of startPara in targetSection.Blocks
-            int insertIndex = 0;
-            for (int i = 0; i < targetSection.Blocks.Count; i++)
-            {
-                if (targetSection.Blocks[i] == startPara)
-                {
-                    insertIndex = i;
-                    break;
+                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
                 }
-            }
 
-            foreach (var item in sorted.Reverse<dynamic>())  // reverse so that insertion keeps correct order
+                SimpleLogger.Log($"Total words found: {words.Count}");
+                foreach (var w in words)
+                {
+                    SimpleLogger.Log($"Word: {w}");
+                }
+
+                string doneMsg = isEnglish
+                    ? "Words logged successfully!"
+                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ!";
+                MessageBox.Show(doneMsg, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
             {
-                targetSection.Blocks.Insert(insertIndex, item.Paragraph);
+                SimpleLogger.Log($"Error in OkButton_Click: {ex.Message}");
+                MessageBox.Show("Error occurred.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            string msgDone = isEnglish
-                ? "Paragraphs sorted successfully!"
-                : "ಪ್ಯಾರಾಗ್ರಾಫ್‌ಗಳು ಯಶಸ್ವಿಯಾಗಿ ಸರಿಕ್ರಮಿಸಲ್ಪಟ್ಟಿವೆ!";
-            MessageBox.Show(msgDone, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            this.Close();
         }
+
+
+
+
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
