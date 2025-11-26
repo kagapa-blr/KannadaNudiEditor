@@ -104,8 +104,17 @@ namespace KannadaNudiEditor.Views.Sort
                     SimpleLogger.Log($"Word: {w}");
                 }
 
-                // Sort words alphabetically and log sorted words
-                var sortedWords = words.OrderBy(w => w, StringComparer.CurrentCulture).ToList();
+                // Sort words alphabetically based on user selection
+                List<string> sortedWords;
+                if (sortByAsc.IsChecked == true)
+                {
+                    sortedWords = words.OrderBy(w => w, StringComparer.CurrentCulture).ToList();
+                }
+                else
+                {
+                    sortedWords = words.OrderByDescending(w => w, StringComparer.CurrentCulture).ToList();
+                }
+
                 SimpleLogger.Log("Words sorted alphabetically:");
                 foreach (var w in sortedWords)
                 {
@@ -121,7 +130,7 @@ namespace KannadaNudiEditor.Views.Sort
 
                 string doneMsg = isEnglish
                     ? "Words logged and replaced successfully!"
-                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ ಮತ್ತು ಬದಲಿಸಲಾಗಿದೆ!";
+                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಿಸಲಾಗಿದೆ ಮತ್ತು ಬದಲಿಸಲಾಗಿದೆ!";
                 MessageBox.Show(doneMsg, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -130,6 +139,7 @@ namespace KannadaNudiEditor.Views.Sort
                 MessageBox.Show("Error occurred.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
 
 
