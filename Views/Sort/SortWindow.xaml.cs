@@ -48,15 +48,17 @@ namespace KannadaNudiEditor.Views.Sort
 
                 var lines = selectedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
-                if (lines.Length > 1)
+                if (lines.Length > 0)
                 {
                     bool allLinesValid = true;
 
                     foreach (var line in lines)
                     {
                         var trimmedLine = line.Trim();
+
+                        // Ignore empty lines or lines with only whitespace
                         if (string.IsNullOrEmpty(trimmedLine))
-                            continue;
+                            continue; // Skip checking empty lines
 
                         var wordsInLine = trimmedLine
                             .Split(new[] { ' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' },
@@ -64,6 +66,7 @@ namespace KannadaNudiEditor.Views.Sort
 
                         SimpleLogger.Log($"Line '{trimmedLine}' has {wordsInLine.Length} words.");
 
+                        // If a non-empty line has not exactly one word, invalidate selection
                         if (wordsInLine.Length != 1)
                         {
                             allLinesValid = false;
@@ -80,6 +83,13 @@ namespace KannadaNudiEditor.Views.Sort
                         MessageBox.Show(multiWordLineMsg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                         return;
                     }
+                }
+                else
+                {
+                    // No lines at all - treat as invalid selection
+                    string msg = isEnglish ? "No content selected." : "ಯಾವುದೇ ಪಠ್ಯ ಆಯ್ಕೆಮಾಡಿಲ್ಲ.";
+                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
                 }
 
                 var words = selectedText
