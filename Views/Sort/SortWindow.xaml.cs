@@ -24,8 +24,6 @@ namespace KannadaNudiEditor.Views.Sort
 
 
 
-
-
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -43,7 +41,10 @@ namespace KannadaNudiEditor.Views.Sort
                 }
 
                 string selectedText = selection.Text ?? string.Empty;
-                SimpleLogger.Log($"Raw selected text: '{selectedText}'");
+
+                // Log raw selected text before sorting
+                SimpleLogger.Log("Raw selected text:");
+                SimpleLogger.Log(selectedText);
 
                 var lines = selectedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
@@ -96,14 +97,14 @@ namespace KannadaNudiEditor.Views.Sort
                     return;
                 }
 
-                // Log all words individually
+                // Log all words before sorting
                 SimpleLogger.Log($"Total words found: {words.Count}");
                 foreach (var w in words)
                 {
                     SimpleLogger.Log($"Word: {w}");
                 }
 
-                // Sort words alphabetically and log
+                // Sort words alphabetically and log sorted words
                 var sortedWords = words.OrderBy(w => w, StringComparer.CurrentCulture).ToList();
                 SimpleLogger.Log("Words sorted alphabetically:");
                 foreach (var w in sortedWords)
@@ -111,9 +112,16 @@ namespace KannadaNudiEditor.Views.Sort
                     SimpleLogger.Log($"Sorted Word: {w}");
                 }
 
+                // Join with newline to keep each word on its own line
+                string replacementText = string.Join(Environment.NewLine, sortedWords);
+
+                // Replace selection by deleting it and inserting the sorted text
+                richTextBoxAdv.Selection.Delete();
+                richTextBoxAdv.Selection.InsertText(replacementText);
+
                 string doneMsg = isEnglish
-                    ? "Words logged successfully!"
-                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ!";
+                    ? "Words logged and replaced successfully!"
+                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ ಮತ್ತು ಬದಲಿಸಲಾಗಿದೆ!";
                 MessageBox.Show(doneMsg, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
