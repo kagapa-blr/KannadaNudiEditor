@@ -343,9 +343,11 @@
   <sys:String x:Key="FeedbackTitle">ಅಭಿಪ್ರಾಯ</sys:String>
   <sys:String x:Key="EmailLabel">ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ:</sys:String>
   <sys:String x:Key="FeedbackLabel">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ನಮೂದಿಸಿ:</sys:String>
+
   <sys:String x:Key="Submit">ಸಲ್ಲಿಸು</sys:String>
   <sys:String x:Key="Close">ಮುಚ್ಚಿ</sys:String>
-
+  <sys:String x:Key="FeedbackEmailPlaceholder">ಮುಚ್ಚಿ</sys:String>
+  
 
   <!-- Buttons -->
   <sys:String x:Key="AboutNudi">ನುಡಿಯ ಕುರಿತು</sys:String>
