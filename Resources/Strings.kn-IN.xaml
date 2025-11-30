@@ -329,17 +329,11 @@
   <sys:String x:Key="HelpTab">ಸಹಾಯ</sys:String>
 
   <!-- Groups -->
-  <sys:String x:Key="HelpGroup">ನುಡಿಗೆ ಪರಿಚಯ</sys:String>
-  <sys:String x:Key="HelpGroupDescription">ನುಡೀ ತಂತ್ರಾಂಶದ ಪರಿಚಯ ಮತ್ತು ರಚನಾಕಾರರು.</sys:String>
+  <sys:String x:Key="HelpGroup">ನುಡಿ ಪರಿಚಯ</sys:String>
+  <sys:String x:Key="HelpGroupDescription">ನುಡಿ ತಂತ್ರಾಂಶದ ಪರಿಚಯ ಮತ್ತು ರಚನಾಕಾರರು.</sys:String>
 
   <sys:String x:Key="HelpDocumentationGroup">ದಸ್ತಾವೇಜುಗಳು</sys:String>
   <sys:String x:Key="HelpDocumentationGroupDescription">ಬಳಕೆದಾರರ ಮಾರ್ಗದರ್ಶಿಗಳು ಮತ್ತು ಉಲ್ಲೇಖ.</sys:String>
-
-  <sys:String x:Key="SupportGroup">ಬೆಂಬಲ</sys:String>
-  <sys:String x:Key="SupportGroupDescription">ಬೆಂಬಲ ಆಯ್ಕೆಗಳು ಮತ್ತು ಸಂಪನ್ಮೂಲಗಳು.</sys:String>
-
-  <sys:String x:Key="AppInfoGroup">ಅನ್ವಯ ಮಾಹಿತಿ</sys:String>
-  <sys:String x:Key="AppInfoGroupDescription">ಅನ್ವಯದ ಕುರಿತು ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
 
 
   <!-- =========================== -->
@@ -355,24 +349,25 @@
 
   <!-- Buttons -->
   <sys:String x:Key="AboutNudi">ನುಡಿಯ ಕುರಿತು</sys:String>
-  <sys:String x:Key="AboutNudiTipLine1">ನುಡಿ ಒಂದು ಕನ್ನಡ ಟೈಪಿಂಗ್ ತಂತ್ರಾಂಶವಾಗಿದೆ.</sys:String>
-  <sys:String x:Key="AboutNudiTipLine2">ಇದಿನ ಇತಿಹಾಸ ಮತ್ತು ರಚನಾಕಾರರನ್ನು ತಿಳಿಯಿರಿ.</sys:String>
+  <sys:String x:Key="AboutNudiTipLine2">ನುಡಿ ಕನ್ನಡದಲ್ಲಿ ಟೈಪಿಂಗ್ ಮಾಡಲು ವಿನ್ಯಾಸಗೊಳಿಸಿದ ಸಂಪೂರ್ಣ ತಂತ್ರಾಂಶವಾಗಿದೆ. ವೈಶಿಷ್ಟ್ಯಗಳು ಮತ್ತು ರಚನಾಕಾರರ ಕುರಿತು ವಿವರಗಳನ್ನು ತಿಳಿದುಕೊಳ್ಳಿ.</sys:String>
+
 
   <sys:String x:Key="Documentation">ದಸ್ತಾವೇಜು</sys:String>
-  <sys:String x:Key="DocumentationTipLine1">ನುಡಿಯ ಬಳಕೆದಾರರ ಗೈಡ್ ಮತ್ತು ಉಲ್ಲೇಖ ನೋಡಿ.</sys:String>
-  <sys:String x:Key="DocumentationTipLine2">ಪ್ರಾರಂಭಿಕ ಮತ್ತು ಮುಂದುವರಿದ ಸಹಾಯವಾಣಿಯು ಇರುತ್ತದೆ.</sys:String>
+  <sys:String x:Key="DocumentationTipLine2">ನುಡಿಯನ್ನು ಬಳಸಲು ಅಗತ್ಯವಾದ ಮಾರ್ಗದರ್ಶಿ, ಸಹಾಯ ಮತ್ತು ಉಲ್ಲೇಖಗಳನ್ನು ಇಲ್ಲಿ ನೋಡಿ. ಪ್ರಾರಂಭಿಕರಿಂದ ಪ್ರಗತಿಗಾರರ ತನಕ ಎಲ್ಲರಿಗಾಗಿ ಸವಿಸ್ತಾರ ಮಾಹಿತಿಯನ್ನು ಒದಗಿಸಲಾಗಿದೆ.</sys:String>
+
 
   <sys:String x:Key="Support">ಬೆಂಬಲ</sys:String>
-  <sys:String x:Key="SupportTipLine1">ನುಡಿಗೆ ನೆರವು ಬೇಕೆ? ಸಂಪರ್ಕ ಮತ್ತು ಸಹಾಯದ ಮಾಹಿತಿ.</sys:String>
-  <sys:String x:Key="SupportTipLine2">ಪದೇಪದೇ ಕೇಳುವ ಪ್ರಶ್ನೆಗಳು ಮತ್ತು ಪರಿಹಾರಗಳು ಸೇರಿವೆ.</sys:String>
+  <sys:String x:Key="SupportTipLine1">ನುಡಿ ಬಳಕೆಯಲ್ಲಿ ಸಮಸ್ಯೆಗಳು ಬಂದರೆ ಸಹಾಯ ಹಾಗೂ ಸಂಪರ್ಕ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಿರಿ.</sys:String>
+  <sys:String x:Key="SupportTipLine2">ಸಾಮಾನ್ಯ ಪ್ರಶ್ನೆಗಳು, ಪರಿಹಾರಗಳು ಮತ್ತು ಮಾರ್ಗದರ್ಶನವನ್ನು ಇಲ್ಲಿ ಕಾಣಬಹುದು.</sys:String>
+
 
   <sys:String x:Key="AboutApp">ಅನ್ವಯದ ಕುರಿತು</sys:String>
-  <sys:String x:Key="AboutAppTipLine1">ಆವೃತ್ತಿ, ಪರವಾನಗಿ ಮತ್ತು ಹೆಸರಾವಳಿ ಮಾಹಿತಿಯನ್ನು ನೋಡಿ.</sys:String>
-  <sys:String x:Key="AboutAppTipLine2">ಈ ತಂತ್ರಾಂಶದ ಕುರಿತು ವಿವರಗಳನ್ನು ನೋಡಿ.</sys:String>
+  <sys:String x:Key="AboutAppTipLine1">ಅನ್ವಯದ ಆವೃತ್ತಿ, ಪರವಾನಗಿ, ತಾಂತ್ರಿಕ ವಿವರಗಳು ಮತ್ತು ಹೆಸರಾವಳಿ ಕುರಿತು ತಿಳಿದುಕೊಳ್ಳಿ.</sys:String>
+  <sys:String x:Key="AboutAppTipLine2">ಈ ತಂತ್ರಾಂಶದ ವೈಶಿಷ್ಟ್ಯಗಳು ಹಾಗೂ ರಚನೆಯ ಕುರಿತ ಮಾಹಿತಿಯನ್ನು ಇಲ್ಲಿ ಪಡೆಯಬಹುದು.</sys:String>
+
 
   <sys:String x:Key="Feedback">ಪ್ರತಿಕ್ರಿಯೆ</sys:String>
-  <sys:String x:Key="FeedbackTipLine1">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ಕಳುಹಿಸಿ.</sys:String>
-  <sys:String x:Key="FeedbackTipLine2">ಭವಿಷ್ಯದಲ್ಲಿ ಉತ್ತಮೀಕರಣಕ್ಕಾಗಿ ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಬೇಕು.</sys:String>
+  <sys:String x:Key="FeedbackTipLine2">ನುಡಿಯನ್ನು ಇನ್ನಷ್ಟು ಉತ್ತಮಗೊಳಿಸಲು ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ, ಸಲಹೆಗಳು ಅಥವಾ ಸಮಸ್ಯೆಗಳನ್ನು ಕಳುಹಿಸಿ. ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆಯು ಭವಿಷ್ಯದ ಸುಧಾರಣೆಗಳಿಗೆ ಅತ್ಯಂತ ಉಪಯುಕ್ತವಾಗುತ್ತದೆ.</sys:String>
 
 
 

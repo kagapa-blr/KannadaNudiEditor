@@ -2835,114 +2835,70 @@
 
             </Syncfusion:RibbonTab>
 
-
-
             <Syncfusion:RibbonTab Caption="{DynamicResource HelpTab}">
 
                 <!-- Help Group (About Nudi) -->
-                <Syncfusion:RibbonBar Header="{DynamicResource HelpGroup}"
+                <Syncfusion:RibbonBar Header="{DynamicResource AboutNudi}"
                                       IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource HelpGroupDescription}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="10">
-                        <Button Content="{DynamicResource AboutNudi}"
-                                Height="32"
-                                Width="140"
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
                                 Click="AboutNudi_Click">
+                            <Image Source="Images/Help/nudi-about-icon.png"
+                                   Width="28"
+                                   Height="28"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+
                             <Button.ToolTip>
-                                <ToolTip>
+                                <ToolTip MaxWidth="320"
+                                         MinWidth="250"
+                                         Padding="10">
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource AboutNudiTipLine1}"
+                                        <TextBlock Text="{DynamicResource AboutNudi}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
+                                                   Margin="0,0,0,8"/>
                                         <TextBlock Text="{DynamicResource AboutNudiTipLine2}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
                 </Syncfusion:RibbonBar>
+
 
                 <!-- Help Documentation Group -->
-                <Syncfusion:RibbonBar Header="{DynamicResource HelpDocumentationGroup}"
+                <Syncfusion:RibbonBar Header="{DynamicResource Documentation}"
                                       IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource HelpDocumentationGroupDescription}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="10">
-                        <Button Content="{DynamicResource Documentation}"
-                                Height="32"
-                                Width="140"
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
                                 Click="ShowDocumentation_Click">
-                            <Button.ToolTip>
+                            <Image Source="Images/Help/nudi-documentation-icon.png"
+                                   Width="28"
+                                   Height="28"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
 
-                                <ToolTip>
+                            <Button.ToolTip>
+                                <ToolTip MaxWidth="320"
+                                         MinWidth="250"
+                                         Padding="10">
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource DocumentationTipLine1}"
+                                        <TextBlock Text="{DynamicResource Documentation}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
+                                                   Margin="0,0,0,8"/>
                                         <TextBlock Text="{DynamicResource DocumentationTipLine2}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"/>
                                     </StackPanel>
                                 </ToolTip>
-
-                            </Button.ToolTip>
-                        </Button>
-                    </StackPanel>
-                </Syncfusion:RibbonBar>
-
-                <!-- Support Group -->
-                <Syncfusion:RibbonBar Header="{DynamicResource SupportGroup}"
-                                      IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource SupportGroupDescription}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
-                    <StackPanel Margin="10">
-                        <Button Content="{DynamicResource Support}"
-                                Height="32"
-                                Width="140"
-                                Margin="5"
-                                Click="ShowSupport_Click">
-                            <Button.ToolTip>
-
-                                <ToolTip>
-                                    <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource SupportTipLine1}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource SupportTipLine2}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-
                             </Button.ToolTip>
                         </Button>
                     </StackPanel>
@@ -2950,33 +2906,31 @@
 
 
                 <!-- Feedback Group -->
-                <Syncfusion:RibbonBar Header="{DynamicResource FeedbackGroup}"
+                <Syncfusion:RibbonBar Header="{DynamicResource Feedback}"
                                       IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource FeedbackGroupDescription}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
+
                     <StackPanel Margin="10">
-                        <Button Content="{DynamicResource Feedback}"
-                                Height="32"
-                                Width="140"
+                        <Button Height="40"
+                                Width="40"
                                 Margin="5"
                                 Click="ProvideFeedback_Click">
+                            <Image Source="Images/Help/nudi-feedback-icon.png"
+                                   Width="28"
+                                   Height="28"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+
                             <Button.ToolTip>
-                                <ToolTip>
+                                <ToolTip MaxWidth="320"
+                                         MinWidth="250"
+                                         Padding="10">
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
-                                        <TextBlock Text="{DynamicResource FeedbackTipLine1}"
+                                        <TextBlock Text="{DynamicResource Feedback}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
-                                                   Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
+                                                   Margin="0,0,0,8"/>
                                         <TextBlock Text="{DynamicResource FeedbackTipLine2}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
+                                                   TextWrapping="WrapWithOverflow"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
@@ -2984,11 +2938,7 @@
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
-
-
-
             </Syncfusion:RibbonTab>
-
 
             <Syncfusion:RibbonTab Caption="{DynamicResource SpellCheckTab}">
 
@@ -3075,7 +3025,6 @@
                 </Syncfusion:RibbonBar>
 
             </Syncfusion:RibbonTab>
-
 
         </Syncfusion:Ribbon>
 

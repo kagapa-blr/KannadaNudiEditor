@@ -337,7 +337,7 @@ namespace KannadaNudiEditor
 
             if (fontFamilyComboBox != null)
                 fontFamilyComboBox.ItemsSource = GetFontFamilySource();
-            fontFamilyComboBox.SelectedValue = "NudiParijataha"; // set default selected value
+            fontFamilyComboBox.SelectedValue = "NudiParijatha"; // set default selected value
 
             if (fontSizeComboBox != null)
                 fontSizeComboBox.ItemsSource = new double[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 26, 28, 36, 48, 72, 96 };
@@ -345,10 +345,10 @@ namespace KannadaNudiEditor
             if (richTextBoxAdv != null)
             {
                 // Set default font at the document level
-                richTextBoxAdv.Document.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijataha");
+                richTextBoxAdv.Document.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijatha");
 
                 // Optionally, apply it to current selection too
-                richTextBoxAdv.Selection.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijataha");
+                richTextBoxAdv.Selection.CharacterFormat.FontFamily = new System.Windows.Media.FontFamily("NudiParijatha");
 
                 richTextBoxAdv.Focus();
             }
@@ -2363,11 +2363,6 @@ namespace KannadaNudiEditor
             MessageBox.Show("Documentation link or window here.");
         }
 
-        private void ShowSupport_Click(object sender, RoutedEventArgs e)
-        {
-            // Open support window or link to support page
-            MessageBox.Show("Support link or window here.");
-        }
 
 
 
