@@ -5,6 +5,7 @@ using KannadaNudiEditor.Views.SortHelp;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
 using System.Globalization;
 using System.Collections.Generic;
+using KannadaNudiEditor.Views.Loading;
 
 namespace KannadaNudiEditor.Views.Sort
 {
@@ -22,145 +23,92 @@ namespace KannadaNudiEditor.Views.Sort
             SimpleLogger.Log("SortWindow initialized.");
         }
 
-
-
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var selection = richTextBoxAdv.Selection;
+                LoadingView.Show();
+                StatusMessage.Text = ""; // Clear previous status
 
+                var selection = richTextBoxAdv.Selection;
                 if (selection == null || selection.IsEmpty)
                 {
-                    string msg = isEnglish
-                        ? "Please select some words."
-                        : "ದಯವಿಟ್ಟು ಕೆಲವು ಪದಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ";
-
-                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    StatusMessage.Foreground = System.Windows.Media.Brushes.Red;
+                    StatusMessage.Text = isEnglish ? "Please select some words." : "ದಯವಿಟ್ಟು ಕೆಲವು ಪದಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ";
+                    SimpleLogger.Log(StatusMessage.Text);
                     return;
                 }
 
                 string selectedText = selection.Text ?? string.Empty;
-
-                // Log raw selected text before sorting
                 SimpleLogger.Log("Raw selected text:");
                 SimpleLogger.Log(selectedText);
 
                 var lines = selectedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                bool allLinesValid = true;
 
-                if (lines.Length > 0)
+                foreach (var line in lines)
                 {
-                    bool allLinesValid = true;
+                    var trimmedLine = line.Trim();
+                    if (string.IsNullOrEmpty(trimmedLine))
+                        continue;
 
-                    foreach (var line in lines)
+                    var wordsInLine = trimmedLine.Split(new[] { ' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+                    SimpleLogger.Log($"Line '{trimmedLine}' has {wordsInLine.Length} words.");
+                    if (wordsInLine.Length != 1)
                     {
-                        var trimmedLine = line.Trim();
-
-                        // Ignore empty lines or lines with only whitespace
-                        if (string.IsNullOrEmpty(trimmedLine))
-                            continue; // Skip checking empty lines
-
-                        var wordsInLine = trimmedLine
-                            .Split(new[] { ' ', '\t', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' },
-                                   StringSplitOptions.RemoveEmptyEntries);
-
-                        SimpleLogger.Log($"Line '{trimmedLine}' has {wordsInLine.Length} words.");
-
-                        // If a non-empty line has not exactly one word, invalidate selection
-                        if (wordsInLine.Length != 1)
-                        {
-                            allLinesValid = false;
-                            break;
-                        }
-                    }
-
-                    if (!allLinesValid)
-                    {
-                        SimpleLogger.Log("One or more lines contain multiple words.");
-                        string multiWordLineMsg = isEnglish
-                            ? "Each line must contain exactly one word."
-                            : "ಪ್ರತಿ ಸಾಲು ಒಂದು ಪದ ಮಾತ್ರ ಹೊಂದಿರಬೇಕು";
-                        MessageBox.Show(multiWordLineMsg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                        return;
+                        allLinesValid = false;
+                        break;
                     }
                 }
-                else
+
+                if (!allLinesValid)
                 {
-                    // No lines at all - treat as invalid selection
-                    string msg = isEnglish ? "No content selected." : "ಯಾವುದೇ ಪಠ್ಯ ಆಯ್ಕೆಮಾಡಿಲ್ಲ.";
-                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    StatusMessage.Foreground = System.Windows.Media.Brushes.Red;
+                    StatusMessage.Text = isEnglish ? "Each line must contain exactly one word." : "ಪ್ರತಿ ಸಾಲು ಒಂದು ಪದ ಮಾತ್ರ ಹೊಂದಿರಬೇಕು";
+                    SimpleLogger.Log(StatusMessage.Text);
                     return;
                 }
 
-                var words = selectedText
-                    .Split(new[] { ' ', '\t', '\r', '\n', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' },
-                           StringSplitOptions.RemoveEmptyEntries)
-                    .ToList();
-
+                var words = selectedText.Split(new[] { ' ', '\t', '\r', '\n', ',', '.', ';', ':', '!', '?', '(', ')', '[', ']' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (words.Count == 0)
                 {
-                    string msg = isEnglish
-                        ? "No words found in selection."
-                        : "ಆಯ್ಕೆ ಮಾಡಿದ ಪ್ರದೇಶದಲ್ಲಿ ಯಾವುದೇ ಪದ ಸಿಗಲಿಲ್ಲ";
-
-                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    StatusMessage.Foreground = System.Windows.Media.Brushes.Red;
+                    StatusMessage.Text = isEnglish ? "No words found in selection." : "ಆಯ್ಕೆ ಮಾಡಿದ ಪ್ರದೇಶದಲ್ಲಿ ಯಾವುದೇ ಪದ ಸಿಗಲಿಲ್ಲ";
+                    SimpleLogger.Log(StatusMessage.Text);
                     return;
                 }
-                // If only one word is selected, log and show message, no sorting/replacement
+
                 if (words.Count == 1)
                 {
-                    SimpleLogger.Log($"Single word selected: {words[0]}");
-                    string msg = isEnglish
-                        ? "Single word selected, no sorting/replacement needed."
-                        : "ಏಕ ಪದ ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ, ಕ್ರಮವಿಧಾನ ಅಥವಾ ಬದಲಾವಣೆ ಅಗತ್ಯವಿಲ್ಲ.";
-                    MessageBox.Show(msg, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    StatusMessage.Foreground = System.Windows.Media.Brushes.Green;
+                    StatusMessage.Text = isEnglish ? "Single word selected, no sorting/replacement needed." : "ಏಕ ಪದ ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ, ಕ್ರಮವಿಧಾನ ಅಥವಾ ಬದಲಾವಣೆ ಅಗತ್ಯವಿಲ್ಲ.";
+                    SimpleLogger.Log(StatusMessage.Text);
                     return;
                 }
 
-                // Log all words before sorting
-                SimpleLogger.Log($"Total words found: {words.Count}");
-                foreach (var w in words)
-                {
-                    SimpleLogger.Log($"Word: {w}");
-                }
+                List<string> sortedWords = sortByAsc.IsChecked == true
+                    ? words.OrderBy(w => w, StringComparer.CurrentCulture).ToList()
+                    : words.OrderByDescending(w => w, StringComparer.CurrentCulture).ToList();
 
-                // Sort words alphabetically based on user selection
-                List<string> sortedWords;
-                if (sortByAsc.IsChecked == true)
-                {
-                    sortedWords = words.OrderBy(w => w, StringComparer.CurrentCulture).ToList();
-                }
-                else
-                {
-                    sortedWords = words.OrderByDescending(w => w, StringComparer.CurrentCulture).ToList();
-                }
-
-                SimpleLogger.Log("Words sorted alphabetically:");
-                foreach (var w in sortedWords)
-                {
-                    SimpleLogger.Log($"Sorted Word: {w}");
-                }
-
-                // Join with newline to keep each word on its own line
                 string replacementText = string.Join(Environment.NewLine, sortedWords);
-
-                // Replace selection by deleting it and inserting the sorted text
                 richTextBoxAdv.Selection.Delete();
                 richTextBoxAdv.Selection.InsertText(replacementText);
 
-                string doneMsg = isEnglish
-                    ? "Words logged and replaced successfully!"
-                    : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಿಸಲಾಗಿದೆ ಮತ್ತು ಬದಲಿಸಲಾಗಿದೆ!";
-                MessageBox.Show(doneMsg, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                StatusMessage.Foreground = System.Windows.Media.Brushes.Green;
+                StatusMessage.Text = isEnglish ? "Words logged and replaced successfully!" : "ಪದಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಿಸಲಾಗಿದೆ ಮತ್ತು ಬದಲಿಸಲಾಗಿದೆ!";
+                SimpleLogger.Log(StatusMessage.Text);
             }
             catch (Exception ex)
             {
+                StatusMessage.Foreground = System.Windows.Media.Brushes.Red;
+                StatusMessage.Text = "Error occurred: " + ex.Message;
                 SimpleLogger.Log($"Error in OkButton_Click: {ex.Message}");
-                MessageBox.Show("Error occurred.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
             }
         }
-
-
 
 
 

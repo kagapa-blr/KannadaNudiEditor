@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
 using KannadaNudiEditor.Views.PageNumber;
+using KannadaNudiEditor.Views.Common;
 
 
 namespace KannadaNudiEditor
@@ -2513,54 +2514,58 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             bool isEnglish = LanguageToggleButton.IsChecked == true;
-            var sortWindow = new SortWindow(isEnglish, richTextBoxAdv);
-            sortWindow.Owner = this;
-            sortWindow.ShowDialog();
 
+            var sortWindow = new SortWindow(isEnglish, richTextBoxAdv)
+            {
+                Owner = this
+            };
+            sortWindow.ShowDialog(); // Modal — blocks until SortWindow closes
         }
-
-
-
-
-
-
 
         private void EnableSpellCheck_Click(object sender, RoutedEventArgs e)
         {
-            if (spellChecker != null)
+            if (spellChecker == null)
             {
-                spellChecker.IsEnabled = true;
-                MessageBox.Show("Spell check enabled");
+                SimpleLogger.Log("Spell checker not initialized.");
+                NudiInfoDialog.Show("Spell checker not initialized.");
+                return;
             }
+
+            if (spellChecker.IsEnabled)
+            {
+                SimpleLogger.Log("Spell check is already enabled.");
+                NudiInfoDialog.Show("Spell check is already enabled.");
+                return;
+            }
+
+            spellChecker.IsEnabled = true;
+            SimpleLogger.Log("Spell check enabled.");
+            NudiInfoDialog.Show("Spell check enabled.");
         }
 
         private void DisableSpellCheck_Click(object sender, RoutedEventArgs e)
         {
-            if (spellChecker != null)
+            if (spellChecker == null)
             {
-                spellChecker.IsEnabled = false;
-                MessageBox.Show("Spell check disabled");
+                SimpleLogger.Log("Spell checker not initialized.");
+                NudiInfoDialog.Show("Spell checker not initialized.");
+                return;
             }
+
+            if (!spellChecker.IsEnabled)
+            {
+                SimpleLogger.Log("Spell check is already disabled.");
+                NudiInfoDialog.Show("Spell check is already disabled.");
+                return;
+            }
+
+            spellChecker.IsEnabled = false;
+            SimpleLogger.Log("Spell check disabled.");
+            NudiInfoDialog.Show("Spell check disabled.");
         }
-
-
 
 
 
@@ -2569,9 +2574,6 @@ namespace KannadaNudiEditor
 
 
     }
-
-
-
 
 
 }

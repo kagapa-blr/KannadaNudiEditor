@@ -347,7 +347,7 @@
   <sys:String x:Key="Submit">ಸಲ್ಲಿಸು</sys:String>
   <sys:String x:Key="Close">ಮುಚ್ಚಿ</sys:String>
   <sys:String x:Key="FeedbackEmailPlaceholder">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯವನ್ನು ಇಲ್ಲಿ ಬರೆಯಿರಿ...</sys:String>
-  
+
 
   <!-- Buttons -->
   <sys:String x:Key="AboutNudi">ನುಡಿಯ ಕುರಿತು</sys:String>
@@ -456,12 +456,11 @@
 
 
   <sys:String x:Key="SpellCheckTab">ಪದ ಪರೀಕ್ಷೆ</sys:String>
-  <sys:String x:Key="SpellCheckEnableHeader">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheckDisableHeader">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheckEnableTip">ಮದ್ದೆಪಡಿಸಿದ ಕ್ಷೇತ್ರಗಳಿಗಾಗಿ ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
-  <sys:String x:Key="SpellCheckDisableTip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</sys:String>
-  <sys:String x:Key="SpellCheckEnableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-  <sys:String x:Key="SpellCheckDisableTooltip">ಅಕ್ಷರ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckEnableHeader">ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckEnableTipMsg">ತಪ್ಪಾಗಿ ಟೈಪ್ ಮಾಡಿದ ಪದಗಳನ್ನು ಅಕ್ಷರ ಪರಿಶೀಲನಾ  ಸಾಧನನದಿಂದ ಸರಿಪಡಿಸಿ.</sys:String>
+   <sys:String x:Key="SpellCheckDisableHeader">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckDisableTipMsg">ಪದ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+
 
 
   <sys:String x:Key="LoadingTitle">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</sys:String>

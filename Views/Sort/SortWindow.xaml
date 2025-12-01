@@ -12,6 +12,8 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Status Message -->
+            <RowDefinition Height="Auto"/>
             <!-- Info Button -->
             <RowDefinition Height="Auto"/>
             <!-- Sort By -->
@@ -19,16 +21,26 @@
             <!-- Then By 1 -->
             <RowDefinition Height="Auto"/>
             <!-- Then By 2 -->
-            <RowDefinition Height="Auto"/>
-            <!-- My List Has -->
             <RowDefinition Height="*"/>
+            <!-- My List Has -->
+            <RowDefinition Height="Auto"/>
             <!-- Spacer -->
             <RowDefinition Height="Auto"/>
             <!-- Buttons -->
         </Grid.RowDefinitions>
 
+        <!-- Status Message -->
+        <TextBlock x:Name="StatusMessage"
+                   Grid.Row="0"
+                   Text=""
+                   FontWeight="Bold"
+                   FontSize="14"
+                   Foreground="Green"
+                   Margin="0,0,0,10"
+                   TextWrapping="Wrap"/>
+
         <!-- Info Button -->
-        <Button Grid.Row="0"
+        <Button Grid.Row="1"
                 Content="🛈"
                 ToolTip="{DynamicResource SortHelp}"
                 HorizontalAlignment="Right"
@@ -41,7 +53,7 @@
         <!-- Sort By Group -->
         <GroupBox Header="{DynamicResource SortSortBy}"
                   FontWeight="Bold"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -91,7 +103,7 @@
         <!-- Then By 1 -->
         <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
-                  Grid.Row="2"
+                  Grid.Row="3"
                   Padding="10"
                   Margin="0,10,0,0"
                   IsEnabled="False">
@@ -131,7 +143,7 @@
         <!-- Then By 2 -->
         <GroupBox Header="{DynamicResource SortThenBy}"
                   FontWeight="Bold"
-                  Grid.Row="3"
+                  Grid.Row="4"
                   Padding="10"
                   Margin="0,10,0,0"
                   IsEnabled="False">
@@ -171,7 +183,7 @@
         <!-- My List Has -->
         <GroupBox Header="{DynamicResource SortMyListHas}"
                   FontWeight="Bold"
-                  Grid.Row="4"
+                  Grid.Row="5"
                   Padding="10"
                   Margin="0,10,0,0"
                   IsEnabled="False">
@@ -188,10 +200,10 @@
         </GroupBox>
 
         <!-- Spacer -->
-        <Grid Grid.Row="5"/>
+        <Grid Grid.Row="6"/>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="6"
+        <StackPanel Grid.Row="7"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,20,0,0">

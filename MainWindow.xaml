@@ -2692,8 +2692,6 @@
             </Syncfusion:RibbonTab>
 
 
-
-
             <Syncfusion:RibbonTab Caption="{DynamicResource NudiManagerTab}">
 
                 <!-- Nudi Controls Group -->
@@ -2771,7 +2769,6 @@
                     </Grid>
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
-
 
             <Syncfusion:RibbonTab Caption="{DynamicResource SpeechToTextTab}">
 
@@ -2940,87 +2937,107 @@
 
             </Syncfusion:RibbonTab>
 
+
             <Syncfusion:RibbonTab Caption="{DynamicResource SpellCheckTab}">
 
-                <!-- Enable Spell Check Group -->
+                <!-- Enable Spell Check -->
                 <Syncfusion:RibbonBar Header="{DynamicResource SpellCheckEnableHeader}"
-                                      IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource SpellCheckEnableTip}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
+                                      IsLauncherButtonVisible="False"
+                                      HorizontalAlignment="Center">
 
-                    <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="10">
+
                         <Button x:Name="EnableSpellCheckButton"
-                                Height="32"
-                                Width="32"
-                                Margin="5"
+                                Width="40"
+                                Height="40"
+                                Padding="0"
+                                Margin="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
                                 Click="EnableSpellCheck_Click">
+
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource SpellCheckEnableHeader}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
                                                    Margin="0,0,0,5"/>
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource SpellCheckEnableTip}"
+                                        <TextBlock Text="{DynamicResource SpellCheckEnableTipMsg}"
                                                    TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
+                                                   MaxWidth="220"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
-                            <Image Source="/Images/spellcheck/start-spellcheck.png"
-                                   Width="24"
-                                   Height="24"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+
+                            <!-- perfectly centered icon -->
+                            <Grid VerticalAlignment="Center"
+                                  HorizontalAlignment="Center">
+                                <Image Source="/Images/spellcheck/start-spellcheck.png"
+                                       Width="28"
+                                       Height="28"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Stretch="Uniform"/>
+                            </Grid>
                         </Button>
+
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
-                <!-- Disable Spell Check Group -->
-                <Syncfusion:RibbonBar Header="{DynamicResource SpellCheckDisableHeader}"
-                                      IsLauncherButtonVisible="False">
-                    <Syncfusion:RibbonBar.ToolTip>
-                        <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource SpellCheckDisableTip}"
-                                       TextWrapping="Wrap"/>
-                        </Syncfusion:ScreenTip>
-                    </Syncfusion:RibbonBar.ToolTip>
 
-                    <StackPanel Margin="0"
-                                HorizontalAlignment="Center">
+                <!-- Disable Spell Check -->
+                <Syncfusion:RibbonBar Header="{DynamicResource SpellCheckDisableHeader}"
+                                      IsLauncherButtonVisible="False"
+                                      HorizontalAlignment="Center">
+
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="10">
+
                         <Button x:Name="DisableSpellCheckButton"
-                                Height="32"
-                                Width="32"
-                                Margin="5"
+                                Width="40"
+                                Height="40"
+                                Padding="0"
+                                Margin="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
                                 Click="DisableSpellCheck_Click">
+
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource SpellCheckDisableHeader}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
                                                    Margin="0,0,0,5"/>
-                                        <!-- Tooltip Content -->
-                                        <TextBlock Text="{DynamicResource SpellCheckDisableTip}"
+                                        <TextBlock Text="{DynamicResource SpellCheckDisableTipMsg}"
                                                    TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
+                                                   MaxWidth="220"/>
                                     </StackPanel>
                                 </ToolTip>
                             </Button.ToolTip>
-                            <Image Source="/Images/spellcheck/stop-spellcheck.png"
-                                   Width="24"
-                                   Height="24"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+
+                            <!-- perfectly centered icon -->
+                            <Grid VerticalAlignment="Center"
+                                  HorizontalAlignment="Center">
+                                <Image Source="/Images/spellcheck/stop-spellcheck.png"
+                                       Width="28"
+                                       Height="28"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Stretch="Uniform"/>
+                            </Grid>
                         </Button>
+
                     </StackPanel>
                 </Syncfusion:RibbonBar>
 
@@ -3050,7 +3067,5 @@
                 </Syncfusion:SpellChecker>
             </RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
         </RichTextBoxAdv:SfRichTextBoxAdv>
-
-
     </Grid>
 </Syncfusion:RibbonWindow>
