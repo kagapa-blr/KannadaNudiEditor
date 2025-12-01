@@ -346,7 +346,7 @@
 
   <sys:String x:Key="Submit">ಸಲ್ಲಿಸು</sys:String>
   <sys:String x:Key="Close">ಮುಚ್ಚಿ</sys:String>
-  <sys:String x:Key="FeedbackEmailPlaceholder">ಮುಚ್ಚಿ</sys:String>
+  <sys:String x:Key="FeedbackEmailPlaceholder">ನಿಮ್ಮ ಅಭಿಪ್ರಾಯವನ್ನು ಇಲ್ಲಿ ಬರೆಯಿರಿ...</sys:String>
   
 
   <!-- Buttons -->

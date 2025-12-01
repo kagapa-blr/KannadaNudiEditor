@@ -416,7 +416,7 @@
   <sys:String x:Key="FeedbackLabel">Enter Your Feedback:</sys:String>
   <sys:String x:Key="Submit">Submit</sys:String>
   <sys:String x:Key="Close">Close</sys:String>
-
+  <sys:String x:Key="FeedbackEmailPlaceholder">Please Write your Feedback Here...</sys:String>
 
 
 

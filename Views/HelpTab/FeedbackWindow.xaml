@@ -100,7 +100,7 @@
                          Grid.Row="1"
                          Height="42"
                          Style="{StaticResource WatermarkTextBox}"
-                         Tag="yourname@example.com"
+                         Tag="youremail@example.com"
                          Margin="0,0,0,16"/>
 
                 <!-- Feedback Label -->
@@ -118,7 +118,7 @@
                          VerticalScrollBarVisibility="Auto"
                          MinHeight="160"
                          Style="{StaticResource WatermarkTextBox}"
-                         Tag="ನಿಮ್ಮ ಅಭಿಪ್ರಾಯವನ್ನು ಇಲ್ಲಿ ಬರೆಯಿರಿ..."/>
+                         Tag="{DynamicResource FeedbackEmailPlaceholder}"/>
 
                 <!-- Buttons -->
                 <StackPanel Grid.Row="4"
