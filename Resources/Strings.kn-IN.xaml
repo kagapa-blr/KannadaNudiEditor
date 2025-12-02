@@ -458,13 +458,13 @@
   <sys:String x:Key="SpellCheckTab">ಪದ ಪರೀಕ್ಷೆ</sys:String>
   <sys:String x:Key="SpellCheckEnableHeader">ಸಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
   <sys:String x:Key="SpellCheckEnableTipMsg">ತಪ್ಪಾಗಿ ಟೈಪ್ ಮಾಡಿದ ಪದಗಳನ್ನು ಅಕ್ಷರ ಪರಿಶೀಲನಾ  ಸಾಧನನದಿಂದ ಸರಿಪಡಿಸಿ.</sys:String>
-   <sys:String x:Key="SpellCheckDisableHeader">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
+  <sys:String x:Key="SpellCheckDisableHeader">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
   <sys:String x:Key="SpellCheckDisableTipMsg">ಪದ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
 
 
 
-  <sys:String x:Key="LoadingTitle">ಲೋಡ್ ಆಗುತ್ತಿದೆ...</sys:String>
-  <sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ಕಾಯಿರಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ</sys:String>
+  <sys:String x:Key="LoadingTitle">ಸಂಸ್ಕರಣೆ ಆಗುತ್ತಿದೆ</sys:String>
+  <sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ನಿರೀಕ್ಷಿಸಿ...!</sys:String>
 
 
 
