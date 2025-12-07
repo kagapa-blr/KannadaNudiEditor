@@ -69,34 +69,36 @@ namespace KannadaNudiEditor
         {
             try
             {
-                const string exeFile = "kannadaKeyboard.exe";
+                const string exeFile = "kannadaKeyboard";
 
-                // Check if already running
-                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exeFile)).Length > 0)
+                // Prevent duplicate instances
+                if (Process.GetProcessesByName(exeFile).Length > 0)
                 {
-                    MessageBox.Show("The Nudi Engine is already running.",
-                        "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SimpleLogger.Log("kannadaKeyboard.exe already running. Skip launch.");
                     return;
                 }
 
-                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFile);
+                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFile + ".exe");
 
                 if (!File.Exists(exePath))
                 {
-                    MessageBox.Show(
-                        "kannadaKeyboard.exe not found in the Assets folder.",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error
-                    );
+                    MessageBox.Show("kannadaKeyboard.exe not found in Assets folder.",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                _kannadaKeyboardProcess = Process.Start(new ProcessStartInfo
+                _kannadaKeyboardProcess = new Process
                 {
-                    FileName = exePath,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    },
+                    EnableRaisingEvents = true
+                };
 
+                _kannadaKeyboardProcess.Start();
                 SimpleLogger.Log("kannadaKeyboard.exe started.");
             }
             catch (Exception ex)
@@ -117,15 +119,32 @@ namespace KannadaNudiEditor
 
             try
             {
-                if (_kannadaKeyboardProcess != null && !_kannadaKeyboardProcess.HasExited)
+                // 1. Close the tracked process if running
+                if (_kannadaKeyboardProcess != null)
                 {
-                    _kannadaKeyboardProcess.Kill();
-                    _kannadaKeyboardProcess.WaitForExit();
+                    if (!_kannadaKeyboardProcess.HasExited)
+                    {
+                        _kannadaKeyboardProcess.Kill();
+                        _kannadaKeyboardProcess.WaitForExit(1000);
+                    }
                 }
+
+                // 2. As a fallback, kill all running nudi engine processes
+                foreach (var p in Process.GetProcessesByName("kannadaKeyboard"))
+                {
+                    try
+                    {
+                        p.Kill();
+                        p.WaitForExit(500);
+                    }
+                    catch { }
+                }
+
+                SimpleLogger.Log("kannadaKeyboard.exe terminated on app exit.");
             }
             catch (Exception ex)
             {
-                ShowError("Error stopping the Nudi Engine on exit", ex);
+                ShowError("Error stopping kannadaKeyboard.exe on exit", ex);
             }
         }
 
