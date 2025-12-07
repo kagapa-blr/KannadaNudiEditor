@@ -56,17 +56,15 @@ public static class SimpleLogger
     {
         try
         {
-            var rootDir = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)
-                            ?.Parent?.Parent?.Parent?.FullName;
-
-            if (string.IsNullOrWhiteSpace(rootDir))
-                throw new Exception("Could not resolve root folder");
-
-            return Path.Combine(rootDir, "Logs");
+            // Always create Logs folder inside the current running folder
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string logPath = Path.Combine(basePath, "Logs");
+            return logPath;
         }
         catch
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+            return Path.Combine(Environment.CurrentDirectory, "Logs");
         }
     }
+
 }
