@@ -554,6 +554,8 @@
 
 
 
+
+
                     <Syncfusion:BackstageTabItem Header="{DynamicResource backStageExport}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
@@ -566,16 +568,24 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
+                                    <!-- Title -->
                                     <RowDefinition Height="Auto"/>
+                                    <!-- Divider -->
                                     <RowDefinition Height="Auto"/>
+                                    <!-- PDF -->
                                     <RowDefinition Height="Auto"/>
+                                    <!-- Markdown -->
+                                    <RowDefinition Height="Auto"/>
+                                    <!-- RTF -->
                                 </Grid.RowDefinitions>
 
+                                <!-- TITLE -->
                                 <TextBlock Text="{DynamicResource backStageExportOptions}"
                                            FontFamily="NudiParijatha"
                                            FontSize="20"
                                            Margin="10"/>
 
+                                <!-- DIVIDER -->
                                 <Rectangle Grid.Row="1"
                                            Stroke="Gray"
                                            StrokeThickness="1"
@@ -600,8 +610,8 @@
                                                              Label="{DynamicResource backStageExportToPdf}"
                                                              BorderBrush="#FFA1A2A4"
                                                              BorderThickness="1"
-                                                             Click="pdfSave_Click"
-                                                             LargeIcon="Images/Backstage/export/export-to-pdf.png"/>
+                                                             LargeIcon="Images/Backstage/export/export-to-pdf.png"
+                                                             Click="pdfSave_Click"/>
 
                                     <StackPanel Grid.Column="1"
                                                 Margin="5">
@@ -630,8 +640,8 @@
                                                              Label="{DynamicResource backStageExportToMarkdown}"
                                                              BorderBrush="#FFA1A2A4"
                                                              BorderThickness="1"
-                                                             Click="mdSave_Click"
-                                                             LargeIcon="Images/Backstage/export/export-to-md.png"/>
+                                                             LargeIcon="Images/Backstage/export/export-to-md.png"
+                                                             Click="mdSave_Click"/>
 
                                     <StackPanel Grid.Column="1"
                                                 Margin="5">
@@ -643,6 +653,37 @@
                                                    Margin="3"/>
                                     </StackPanel>
                                 </Grid>
+
+                                <!-- EXPORT TO RTF -->
+                                <Grid Grid.Row="4"
+                                      Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Syncfusion:RibbonButton x:Name="exportToRtfButton"
+                                                             SizeForm="Large"
+                                                             Width="87"
+                                                             Height="85"
+                                                             Margin="5"
+                                                             Label="{DynamicResource backStageExportToRtf}"
+                                                             BorderBrush="#FFA1A2A4"
+                                                             BorderThickness="1"
+                                                             LargeIcon="Images/Backstage/export/export-to-rtf.png"
+                                                             Click="rtfSave_Click"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                Margin="5">
+                                        <TextBlock Text="{DynamicResource backStageExportToRtf}"
+                                                   FontWeight="Bold"
+                                                   Margin="3"/>
+                                        <TextBlock Text="{DynamicResource backStageExportToRtfDescription}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="3"/>
+                                    </StackPanel>
+                                </Grid>
+
                             </Grid>
 
                             <!-- MIDDLE SEPARATOR -->
@@ -666,7 +707,6 @@
                             </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
-
 
 
 

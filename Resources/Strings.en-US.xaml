@@ -465,7 +465,8 @@
   <sys:String x:Key="backStageExportToMarkdown">Export to Markdown</sys:String>
   <sys:String x:Key="backStageExportToMarkdownDescription">Save the document in Markdown (.md) format.</sys:String>
   <sys:String x:Key="backStageExportRightHint">Select an export format to save your document.</sys:String>
-
+  <sys:String x:Key="backStageExportToRtf">Export to RTF</sys:String>
+  <sys:String x:Key="backStageExportToRtfDescription">Exports the document as a Rich Text Format (.rtf)</sys:String>
 
 
 

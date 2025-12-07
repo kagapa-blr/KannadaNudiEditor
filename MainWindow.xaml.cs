@@ -528,6 +528,8 @@ namespace KannadaNudiEditor
             SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand.Execute(null, richTextBoxAdv);
         }
 
+
+
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -580,7 +582,6 @@ namespace KannadaNudiEditor
             }
         }
 
-
         private async void mdSave_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
@@ -613,6 +614,43 @@ namespace KannadaNudiEditor
                 }
             }
         }
+
+        private async void rtfSave_Click(object sender, RoutedEventArgs e)
+        {
+            CloseBackstage();
+
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "RTF Document (*.rtf)|*.rtf",
+                Title = "Save as RTF"
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            try
+            {
+                LoadingView.Show();
+
+                await Task.Run(() =>
+                {
+                    DocumentExportHelper.ExportToRtf(richTextBoxAdv, dialog.FileName);
+                });
+
+                MessageBox.Show("RTF exported successfully!", "Success",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export RTF:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+            }
+        }
+
 
 
 

@@ -424,6 +424,8 @@
   <sys:String x:Key="backStageExportToMarkdown">Markdown ಗೆ ರಫ್ತು ಮಾಡಿ</sys:String>
   <sys:String x:Key="backStageExportToMarkdownDescription">ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು Markdown (.md) ರೂಪದಲ್ಲಿ ಉಳಿಸಿ.</sys:String>
   <sys:String x:Key="backStageExportRightHint">ಡಾಕ್ಯುಮೆಂಟ್ ಉಳಿಸಲು ರಫ್ತು ರೂಪವನ್ನು ಆಯ್ಕೆಮಾಡಿ.</sys:String>
+  <sys:String x:Key="backStageExportToRtf">RTF ಆಗಿ ರಫ್ತು ಮಾಡಿ</sys:String>
+  <sys:String x:Key="backStageExportToRtfDescription">ದಸ್ತಾವೇಜನ್ನು ರಿಚ್ ಟೆಕ್ಸ್ಟ್ ಫಾರ್ಮ್ಯಾಟ್ (.rtf) ರೂಪದಲ್ಲಿ ರಫ್ತು ಮಾಡುತ್ತದೆ</sys:String>
 
 
 

@@ -1,7 +1,6 @@
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
-using Microsoft.Win32;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocToPDFConverter;
 using Syncfusion.Pdf;
@@ -11,46 +10,91 @@ namespace KannadaNudiEditor.Helpers
 {
     public static class DocumentExportHelper
     {
-
-
-
+        // -------------------------
+        // EXPORT TO PDF
+        // -------------------------
         public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath)
         {
-            using MemoryStream docStream = new MemoryStream();
-            richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
-            docStream.Position = 0;
+            try
+            {
+                SimpleLogger.Log("ExportToPdf: Started");
 
-            using WordDocument document = new(docStream, Syncfusion.DocIO.FormatType.Docx);
-            using DocToPDFConverter converter = new DocToPDFConverter();
-            using PdfDocument pdfDocument = converter.ConvertToPDF(document);
-            pdfDocument.Save(filePath);
+                using MemoryStream docStream = new MemoryStream();
+                richTextBox.Save(docStream, FormatType.Docx);
+                docStream.Position = 0;
 
-            ShowFileInExplorer(filePath);
+                using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
+                using DocToPDFConverter converter = new DocToPDFConverter();
+                using PdfDocument pdfDocument = converter.ConvertToPDF(document);
+
+                pdfDocument.Save(filePath);
+
+                SimpleLogger.Log($"ExportToPdf: Saved to {filePath}");
+                ShowFileInExplorer(filePath);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"ExportToPdf FAILED: {ex.Message}\n{ex.StackTrace}");
+                throw;
+            }
         }
 
 
+        // -------------------------
+        // EXPORT TO MARKDOWN
+        // -------------------------
         public static void ExportToMarkdown(SfRichTextBoxAdv richTextBox, string filePath)
         {
             try
             {
+                SimpleLogger.Log("ExportToMarkdown: Started");
+
                 using MemoryStream docStream = new MemoryStream();
-                richTextBox.Save(docStream, Syncfusion.Windows.Controls.RichTextBoxAdv.FormatType.Docx);
+                richTextBox.Save(docStream, FormatType.Docx);
                 docStream.Position = 0;
 
                 using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
                 document.Save(filePath, Syncfusion.DocIO.FormatType.Markdown);
 
-                MessageBox.Show("Markdown exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                SimpleLogger.Log($"ExportToMarkdown: Saved to {filePath}");
                 ShowFileInExplorer(filePath);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to export Markdown:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.Log($"ExportToMarkdown FAILED: {ex.Message}\n{ex.StackTrace}");
+                throw;
             }
         }
 
 
+        // -------------------------
+        // EXPORT TO RTF
+        // -------------------------
+        public static void ExportToRtf(SfRichTextBoxAdv richTextBox, string filePath)
+        {
+            try
+            {
+                SimpleLogger.Log("ExportToRtf: Started");
 
+                using MemoryStream rtfStream = new MemoryStream();
+                richTextBox.Save(rtfStream, FormatType.Rtf);
+
+                File.WriteAllBytes(filePath, rtfStream.ToArray());
+
+                SimpleLogger.Log($"ExportToRtf: Saved to {filePath}");
+                ShowFileInExplorer(filePath);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"ExportToRtf FAILED: {ex.Message}\n{ex.StackTrace}");
+                throw;
+            }
+        }
+
+
+        // -------------------------
+        // OPEN FILE IN EXPLORER
+        // -------------------------
         private static void ShowFileInExplorer(string filePath)
         {
             try
@@ -62,11 +106,17 @@ namespace KannadaNudiEditor.Helpers
                     {
                         UseShellExecute = true
                     });
+
+                    SimpleLogger.Log($"Explorer opened: {filePath}");
+                }
+                else
+                {
+                    SimpleLogger.Log($"ShowFileInExplorer: File not found {filePath}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Could not open File Explorer:\n{ex.Message}", "Explorer Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                SimpleLogger.Log($"ShowFileInExplorer FAILED: {ex.Message}\n{ex.StackTrace}");
             }
         }
     }
