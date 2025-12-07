@@ -2589,13 +2589,13 @@
                         <!-- No Color Button -->
                         <Button Content="No Color"
                                 Height="30"
-                                Margin="5, 0"
-                                Width="130"
+                                Margin="5,0"
+                                Width="150"
                                 Click="NoColorButton_Click"/>
 
                         <!-- Color Picker Palette -->
                         <Syncfusion:ColorPickerPalette x:Name="pageColorColorPicker"
-                                                       HeaderTemplate="{DynamicResource Custom_HeaderTemplate}"
+                                                       Width="150"
                                                        MoreColorOptionVisibility="Visible"
                                                        SelectedBrushChanged="pageColorColorPicker_ColorChanged"/>
                     </StackPanel>
@@ -2610,38 +2610,46 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Margin="0, 0, 0, 5"/>
+                                   Margin="0,0,0,5"/>
 
                         <!-- ComboBox for selecting page margins -->
                         <ComboBox Name="pageMargins"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Center"
                                   Height="30"
-                                  SelectionChanged="pageMargins_SelectionChanged"
-                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
+                                  MinWidth="180"
+                                  MaxDropDownHeight="600" 
+                            SelectionChanged="pageMargins_SelectionChanged"
+                      PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
+                                    <StackPanel Margin="2">
                                         <TextBlock Text="{Binding Key}"
                                                    FontWeight="Bold"
-                                                   Margin="0, 0, 0, 5"/>
+                                                   Margin="0,0,0,3"/>
                                         <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding top}"
-                                                       FontStyle="Italic"/>
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding bottom}"
-                                                       FontStyle="Italic"/>
+                                                    Margin="0,0,0,2">
+                                            <TextBlock Text="Top:"
+                                                       FontStyle="Italic"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="{Binding top}"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="Bottom:"
+                                                       FontStyle="Italic"
+                                                       Margin="10,0,2,0"/>
+                                            <TextBlock Text="{Binding bottom}"
+                                                       Margin="2,0"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding left}"
-                                                       FontStyle="Italic"/>
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding right}"
-                                                       FontStyle="Italic"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Left:"
+                                                       FontStyle="Italic"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="{Binding left}"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="Right:"
+                                                       FontStyle="Italic"
+                                                       Margin="10,0,2,0"/>
+                                            <TextBlock Text="{Binding right}"
+                                                       Margin="2,0"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -2664,24 +2672,28 @@
                         <!-- ComboBox for selecting page size -->
                         <ComboBox Name="pageSize"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Center"
                                   Height="30"
-                                  SelectionChanged="pageSize_SelectionChanged"
-                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
+                                  MinWidth="180"
+                                  MaxDropDownHeight="600" 
+                            SelectionChanged="pageSize_SelectionChanged"
+                      PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
+                                    <StackPanel Margin="2">
                                         <TextBlock Text="{Binding Key}"
                                                    FontWeight="Bold"
-                                                   Margin="0,0,0,5"/>
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left">
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding height}"
-                                                       FontStyle="Italic"/>
-                                            <TextBlock Margin="2"
-                                                       Text="{Binding width}"
-                                                       FontStyle="Italic"/>
+                                                   Margin="0,0,0,3"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Height:"
+                                                       FontStyle="Italic"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="{Binding height}"
+                                                       Margin="2,0"/>
+                                            <TextBlock Text="Width:"
+                                                       FontStyle="Italic"
+                                                       Margin="10,0,2,0"/>
+                                            <TextBlock Text="{Binding width}"
+                                                       Margin="2,0"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
