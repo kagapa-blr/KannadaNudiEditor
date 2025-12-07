@@ -551,11 +551,6 @@
                                                         Command="Syncfusion:SfRichTextBoxAdv.PrintDocumentCommand"/>
 
 
-
-
-
-
-
                     <Syncfusion:BackstageTabItem Header="{DynamicResource backStageExport}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
@@ -707,10 +702,6 @@
                             </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
-
-
-
-
 
                     <Syncfusion:BackstageTabItem Header="{DynamicResource backStageHelp}">
                         <Grid Margin="30">
@@ -2488,7 +2479,6 @@
             </Syncfusion:RibbonTab>
 
 
-
             <Syncfusion:RibbonTab Caption="{DynamicResource ViewTab}">
                 <!-- Views Group -->
                 <Syncfusion:RibbonBar Header="{DynamicResource Views}"
@@ -2755,7 +2745,6 @@
                 </Syncfusion:RibbonBar>
             </Syncfusion:RibbonTab>
 
-
             <Syncfusion:RibbonTab Caption="{DynamicResource NudiManagerTab}">
 
                 <!-- Nudi Controls Group -->
@@ -2768,32 +2757,32 @@
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
-                    <!-- Use a grid for better alignment -->
-                    <Grid Margin="5"
-                          Width="150">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <!-- Horizontal StackPanel for icon-only buttons -->
+                    <StackPanel Margin="5"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
 
                         <!-- Start Button -->
-                        <Button Grid.Row="0"
-                                Content="{DynamicResource StartNudiEngine}"
-                                Height="30"
-                                HorizontalAlignment="Stretch"
-                                Click="StartNudiEngine_Click">
+                        <Button Width="40"
+                                Height="40"
+                                Padding="0"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Click="StartNudiEngine_Click"
+                                Margin="0,0,10,0">
+                            <Image Source="Images/nudimanager/start-icon.png"
+                                   Width="24"
+                                   Height="24"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource NudiManagerTab}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
                                                    Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource StartNudiTooltip}"
                                                    TextWrapping="WrapWithOverflow"
                                                    MaxWidth="200"/>
@@ -2802,27 +2791,25 @@
                             </Button.ToolTip>
                         </Button>
 
-                        <!-- Spacer -->
-                        <Rectangle Grid.Row="1"
-                                   Height="10"
-                                   Fill="Transparent"/>
-
                         <!-- Stop Button -->
-                        <Button Grid.Row="2"
-                                Content="{DynamicResource StopNudiEngine}"
-                                Height="30"
-                                HorizontalAlignment="Stretch"
+                        <Button Width="40"
+                                Height="40"
+                                Padding="0"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"
                                 Click="StopNudiEngine_Click">
+                            <Image Source="Images/nudimanager/stop-icon.png"
+                                   Width="24"
+                                   Height="24"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
-                                        <!-- Tooltip Header -->
                                         <TextBlock Text="{DynamicResource NudiManagerTab}"
                                                    FontWeight="Bold"
                                                    FontSize="12"
                                                    Margin="0,0,0,5"/>
-
-                                        <!-- Tooltip Content -->
                                         <TextBlock Text="{DynamicResource StopNudiTooltip}"
                                                    TextWrapping="WrapWithOverflow"
                                                    MaxWidth="200"/>
@@ -2830,9 +2817,13 @@
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
-                    </Grid>
+
+                    </StackPanel>
                 </Syncfusion:RibbonBar>
+
             </Syncfusion:RibbonTab>
+
+
 
             <Syncfusion:RibbonTab Caption="{DynamicResource SpeechToTextTab}">
 
