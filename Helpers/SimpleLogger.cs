@@ -17,7 +17,7 @@ public static class SimpleLogger
 
             // Build log file name with timestamp
             string timestamp = DateTime.Now.ToString("HHmmss");
-            string logFileName = $"Nudilog_{timestamp}_.log";
+            string logFileName = $"NudiBaraha_{timestamp}.log";
             LogFilePath = Path.Combine(DateFolder, logFileName);
 
             Log("=== Application Started ===");
@@ -56,15 +56,28 @@ public static class SimpleLogger
     {
         try
         {
-            // Always create Logs folder inside the current running folder
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string logPath = Path.Combine(basePath, "Logs");
-            return logPath;
+            // Example: C:\Users\<User>\AppData\Local\KannadaNudiBaraha\Logs
+            string appName = "KannadaNudiBaraha";
+
+            string basePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                appName,
+                "Logs"
+            );
+
+            // Ensure directory exists
+            Directory.CreateDirectory(basePath);
+
+            return basePath;
         }
         catch
         {
-            return Path.Combine(Environment.CurrentDirectory, "Logs");
+            // Final fallback – current folder (rarely needed)
+            string fallback = Path.Combine(Environment.CurrentDirectory, "Logs");
+            Directory.CreateDirectory(fallback);
+            return fallback;
         }
     }
+
 
 }
