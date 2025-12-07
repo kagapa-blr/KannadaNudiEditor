@@ -528,46 +528,57 @@ namespace KannadaNudiEditor
             SfRichTextBoxAdv.ShowEncryptDocumentDialogCommand.Execute(null, richTextBoxAdv);
         }
 
-
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
-            CloseBackstage();
-
-            SaveFileDialog saveDialog = new SaveFileDialog
+            try
             {
-                Filter = "PDF Document (*.pdf)|*.pdf",
-                Title = "Save as PDF"
-            };
+                CloseBackstage();
+                SimpleLogger.Log("PDF Save initiated from backstage.");
 
-            if (saveDialog.ShowDialog() == true)
-            {
+                var saveDialog = new SaveFileDialog
+                {
+                    Filter = "PDF Document (*.pdf)|*.pdf",
+                    Title = "Save as PDF"
+                };
+
+                if (saveDialog.ShowDialog() != true)
+                    return; // User cancelled
+
                 string filePath = saveDialog.FileName;
 
-                try
-                {
-                    // Show loading only after user selects file
-                    LoadingView.Show();
-                    await Task.Delay(50); // Optional: allow UI to render loader
+                LoadingView.Show();
 
-                    // Run export on background thread
-                    await Task.Run(() =>
-                    {
-                        DocumentExportHelper.ExportToPdf(richTextBoxAdv, filePath);
-                    });
+                await Task.Run(() =>
+                {
+                    DocumentExportHelper.ExportToPdf(richTextBoxAdv, filePath);
+                });
 
-                    MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to export PDF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                finally
-                {
-                    LoadingView.Hide(); // Hide after processing
-                }
+                SimpleLogger.Log($"PDF exported successfully: {filePath}");
+
+                MessageBox.Show(
+                    "PDF exported successfully!",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                // 🔥 Log full error details
+                SimpleLogger.Log($"PDF export FAILED: {ex.Message}\n{ex.StackTrace}");
+
+                MessageBox.Show(
+                    $"Failed to export PDF:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+            finally
+            {
+                LoadingView.Hide();
             }
         }
-
 
 
         private async void mdSave_Click(object sender, RoutedEventArgs e)

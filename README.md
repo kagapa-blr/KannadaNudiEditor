@@ -70,6 +70,7 @@ dotnet add package Syncfusion.SfRichTextBoxAdv.WPF
 dotnet add package Syncfusion.SfRichTextRibbon.WPF
 dotnet add package Syncfusion.SfSkinManager.WPF
 dotnet add package Syncfusion.Themes.Windows11Light.WPF
+dotnet add package Syncfusion.DocToPDFConverter.Wpf
 ```
 
 These commands will install the latest stable versions of the required NuGet packages for the project.
@@ -93,13 +94,16 @@ python -m venv venv
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
 # Activate the virtual environment
-.env\Scripts\Activate.ps1
+.\\venv\\Scripts\\Activate.ps1
 
 # Install required Python packages
 pip install SpeechRecognition PyAudio
+
+# Install pyinstaller to build a standalone executable from the Python script
 pip install pyinstaller
 
 # Build the executable from recognize_mic.py
+pyinstaller --onefile recognize_mic.py
 pyinstaller --onefile recognize_mic.py
 ```
 
@@ -110,7 +114,7 @@ After the build completes, the `.exe` file will be located in the `dist` folder:
 ```
 dist/
 └── recognize_mic.exe
-```
+Ensure that `recognize_mic.py` is located in the same directory where you run the `pyinstaller` command (typically your project root or the directory you are working in) before running the commands above.
 
 Ensure that `recognize_mic.py` is located in the same directory before running the commands above.
 

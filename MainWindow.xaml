@@ -552,6 +552,8 @@
 
 
 
+
+
                     <Syncfusion:BackstageTabItem Header="{DynamicResource backStageExport}">
                         <Grid Margin="30">
                             <Grid.ColumnDefinitions>
@@ -560,6 +562,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
+                            <!-- LEFT SECTION -->
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -581,6 +584,7 @@
                                            Margin="10"
                                            Height="1"/>
 
+                                <!-- EXPORT TO PDF -->
                                 <Grid Grid.Row="2"
                                       Margin="10">
                                     <Grid.ColumnDefinitions>
@@ -591,15 +595,16 @@
                                     <Syncfusion:RibbonButton x:Name="exportToPdfButton"
                                                              SizeForm="Large"
                                                              Width="87"
-                                                             Height="80"
+                                                             Height="85"
                                                              Margin="5"
                                                              Label="{DynamicResource backStageExportToPdf}"
                                                              BorderBrush="#FFA1A2A4"
+                                                             BorderThickness="1"
                                                              Click="pdfSave_Click"
-                                                             BorderThickness="1"/>
+                                                             LargeIcon="Images/Backstage/export/export-to-pdf.png"/>
 
                                     <StackPanel Grid.Column="1"
-                                                Margin="3">
+                                                Margin="5">
                                         <TextBlock Text="{DynamicResource backStageExportToPdf}"
                                                    FontWeight="Bold"
                                                    Margin="3"/>
@@ -609,6 +614,7 @@
                                     </StackPanel>
                                 </Grid>
 
+                                <!-- EXPORT TO MARKDOWN -->
                                 <Grid Grid.Row="3"
                                       Margin="10">
                                     <Grid.ColumnDefinitions>
@@ -619,15 +625,16 @@
                                     <Syncfusion:RibbonButton x:Name="exportToMarkdownButton"
                                                              SizeForm="Large"
                                                              Width="87"
-                                                             Height="80"
+                                                             Height="85"
                                                              Margin="5"
                                                              Label="{DynamicResource backStageExportToMarkdown}"
                                                              BorderBrush="#FFA1A2A4"
+                                                             BorderThickness="1"
                                                              Click="mdSave_Click"
-                                                             BorderThickness="1"/>
+                                                             LargeIcon="Images/Backstage/export/export-to-md.png"/>
 
                                     <StackPanel Grid.Column="1"
-                                                Margin="3">
+                                                Margin="5">
                                         <TextBlock Text="{DynamicResource backStageExportToMarkdown}"
                                                    FontWeight="Bold"
                                                    Margin="3"/>
@@ -638,12 +645,15 @@
                                 </Grid>
                             </Grid>
 
+                            <!-- MIDDLE SEPARATOR -->
                             <Border BorderThickness="0.5"
                                     BorderBrush="#FFBCBCBC"
                                     Margin="15"
                                     Grid.Column="1"
-                                    HorizontalAlignment="Left"/>
+                                    Width="1"
+                                    HorizontalAlignment="Center"/>
 
+                            <!-- RIGHT HINT PANEL -->
                             <Grid Grid.Column="2"
                                   VerticalAlignment="Top"
                                   HorizontalAlignment="Left"
@@ -652,10 +662,12 @@
                                            FontStyle="Italic"
                                            FontSize="14"
                                            TextWrapping="Wrap"
-                                           Width="300"/>
+                                           Width="310"/>
                             </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
+
+
 
 
 
@@ -2617,9 +2629,9 @@
                                   HorizontalAlignment="Stretch"
                                   Height="30"
                                   MinWidth="180"
-                                  MaxDropDownHeight="600" 
-                            SelectionChanged="pageMargins_SelectionChanged"
-                      PreviewMouseDown="pageMargins_PreviewMouseDown">
+                                  MaxDropDownHeight="600"
+                                  SelectionChanged="pageMargins_SelectionChanged"
+                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="2">
@@ -2674,9 +2686,9 @@
                                   HorizontalAlignment="Stretch"
                                   Height="30"
                                   MinWidth="180"
-                                  MaxDropDownHeight="600" 
-                            SelectionChanged="pageSize_SelectionChanged"
-                      PreviewMouseDown="pageMargins_PreviewMouseDown">
+                                  MaxDropDownHeight="600"
+                                  SelectionChanged="pageSize_SelectionChanged"
+                                  PreviewMouseDown="pageMargins_PreviewMouseDown">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="2">

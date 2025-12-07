@@ -4,42 +4,33 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>KannadaNudiEditor</RootNamespace>
+
+    <!-- Optional but recommended -->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- App Branding -->
+    <RootNamespace>KannadaNudiEditor</RootNamespace>
     <ApplicationIcon>Assets\nudi.ico</ApplicationIcon>
+
+    <!-- Improve build/publish consistency -->
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+
+    <!-- Ensures images, assets, exes are kept during publish -->
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
   </PropertyGroup>
 
-  <!-- Remove unnecessary files from default inclusion -->
+  <!-- EXEs and External Files -->
   <ItemGroup>
-    <None Remove="Assets\kannadaKeyboard.exe" />
-    <None Remove="Images\Page Layout\pagesetup.jpg" />
+    <Content Include="Assets\kannadaKeyboard.exe" CopyToOutputDirectory="Always" />
+    <Content Include="Assets\recognize_mic.exe" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Custom_MyDictionary_kn_IN.dic" CopyToOutputDirectory="Always" />
+    <Content Include="Assets\kn_IN.dic" CopyToOutputDirectory="Always" />
+    <Content Include="Assets\default.dic" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
-  <!-- Explicitly include EXEs, Python script, and dictionary files -->
-  <ItemGroup>
-    <Content Include="Assets\kannadaKeyboard.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  <Content Include="Assets\recognize_mic.exe">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-
-
-    <None Update="Assets\Custom_MyDictionary_kn_IN.dic">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-
-    <None Update="Assets\kn_IN.dic">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-
-    <None Update="Assets\default.dic">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <!-- Resource images -->
+  <!-- WPF Resources -->
   <ItemGroup>
     <Resource Include="Images\**\*.png" />
     <Resource Include="Assets\**\*.png" />
@@ -48,10 +39,10 @@
   <!-- NuGet Packages -->
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="30.1.40" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="31.2.10" />
-    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="31.2.10" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="31.2.10" />
-    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="31.2.10" />
+    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="31.2.16" />
   </ItemGroup>
 </Project>
