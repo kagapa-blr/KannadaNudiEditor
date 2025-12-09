@@ -129,31 +129,67 @@ namespace KannadaNudiEditor
 
         private void ConfigureSpellChecker()
         {
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string dictionaryPath = Path.Combine(basePath, "Assets", "kn_IN.dic");
-            string customDictionaryPath1 = Path.Combine(basePath, "Assets", "Custom_MyDictionary_kn_IN.dic");
-            string customDictionaryPath2 = Path.Combine(basePath, "Assets", "default.dic");
+            SimpleLogger.Log("=== SpellChecker Configuration Started ===");
 
-            // Optional: Debug missing files
-            if (!File.Exists(dictionaryPath)) MessageBox.Show("Missing: " + dictionaryPath);
-            if (!File.Exists(customDictionaryPath1)) MessageBox.Show("Missing: " + customDictionaryPath1);
-            if (!File.Exists(customDictionaryPath2)) MessageBox.Show("Missing: " + customDictionaryPath2);
-
-            // Create spell checker instance (but don't enable it)
-            spellChecker = new SpellChecker
+            try
             {
-                IsEnabled = false, // Initially off
-                IgnoreUppercaseWords = false,
-                IgnoreAlphaNumericWords = true,
-                UseFrameworkSpellCheck = false,
-            };
+                string basePath = AppDomain.CurrentDomain.BaseDirectory;
+                SimpleLogger.Log($"Base Directory: {basePath}");
 
-            spellChecker.Dictionaries.Add(dictionaryPath);
-            spellChecker.CustomDictionaries.Add(customDictionaryPath1);
-            spellChecker.CustomDictionaries.Add(customDictionaryPath2);
+                // Main dictionary (read-only)
+                string dictionaryPath = Path.Combine(basePath, "Assets", "kn_IN.dic");
+                SimpleLogger.Log($"Main Dictionary Path: {dictionaryPath}");
 
-            // Assign to RichTextBoxAdv
-            richTextBoxAdv.SpellChecker = spellChecker;
+                if (!File.Exists(dictionaryPath))
+                {
+                    SimpleLogger.Log($"ERROR: Missing main dictionary at {dictionaryPath}");
+                    MessageBox.Show("Missing main dictionary: " + dictionaryPath);
+                }
+
+                // Custom dictionaries — writable in AppData
+                string customDictionaryPath1 = DictionaryHelper.GetWritableDictionaryPath("Custom_MyDictionary_kn_IN.dic");
+                string customDictionaryPath2 = DictionaryHelper.GetWritableDictionaryPath("default.dic");
+
+                SimpleLogger.Log($"Custom Dictionary 1 (AppData): {customDictionaryPath1}");
+                SimpleLogger.Log($"Custom Dictionary 2 (AppData): {customDictionaryPath2}");
+
+                // Check existence
+                if (!File.Exists(customDictionaryPath1))
+                    SimpleLogger.Log($"ERROR: Missing custom dictionary: {customDictionaryPath1}");
+
+                if (!File.Exists(customDictionaryPath2))
+                    SimpleLogger.Log($"ERROR: Missing custom dictionary: {customDictionaryPath2}");
+
+                // Initialize SpellChecker
+                spellChecker = new SpellChecker
+                {
+                    IsEnabled = false,
+                    IgnoreUppercaseWords = false,
+                    IgnoreAlphaNumericWords = true,
+                    UseFrameworkSpellCheck = false,
+                };
+
+                SimpleLogger.Log("Adding dictionaries to SpellChecker...");
+
+                spellChecker.Dictionaries.Add(dictionaryPath);
+                SimpleLogger.Log("Main dictionary added.");
+
+                spellChecker.CustomDictionaries.Add(customDictionaryPath1);
+                SimpleLogger.Log("Custom dictionary 1 added.");
+
+                spellChecker.CustomDictionaries.Add(customDictionaryPath2);
+                SimpleLogger.Log("Custom dictionary 2 added.");
+
+                richTextBoxAdv.SpellChecker = spellChecker;
+                SimpleLogger.Log("Assigned SpellChecker to RichTextBoxAdv.");
+
+                SimpleLogger.Log("=== SpellChecker Configuration Completed Successfully ===");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"EXCEPTION in ConfigureSpellChecker: {ex}");
+                MessageBox.Show("SpellChecker failed to initialize:\n" + ex.Message);
+            }
         }
 
 
