@@ -15,81 +15,141 @@ namespace KannadaNudiEditor.Helpers
         // EXPORT TO PDF
         // -------------------------
 
-
         public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath)
         {
-            SimpleLogger.Log("ExportToPdf: Started.....");
-            using MemoryStream docStream = new MemoryStream();
-            richTextBox.Save(docStream, FormatType.Docx);
-            docStream.Position = 0;
+            SimpleLogger.Log("========== ExportToPdf: START ==========");
 
-            using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
+            try
+            {
+                // STEP 1 — Save editor content to DOCX stream
+                SimpleLogger.Log("STEP 1: Saving editor content to DOCX MemoryStream...");
+                using MemoryStream docStream = new MemoryStream();
+                richTextBox.Save(docStream, FormatType.Docx);
+                SimpleLogger.Log($"STEP 1 DONE: DOCX stream size = {docStream.Length} bytes");
 
-            // Fallback fonts for Kannada Unicode block (ensure these fonts are installed)
-            document.FontSettings.FallbackFonts.Add(
-                new FallbackFont(0x0C80, 0x0CFF, "Nirmala UI, Tunga, Noto Sans Kannada")); // Kannada range [web:5][web:29]
+                docStream.Position = 0;
+                SimpleLogger.Log("MemoryStream.Position reset to 0.");
 
-            using DocToPDFConverter converter = new DocToPDFConverter();
+                // STEP 2 — Load DOCX into WordDocument
+                SimpleLogger.Log("STEP 2: Loading WordDocument from stream...");
+                using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
+                SimpleLogger.Log("STEP 2 DONE: WordDocument loaded.");
 
-            // Enable complex script auto detection
-            converter.Settings.AutoDetectComplexScript = true; // important for Indic scripts [web:13][web:16][web:17]
-            SimpleLogger.Log("ExportToPdf: Converting to PDF...");
-            using PdfDocument pdfDocument = converter.ConvertToPDF(document);
-            pdfDocument.Save(filePath);
-            
-            ShowFileInExplorer(filePath);
+                // STEP 3 — Adding fallback fonts for Kannada Unicode block
+                SimpleLogger.Log("STEP 3: Adding Kannada fallback fonts...");
+                document.FontSettings.FallbackFonts.Add(
+                    new FallbackFont(0x0C80, 0x0CFF, "Nirmala UI, Tunga, Noto Sans Kannada"));
+                SimpleLogger.Log("STEP 3 DONE: Fallback fonts applied: Nirmala UI, Tunga, Noto Sans Kannada");
+
+                // STEP 4 — Initialize PDF converter
+                SimpleLogger.Log("STEP 4: Initializing DocToPDFConverter...");
+                using DocToPDFConverter converter = new DocToPDFConverter();
+
+                converter.Settings.AutoDetectComplexScript = true;
+                SimpleLogger.Log("STEP 4 DONE: AutoDetectComplexScript = true");
+
+                // STEP 5 — Convert DOCX → PDF
+                SimpleLogger.Log("STEP 5: Converting DOCX to PDF...");
+                using PdfDocument pdfDocument = converter.ConvertToPDF(document);
+                SimpleLogger.Log("STEP 5 DONE: PDF document created in memory.");
+
+                // STEP 6 — Save PDF to file
+                SimpleLogger.Log($"STEP 6: Saving PDF to: {filePath}");
+                pdfDocument.Save(filePath);
+                SimpleLogger.Log("STEP 6 DONE: PDF saved successfully.");
+
+                // STEP 7 — Open in Explorer
+                SimpleLogger.Log("STEP 7: Opening PDF in Windows Explorer...");
+                ShowFileInExplorer(filePath);
+                SimpleLogger.Log("STEP 7 DONE: Explorer opened.");
+
+                SimpleLogger.Log("========== ExportToPdf: COMPLETED SUCCESSFULLY ==========");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log("========== ExportToPdf: ERROR OCCURRED ==========");
+                SimpleLogger.Log($"EXCEPTION: {ex.Message}");
+                SimpleLogger.Log(ex.StackTrace);
+                throw;
+            }
         }
-
-
-
 
         // -------------------------
         // EXPORT TO MARKDOWN
         // -------------------------
         public static void ExportToMarkdown(SfRichTextBoxAdv richTextBox, string filePath)
         {
+            SimpleLogger.Log("========== ExportToMarkdown: START ==========");
+
             try
             {
-                SimpleLogger.Log("ExportToMarkdown: Started");
-
+                // STEP 1 — Save editor content to DOCX stream
+                SimpleLogger.Log("STEP 1: Saving editor content to DOCX MemoryStream...");
                 using MemoryStream docStream = new MemoryStream();
                 richTextBox.Save(docStream, FormatType.Docx);
+                SimpleLogger.Log($"STEP 1 DONE: DOCX stream size = {docStream.Length} bytes");
+
                 docStream.Position = 0;
+                SimpleLogger.Log("MemoryStream.Position reset to 0.");
 
+                // STEP 2 — Load DOCX into WordDocument
+                SimpleLogger.Log("STEP 2: Loading WordDocument from stream...");
                 using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
-                document.Save(filePath, Syncfusion.DocIO.FormatType.Markdown);
+                SimpleLogger.Log("STEP 2 DONE: WordDocument loaded.");
 
-                SimpleLogger.Log($"ExportToMarkdown: Saved to {filePath}");
+                // STEP 3 — Save WordDocument as Markdown
+                SimpleLogger.Log($"STEP 3: Saving WordDocument as Markdown to: {filePath}");
+                document.Save(filePath, Syncfusion.DocIO.FormatType.Markdown);
+                SimpleLogger.Log("STEP 3 DONE: Markdown file saved successfully.");
+
+                // STEP 4 — Open in Explorer
+                SimpleLogger.Log("STEP 4: Opening Markdown file in Windows Explorer...");
                 ShowFileInExplorer(filePath);
+                SimpleLogger.Log("STEP 4 DONE: Explorer opened.");
+
+                SimpleLogger.Log("========== ExportToMarkdown: COMPLETED SUCCESSFULLY ==========");
             }
             catch (Exception ex)
             {
-                SimpleLogger.Log($"ExportToMarkdown FAILED: {ex.Message}\n{ex.StackTrace}");
+                SimpleLogger.Log("========== ExportToMarkdown: ERROR OCCURRED ==========");
+                SimpleLogger.Log($"EXCEPTION: {ex.Message}");
+                SimpleLogger.Log(ex.StackTrace);
                 throw;
             }
         }
-
 
         // -------------------------
         // EXPORT TO RTF
         // -------------------------
         public static void ExportToRtf(SfRichTextBoxAdv richTextBox, string filePath)
         {
+            SimpleLogger.Log("========== ExportToRtf: START ==========");
+
             try
             {
-                SimpleLogger.Log("ExportToRtf: Started");
-
+                // STEP 1 — Save editor content to RTF MemoryStream
+                SimpleLogger.Log("STEP 1: Saving editor content to RTF MemoryStream...");
                 using MemoryStream rtfStream = new MemoryStream();
                 richTextBox.Save(rtfStream, FormatType.Rtf);
+                SimpleLogger.Log($"STEP 1 DONE: RTF stream size = {rtfStream.Length} bytes");
 
+                // STEP 2 — Write RTF stream to file
+                SimpleLogger.Log($"STEP 2: Writing RTF stream to file: {filePath}");
                 File.WriteAllBytes(filePath, rtfStream.ToArray());
+                SimpleLogger.Log("STEP 2 DONE: RTF file saved successfully.");
 
-                SimpleLogger.Log($"ExportToRtf: Saved to {filePath}");
+                // STEP 3 — Open the file in Explorer
+                SimpleLogger.Log("STEP 3: Opening RTF file in Windows Explorer...");
                 ShowFileInExplorer(filePath);
+                SimpleLogger.Log("STEP 3 DONE: Explorer opened.");
+
+                SimpleLogger.Log("========== ExportToRtf: COMPLETED SUCCESSFULLY ==========");
             }
             catch (Exception ex)
             {
-                SimpleLogger.Log($"ExportToRtf FAILED: {ex.Message}\n{ex.StackTrace}");
+                SimpleLogger.Log("========== ExportToRtf: ERROR OCCURRED ==========");
+                SimpleLogger.Log($"EXCEPTION: {ex.Message}");
+                SimpleLogger.Log(ex.StackTrace);
                 throw;
             }
         }

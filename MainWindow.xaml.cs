@@ -566,6 +566,8 @@ namespace KannadaNudiEditor
 
 
 
+
+
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -592,31 +594,22 @@ namespace KannadaNudiEditor
                 });
 
                 SimpleLogger.Log($"PDF exported successfully: {filePath}");
-
-                MessageBox.Show(
-                    "PDF exported successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
             }
             catch (Exception ex)
             {
-                // 🔥 Log full error details
                 SimpleLogger.Log($"PDF export FAILED: {ex.Message}\n{ex.StackTrace}");
-
-                MessageBox.Show(
-                    $"Failed to export PDF:\n{ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageBox.Show($"Failed to export PDF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             finally
             {
                 LoadingView.Hide();
             }
+
+            // ✅ Show success message after loading overlay is hidden
+            MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
         private async void mdSave_Click(object sender, RoutedEventArgs e)
         {
@@ -628,27 +621,34 @@ namespace KannadaNudiEditor
                 Title = "Save as Markdown"
             };
 
-            if (saveDialog.ShowDialog() == true)
+            if (saveDialog.ShowDialog() != true)
+                return;
+
+            string filePath = saveDialog.FileName;
+
+            try
             {
-                string filePath = saveDialog.FileName;
+                LoadingView.Show();
 
-                try
+                await Task.Run(() =>
                 {
-                    LoadingView.Show();
-
-                    await Task.Run(() =>
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            DocumentExportHelper.ExportToMarkdown(richTextBoxAdv, filePath);
-                        });
-                    });
-                }
-                finally
-                {
-                    LoadingView.Hide();
-                }
+                    // Export Markdown directly, no need for Dispatcher.Invoke here
+                    DocumentExportHelper.ExportToMarkdown(richTextBoxAdv, filePath);
+                });
             }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Markdown export FAILED: {ex.Message}\n{ex.StackTrace}");
+                MessageBox.Show($"Failed to export Markdown:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            finally
+            {
+                LoadingView.Hide();
+            }
+
+            // Show success message after loading overlay is hidden
+            MessageBox.Show("Markdown exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async void rtfSave_Click(object sender, RoutedEventArgs e)
@@ -664,28 +664,31 @@ namespace KannadaNudiEditor
             if (dialog.ShowDialog() != true)
                 return;
 
+            string filePath = dialog.FileName;
+
             try
             {
                 LoadingView.Show();
 
                 await Task.Run(() =>
                 {
-                    DocumentExportHelper.ExportToRtf(richTextBoxAdv, dialog.FileName);
+                    DocumentExportHelper.ExportToRtf(richTextBoxAdv, filePath);
                 });
-
-                MessageBox.Show("RTF exported successfully!", "Success",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to export RTF:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.Log($"RTF export FAILED: {ex.Message}\n{ex.StackTrace}");
+                MessageBox.Show($"Failed to export RTF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             finally
             {
                 LoadingView.Hide();
             }
+
+            MessageBox.Show("RTF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
 
 
