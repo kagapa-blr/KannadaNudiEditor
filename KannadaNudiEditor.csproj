@@ -5,35 +5,28 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
 
-    <!-- Optional but recommended -->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <!-- App Branding -->
     <RootNamespace>KannadaNudiEditor</RootNamespace>
     <ApplicationIcon>Assets\nudi.ico</ApplicationIcon>
 
-    <!-- Improve build/publish consistency -->
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 
-    <!-- Ensures images, assets, exes are kept during publish -->
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
   </PropertyGroup>
 
-  <!-- EXEs and External Files -->
+  <!-- Include ENTIRE Assets folder recursively -->
   <ItemGroup>
-    <Content Include="Assets\kannadaKeyboard.exe" CopyToOutputDirectory="Always" />
-    <Content Include="Assets\recognize_mic.exe" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Assets\Custom_MyDictionary_kn_IN.dic" CopyToOutputDirectory="Always" />
-    <Content Include="Assets\kn_IN.dic" CopyToOutputDirectory="Always" />
-    <Content Include="Assets\default.dic" CopyToOutputDirectory="Always" />
+    <Content Include="Assets\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
-  <!-- WPF Resources -->
+  <!-- WPF Images from Images folder -->
   <ItemGroup>
     <Resource Include="Images\**\*.png" />
-    <Resource Include="Assets\**\*.png" />
   </ItemGroup>
 
   <!-- NuGet Packages -->

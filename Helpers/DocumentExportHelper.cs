@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocToPDFConverter;
+using Syncfusion.Office;
 using Syncfusion.Pdf;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
 
@@ -13,31 +14,33 @@ namespace KannadaNudiEditor.Helpers
         // -------------------------
         // EXPORT TO PDF
         // -------------------------
+
+
         public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath)
         {
-            try
-            {
-                SimpleLogger.Log("ExportToPdf: Started");
+            SimpleLogger.Log("ExportToPdf: Started.....");
+            using MemoryStream docStream = new MemoryStream();
+            richTextBox.Save(docStream, FormatType.Docx);
+            docStream.Position = 0;
 
-                using MemoryStream docStream = new MemoryStream();
-                richTextBox.Save(docStream, FormatType.Docx);
-                docStream.Position = 0;
+            using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
 
-                using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
-                using DocToPDFConverter converter = new DocToPDFConverter();
-                using PdfDocument pdfDocument = converter.ConvertToPDF(document);
+            // Fallback fonts for Kannada Unicode block (ensure these fonts are installed)
+            document.FontSettings.FallbackFonts.Add(
+                new FallbackFont(0x0C80, 0x0CFF, "Nirmala UI, Tunga, Noto Sans Kannada")); // Kannada range [web:5][web:29]
 
-                pdfDocument.Save(filePath);
+            using DocToPDFConverter converter = new DocToPDFConverter();
 
-                SimpleLogger.Log($"ExportToPdf: Saved to {filePath}");
-                ShowFileInExplorer(filePath);
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.Log($"ExportToPdf FAILED: {ex.Message}\n{ex.StackTrace}");
-                throw;
-            }
+            // Enable complex script auto detection
+            converter.Settings.AutoDetectComplexScript = true; // important for Indic scripts [web:13][web:16][web:17]
+            SimpleLogger.Log("ExportToPdf: Converting to PDF...");
+            using PdfDocument pdfDocument = converter.ConvertToPDF(document);
+            pdfDocument.Save(filePath);
+            
+            ShowFileInExplorer(filePath);
         }
+
+
 
 
         // -------------------------
