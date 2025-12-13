@@ -567,13 +567,16 @@ namespace KannadaNudiEditor
 
 
 
-
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 CloseBackstage();
                 SimpleLogger.Log("PDF Save initiated from backstage.");
+
+                string currentFont = richTextBoxAdv.Selection.CharacterFormat.FontFamily.Source;
+
+                SimpleLogger.Log("Current Font in RichTextBoxAdv: " + currentFont);
 
                 var saveDialog = new SaveFileDialog
                 {
@@ -582,7 +585,7 @@ namespace KannadaNudiEditor
                 };
 
                 if (saveDialog.ShowDialog() != true)
-                    return; // User cancelled
+                    return;
 
                 string filePath = saveDialog.FileName;
 
@@ -590,7 +593,11 @@ namespace KannadaNudiEditor
 
                 await Task.Run(() =>
                 {
-                    DocumentExportHelper.ExportToPdf(richTextBoxAdv, filePath);
+                    DocumentExportHelper.ExportToPdf(
+                        richTextBoxAdv,
+                        filePath,
+                        currentFont
+                    );
                 });
 
                 SimpleLogger.Log($"PDF exported successfully: {filePath}");
@@ -598,7 +605,8 @@ namespace KannadaNudiEditor
             catch (Exception ex)
             {
                 SimpleLogger.Log($"PDF export FAILED: {ex.Message}\n{ex.StackTrace}");
-                MessageBox.Show($"Failed to export PDF:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Failed to export PDF:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             finally
@@ -606,10 +614,9 @@ namespace KannadaNudiEditor
                 LoadingView.Hide();
             }
 
-            // ✅ Show success message after loading overlay is hidden
-            MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("PDF exported successfully!",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
 
         private async void mdSave_Click(object sender, RoutedEventArgs e)
         {

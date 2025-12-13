@@ -14,14 +14,15 @@ namespace KannadaNudiEditor.Helpers
         // -------------------------
         // EXPORT TO PDF
         // -------------------------
-
-        public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath)
+        public static void ExportToPdf(SfRichTextBoxAdv richTextBox, string filePath, string primaryFont)
         {
             SimpleLogger.Log("========== ExportToPdf: START ==========");
 
             try
             {
+                // -------------------------
                 // STEP 1 — Save editor content to DOCX stream
+                // -------------------------
                 SimpleLogger.Log("STEP 1: Saving editor content to DOCX MemoryStream...");
                 using MemoryStream docStream = new MemoryStream();
                 richTextBox.Save(docStream, FormatType.Docx);
@@ -30,35 +31,55 @@ namespace KannadaNudiEditor.Helpers
                 docStream.Position = 0;
                 SimpleLogger.Log("MemoryStream.Position reset to 0.");
 
+                // -------------------------
                 // STEP 2 — Load DOCX into WordDocument
+                // -------------------------
                 SimpleLogger.Log("STEP 2: Loading WordDocument from stream...");
-                using WordDocument document = new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
+                using WordDocument document =
+                    new WordDocument(docStream, Syncfusion.DocIO.FormatType.Docx);
                 SimpleLogger.Log("STEP 2 DONE: WordDocument loaded.");
 
-                // STEP 3 — Adding fallback fonts for Kannada Unicode block
+                // -------------------------
+                // STEP 3 — Apply dynamic Kannada fallback fonts
+                // -------------------------
                 SimpleLogger.Log("STEP 3: Adding Kannada fallback fonts...");
-                document.FontSettings.FallbackFonts.Add(
-                    new FallbackFont(0x0C80, 0x0CFF, "Nirmala UI, Tunga, Noto Sans Kannada"));
-                SimpleLogger.Log("STEP 3 DONE: Fallback fonts applied: Nirmala UI, Tunga, Noto Sans Kannada");
 
+                string fallbackFonts = string.IsNullOrWhiteSpace(primaryFont)
+                    ? "Nirmala UI, Tunga, Noto Sans Kannada"
+                    : $"{primaryFont}, Nirmala UI, Tunga, Noto Sans Kannada";
+
+                document.FontSettings.FallbackFonts.Add(
+                    new FallbackFont(0x0C80, 0x0CFF, fallbackFonts)
+                );
+
+                SimpleLogger.Log($"STEP 3 DONE: Fallback fonts applied: {fallbackFonts}");
+
+                // -------------------------
                 // STEP 4 — Initialize PDF converter
+                // -------------------------
                 SimpleLogger.Log("STEP 4: Initializing DocToPDFConverter...");
                 using DocToPDFConverter converter = new DocToPDFConverter();
 
                 converter.Settings.AutoDetectComplexScript = true;
                 SimpleLogger.Log("STEP 4 DONE: AutoDetectComplexScript = true");
 
+                // -------------------------
                 // STEP 5 — Convert DOCX → PDF
+                // -------------------------
                 SimpleLogger.Log("STEP 5: Converting DOCX to PDF...");
                 using PdfDocument pdfDocument = converter.ConvertToPDF(document);
                 SimpleLogger.Log("STEP 5 DONE: PDF document created in memory.");
 
+                // -------------------------
                 // STEP 6 — Save PDF to file
+                // -------------------------
                 SimpleLogger.Log($"STEP 6: Saving PDF to: {filePath}");
                 pdfDocument.Save(filePath);
                 SimpleLogger.Log("STEP 6 DONE: PDF saved successfully.");
 
+                // -------------------------
                 // STEP 7 — Open in Explorer
+                // -------------------------
                 SimpleLogger.Log("STEP 7: Opening PDF in Windows Explorer...");
                 ShowFileInExplorer(filePath);
                 SimpleLogger.Log("STEP 7 DONE: Explorer opened.");
