@@ -127,70 +127,90 @@ namespace KannadaNudiEditor
 
 
 
+
+
         private void ConfigureSpellChecker()
         {
             SimpleLogger.Log("=== SpellChecker Configuration Started ===");
 
             try
             {
-                string basePath = AppDomain.CurrentDomain.BaseDirectory;
-                SimpleLogger.Log($"Base Directory: {basePath}");
+                // --------------------------------------------------
+                // Resolve dictionaries via AppData (copy if missing)
+                // --------------------------------------------------
 
-                // Main dictionary (read-only)
-                string dictionaryPath = Path.Combine(basePath, "Assets", "kn_IN.dic");
-                SimpleLogger.Log($"Main Dictionary Path: {dictionaryPath}");
+                string standardDictionaryPath =
+                    DictionaryHelper.GetWritableDictionaryPath("kn_IN.dic");
 
-                if (!File.Exists(dictionaryPath))
+                string kannadaNudiBarahaDictionaryPath =
+                    DictionaryHelper.GetWritableDictionaryPath("KannadaNudiBaraha_Kn_IN.dic");
+
+                SimpleLogger.Log($"Standard Dictionary (kn_IN.dic): {standardDictionaryPath}");
+                SimpleLogger.Log($"KannadaNudiBaraha Dictionary: {kannadaNudiBarahaDictionaryPath}");
+
+                // --------------------------------------------------
+                // Validate existence
+                // --------------------------------------------------
+
+                if (!File.Exists(standardDictionaryPath))
                 {
-                    SimpleLogger.Log($"ERROR: Missing main dictionary at {dictionaryPath}");
-                    MessageBox.Show("Missing main dictionary: " + dictionaryPath);
+                    SimpleLogger.Log($"[ERROR] Standard dictionary missing: {standardDictionaryPath}");
+                    return;
                 }
 
-                // Custom dictionaries — writable in AppData
-                string customDictionaryPath1 = DictionaryHelper.GetWritableDictionaryPath("Custom_MyDictionary_kn_IN.dic");
-                string customDictionaryPath2 = DictionaryHelper.GetWritableDictionaryPath("default.dic");
+                if (!File.Exists(kannadaNudiBarahaDictionaryPath))
+                {
+                    SimpleLogger.Log($"[ERROR] KannadaNudiBaraha dictionary missing: {kannadaNudiBarahaDictionaryPath}");
+                    return;
+                }
 
-                SimpleLogger.Log($"Custom Dictionary 1 (AppData): {customDictionaryPath1}");
-                SimpleLogger.Log($"Custom Dictionary 2 (AppData): {customDictionaryPath2}");
+                // --------------------------------------------------
+                // Sync custom → standard BEFORE loading SpellChecker
+                // --------------------------------------------------
 
-                // Check existence
-                if (!File.Exists(customDictionaryPath1))
-                    SimpleLogger.Log($"ERROR: Missing custom dictionary: {customDictionaryPath1}");
+                SimpleLogger.Log("Starting dictionary sync (KannadaNudiBaraha → Standard)");
+                DictionaryHelper.SyncCustomToStandardDictionary();
+                SimpleLogger.Log("Dictionary sync completed");
 
-                if (!File.Exists(customDictionaryPath2))
-                    SimpleLogger.Log($"ERROR: Missing custom dictionary: {customDictionaryPath2}");
-
+                // --------------------------------------------------
                 // Initialize SpellChecker
+                // --------------------------------------------------
+
                 spellChecker = new SpellChecker
                 {
                     IsEnabled = false,
                     IgnoreUppercaseWords = false,
                     IgnoreAlphaNumericWords = true,
-                    UseFrameworkSpellCheck = false,
+                    UseFrameworkSpellCheck = false
                 };
 
-                SimpleLogger.Log("Adding dictionaries to SpellChecker...");
+                SimpleLogger.Log("Adding dictionaries to SpellChecker");
 
-                spellChecker.Dictionaries.Add(dictionaryPath);
-                SimpleLogger.Log("Main dictionary added.");
+                // Standard dictionary (unique, sorted, AppData)
+                spellChecker.Dictionaries.Add(standardDictionaryPath);
+                SimpleLogger.Log("Standard dictionary added");
 
-                spellChecker.CustomDictionaries.Add(customDictionaryPath1);
-                SimpleLogger.Log("Custom dictionary 1 added.");
-
-                spellChecker.CustomDictionaries.Add(customDictionaryPath2);
-                SimpleLogger.Log("Custom dictionary 2 added.");
+                // KannadaNudiBaraha dictionary (now empty, but still valid)
+                spellChecker.CustomDictionaries.Add(kannadaNudiBarahaDictionaryPath);
+                SimpleLogger.Log("KannadaNudiBaraha dictionary added");
 
                 richTextBoxAdv.SpellChecker = spellChecker;
-                SimpleLogger.Log("Assigned SpellChecker to RichTextBoxAdv.");
+                SimpleLogger.Log("SpellChecker assigned to RichTextBoxAdv");
 
                 SimpleLogger.Log("=== SpellChecker Configuration Completed Successfully ===");
             }
             catch (Exception ex)
             {
-                SimpleLogger.Log($"EXCEPTION in ConfigureSpellChecker: {ex}");
-                MessageBox.Show("SpellChecker failed to initialize:\n" + ex.Message);
+                SimpleLogger.Log($"[EXCEPTION] ConfigureSpellChecker: {ex}");
+                MessageBox.Show(
+                    "SpellChecker failed to initialize.\n\n" + ex.Message,
+                    "SpellChecker Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
+
 
 
         #region Events
