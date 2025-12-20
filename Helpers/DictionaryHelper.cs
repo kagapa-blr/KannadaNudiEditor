@@ -1,6 +1,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Principal;
 
 public static class DictionaryHelper
 {
@@ -155,11 +156,13 @@ public static class DictionaryHelper
 
 
 
-
     public static bool SyncCustomToStandardDictionary()
     {
         try
         {
+            string currentUser = WindowsIdentity.GetCurrent()?.Name ?? "unknown";
+            SimpleLogger.Log($"[Dictionary] Sync initiated by user: {currentUser}");
+
             string standardPath = GetWritableDictionaryPath("kn_IN.dic");
             string customPath = GetWritableDictionaryPath("KannadaNudiBaraha_Kn_IN.dic");
 
@@ -175,10 +178,7 @@ public static class DictionaryHelper
                 return false;
             }
 
-            // --------------------------------------------------
             // STEP 1: Read custom words
-            // --------------------------------------------------
-
             var customWords = File.ReadAllLines(customPath)
                                   .Select(w => w.Trim())
                                   .Where(w => !string.IsNullOrWhiteSpace(w))
@@ -193,10 +193,7 @@ public static class DictionaryHelper
 
             SimpleLogger.Log($"[Dictionary] Custom words found: {customWords.Count}");
 
-            // --------------------------------------------------
             // STEP 2: Sync into standard dictionary (UNIQUE)
-            // --------------------------------------------------
-
             var standardWords = new HashSet<string>(
                 File.ReadAllLines(standardPath)
                     .Select(w => w.Trim())
@@ -205,7 +202,6 @@ public static class DictionaryHelper
             );
 
             int mergedCount = 0;
-
             foreach (var word in customWords)
             {
                 if (standardWords.Add(word))
@@ -224,18 +220,16 @@ public static class DictionaryHelper
             SimpleLogger.Log($"[Dictionary] New words merged: {mergedCount}");
             SimpleLogger.Log($"[Dictionary] Total unique words in kn_IN.dic: {finalStandardList.Count}");
 
-            // --------------------------------------------------
             // STEP 3: Upload custom words to API
-            // --------------------------------------------------
-
             const string apiUrl = "https://kagapa.com/tools/api/v1/dictionary/user/add";
 
-            SimpleLogger.Log($"[Dictionary] Uploading {customWords.Count} words to API");
+            SimpleLogger.Log($"[Dictionary] Uploading {customWords.Count} words to API as user '{currentUser}'");
             SimpleLogger.Log($"[Dictionary] API Endpoint: {apiUrl}");
 
             var payload = new
             {
-                words = customWords
+                words = customWords,
+                added_by = currentUser
             };
 
             HttpResponseMessage response =
@@ -247,16 +241,12 @@ public static class DictionaryHelper
                     $"[Dictionary][ERROR] Upload failed: {response.StatusCode} | {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}"
                 );
 
-                // IMPORTANT: Do NOT clean up custom dictionary
                 return false;
             }
 
             SimpleLogger.Log("[Dictionary] Upload successful");
 
-            // --------------------------------------------------
-            // STEP 4: Cleanup custom dictionary (ONLY after upload)
-            // --------------------------------------------------
-
+            // STEP 4: Cleanup custom dictionary
             File.WriteAllText(customPath, string.Empty);
 
             string lastWord = finalStandardList.Count > 0
@@ -275,10 +265,6 @@ public static class DictionaryHelper
             return false;
         }
     }
-
-
-
-
 
 
 
