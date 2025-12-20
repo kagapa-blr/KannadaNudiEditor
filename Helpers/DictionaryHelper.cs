@@ -146,8 +146,15 @@ public static class DictionaryHelper
     // Rules:
     // - kn_IN.dic contains ONLY unique words
     // - Case-insensitive uniqueness
+    // - https://kagapa.com/tools/api/v1/dictionary/user/add   -> upload the words from custom dictionary 
+    // -if successfull uploaded then only clean the custom dictionary 
     // - Custom dictionary is cleared after sync
+
     // ======================================================
+
+
+
+
 
     public static bool SyncCustomToStandardDictionary()
     {
@@ -168,6 +175,28 @@ public static class DictionaryHelper
                 return false;
             }
 
+            // --------------------------------------------------
+            // STEP 1: Read custom words
+            // --------------------------------------------------
+
+            var customWords = File.ReadAllLines(customPath)
+                                  .Select(w => w.Trim())
+                                  .Where(w => !string.IsNullOrWhiteSpace(w))
+                                  .Distinct(StringComparer.OrdinalIgnoreCase)
+                                  .ToList();
+
+            if (customWords.Count == 0)
+            {
+                SimpleLogger.Log("[Dictionary] No custom words to sync");
+                return true;
+            }
+
+            SimpleLogger.Log($"[Dictionary] Custom words found: {customWords.Count}");
+
+            // --------------------------------------------------
+            // STEP 2: Sync into standard dictionary (UNIQUE)
+            // --------------------------------------------------
+
             var standardWords = new HashSet<string>(
                 File.ReadAllLines(standardPath)
                     .Select(w => w.Trim())
@@ -175,17 +204,13 @@ public static class DictionaryHelper
                 StringComparer.OrdinalIgnoreCase
             );
 
-            var customWords = File.ReadAllLines(customPath)
-                                  .Select(w => w.Trim())
-                                  .Where(w => !string.IsNullOrWhiteSpace(w));
-
-            int movedCount = 0;
+            int mergedCount = 0;
 
             foreach (var word in customWords)
             {
                 if (standardWords.Add(word))
                 {
-                    movedCount++;
+                    mergedCount++;
                 }
             }
 
@@ -194,16 +219,53 @@ public static class DictionaryHelper
                 .ToList();
 
             File.WriteAllLines(standardPath, finalStandardList);
+
+            SimpleLogger.Log($"[Dictionary] Synced to standard dictionary");
+            SimpleLogger.Log($"[Dictionary] New words merged: {mergedCount}");
+            SimpleLogger.Log($"[Dictionary] Total unique words in kn_IN.dic: {finalStandardList.Count}");
+
+            // --------------------------------------------------
+            // STEP 3: Upload custom words to API
+            // --------------------------------------------------
+
+            const string apiUrl = "https://kagapa.com/tools/api/v1/dictionary/user/add";
+
+            SimpleLogger.Log($"[Dictionary] Uploading {customWords.Count} words to API");
+            SimpleLogger.Log($"[Dictionary] API Endpoint: {apiUrl}");
+
+            var payload = new
+            {
+                words = customWords
+            };
+
+            HttpResponseMessage response =
+                http.PostAsJsonAsync(apiUrl, payload).GetAwaiter().GetResult();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SimpleLogger.Log(
+                    $"[Dictionary][ERROR] Upload failed: {response.StatusCode} | {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}"
+                );
+
+                // IMPORTANT: Do NOT clean up custom dictionary
+                return false;
+            }
+
+            SimpleLogger.Log("[Dictionary] Upload successful");
+
+            // --------------------------------------------------
+            // STEP 4: Cleanup custom dictionary (ONLY after upload)
+            // --------------------------------------------------
+
             File.WriteAllText(customPath, string.Empty);
 
             string lastWord = finalStandardList.Count > 0
                 ? finalStandardList[^1]
                 : "<EMPTY>";
 
-            SimpleLogger.Log("[Dictionary] Sync completed successfully");
-            SimpleLogger.Log($"[Dictionary] Words moved from custom dictionary: {movedCount}");
-            SimpleLogger.Log($"[Dictionary] Total unique words in kn_IN.dic: {finalStandardList.Count}");
+            SimpleLogger.Log("[Dictionary] Custom dictionary cleaned");
             SimpleLogger.Log($"[Dictionary] Last word in kn_IN.dic: {lastWord}");
+            SimpleLogger.Log("[Dictionary] Sync process completed successfully");
 
             return true;
         }
@@ -213,4 +275,11 @@ public static class DictionaryHelper
             return false;
         }
     }
+
+
+
+
+
+
+
 }
