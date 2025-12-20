@@ -2642,45 +2642,93 @@ namespace KannadaNudiEditor
 
         private void EnableSpellCheck_Click(object sender, RoutedEventArgs e)
         {
-            if (spellChecker == null)
-            {
-                SimpleLogger.Log("Spell checker not initialized.");
-                NudiInfoDialog.Show("Spell checker not initialized.");
-                return;
-            }
+            LoadingView.Show();
+            SimpleLogger.Log("Enable spell check requested.");
 
-            if (spellChecker.IsEnabled)
+            try
             {
-                SimpleLogger.Log("Spell check is already enabled.");
-                NudiInfoDialog.Show("Spell check is already enabled.");
-                return;
-            }
+                string message;
 
-            spellChecker.IsEnabled = true;
-            SimpleLogger.Log("Spell check enabled.");
-            NudiInfoDialog.Show("Spell check enabled.");
+                if (spellChecker == null)
+                {
+                    message = "Spell checker not initialized.";
+                    SimpleLogger.Log(message);
+                    return;
+                }
+
+                if (spellChecker.IsEnabled)
+                {
+                    message = "Spell check is already enabled.";
+                    SimpleLogger.Log(message);
+                    return;
+                }
+
+                spellChecker.IsEnabled = true;
+
+                message = "Spell check enabled.";
+                SimpleLogger.Log(message);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[EXCEPTION] EnableSpellCheck_Click: {ex}");
+                MessageBox.Show(
+                    "Failed to enable spell check.\n\n" + ex.Message,
+                    "Spell Check Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+            finally
+            {
+                LoadingView.Hide();
+            }
         }
 
         private void DisableSpellCheck_Click(object sender, RoutedEventArgs e)
         {
-            if (spellChecker == null)
-            {
-                SimpleLogger.Log("Spell checker not initialized.");
-                NudiInfoDialog.Show("Spell checker not initialized.");
-                return;
-            }
+            LoadingView.Show();
+            SimpleLogger.Log("Disable spell check requested.");
 
-            if (!spellChecker.IsEnabled)
+            try
             {
-                SimpleLogger.Log("Spell check is already disabled.");
-                NudiInfoDialog.Show("Spell check is already disabled.");
-                return;
-            }
+                string message;
 
-            spellChecker.IsEnabled = false;
-            SimpleLogger.Log("Spell check disabled.");
-            NudiInfoDialog.Show("Spell check disabled.");
+                if (spellChecker == null)
+                {
+                    message = "Spell checker not initialized.";
+                    SimpleLogger.Log(message);
+                    return;
+                }
+
+                if (!spellChecker.IsEnabled)
+                {
+                    message = "Spell check is already disabled.";
+                    SimpleLogger.Log(message);
+                    return;
+                }
+
+                spellChecker.IsEnabled = false;
+
+                message = "Spell check disabled.";
+                SimpleLogger.Log(message);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[EXCEPTION] DisableSpellCheck_Click: {ex}");
+                MessageBox.Show(
+                    "Failed to disable spell check.\n\n" + ex.Message,
+                    "Spell Check Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+            finally
+            {
+                LoadingView.Hide();
+            }
         }
+
+
 
 
 
