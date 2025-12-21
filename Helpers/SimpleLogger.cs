@@ -1,30 +1,33 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using Syncfusion.DocIO.DLS;
 
 public static class SimpleLogger
 {
-    private static readonly string BaseLogFolder = GetRootLogFolder();
-    private static readonly string DateFolder = Path.Combine(BaseLogFolder, DateTime.Now.ToString("dd-MM-yyyy"));
+    private static readonly object _lock = new();
     private static readonly string LogFilePath;
 
     static SimpleLogger()
     {
         try
         {
-            // Ensure date folder exists
-            Directory.CreateDirectory(DateFolder);
+            string baseLogFolder = GetRootLogFolder();
+            string dateFolder = Path.Combine(baseLogFolder, DateTime.Now.ToString("dd-MM-yyyy"));
+            Directory.CreateDirectory(dateFolder);
 
-            // Build log file name with timestamp
             string timestamp = DateTime.Now.ToString("HHmmss");
             string logFileName = $"NudiBaraha_{timestamp}.log";
-            LogFilePath = Path.Combine(DateFolder, logFileName);
 
-            Log("=== Application Started ===");
+            LogFilePath = Path.Combine(dateFolder, logFileName);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Logger init failed: " + ex.Message);
+            // Absolute fallback
+            string fallback = Path.Combine(Environment.CurrentDirectory, "NudiBaraha_fallback.log");
+            LogFilePath = fallback;
+
+            Debug.WriteLine("Logger init failed: " + ex);
         }
     }
 
@@ -33,30 +36,39 @@ public static class SimpleLogger
         try
         {
             string logMessage = $"{DateTime.Now:HH:mm:ss} | {message}";
-            File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
+            lock (_lock)
+            {
+                File.AppendAllText(LogFilePath, logMessage + Environment.NewLine);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // Silently ignore
+            Debug.WriteLine("Logging failed: " + ex.Message);
         }
     }
 
     public static void LogException(Exception ex, string context = "")
     {
-        Log($"[ERROR] {context} {ex.Message}\n{ex.StackTrace}");
+        if (ex == null)
+        {
+            Log($"[ERROR] {context} (Exception is null)");
+            return;
+        }
+
+        Log($"[ERROR] {context}\n{ex.Message}\n{ex.StackTrace}");
     }
 
+    [Obsolete("Use Log(string) instead.")]
     internal static void Log(IWParagraph para)
     {
-        throw new NotImplementedException();
+        if (para != null)
+            Log($"IWParagraph: {para.Text}");
     }
-
 
     private static string GetRootLogFolder()
     {
         try
         {
-            // Example: C:\Users\<User>\AppData\Local\KannadaNudiBaraha\Logs
             string appName = "KannadaNudiBaraha";
 
             string basePath = Path.Combine(
@@ -65,19 +77,14 @@ public static class SimpleLogger
                 "Logs"
             );
 
-            // Ensure directory exists
             Directory.CreateDirectory(basePath);
-
             return basePath;
         }
         catch
         {
-            // Final fallback – current folder (rarely needed)
             string fallback = Path.Combine(Environment.CurrentDirectory, "Logs");
             Directory.CreateDirectory(fallback);
             return fallback;
         }
     }
-
-
 }

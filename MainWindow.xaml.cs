@@ -1742,66 +1742,44 @@ namespace KannadaNudiEditor
 
         private void ribbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // If no changes, just close
-            if (_isDocumentModified == false)
+            var app = (App)Application.Current; // define once
+
+            if (!_isDocumentModified)
             {
                 SimpleLogger.Log("Window closing: no unsaved changes.");
-
-                // Kill keyboard process if running; skips if already exited
-                ((App)Application.Current).KillKeyboardProcess();
+                app.KillKeyboardProcess(); // terminate keyboard
                 return;
             }
 
-            string message;
-            string caption;
+            string message = LanguageToggleButton.IsChecked == true
+                ? "Do you want to save changes to the document before exiting?"
+                : "ನಿರ್ಗಮಿಸುವ ಮೊದಲು ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ?";
 
-            if (LanguageToggleButton.IsChecked == true) // English
-            {
-                message = "Do you want to save changes to the document before exiting?";
-                caption = "Save Document";
-            }
-            else // Kannada
-            {
-                message = "ನಿರ್ಗಮಿಸುವ ಮೊದಲು ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ?";
-                caption = "ಕಡತವನ್ನು ಉಳಿಸಿ";
-            }
+            string caption = LanguageToggleButton.IsChecked == true ? "Save Document" : "ಕಡತವನ್ನು ಉಳಿಸಿ";
 
-            // Show prompt to user
-            MessageBoxResult result = MessageBox.Show(
-                message,
-                caption,
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    SimpleLogger.Log("User chose to save changes before closing.");
                     try
                     {
                         SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
                         _isDocumentModified = false;
                         SimpleLogger.Log("Document saved successfully before closing.");
-
-                        // Kill keyboard if running
-                        ((App)Application.Current).KillKeyboardProcess();
+                        app.KillKeyboardProcess();
                     }
                     catch (Exception ex)
                     {
                         SimpleLogger.LogException(ex, "Error saving document before closing");
-                        MessageBox.Show($"Failed to save document:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
-                                        "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                        // Cancel closing if save failed
-                        e.Cancel = true;
+                        MessageBox.Show($"Failed to save document:\n{ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        e.Cancel = true; // Cancel closing if save failed
                     }
                     break;
 
                 case MessageBoxResult.No:
                     SimpleLogger.Log("User chose not to save changes and closed the window.");
-
-                    // Kill keyboard if running
-                    ((App)Application.Current).KillKeyboardProcess();
+                    app.KillKeyboardProcess();
                     break;
 
                 case MessageBoxResult.Cancel:
