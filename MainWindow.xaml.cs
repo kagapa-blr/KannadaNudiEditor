@@ -1746,6 +1746,9 @@ namespace KannadaNudiEditor
             if (_isDocumentModified == false)
             {
                 SimpleLogger.Log("Window closing: no unsaved changes.");
+
+                // Kill keyboard process if running; skips if already exited
+                ((App)Application.Current).KillKeyboardProcess();
                 return;
             }
 
@@ -1776,13 +1779,12 @@ namespace KannadaNudiEditor
                     SimpleLogger.Log("User chose to save changes before closing.");
                     try
                     {
-                        // Call the saving command
                         SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
-
-                        // Reset the flag after save
                         _isDocumentModified = false;
-
                         SimpleLogger.Log("Document saved successfully before closing.");
+
+                        // Kill keyboard if running
+                        ((App)Application.Current).KillKeyboardProcess();
                     }
                     catch (Exception ex)
                     {
@@ -1797,6 +1799,9 @@ namespace KannadaNudiEditor
 
                 case MessageBoxResult.No:
                     SimpleLogger.Log("User chose not to save changes and closed the window.");
+
+                    // Kill keyboard if running
+                    ((App)Application.Current).KillKeyboardProcess();
                     break;
 
                 case MessageBoxResult.Cancel:
@@ -1805,8 +1810,6 @@ namespace KannadaNudiEditor
                     break;
             }
         }
-
-
 
 
 
