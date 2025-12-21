@@ -65,10 +65,10 @@
   <sys:String x:Key="SortCaseSensitive">ಕ್ಷರ ಸಂವೇದಿ</sys:String>
   <sys:String x:Key="SortLanguage">ವಿಂಗಡಿಸುವ ಭಾಷೆ</sys:String>
   <sys:String x:Key="SortHelp">ವಿಂಗಡಿಸುವ ಕುರಿತು ಸಹಾಯ</sys:String>
-
-
-
-
+  <sys:String x:Key="SortTooltipTitle">ವಿಂಗಡಣೆ</sys:String>
+  <sys:String x:Key="SortTooltipDescription">
+    ವಿಂಗಡಣೆ ಸಂವಾದ ಪೆಟ್ಟಿಗೆಯನ್ನು ಬಳಸಿ ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಅಕ್ಷರಕ್ರಮದಲ್ಲಿ ಜೋಡಿಸಿ. ಏರಿಕೆ (ಅ–ಳ) ಅಥವಾ ಇಳಿಕೆ (ಳ–ಅ) ಕ್ರಮವನ್ನು ಆಯ್ಕೆ ಮಾಡಬಹುದು.
+  </sys:String>
 
 
 

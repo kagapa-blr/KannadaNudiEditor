@@ -1934,13 +1934,18 @@
                                                  Click="SortButton_Click">
 
                             <Syncfusion:RibbonButton.ToolTip>
-                                <Syncfusion:ScreenTip Description="{DynamicResource SortShortcut}"
-                                                      MaxWidth="250">
+                                <ToolTip MaxWidth="320"
+                                         MinWidth="250"
+                                         Padding="10">
                                     <StackPanel>
-                                        <TextBlock Text="{DynamicResource SortTooltipLine1}"/>
-                                        <TextBlock Text="{DynamicResource SortTooltipLine2}"/>
+                                        <TextBlock Text="{DynamicResource SortTooltipTitle}"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"
+                                                   Margin="0,0,0,8"/>
+                                        <TextBlock Text="{DynamicResource SortTooltipDescription}"
+                                                   TextWrapping="WrapWithOverflow"/>
                                     </StackPanel>
-                                </Syncfusion:ScreenTip>
+                                </ToolTip>
                             </Syncfusion:RibbonButton.ToolTip>
                         </Syncfusion:RibbonButton>
 

@@ -71,6 +71,10 @@
   <sys:String x:Key="SortCaseSensitive">Case sensitive</sys:String>
   <sys:String x:Key="SortLanguage">Sorting language</sys:String>
   <sys:String x:Key="SortHelp">Help on how to sort</sys:String>
+  <sys:String x:Key="SortTooltipTitle">Sort</sys:String>
+  <sys:String x:Key="SortTooltipDescription">
+    Arrange a list of words alphabetically using the Sort dialog box. Choose Ascending (A–Z) or Descending (Z–A) order.
+  </sys:String>
 
 
 
