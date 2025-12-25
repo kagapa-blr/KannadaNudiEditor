@@ -2,9 +2,9 @@ name: Build and Release Kannada Nudi Editor (WPF)
 
 on:
   push:
-    branches: ["main"]     # Release only after merge to main
+    branches: ["main"]
   pull_request:
-    branches: ["main"]     # Build only
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -46,7 +46,7 @@ jobs:
         path: kannadaNudi.zip
 
   release:
-    name: Clean Old Releases & Create Fresh One
+    name: Clean + Create Release
     runs-on: windows-latest
     needs: build
     if: github.event_name == 'push'
@@ -62,46 +62,42 @@ jobs:
       with:
         name: kannadaNudi-build
 
-    # 🧹 DELETE ALL EXISTING RELEASES & TAGS
-    - name: Delete all existing releases and tags
-      shell: pwsh
-      run: |
-        gh release list --limit 100 | ForEach-Object {
-          $tag = $_.Split(" ")[0]
-          Write-Host "Deleting release + tag $tag"
-          gh release delete $tag --yes
-          git push origin ":$tag"
-        }
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install GitHub CLI
+      run: choco install gh -y
 
-    # 🆕 ALWAYS START FRESH FROM v1.0.0 AND INCREMENT
-    - name: Determine New Version Tag
+    - name: Delete ALL Existing Releases and Tags
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        Write-Host "Fetching releases..."
+        $releases = gh release list --limit 200 --json tagName | ConvertFrom-Json
+
+        if ($releases.Count -eq 0) {
+          Write-Host "No releases found — skipping cleanup."
+        } else {
+          foreach ($r in $releases) {
+            $tag = $r.tagName
+            Write-Host "Deleting release + tag $tag"
+            gh release delete $tag -y
+            git push origin ":$tag" 2>$null
+          }
+        }
+
+    - name: Generate New Version Tag (always fresh start)
       id: version
       shell: pwsh
       run: |
-        git fetch --tags
-        $LATEST = git tag -l 'v*' --sort=-v:refname |
-          Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } |
-          Select-Object -First 1
-
-        if (-not $LATEST) {
-          $NEW = "v1.0.0"
-        } else {
-          $v = $LATEST.TrimStart('v').Split('.')
-          $patch = [int]$v[2] + 1
-          $NEW = "v$($v[0]).$($v[1]).$patch"
-        }
-
+        $NEW="v1.0.0"
         echo "NEW_VERSION=$NEW" >> $env:GITHUB_ENV
-        echo "New version: $NEW"
+        Write-Host "Using fresh version: $NEW"
 
     - name: Create and Push Tag
       run: |
         git tag ${{ env.NEW_VERSION }}
         git push origin ${{ env.NEW_VERSION }}
 
-    - name: Create Fresh GitHub Release
+    - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ env.NEW_VERSION }}
