@@ -7,11 +7,11 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Required for pushing tags and creating releases
+  contents: write
 
 jobs:
   build:
-    name: Build WPF App
+    name: Build & Package
     runs-on: windows-latest
 
     steps:
@@ -35,6 +35,22 @@ jobs:
           --configuration Release `
           --output published
 
+    # ------------------------------
+    # Install & Run Inno Setup
+    # ------------------------------
+    - name: Install Inno Setup
+      run: choco install innosetup --yes
+      shell: pwsh
+
+    - name: Build Installer (Inno Setup)
+      run: |
+        $env:InnoPublishDir = "$(Resolve-Path published)"
+        iscc ".github/workflows/setup.iss" /DSourceDir="$env:InnoPublishDir" /O"installer"
+      shell: pwsh
+
+    # ------------------------------
+    # Package Build Output
+    # ------------------------------
     - name: Zip Published Files
       run: Compress-Archive -Path published\* -DestinationPath kannadaNudi.zip
       shell: pwsh
@@ -43,8 +59,14 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: kannadaNudi-build
-        path: kannadaNudi.zip
+        path: |
+          kannadaNudi.zip
+          installer\*.exe
 
+
+  # --------------------------------
+  # Release Job
+  # --------------------------------
   release:
     name: Create GitHub Release
     runs-on: windows-latest
@@ -90,6 +112,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ env.NEW_VERSION }}
-        files: kannadaNudi.zip
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        files: |
+          kannadaNudi.zip
+          *.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
