@@ -9,16 +9,9 @@ namespace KannadaNudiEditor.Helpers
 {
     public static class FileConversionService
     {
-        // =========================
-        // Public API
-        // =========================
         public static string AsciiToUnicodeConverter(string input) => Convert(input, Direction.AsciiToUnicode);
-
         public static string UnicodeToAsciiConverter(string input) => Convert(input, Direction.UnicodeToAscii);
 
-        // =========================
-        // Direction + config cache
-        // =========================
         private enum Direction { AsciiToUnicode, UnicodeToAscii }
 
         private static readonly Lazy<ConversionConfig> A2U = new(() => LoadConfig(Direction.AsciiToUnicode));
@@ -26,39 +19,30 @@ namespace KannadaNudiEditor.Helpers
 
         private static ConversionConfig GetCfg(Direction dir) => dir == Direction.AsciiToUnicode ? A2U.Value : U2A.Value;
 
-        // =========================
-        // Conversion pipeline
-        // =========================
         private static string Convert(string? input, Direction dir)
         {
             try
             {
                 if (string.IsNullOrEmpty(input))
-                {
-                    SimpleLogger.Log($"[{dir}] Empty input.");
                     return input ?? string.Empty;
-                }
 
                 var cfg = GetCfg(dir);
 
-                // Pre normalize only for ASCII->Unicode direction (Unicode input shouldn't be altered like this)
-                string stage0 = (dir == Direction.AsciiToUnicode) ? PreNormalizeAscii(input, cfg) : input;
+                string stage0 = input;
 
-                // Insert ZWNJ only when enabled
-                string stage1 = cfg.EnableZwnjInsertion ? PreInsertZwnj(stage0, cfg) : stage0;
+                if (dir == Direction.AsciiToUnicode)
+                {
+                    stage0 = FileConversionUtilities.PreNormalizeAscii(stage0, cfg.AsciiHalantChar, cfg.AsciiJoinCharsBeforeNoSpace);
+                    if (cfg.EnableZwnjInsertion)
+                        stage0 = FileConversionUtilities.PreInsertZwnj(stage0, cfg.AsciiHalantChar, cfg.AsciiConsonantStartChars, cfg.Zwnj);
+                }
 
-                // Core token mapping
-                string mapped = ProcessStreamLongestToken(stage1, cfg);
+                string mapped = ProcessStreamLongestToken(stage0, cfg);
 
-                // Kannada-specific reorder/normalization only for A2U (by config flag)
-                string normalized = cfg.EnableKannadaClusterPostProcess
-                    ? PostProcessKannadaClusters(mapped, cfg)
-                    : mapped;
+                if (cfg.EnableKannadaClusterPostProcess)
+                    mapped = FileConversionUtilities.PostProcessKannadaClusters(mapped, cfg.DependentVowels, cfg.Halant);
 
-                // Fixups (run-based)
-                string finalText = ApplyPostFixups(normalized, cfg);
-
-                //SimpleLogger.Log($"[{dir}] Done | chars={finalText.Length}");
+                string finalText = FileConversionUtilities.ApplyPostFixupsKannadaRuns(mapped, cfg.PostFixupsPairs);
                 return finalText;
             }
             catch (Exception ex)
@@ -68,16 +52,11 @@ namespace KannadaNudiEditor.Helpers
             }
         }
 
-        // =========================
-        // JSON config load
-        // =========================
         private static ConversionConfig LoadConfig(Direction dir)
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string fileName = dir == Direction.AsciiToUnicode ? "AsciiToUnicodeMapping.json" : "UnicodeToAsciiMapping.json";
             string jsonPath = Path.Combine(baseDir, "Resources", fileName);
-
-            SimpleLogger.Log($"[{dir}] Loading mapping JSON: {jsonPath}");
 
             if (!File.Exists(jsonPath))
                 throw new FileNotFoundException($"{fileName} not found.", jsonPath);
@@ -88,85 +67,19 @@ namespace KannadaNudiEditor.Helpers
             var root = JsonSerializer.Deserialize<ConversionJson>(json, opts)
                        ?? throw new InvalidOperationException($"Failed to deserialize {fileName}.");
 
-            var cfg = ConversionConfig.From(root, dir);
-
-            SimpleLogger.Log(
-                $"[{dir}] Loaded | mapping={cfg.Mapping.Count} | broken={cfg.BrokenCases.Count} | fixups={cfg.PostFixups.Count} | vattu={cfg.Vattaksharagalu.Count} | arka={cfg.AsciiArkavattu.Count}");
-
-            return cfg;
+            return ConversionConfig.From(root, dir);
         }
 
         private static JsonSerializerOptions CreateJsonOptions()
             => new()
             {
                 PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip,  // allow comments [web:31]
-                AllowTrailingCommas = true                       // allow trailing commas [web:25]
+                ReadCommentHandling = JsonCommentHandling.Skip, // [web:31]
+                AllowTrailingCommas = true // [web:25]
             };
 
-        // =========================
-        // ASCII pre-normalization (A2U only)
-        // =========================
-        private static string PreNormalizeAscii(string input, ConversionConfig cfg)
-        {
-            if (string.IsNullOrEmpty(input)) return input;
+        // ---- core tokenizer (kept here; depends on cfg mapping dictionaries) ----
 
-            // A) Remove whitespace after ASCII halant (ï + ' ' or ï + '\t')
-            input = input.Replace($"{cfg.AsciiHalantChar} ", cfg.AsciiHalantChar.ToString(), StringComparison.Ordinal)
-                         .Replace($"{cfg.AsciiHalantChar}\t", cfg.AsciiHalantChar.ToString(), StringComparison.Ordinal);
-
-            // B) Remove whitespace BEFORE special join-chars (fixes: "vÀvÀÛ é..." -> "vÀvÀÛé...")
-            if (cfg.AsciiJoinCharsBeforeNoSpace.Count > 0)
-            {
-                var sb = new StringBuilder(input.Length);
-                for (int i = 0; i < input.Length; i++)
-                {
-                    char ch = input[i];
-
-                    if ((ch == ' ' || ch == '\t') && i + 1 < input.Length)
-                    {
-                        char next = input[i + 1];
-                        if (cfg.AsciiJoinCharsBeforeNoSpace.Contains(next))
-                            continue; // drop this whitespace
-                    }
-
-                    sb.Append(ch);
-                }
-                input = sb.ToString();
-            }
-
-            return input;
-        }
-
-        // =========================
-        // ZWNJ insertion (A2U)
-        // =========================
-        private static string PreInsertZwnj(string input, ConversionConfig cfg)
-        {
-            if (string.IsNullOrEmpty(input)) return input;
-            if (input.IndexOf(cfg.AsciiHalantChar) < 0) return input;
-
-            var sb = new StringBuilder(input.Length + 16);
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                char ch = input[i];
-                sb.Append(ch);
-
-                if (ch == cfg.AsciiHalantChar && i + 1 < input.Length)
-                {
-                    char next = input[i + 1];
-                    if (cfg.AsciiConsonantStartChars.Contains(next))
-                        sb.Append(cfg.Zwnj);
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        // =========================
-        // Core mapping: streaming longest token match
-        // =========================
         private static string ProcessStreamLongestToken(string text, ConversionConfig cfg)
         {
             if (text == null) return string.Empty;
@@ -202,7 +115,7 @@ namespace KannadaNudiEditor.Helpers
 
                 if (cfg.Mapping.TryGetValue(t, out string mapped))
                 {
-                    if (cfg.EnableZwjAfterHalant && op.Count > 0 && EndsWith(op[^1], cfg.Halant))
+                    if (cfg.EnableZwjAfterHalant && op.Count > 0 && FileConversionUtilities.EndsWith(op[^1], cfg.Halant))
                         op.Add(cfg.Zwj.ToString());
 
                     op.Add(mapped);
@@ -211,7 +124,6 @@ namespace KannadaNudiEditor.Helpers
 
                 if (i > 0) continue;
 
-                // fallback handlers
                 if (cfg.AsciiArkavattu.TryGetValue(t, out var ra))
                     ProcessArkavattu(op, ra, cfg);
                 else if (cfg.Vattaksharagalu.TryGetValue(t, out var baseLetter))
@@ -232,22 +144,9 @@ namespace KannadaNudiEditor.Helpers
             return 0;
         }
 
-        private static bool EndsWith(string s, char c) => !string.IsNullOrEmpty(s) && s[^1] == c;
-
-        private static bool IsSingleChar(string s, out char c)
-        {
-            c = default;
-            if (string.IsNullOrEmpty(s) || s.Length != 1) return false;
-            c = s[0];
-            return true;
-        }
-
         private static bool IsSingleDependentVowel(string s, ConversionConfig cfg)
-            => IsSingleChar(s, out char c) && cfg.DependentVowels.Contains(c);
+            => FileConversionUtilities.IsSingleChar(s, out char c) && cfg.DependentVowels.Contains(c);
 
-        // =========================
-        // Fallback handlers
-        // =========================
         private static void ProcessVattakshara(List<string> letters, string baseLetter, ConversionConfig cfg)
         {
             string last = letters.Count > 0 ? letters[^1] : string.Empty;
@@ -305,139 +204,14 @@ namespace KannadaNudiEditor.Helpers
         {
             string last = letters.Count > 0 ? letters[^1] : string.Empty;
 
-            if (IsSingleChar(last, out char lastChar) && bc.Mapping.TryGetValue(lastChar, out char replacement))
+            if (FileConversionUtilities.IsSingleChar(last, out char lastChar) && bc.Mapping.TryGetValue(lastChar, out char replacement))
                 letters[^1] = replacement.ToString();
             else
                 letters.Add(bc.Value);
         }
 
-        // =========================
-        // Postprocess 1: Kannada run normalization (A2U)
-        // =========================
-        private static string PostProcessKannadaClusters(string text, ConversionConfig cfg)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
+        // ---- DTOs ----
 
-            var sb = new StringBuilder(text.Length);
-            int i = 0;
-
-            while (i < text.Length)
-            {
-                if (!IsKannadaOrJoiner(text[i]))
-                {
-                    sb.Append(text[i]);
-                    i++;
-                    continue;
-                }
-
-                int start = i;
-                while (i < text.Length && IsKannadaOrJoiner(text[i]))
-                    i++;
-
-                string run = text.Substring(start, i - start);
-                sb.Append(NormalizeKannadaRun(run, cfg));
-            }
-
-            return sb.ToString();
-        }
-
-        private static string NormalizeKannadaRun(string run, ConversionConfig cfg)
-        {
-            var sb = new StringBuilder(run.Length);
-            int i = 0;
-
-            while (i < run.Length)
-            {
-                char ch = run[i];
-
-                if (!cfg.DependentVowels.Contains(ch))
-                {
-                    sb.Append(ch);
-                    i++;
-                    continue;
-                }
-
-                // Move vowel sign after (halant+consonant)+ chain when it incorrectly appears before it
-                if (i + 1 < run.Length && run[i + 1] == cfg.Halant)
-                {
-                    char vowel = ch;
-                    int j = i + 1;
-
-                    var chain = new StringBuilder();
-                    while (j < run.Length && run[j] == cfg.Halant)
-                    {
-                        if (j + 1 >= run.Length) break;
-
-                        char cons = run[j + 1];
-                        if (!IsKannadaConsonant(cons)) break;
-
-                        chain.Append(cfg.Halant);
-                        chain.Append(cons);
-                        j += 2;
-                    }
-
-                    sb.Append(chain);
-                    sb.Append(vowel);
-
-                    i = j;
-                    continue;
-                }
-
-                sb.Append(ch);
-                i++;
-            }
-
-            return sb.ToString();
-        }
-
-        private static bool IsKannadaConsonant(char c)
-            => (c >= '\u0C95' && c <= '\u0CB9') || c == '\u0CDE';
-
-        // Kannada + ZWJ/ZWNJ run detection [web:114]
-        private static bool IsKannadaOrJoiner(char c)
-            => (c >= '\u0C80' && c <= '\u0CFF') || c == '\u200C' || c == '\u200D';
-
-        // =========================
-        // Postprocess 2: fixups (run-based)
-        // =========================
-        private static string ApplyPostFixups(string txt, ConversionConfig cfg)
-        {
-            if (string.IsNullOrEmpty(txt)) return txt;
-            if (cfg.PostFixups.Count == 0) return txt;
-
-            var sb = new StringBuilder(txt.Length);
-            int i = 0;
-
-            while (i < txt.Length)
-            {
-                if (!IsKannadaOrJoiner(txt[i]))
-                {
-                    sb.Append(txt[i]);
-                    i++;
-                    continue;
-                }
-
-                int start = i;
-                while (i < txt.Length && IsKannadaOrJoiner(txt[i]))
-                    i++;
-
-                string run = txt.Substring(start, i - start);
-
-                foreach (var fx in cfg.PostFixups)
-                {
-                    if (!string.IsNullOrEmpty(fx.From))
-                        run = run.Replace(fx.From, fx.To ?? string.Empty, StringComparison.Ordinal);
-                }
-
-                sb.Append(run);
-            }
-
-            return sb.ToString();
-        }
-
-        // =========================
-        // DTOs + runtime config
-        // =========================
         private sealed class ConversionConfig
         {
             public required int MaxTokenLength { get; init; }
@@ -456,7 +230,9 @@ namespace KannadaNudiEditor.Helpers
             public required Dictionary<string, string> Vattaksharagalu { get; init; }
             public required Dictionary<string, string> AsciiArkavattu { get; init; }
             public required Dictionary<string, BrokenCase> BrokenCases { get; init; }
+
             public required List<PostFixup> PostFixups { get; init; }
+            public required List<(string From, string To)> PostFixupsPairs { get; init; }
 
             public required bool EnableZwnjInsertion { get; init; }
             public required bool EnableZwjAfterHalant { get; init; }
@@ -475,8 +251,10 @@ namespace KannadaNudiEditor.Helpers
                 char halant = FirstOrDefault(root.Meta.Halant, '\u0CCD');
                 char asciiHalantChar = FirstOrDefault(root.Meta.AsciiHalantChar, '\u00EF');
 
-                string consonantStarts = root.AsciiConsonantStartChars ?? string.Empty;
-                string joinBeforeNoSpace = root.AsciiJoinCharsBeforeNoSpace ?? string.Empty;
+                var postFixups = (root.PostFixups ?? new List<PostFixupJson>())
+                    .Where(x => x != null)
+                    .Select(x => new PostFixup { From = x!.From ?? string.Empty, To = x!.To ?? string.Empty })
+                    .ToList();
 
                 return new ConversionConfig
                 {
@@ -486,23 +264,20 @@ namespace KannadaNudiEditor.Helpers
                     Halant = halant,
 
                     AsciiHalantChar = asciiHalantChar,
-                    AsciiConsonantStartChars = new HashSet<char>(consonantStarts),
-                    AsciiJoinCharsBeforeNoSpace = new HashSet<char>(joinBeforeNoSpace),
+                    AsciiConsonantStartChars = new HashSet<char>(root.AsciiConsonantStartChars ?? string.Empty),
+                    AsciiJoinCharsBeforeNoSpace = new HashSet<char>(root.AsciiJoinCharsBeforeNoSpace ?? string.Empty),
 
-                    Mapping = root.Mapping, // keep key exactness (don’t ignore case)
+                    Mapping = root.Mapping,
                     DependentVowels = ToCharSet(root.DependentVowels),
                     IgnoreList = ToCharSet(root.IgnoreList),
 
                     Vattaksharagalu = root.Vattaksharagalu ?? new Dictionary<string, string>(StringComparer.Ordinal),
                     AsciiArkavattu = root.AsciiArkavattu ?? new Dictionary<string, string>(StringComparer.Ordinal),
-
                     BrokenCases = (root.BrokenCases ?? new Dictionary<string, BrokenCaseJson>())
                         .ToDictionary(kv => kv.Key, kv => BrokenCase.From(kv.Value), StringComparer.Ordinal),
 
-                    PostFixups = (root.PostFixups ?? new List<PostFixupJson>())
-                        .Where(x => x != null)
-                        .Select(x => new PostFixup { From = x!.From ?? string.Empty, To = x!.To ?? string.Empty })
-                        .ToList(),
+                    PostFixups = postFixups,
+                    PostFixupsPairs = postFixups.Select(p => (p.From, p.To)).ToList(),
 
                     EnableZwnjInsertion = dir == Direction.AsciiToUnicode,
                     EnableZwjAfterHalant = dir == Direction.AsciiToUnicode,
@@ -510,8 +285,7 @@ namespace KannadaNudiEditor.Helpers
                 };
             }
 
-            private static char FirstOrDefault(string? s, char fallback)
-                => !string.IsNullOrEmpty(s) ? s[0] : fallback;
+            private static char FirstOrDefault(string? s, char fallback) => !string.IsNullOrEmpty(s) ? s[0] : fallback;
 
             private static HashSet<char> ToCharSet(string[]? arr)
                 => new((arr ?? Array.Empty<string>())
