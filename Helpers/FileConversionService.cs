@@ -70,8 +70,8 @@ namespace KannadaNudiEditor.Helpers
             => new()
             {
                 PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip, // allow comments [web:34]
-                AllowTrailingCommas = true // allow trailing commas [web:34]
+                ReadCommentHandling = JsonCommentHandling.Skip, // allow comments [web:13]
+                AllowTrailingCommas = true // allow trailing commas [web:13]
             };
     }
 }

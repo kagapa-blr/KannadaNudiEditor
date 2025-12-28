@@ -412,9 +412,9 @@
                                                             <Border x:Name="Border"
                                                                     Background="Gray"
                                                                     Opacity="0.1">
-                                                                <Border.BitmapEffect>
-                                                                    <BlurBitmapEffect/>
-                                                                </Border.BitmapEffect>
+                                                                <Border.Effect>
+                                                                    <BlurEffect Radius="3"/>
+                                                                </Border.Effect>
                                                             </Border>
                                                             <ContentPresenter Margin="3"/>
                                                         </Grid>
@@ -3252,7 +3252,5 @@
                 </Syncfusion:SpellChecker>
             </RichTextBoxAdv:SfRichTextBoxAdv.SpellChecker>
         </RichTextBoxAdv:SfRichTextBoxAdv>
-    
-    
     </Grid>
 </Syncfusion:RibbonWindow>
