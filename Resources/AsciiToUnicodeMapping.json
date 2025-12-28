@@ -4,8 +4,12 @@
         "version": 3,
         "maxTokenLength": 4,
         "zwj": "\u200D",
-        "halant": "್"
+        "zwnj": "\u200C",
+        "halant": "\u0CCD",
+        "asciiHalantChar": "\u00EF"
     },
+    "asciiConsonantStartChars": "JRmpL°¬aej0µqC§Sªkv¿y¢¼lAbFU£E®¾±DGKPMQZo²¹z¶½¨»urT¦gndNfwWItHc«µO¸VYºx¥©X",
+    "asciiJoinCharsBeforeNoSpace": "éçæðñòÃÄÆÈÊÌÍÎÏÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæèêëìíî",
     "mapping": {
         "C": "ಅ",
         "D": "ಆ",
@@ -237,7 +241,8 @@
         "¥Áæ": "ಪ್ರ",
         "PÉÆ": "ಕೊ",
         "PÉÆÃ": "ಕೋ",
-        "¸ÀÌø": "ಸ್ಕೃ"
+        "¸ÀÌø": "ಸ್ಕೃ",
+        "AiÉÆÃ": "ಯೋ"
     },
     "brokenCases": {
         "Ã": {
@@ -270,7 +275,6 @@
         }
     },
     "dependentVowels": [
-        "್",
         "ಾ",
         "ಿ",
         "ೀ",
@@ -331,20 +335,12 @@
     },
     "postFixups": [
         {
-            "from": "ೆೀ",
-            "to": "ೇ"
-        },
-        {
-            "from": "ೆು",
-            "to": "ೊ"
-        },
-        {
             "from": "ೊ",
             "to": "ೊ"
         },
         {
-            "from": "ೆಾ",
-            "to": "ೊಾ"
+            "from": "ೋ",
+            "to": "ೋ"
         },
         {
             "from": "ಿೀ",
