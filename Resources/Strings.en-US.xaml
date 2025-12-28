@@ -514,4 +514,17 @@
   <sys:String x:Key="LoadingTitle">Loading...</sys:String>
   <sys:String x:Key="LoadingDescription">Please wait while we process your request</sys:String>
 
+
+
+
+
+  <!-- =========================== -->
+  <!-- Conversion -->
+  <!-- =========================== -->
+  <sys:String x:Key="ConversionTitle">Conversion</sys:String>
+  <sys:String x:Key="AsciiToUnicodeLabel">ASCII to Unicode</sys:String>
+  <sys:String x:Key="UnicodeToAsciiLabel">Unicode to ASCII</sys:String>
+
+
+
 </ResourceDictionary>
