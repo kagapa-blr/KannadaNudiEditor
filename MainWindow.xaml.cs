@@ -2712,11 +2712,6 @@ namespace KannadaNudiEditor
 
 
 
-
-
-
-
-
         private async void AsciiToUnicodeButton_Click(object sender, RoutedEventArgs e)
             => await ConvertFileAsync(FileConversionService.AsciiToUnicodeConverter, "ASCII to Unicode");
 
