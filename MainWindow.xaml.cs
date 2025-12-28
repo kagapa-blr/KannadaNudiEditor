@@ -19,7 +19,6 @@ using System.Collections.ObjectModel;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
 using KannadaNudiEditor.Views.PageNumber;
-using KannadaNudiEditor.Views.Common;
 
 
 namespace KannadaNudiEditor
@@ -2727,6 +2726,293 @@ namespace KannadaNudiEditor
                 LoadingView.Hide();
             }
         }
+
+
+
+
+
+
+
+
+
+        private async void AsciiToUnicodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ConvertFileAsync(FileConversionService.AsciiToUnicodeConverter, "ASCII to Unicode");
+        }
+
+        private async void UnicodeToAsciiButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ConvertFileAsync(FileConversionService.UnicodeToAsciiConverter, "Unicode to ASCII");
+        }
+
+
+        private async Task ConvertFileAsync1(Func<string, string> converter, string operationName)
+        {
+            try
+            {
+                // 1. File Selection
+                var dlg = new OpenFileDialog
+                {
+                    Filter = "All Files|*.txt;*.docx;*.doc;*.rtf",
+                    Title = $"Select file for {operationName}"
+                };
+
+                if (dlg.ShowDialog() != true) return;
+
+                string filePath = dlg.FileName;
+                string fileName = Path.GetFileName(filePath);
+                SimpleLogger.Log($"[{operationName}] Loading {fileName}");
+
+                LoadingView.Show();
+
+                // 2. Load and Convert on UI thread
+                int paraCount = 0;
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    // Load document
+                    var tempEditor = new SfRichTextBoxAdv();
+
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        FormatType format = Path.GetExtension(filePath).ToLowerInvariant() switch
+                        {
+                            ".txt" => FormatType.Txt,
+                            ".doc" => FormatType.Doc,
+                            ".rtf" => FormatType.Rtf,
+                            _ => FormatType.Docx
+                        };
+
+                        tempEditor.Load(fs, format);
+                    }
+
+                    SimpleLogger.Log($"[{operationName}] Document loaded, converting...");
+
+                    // Convert paragraphs while preserving all formatting
+                    foreach (SectionAdv section in tempEditor.Document.Sections)
+                    {
+                        foreach (BlockAdv block in section.Blocks)
+                        {
+                            if (block is ParagraphAdv para && para.Inlines.Count > 0)
+                            {
+                                // Collect all text from inlines
+                                var textParts = para.Inlines
+                                    .OfType<SpanAdv>()
+                                    .Where(span => !string.IsNullOrEmpty(span.Text))
+                                    .Select(span => span.Text);
+
+                                string originalText = string.Concat(textParts);
+
+                                if (!string.IsNullOrEmpty(originalText))
+                                {
+                                    string converted = converter(originalText);
+
+                                    // Get first span's formatting to preserve it
+                                    var firstSpan = para.Inlines.OfType<SpanAdv>().FirstOrDefault();
+
+                                    // Clear and add new span with preserved formatting
+                                    para.Inlines.Clear();
+                                    var newSpan = new SpanAdv
+                                    {
+                                        Text = converted
+                                    };
+
+                                    // Copy formatting from original if exists
+                                    if (firstSpan != null)
+                                    {
+                                        newSpan.CharacterFormat.FontSize = firstSpan.CharacterFormat.FontSize;
+                                        newSpan.CharacterFormat.Bold = firstSpan.CharacterFormat.Bold;
+                                        newSpan.CharacterFormat.Italic = firstSpan.CharacterFormat.Italic;
+                                        newSpan.CharacterFormat.Underline = firstSpan.CharacterFormat.Underline;
+                                        newSpan.CharacterFormat.FontColor = firstSpan.CharacterFormat.FontColor;
+                                    }
+
+                                    // Set Kannada font
+                                    newSpan.CharacterFormat.FontFamily =
+                                        new System.Windows.Media.FontFamily("NudiParijatha");
+
+                                    para.Inlines.Add(newSpan);
+                                }
+
+                                paraCount++;
+                            }
+                        }
+                    }
+
+                    SimpleLogger.Log($"[{operationName}] Converted {paraCount} paragraphs");
+
+                    // Apply to editor - this preserves page layout
+                    richTextBoxAdv.Document = tempEditor.Document;
+                    richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(filePath);
+                    currentFilePath = string.Empty;
+
+                }, System.Windows.Threading.DispatcherPriority.Normal);
+
+                SimpleLogger.Log($"[{operationName}] Success");
+
+                MessageBox.Show($"Conversion completed!\n\nParagraphs: {paraCount}",
+                    operationName, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[{operationName}] ERROR: {ex.Message}");
+                MessageBox.Show($"Failed:\n\n{ex.Message}", operationName,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv?.Focus();
+                if (ribbon != null) ribbon.IsBackStageVisible = false;
+            }
+        }
+
+
+
+        private async Task ConvertFileAsync(Func<string, string> converter, string operationName)
+        {
+            try
+            {
+                // 1) File Selection
+                var dlg = new OpenFileDialog
+                {
+                    Filter = "All Files|*.txt;*.docx;*.doc;*.rtf",
+                    Title = $"Select file for {operationName}"
+                };
+
+                if (dlg.ShowDialog() != true) return;
+
+                string filePath = dlg.FileName;
+                string fileName = Path.GetFileName(filePath);
+                SimpleLogger.Log($"[{operationName}] Loading {fileName}");
+
+                LoadingView.Show();
+
+                int paraCount = 0;
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    // ---------------------------
+                    // Load into temp editor
+                    // ---------------------------
+                    var tempEditor = new SfRichTextBoxAdv();
+
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        FormatType format = Path.GetExtension(filePath).ToLowerInvariant() switch
+                        {
+                            ".txt" => FormatType.Txt,
+                            ".doc" => FormatType.Doc,
+                            ".rtf" => FormatType.Rtf,
+                            _ => FormatType.Docx
+                        };
+
+                        tempEditor.Load(fs, format);
+                    }
+
+                    SimpleLogger.Log($"[{operationName}] Document loaded, converting...");
+
+                    // ---------------------------
+                    // Convert paragraphs (your original logic)
+                    // ---------------------------
+                    foreach (SectionAdv section in tempEditor.Document.Sections)
+                    {
+                        foreach (BlockAdv block in section.Blocks)
+                        {
+                            if (block is ParagraphAdv para && para.Inlines.Count > 0)
+                            {
+                                var spans = para.Inlines.OfType<SpanAdv>()
+                                                        .Where(s => !string.IsNullOrEmpty(s.Text))
+                                                        .ToList();
+
+                                if (spans.Count == 0)
+                                    continue;
+
+                                string originalText = string.Concat(spans.Select(s => s.Text));
+                                if (string.IsNullOrEmpty(originalText))
+                                    continue;
+
+                                string converted = converter(originalText);
+
+                                var firstSpan = spans.FirstOrDefault();
+
+                                para.Inlines.Clear();
+
+                                var newSpan = new SpanAdv { Text = converted };
+
+                                // preserve some formatting from first span
+                                if (firstSpan != null)
+                                {
+                                    newSpan.CharacterFormat.FontSize = firstSpan.CharacterFormat.FontSize;
+                                    newSpan.CharacterFormat.Bold = firstSpan.CharacterFormat.Bold;
+                                    newSpan.CharacterFormat.Italic = firstSpan.CharacterFormat.Italic;
+                                    newSpan.CharacterFormat.Underline = firstSpan.CharacterFormat.Underline;
+                                    newSpan.CharacterFormat.FontColor = firstSpan.CharacterFormat.FontColor;
+                                }
+
+                                // Kannada font
+                                newSpan.CharacterFormat.FontFamily =
+                                    new System.Windows.Media.FontFamily("NudiParijatha");
+
+                                para.Inlines.Add(newSpan);
+                                paraCount++;
+                            }
+                        }
+                    }
+
+                    SimpleLogger.Log($"[{operationName}] Converted {paraCount} paragraphs");
+
+                    // ---------------------------
+                    // Force A4 + Normal margins (same values you use in ApplyDefaultPageSettings)
+                    // ---------------------------
+                    const double dpi = 96.0;
+
+                    // A4 from your code: 8.3 x 11.7 inches (DIP pixels = inches * 96). [file:37]
+                    double a4WidthPx = 8.3 * dpi;
+                    double a4HeightPx = 11.7 * dpi;
+
+                    // Normal margin from your code: 1 inch on all sides. [file:37]
+                    double marginPx = 1.0 * dpi;
+
+                    // Ensure at least one section exists (your ApplyDefaultPageSettings does this too). [file:37]
+                    if (tempEditor.Document.Sections.Count == 0)
+                        tempEditor.Document.Sections.Add(new SectionAdv());
+
+                    foreach (SectionAdv s in tempEditor.Document.Sections.OfType<SectionAdv>())
+                    {
+                        s.SectionFormat.PageSize = new Size(a4WidthPx, a4HeightPx);
+                        s.SectionFormat.PageMargin = new Thickness(marginPx);
+                    }
+
+                    // ---------------------------
+                    // Apply to main editor
+                    // ---------------------------
+                    richTextBoxAdv.Document = tempEditor.Document;
+                    richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(filePath);
+                    currentFilePath = string.Empty;
+
+                    // refresh
+                    richTextBoxAdv.UpdateLayout();
+                }, System.Windows.Threading.DispatcherPriority.Normal);
+
+                MessageBox.Show($"Conversion completed!\n\nParagraphs: {paraCount}",
+                    operationName, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[{operationName}] ERROR: {ex.Message}");
+                MessageBox.Show($"Failed:\n\n{ex.Message}", operationName,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                LoadingView.Hide();
+                richTextBoxAdv?.Focus();
+                if (ribbon != null) ribbon.IsBackStageVisible = false;
+            }
+        }
+
+
 
 
 

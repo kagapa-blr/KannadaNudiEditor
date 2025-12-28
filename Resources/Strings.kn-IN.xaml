@@ -462,11 +462,18 @@
   <sys:String x:Key="SpellCheckEnableTipMsg">ತಪ್ಪಾಗಿ ಟೈಪ್ ಮಾಡಿದ ಪದಗಳನ್ನು ಅಕ್ಷರ ಪರಿಶೀಲನಾ  ಸಾಧನನದಿಂದ ಸರಿಪಡಿಸಿ.</sys:String>
   <sys:String x:Key="SpellCheckDisableHeader">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
   <sys:String x:Key="SpellCheckDisableTipMsg">ಪದ ಪರಿಶೀಲನೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</sys:String>
-
-
-
   <sys:String x:Key="LoadingTitle">ಸಂಸ್ಕರಣೆ ಆಗುತ್ತಿದೆ</sys:String>
   <sys:String x:Key="LoadingDescription">ದಯವಿಟ್ಟು ನಿರೀಕ್ಷಿಸಿ...!</sys:String>
+
+
+
+  <!-- =========================== -->
+  <!-- Conversion -->
+  <!-- =========================== -->
+  <sys:String x:Key="ConversionTitle">ಪರಿವರ್ತನೆ</sys:String>
+  <sys:String x:Key="AsciiToUnicodeLabel">ಆಸ್ಕಿಯಿಂದ ಯೂನಿಕೋಡ್‌ ಶಿಷ್ಟತೆಗೆ</sys:String>
+  <sys:String x:Key="UnicodeToAsciiLabel">ಯೂನಿಕೋಡ್‌ ಶಿಷ್ಟತೆಯಿಂದ ಆಸ್ಕಿಗೆ</sys:String>
+
 
 
 
