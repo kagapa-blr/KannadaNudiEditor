@@ -37,8 +37,10 @@ namespace KannadaNudiEditor.Helpers
 
             while (i < maxLen)
             {
+                // FIX: Don't delete ignored chars. Keep them to preserve adjacency.
                 if (cfg.IgnoreList.Contains(text[i]))
                 {
+                    op.Add(text[i].ToString());
                     i++;
                     continue;
                 }
@@ -76,7 +78,7 @@ namespace KannadaNudiEditor.Helpers
                 else if (cfg.Vattaksharagalu.TryGetValue(t, out var baseLetter))
                     ProcessVattakshara(op, baseLetter, cfg);
                 else if (cfg.BrokenCases.TryGetValue(t, out var bc))
-                    ProcessBrokenCase(op, bc);
+                    ProcessBrokenCase(op, bc, cfg);
                 else
                 {
                     if (t.Length == 1 && t[0] == cfg.AsciiHalantChar)
@@ -147,15 +149,26 @@ namespace KannadaNudiEditor.Helpers
             }
         }
 
-        private static void ProcessBrokenCase(List<string> letters, BrokenCase bc)
+        private static void ProcessBrokenCase(List<string> letters, BrokenCase bc, ConversionConfig cfg)
         {
-            string last = letters.Count > 0 ? letters[^1] : string.Empty;
+            if (letters.Count == 0)
+                return; // drop modifier if nothing to modify
 
-            if (IsSingleChar(last, out char lastChar) && bc.Mapping.TryGetValue(lastChar, out char replacement))
+            string last = letters[^1];
+
+            // Only allow modifier to act on a single dependent vowel sign.
+            if (IsSingleChar(last, out char lastChar) &&
+                cfg.DependentVowels.Contains(lastChar) &&
+                bc.Mapping.TryGetValue(lastChar, out char replacement))
+            {
                 letters[^1] = replacement.ToString();
-            else
-                letters.Add(bc.Value);
+                return;
+            }
+
+            // Otherwise: drop it (prevents stray "ೀ" / "ು" etc showing up)
+            // If you want debugging, you can instead: letters.Add(bc.Value);
         }
+
 
         // =========================================================
         // A2U: pre-normalization / join rules

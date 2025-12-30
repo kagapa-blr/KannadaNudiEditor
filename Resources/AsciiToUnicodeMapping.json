@@ -2,7 +2,7 @@
     "meta": {
         "name": "ASCII/ANSI -> Unicode Kannada",
         "version": 3,
-        "maxTokenLength": 4,
+        "maxTokenLength": 6,
         "zwj": "\u200D",
         "zwnj": "\u200C",
         "halant": "\u0CCD",
@@ -242,7 +242,11 @@
         "PÉÆ": "ಕೊ",
         "PÉÆÃ": "ಕೋ",
         "¸ÀÌø": "ಸ್ಕೃ",
-        "AiÉÆÃ": "ಯೋ"
+        "AiÉÆÃ": "ಯೋ",
+        "¸ÉÜ": "ಸ್ಥೆ",
+        "μÀ": "ಷ",
+        "μÉ": "ಷೆ",
+        "μÉÃ": "ಷೇ"
     },
     "brokenCases": {
         "Ã": {
@@ -349,6 +353,14 @@
         {
             "from": "ುೂ",
             "to": "ೂ"
+        },
+        {
+            "from": "ೆೀ",
+            "to": "ೇ"
+        },
+        {
+            "from": "ೊೀ",
+            "to": "ೋ"
         }
     ]
 }
