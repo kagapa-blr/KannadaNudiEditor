@@ -2765,6 +2765,47 @@ namespace KannadaNudiEditor
 
 
 
+        // Code-behind placeholders for Recent Files backstage tab
+
+        private void ClearRecentFilesClick(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement logic to clear the recent files list
+            // Example: RecentFiles.Clear();
+        }
+
+        private void RecentFilesListBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // TODO: Implement logic to open the selected recent file
+            // Example: var item = SelectedRecentFile;
+        }
+
+        public ObservableCollection<RecentFileItem> RecentFiles { get; set; }
+
+        public RecentFileItem SelectedRecentFile { get; set; }
+
+        // Optional model placeholder — replace with your actual one
+        public class RecentFileItem
+        {
+            public string DisplayName { get; set; }
+            public string FullPath { get; set; }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
