@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
 using KannadaNudiEditor.Views.PageNumber;
+using KannadaNudiEditor.Helpers.Conversion;
 
 
 namespace KannadaNudiEditor

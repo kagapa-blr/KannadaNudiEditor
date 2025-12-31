@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KannadaNudiEditor.Helpers
+namespace KannadaNudiEditor.Helpers.Conversion
 {
     internal static partial class FileConversionUtilities
     {

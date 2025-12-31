@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace KannadaNudiEditor.Helpers
+namespace KannadaNudiEditor.Helpers.Conversion
 {
     internal static partial class FileConversionUtilities
     {
