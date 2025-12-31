@@ -36,7 +36,7 @@ namespace KannadaNudiEditor.Views.Loading
                 ShowInTaskbar = false,
                 ResizeMode = ResizeMode.NoResize,
                 Content = view,
-                Topmost = true,
+                Topmost = false,
                 SnapsToDevicePixels = true,
                 WindowStartupLocation = WindowStartupLocation.Manual
             };
