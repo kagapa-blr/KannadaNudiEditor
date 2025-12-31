@@ -85,7 +85,9 @@ namespace KannadaNudiEditor.Helpers
                     ProcessBrokenCase(op, bc, cfg);
                 else
                 {
-                    if (t.Length == 1 && t[0] == cfg.AsciiHalantChar)
+                    if (t.Length == 1 && cfg.AsciiDigitToKannada.TryGetValue(t[0], out var kd))
+                        op.Add(kd);
+                    else if (t.Length == 1 && t[0] == cfg.AsciiHalantChar)
                         op.Add(cfg.Halant.ToString());
                     else
                         op.Add(t);

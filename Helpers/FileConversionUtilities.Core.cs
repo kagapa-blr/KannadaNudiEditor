@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace KannadaNudiEditor.Helpers
@@ -68,6 +69,9 @@ namespace KannadaNudiEditor.Helpers
             public required Regex RegexUniVattakshara { get; init; }
             public required Regex RegexUniRephWithoutZwj { get; init; }
 
+            // Numbers (A2U)
+            public required Dictionary<char, string> AsciiDigitToKannada { get; init; }
+
             public static ConversionConfig From(ConversionJson root, bool isAsciiToUnicode)
             {
                 if (root.Meta == null) throw new InvalidOperationException("meta missing.");
@@ -96,13 +100,30 @@ namespace KannadaNudiEditor.Helpers
 
                 var vowels = new HashSet<string>(root.UnicodeVowels ?? Array.Empty<string>(), StringComparer.Ordinal);
 
+                // U2A digits (Kannada -> ASCII)
                 var digitMap = new Dictionary<char, char>();
-                if (root.KannadaDigits != null && root.AsciiDigits != null && root.KannadaDigits.Length == root.AsciiDigits.Length)
+                if (root.KannadaDigits != null &&
+                    root.AsciiDigits != null &&
+                    root.KannadaDigits.Length == root.AsciiDigits.Length)
                 {
                     for (int i = 0; i < root.KannadaDigits.Length; i++)
                     {
-                        if (!string.IsNullOrEmpty(root.KannadaDigits[i]) && !string.IsNullOrEmpty(root.AsciiDigits[i]))
+                        if (!string.IsNullOrEmpty(root.KannadaDigits[i]) &&
+                            !string.IsNullOrEmpty(root.AsciiDigits[i]))
+                        {
                             digitMap[root.KannadaDigits[i][0]] = root.AsciiDigits[i][0];
+                        }
+                    }
+                }
+
+                // A2U digits (ASCII -> Kannada) from JSON "numbersMapping"
+                var asciiDigitToKannada = new Dictionary<char, string>();
+                if (root.NumbersMapping != null)
+                {
+                    foreach (var kv in root.NumbersMapping)
+                    {
+                        if (!string.IsNullOrEmpty(kv.Key) && kv.Key.Length == 1)
+                            asciiDigitToKannada[kv.Key[0]] = kv.Value ?? string.Empty;
                     }
                 }
 
@@ -153,13 +174,19 @@ namespace KannadaNudiEditor.Helpers
                     RegexUniConsonantPlusVowel = new Regex(p2, RegexOptions.Compiled),
                     RegexUniVattakshara = new Regex(p3, RegexOptions.Compiled),
                     RegexUniRephWithoutZwj = new Regex(p4, RegexOptions.Compiled),
+
+                    // FIX: required member now set
+                    AsciiDigitToKannada = asciiDigitToKannada,
                 };
             }
 
-            private static char FirstOrDefault(string? s, char fallback) => !string.IsNullOrEmpty(s) ? s[0] : fallback;
+            private static char FirstOrDefault(string? s, char fallback)
+                => !string.IsNullOrEmpty(s) ? s[0] : fallback;
 
             private static HashSet<char> ToCharSet(string[]? arr)
-                => new((arr ?? Array.Empty<string>()).Where(s => !string.IsNullOrEmpty(s)).Select(s => s[0]));
+                => new((arr ?? Array.Empty<string>())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s[0]));
         }
 
         internal sealed class ConversionJson
@@ -186,6 +213,10 @@ namespace KannadaNudiEditor.Helpers
             public string[]? KannadaDigits { get; set; }
             public string[]? AsciiDigits { get; set; }
             public U2aRegexJson? U2aRegex { get; set; }
+
+            // Numbers (A2U)
+            [JsonPropertyName("numbersMapping")]
+            public Dictionary<string, string>? NumbersMapping { get; set; }
         }
 
         internal sealed class U2aRegexJson
