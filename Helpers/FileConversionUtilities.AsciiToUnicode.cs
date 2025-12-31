@@ -21,8 +21,12 @@ namespace KannadaNudiEditor.Helpers
             if (cfg.EnableKannadaClusterPostProcess)
                 mapped = PostProcessKannadaClusters(mapped, cfg.DependentVowels, cfg.Halant);
 
-            return ApplyPostFixupsKannadaRuns(mapped, cfg.PostFixupsPairs);
+            mapped = ApplyPostFixupsKannadaRuns(mapped, cfg.PostFixupsPairs);
+
+            // FIX: stabilize combining-mark order/composition
+            return mapped.Normalize(NormalizationForm.FormC);
         }
+
 
         // =========================================================
         // A2U: streaming longest-token match
@@ -202,7 +206,11 @@ namespace KannadaNudiEditor.Helpers
             return input;
         }
 
-        public static string PreInsertZwnj(string input, char asciiHalantChar, HashSet<char> asciiConsonantStartChars, char zwnj)
+        public static string PreInsertZwnj(
+            string input,
+            char asciiHalantChar,
+            HashSet<char> asciiConsonantStartChars,
+            char zwnj)
         {
             if (string.IsNullOrEmpty(input)) return input;
             if (input.IndexOf(asciiHalantChar) < 0) return input;
@@ -217,6 +225,11 @@ namespace KannadaNudiEditor.Helpers
                 if (ch == asciiHalantChar && i + 1 < input.Length)
                 {
                     char next = input[i + 1];
+
+                    // NEW: don't inject ZWNJ before plain ASCII letters/digits
+                    if (next <= 0x007F && (char.IsLetterOrDigit(next) || next == '_' || next == '-'))
+                        continue;
+
                     if (asciiConsonantStartChars.Contains(next))
                         sb.Append(zwnj);
                 }
