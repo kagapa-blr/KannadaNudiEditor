@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -124,17 +125,29 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     }
                 }
 
+                // -------- U2A regex defaults --------
                 string p1 = root.U2aRegex?.UniVowelPlusAnusvaraVisarga
                     ?? @"(?<v>[\u0C85-\u0C94\u0C8E-\u0C90\u0CE0])(?<av>[\u0C82\u0C83])";
 
                 string p2 = root.U2aRegex?.UniConsonantPlusVowel
-                    ?? @"(?<base>[\u0C95-\u0CB9\u0CDE])(?<dv>[\u0CBE-\u0CCC\u0C82\u0C83]{1,2})";
+                    ?? @"(?<base>[\u0C95-\u0CB9\u0CDE])(?<dv>[\u0CBE-\u0CCC\u0C82\u0C83]{1,2})(?!\u0CCD|\u200D)";
 
                 string p3 = root.U2aRegex?.UniVattakshara
                     ?? @"(?<base>[\u0C95-\u0CB9\u0CDE])(?<chain>(?:\u0CCD\u200D?[\u0C95-\u0CB9\u0CDE])+)(?<dv>[\u0CBE-\u0CCC\u0C82\u0C83]{0,2})";
 
-                // NOTE: keep as placeholder unless you paste the exact JS regex pattern for correctness.
-                string p4 = root.U2aRegex?.UniRephWithoutZwj ?? @"(?<stub>^\b$)";
+                // -------- FIXED: UniRephWithoutZwj default --------
+                // JS behavior: "RA + HALANT" (no ZWJ) => treat first vattakshara as base and append asciiArkavattu. [file:53]
+                string p4 = root.U2aRegex?.UniRephWithoutZwj ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(p4) ||
+                    p4.Contains("PASTE_THE_EXACT", StringComparison.OrdinalIgnoreCase))
+                {
+                    p4 =
+                        @"\u0CB0\u0CCD" +                                        // RA + HALANT
+                        @"\u0CCD" +                                              // first vattakshara halant
+                        @"(?<baseVattaCons>\u200D?[\u0C95-\u0CB9\u0CDE])" +      // optional ZWJ + consonant
+                        @"(?<restChain>(?:\u0CCD\u200D?[\u0C95-\u0CB9\u0CDE])*)" + // rest chain
+                        @"(?<dv>[\u0CBE-\u0CCC\u0C82\u0C83]{0,2})";              // dep vowels
+                }
 
                 return new ConversionConfig
                 {
@@ -172,7 +185,6 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     RegexUniVattakshara = new Regex(p3, RegexOptions.Compiled),
                     RegexUniRephWithoutZwj = new Regex(p4, RegexOptions.Compiled),
 
-                    // FIX: required member now set
                     AsciiDigitToKannada = asciiDigitToKannada,
                 };
             }
