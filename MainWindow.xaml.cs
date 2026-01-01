@@ -2719,6 +2719,9 @@ namespace KannadaNudiEditor
         private async void UnicodeToAsciiButton_Click(object sender, RoutedEventArgs e)
             => await ConvertFileAsync(FileConversionService.UnicodeToAsciiConverter, "Unicode to ASCII");
 
+
+
+
         private async Task ConvertFileAsync(Func<string, string> converter, string operationName)
         {
             var dlg = new OpenFileDialog
@@ -2732,11 +2735,16 @@ namespace KannadaNudiEditor
             SimpleLogger.Log($"{operationName} - file selected: {dlg.FileName}");
             LoadingView.Show();
 
-            var sw = Stopwatch.StartNew();
+            var totalSw = Stopwatch.StartNew();
+            Stopwatch? uiSw = null;
 
             try
             {
                 var filePath = dlg.FileName;
+
+                // ---- Conversion timing ----
+                Stopwatch? convSw = Stopwatch.StartNew();
+
 
                 var result = await NudiFileManager.ConvertFileToDocumentAsync(
                     filePath: filePath,
@@ -2744,23 +2752,40 @@ namespace KannadaNudiEditor
                     fontFamilyName: "NudiParijatha",
                     applyA4NormalMargins: true);
 
+                convSw.Stop();
+
+                // ---- UI rendering timing ----
+                uiSw = Stopwatch.StartNew();
+
                 richTextBoxAdv.Document = result.Document;
                 richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(filePath);
                 currentFilePath = string.Empty;
 
-                string elapsedText = TimeHelper.FormatElapsed(sw.Elapsed);
+                uiSw.Stop();
+
+                totalSw.Stop();
+
+                string convTime = TimeHelper.FormatElapsed(convSw.Elapsed);
+                string uiTime = TimeHelper.FormatElapsed(uiSw.Elapsed);
+                string totalTime = TimeHelper.FormatElapsed(totalSw.Elapsed);
 
                 SimpleLogger.Log(
-                    $"{operationName} - done. Paragraphs: {result.ConvertedParagraphs}. Time: {elapsedText}");
+                    $"{operationName} - done. " +
+                    $"Paragraphs: {result.ConvertedParagraphs}. " +
+                    $"Conversion: {convTime}. UI: {uiTime}. Total: {totalTime}");
 
                 MessageBox.Show(
-                    $"Conversion completed!\n\nParagraphs: {result.ConvertedParagraphs}\nTime: {elapsedText}",
+                    $"Conversion completed!\n\n" +
+                    $"Paragraphs: {result.ConvertedParagraphs}\n" +
+                    $"Conversion Time: {convTime}\n" +
+                    $"UI Load Time: {uiTime}\n" +
+                    $"Total Time: {totalTime}",
                     operationName, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 SimpleLogger.LogException(
-                    ex, $"{operationName} failed after {sw.Elapsed.TotalSeconds:0.000}s");
+                    ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:0.000}s");
 
                 MessageBox.Show(
                     $"Failed:\n\n{ex.Message}",
@@ -2768,15 +2793,12 @@ namespace KannadaNudiEditor
             }
             finally
             {
-                sw.Stop(); // <-- single, guaranteed stop point
-
                 LoadingView.Hide();
                 richTextBoxAdv?.Focus();
                 if (ribbon != null)
                     ribbon.IsBackStageVisible = false;
             }
         }
-
 
 
         // Code-behind placeholders for Recent Files backstage tab

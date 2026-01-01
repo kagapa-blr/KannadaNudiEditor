@@ -1,8 +1,5 @@
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
-using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace KannadaNudiEditor.Helpers
