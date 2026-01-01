@@ -9,101 +9,178 @@ namespace KannadaNudiEditor.Helpers
     public sealed class RecentFileItem
     {
         public string FullPath { get; set; } = "";
+        public string FileType { get; set; } = "";   // "txt", "rtf", "docx", ...
+        public string FileName { get; set; } = "";
 
-        // Store as IST with +05:30 offset
+        private bool _isAscii;
+        public bool IsAscii
+        {
+            get => _isAscii;
+            set
+            {
+                _isAscii = value;
+                if (value) _isUnicode = false;
+            }
+        }
+
+        private bool _isUnicode = true;
+        public bool IsUnicode
+        {
+            get => _isUnicode;
+            set
+            {
+                _isUnicode = value;
+                if (value) _isAscii = false;
+            }
+        }
+
+        public bool IsUpdated { get; set; }
         public DateTimeOffset LastOpen { get; set; }
-
-        public string DisplayName => Path.GetFileName(FullPath);
     }
 
     public static class RecentFilesStore
     {
-        private const int MaxItems = 15;
+        private const int MaxRecentFiles = 15;
 
-        private static string StorePath =>
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            WriteIndented = true // pretty JSON [web:80]
+        };
+
+        private static string RecentFilesJsonPath =>
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "KannadaNudiBaraha",
                 "recent-files.json");
 
-        private static TimeZoneInfo IstTimeZone
+        private static TimeZoneInfo GetIstTimeZoneOrFallback()
         {
-            get
+            try
             {
-                // Windows ID for IST
-                return TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                return TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"); // [web:174]
+            }
+            catch
+            {
+                return TimeZoneInfo.Local;
             }
         }
 
         private static DateTimeOffset NowIst()
         {
-            var nowUtc = DateTimeOffset.UtcNow;
-            var istNow = TimeZoneInfo.ConvertTime(nowUtc, IstTimeZone);
-            return istNow;
+            var ist = GetIstTimeZoneOrFallback();
+            return TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, ist);
         }
 
-        public static List<RecentFileItem> Load()
+        public static List<RecentFileItem> ReadAll()
         {
-            SimpleLogger.Log("[RECENTFILE] Load from: " + StorePath);
             try
             {
-                if (!File.Exists(StorePath))
+                if (!File.Exists(RecentFilesJsonPath))
+                    return new List<RecentFileItem>();
+
+                var json = File.ReadAllText(RecentFilesJsonPath);
+                return JsonSerializer.Deserialize<List<RecentFileItem>>(json, JsonOptions) ?? new List<RecentFileItem>();
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "[RECENTFILE] ReadAll failed");
+                return new List<RecentFileItem>();
+            }
+        }
+
+        public static List<RecentFileItem> AddOrUpdate(
+            string fullPath,
+            bool isAscii,
+            bool isUnicode,
+            string? fileType = null,
+            string? fileName = null)
+        {
+            try
+            {
+                var normalizedPath = Path.GetFullPath(fullPath);
+
+                if (isAscii && isUnicode) isUnicode = false;
+                if (!isAscii && !isUnicode) isUnicode = true;
+
+                var recentFiles = ReadAll();
+
+                int existingIndex = recentFiles.FindIndex(x =>
+                    string.Equals(x.FullPath, normalizedPath, StringComparison.OrdinalIgnoreCase));
+
+                bool wasUpdated;
+
+                if (existingIndex >= 0)
                 {
-                    SimpleLogger.Log("[RECENTFILE] File not found.");
-                    return new();
+                    var existingItem = recentFiles[existingIndex];
+                    existingItem.LastOpen = NowIst();
+                    existingItem.IsUpdated = true;
+
+                    existingItem.FileName = !string.IsNullOrWhiteSpace(fileName)
+                        ? fileName
+                        : (!string.IsNullOrWhiteSpace(existingItem.FileName) ? existingItem.FileName : Path.GetFileName(normalizedPath));
+
+                    existingItem.FileType = !string.IsNullOrWhiteSpace(fileType)
+                        ? NormalizeFileType(fileType)
+                        : (!string.IsNullOrWhiteSpace(existingItem.FileType) ? existingItem.FileType : GetFileTypeFromPath(normalizedPath));
+
+                    existingItem.IsAscii = isAscii;
+                    existingItem.IsUnicode = isUnicode;
+
+                    recentFiles.RemoveAt(existingIndex);
+                    recentFiles.Insert(0, existingItem);
+
+                    wasUpdated = true;
+                }
+                else
+                {
+                    var newItem = new RecentFileItem
+                    {
+                        FullPath = normalizedPath,
+                        FileName = !string.IsNullOrWhiteSpace(fileName) ? fileName : Path.GetFileName(normalizedPath),
+                        FileType = !string.IsNullOrWhiteSpace(fileType) ? NormalizeFileType(fileType) : GetFileTypeFromPath(normalizedPath),
+                        IsAscii = isAscii,
+                        IsUnicode = isUnicode,
+                        IsUpdated = false,
+                        LastOpen = NowIst()
+                    };
+
+                    recentFiles.Insert(0, newItem);
+                    wasUpdated = false;
                 }
 
-                var json = File.ReadAllText(StorePath);
-                var list = JsonSerializer.Deserialize<List<RecentFileItem>>(json) ?? new();
+                // keep only existing files (remove if you want to show missing too)
+                recentFiles = recentFiles
+                    .Where(x => !string.IsNullOrWhiteSpace(x.FullPath) && File.Exists(x.FullPath))
+                    .ToList();
 
-                // Optional: keep only existing
-                list = list.Where(x => File.Exists(x.FullPath)).ToList();
+                if (recentFiles.Count > MaxRecentFiles)
+                    recentFiles = recentFiles.Take(MaxRecentFiles).ToList();
 
-                SimpleLogger.Log("[RECENTFILE] Loaded count: " + list.Count);
-                return list;
+                Directory.CreateDirectory(Path.GetDirectoryName(RecentFilesJsonPath)!);
+                File.WriteAllText(RecentFilesJsonPath, JsonSerializer.Serialize(recentFiles, JsonOptions));
+
+                SimpleLogger.Log($"[RECENTFILE] {(wasUpdated ? "Updated" : "Added")} : {normalizedPath}");
+
+                return recentFiles;
             }
             catch (Exception ex)
             {
-                SimpleLogger.LogException(ex, "[RECENTFILE] Load failed");
-                return new();
+                SimpleLogger.LogException(ex, "[RECENTFILE] AddOrUpdate failed");
+                return ReadAll();
             }
         }
 
-        public static void Save(List<RecentFileItem> items)
+        private static string GetFileTypeFromPath(string path)
         {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(StorePath)!);
-
-                // enforce max here also
-                if (items.Count > MaxItems)
-                    items = items.Take(MaxItems).ToList();
-
-                var json = JsonSerializer.Serialize(items, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(StorePath, json);
-
-                SimpleLogger.Log("[RECENTFILE] Saved count: " + items.Count + " to " + StorePath);
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.LogException(ex, "[RECENTFILE] Save failed");
-            }
+            var ext = Path.GetExtension(path);
+            return string.IsNullOrWhiteSpace(ext) ? "unknown" : ext.TrimStart('.').ToLowerInvariant();
         }
 
-        public static List<RecentFileItem> AddOrBump(List<RecentFileItem> list, string filePath)
+        private static string NormalizeFileType(string fileType)
         {
-            filePath = Path.GetFullPath(filePath);
-
-            list.RemoveAll(x => string.Equals(x.FullPath, filePath, StringComparison.OrdinalIgnoreCase));
-            list.Insert(0, new RecentFileItem { FullPath = filePath, LastOpen = NowIst() });
-
-            // keep only existing
-            list = list.Where(x => File.Exists(x.FullPath)).ToList();
-
-            if (list.Count > MaxItems)
-                list = list.Take(MaxItems).ToList();
-
-            return list;
+            var t = fileType.Trim();
+            if (t.StartsWith(".", StringComparison.Ordinal)) t = t.TrimStart('.');
+            return string.IsNullOrWhiteSpace(t) ? "unknown" : t.ToLowerInvariant();
         }
     }
 }

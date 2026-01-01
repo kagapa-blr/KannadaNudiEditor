@@ -1250,81 +1250,68 @@ namespace KannadaNudiEditor
         }
         #endregion
 
-        #region Implementation
-        /// <summary>
-        /// Words the import.
-        /// </summary>
-#if Framework3_5 || Framework4_0
-        private void WordImport()
-#else
         private async void WordImport()
-#endif
         {
-            OpenFileDialog openDialog = new OpenFileDialog()
+            var openDialog = new OpenFileDialog
             {
-                Filter = "All supported files (*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.docx;*.doc;*.htm;*.html;*.rtf,*.txt;*.xaml|Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml",
+                Filter = "All supported files (*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.docx;*.doc;*.htm;*.html;*.rtf;*.txt;*.xaml|Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml",
                 FilterIndex = 1,
                 Multiselect = false
             };
-            if ((bool)openDialog.ShowDialog() && richTextBoxAdv != null)
-            {
-                Stream fileStream = openDialog.OpenFile();
-                FileInfo file = new FileInfo(openDialog.FileName);
-                string fileName = file.Name;
-                string fileExtension = file.Extension;
-                if (!string.IsNullOrEmpty(fileExtension) && fileStream != null)
-                {
-                    FormatType formatType = GetFormatType(fileExtension);
-#if Framework3_5
-                    RichTextBoxAdv.Load(fileStream, formatType);
-#else
-                    if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
-                    {
-                        cancellationTokenSource.Cancel();
-                        try
-                        {
-                            if (!loadAsync.IsCanceled)
-#if Framework4_0
-                                loadAsync.Wait();
-#else
-                                await loadAsync;
-#endif
-                        }
-                        catch
-                        { }
-                    }
-                    try
-                    {
-                        cancellationTokenSource = new CancellationTokenSource();
-#if Framework4_0
-                        loadAsync = RichTextBoxAdv.LoadAsync(fileStream, formatType, cancellationTokenSource.Token);
-#else
-                        loadAsync = richTextBoxAdv.LoadAsync(fileStream, formatType, cancellationTokenSource.Token);
-                        await loadAsync;
-#endif
-                        if (cancellationTokenSource != null)
-                            cancellationTokenSource.Dispose();
-                        cancellationTokenSource = null;
-                        loadAsync = null;
-                    }
-                    catch
-                    { }
-#endif
-                    richTextBoxAdv.DocumentTitle = fileName.Remove(fileName.LastIndexOf("."));
-                    currentFilePath = openDialog.FileName;
 
+            if (openDialog.ShowDialog() != true || richTextBoxAdv == null)
+                return;
+
+            using var fileStream = openDialog.OpenFile();
+            var file = new FileInfo(openDialog.FileName);
+            var fileName = file.Name;          // includes extension [web:102]
+            var fileExtension = file.Extension; // includes leading dot [web:100]
+
+            if (string.IsNullOrWhiteSpace(fileExtension))
+                return;
+
+            var formatType = GetFormatType(fileExtension);
+
+            if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                try
+                {
+                    if (!loadAsync.IsCanceled)
+                        await loadAsync;
                 }
+                catch { }
             }
+
+            try
+            {
+                cancellationTokenSource = new CancellationTokenSource();
+                loadAsync = richTextBoxAdv.LoadAsync(fileStream, formatType, cancellationTokenSource.Token);
+                await loadAsync;
+            }
+            catch { }
+            finally
+            {
+                cancellationTokenSource?.Dispose();
+                cancellationTokenSource = null;
+                loadAsync = null;
+            }
+
+            richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(fileName);
+            currentFilePath = openDialog.FileName;
+
+            // Save recent file metadata
+            var fileType = fileExtension.TrimStart('.').ToLowerInvariant();
+            bool isAscii = false;
+            bool isUnicode = true;
+            SimpleLogger.Log($"Updating Recent file entry for {currentFilePath}");
+            RecentFilesStore.AddOrUpdate(currentFilePath, isAscii, isUnicode, fileType, fileName);
         }
-        /// <summary>
-        /// Words the export.
-        /// </summary>
-        /// <param name="extension">The extension.</param>
-#if Framework3_5 || Framework4_0
-        private void WordExport(string extension)
-#else
+
+
+
         private async void WordExport(string extension)
-#endif
+
         {
             SaveFileDialog saveDialog = new SaveFileDialog();
             {
@@ -1527,7 +1514,6 @@ namespace KannadaNudiEditor
                 ribbon = null;
             }
         }
-        #endregion
 
 
 
