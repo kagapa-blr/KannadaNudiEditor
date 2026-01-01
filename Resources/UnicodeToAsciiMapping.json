@@ -666,5 +666,10 @@
     },
     "asciiArkavattu": {},
     "brokenCases": {},
-    "postFixups": []
+    "postFixups": [
+        {
+            "from": "jÜ",
+            "to": "yð"
+        }
+    ]
 }

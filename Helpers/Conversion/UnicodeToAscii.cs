@@ -269,17 +269,20 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     // Expect halant + consonant pairs.
                     if (ch == cfg.Halant && i + 1 < vattaChain.Length)
                     {
-                        char cons = vattaChain[i + 1];
-                        if (cons == cfg.Zwj && i + 2 < vattaChain.Length)
+                        char next = vattaChain[i + 1];
+                        bool hasZwj = false;
+
+                        if (next == cfg.Zwj && i + 2 < vattaChain.Length)
                         {
-                            // handle \u0CCD\u200D<cons>
-                            cons = vattaChain[i + 2];
-                            i++;
+                            hasZwj = true;
+                            next = vattaChain[i + 2];
+                            i++; // consumed ZWJ
                         }
 
-                        sb.Append(MapVattaksharaOrFallback(cons, cfg));
-                        i++;
+                        sb.Append(MapVattaksharaOrFallback(next, hasZwj, cfg));
+                        i++; // consumed consonant
                     }
+
                 }
             }
 
@@ -298,14 +301,27 @@ namespace KannadaNudiEditor.Helpers.Conversion
             return sb.ToString();
         }
 
-        private static string MapVattaksharaOrFallback(char consonant, ConversionConfig cfg)
+        private static string MapVattaksharaOrFallback(char consonant, bool hasZwj, ConversionConfig cfg)
         {
-            // vattaksharagalu JSON is typically keyed by the Kannada consonant char ("ಕ","ಗ"...). [file:53]
+            // 1) Best: explicit virama-based vatta mapping (your JSON has many "\u0CCD<cons>" entries)
+            // Optionally support "\u0CCD\u200D<cons>" if you add such keys later.
+            string keyZwj = cfg.Halant.ToString() + cfg.Zwj + consonant; // "\u0CCD\u200D<cons>"
+            string keyPlain = cfg.Halant.ToString() + consonant;         // "\u0CCD<cons>"
+
+            if (hasZwj && cfg.Mapping.TryGetValue(keyZwj, out var mZwj))
+                return mZwj;
+
+            if (cfg.Mapping.TryGetValue(keyPlain, out var mPlain))
+                return mPlain;
+
+            // 2) Fallback: legacy vattaksharagalu table keyed by consonant (e.g., "ಥ" -> "xï")
             if (cfg.Vattaksharagalu.TryGetValue(consonant.ToString(), out var vatta))
                 return vatta;
 
+            // 3) Last fallback: map consonant itself
             return MapOrSelf(consonant.ToString(), cfg);
         }
+
 
         private static string MapOrSelf(string s, ConversionConfig cfg)
             => cfg.Mapping.TryGetValue(s, out var mapped) ? mapped : s;
@@ -415,9 +431,9 @@ namespace KannadaNudiEditor.Helpers.Conversion
             return s;
         }
 
-    
-    
-    
+
+
+
     }
 
 
