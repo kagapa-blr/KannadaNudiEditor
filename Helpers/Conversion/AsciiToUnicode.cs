@@ -11,7 +11,11 @@ namespace KannadaNudiEditor.Helpers.Conversion
         // =========================================================
         public static string ConvertAsciiToUnicode(string input, ConversionConfig cfg)
         {
-            string stage0 = PreNormalizeAscii(input, cfg.AsciiHalantChar, cfg.AsciiJoinCharsBeforeNoSpace);
+            string stage0 = PreNormalizeAscii(
+                input,
+                cfg.AsciiHalantChar,
+                cfg.AsciiJoinCharsBeforeNoSpace,
+                cfg.AsciiConsonantStartChars);
 
             if (cfg.EnableZwnjInsertion)
                 stage0 = PreInsertZwnj(stage0, cfg.AsciiHalantChar, cfg.AsciiConsonantStartChars, cfg.Zwnj);
@@ -23,189 +27,180 @@ namespace KannadaNudiEditor.Helpers.Conversion
 
             mapped = ApplyPostFixupsKannadaRuns(mapped, cfg.PostFixupsPairs);
 
-            // FIX: stabilize combining-mark order/composition
             return mapped.Normalize(NormalizationForm.FormC);
         }
-
 
         // =========================================================
         // A2U: streaming longest-token match
         // =========================================================
+
         private static string ProcessStreamLongestToken(string text, ConversionConfig cfg)
         {
             if (text == null) return string.Empty;
 
-            int i = 0;
-            int maxLen = text.Length;
-            var op = new List<string>(capacity: Math.Min(256, maxLen * 2));
+            var sb = new StringBuilder(text.Length + Math.Min(1024, text.Length / 2));
 
-            while (i < maxLen)
+            int i = 0;
+            int n = text.Length;
+
+            int maxToken = cfg.MaxKeyLenInMapping > 0
+                ? Math.Min(cfg.MaxTokenLength, cfg.MaxKeyLenInMapping)
+                : cfg.MaxTokenLength;
+
+            while (i < n)
             {
-                // FIX: Don't delete ignored chars. Keep them to preserve adjacency.
-                if (cfg.IgnoreList.Contains(text[i]))
+                if (cfg.IgnoreList != null && cfg.IgnoreList.Contains(text[i]))
                 {
-                    op.Add(text[i].ToString());
                     i++;
                     continue;
                 }
 
-                int jump = FindAndAppend(op, text, i, cfg);
-                i += 1 + jump;
-            }
-
-            return string.Concat(op);
-        }
-
-        private static int FindAndAppend(List<string> op, string txt, int pos, ConversionConfig cfg)
-        {
-            int remaining = txt.Length - pos;
-            int maxLen = Math.Min(cfg.MaxTokenLength, remaining - 1);
-            if (maxLen < 0) maxLen = 0;
-
-            for (int i = maxLen; i >= 0; i--)
-            {
-                string t = txt.Substring(pos, i + 1);
-
-                if (cfg.Mapping.TryGetValue(t, out string mapped))
+                if (TryMatchMapping(text, i, n, maxToken, cfg, out string mapped, out int matchLen))
                 {
-                    if (cfg.EnableZwjAfterHalant && op.Count > 0 && EndsWith(op[^1], cfg.Halant))
-                        op.Add(cfg.Zwj.ToString());
+                    if (cfg.EnableZwjAfterHalant && sb.Length > 0 && sb[sb.Length - 1] == cfg.Halant)
+                        sb.Append(cfg.Zwj);
 
-                    op.Add(mapped);
-                    return i;
+                    sb.Append(mapped);
+                    i += matchLen;
+                    continue;
                 }
 
-                if (i > 0) continue;
+                // 1-char fallback
+                char ch = text[i];
+                string one = ch.ToString();
 
-                if (cfg.AsciiArkavattu.TryGetValue(t, out var ra))
-                    ProcessArkavattu(op, ra, cfg);
-                else if (cfg.Vattaksharagalu.TryGetValue(t, out var baseLetter))
-                    ProcessVattakshara(op, baseLetter, cfg);
-                else if (cfg.BrokenCases.TryGetValue(t, out var bc))
-                    ProcessBrokenCase(op, bc, cfg);
+                if (cfg.AsciiArkavattu.TryGetValue(one, out var ra))
+                {
+                    sb.Append(ra);
+                    sb.Append(cfg.Halant);
+                }
+                else if (cfg.Vattaksharagalu.TryGetValue(one, out var baseLetter))
+                {
+                    sb.Append(cfg.Halant);
+                    sb.Append(baseLetter);
+                }
+                else if (cfg.BrokenCases.TryGetValue(one, out var bc))
+                {
+                    ApplyBrokenCase(sb, bc, cfg);
+                }
                 else
                 {
-                    if (t.Length == 1 && cfg.AsciiDigitToKannada.TryGetValue(t[0], out var kd))
-                        op.Add(kd);
-                    else if (t.Length == 1 && t[0] == cfg.AsciiHalantChar)
-                        op.Add(cfg.Halant.ToString());
+                    if (cfg.AsciiDigitToKannada != null && cfg.AsciiDigitToKannada.TryGetValue(ch, out var kd))
+                        sb.Append(kd);
+                    else if (ch == cfg.AsciiHalantChar)
+                        sb.Append(cfg.Halant);
                     else
-                        op.Add(t);
+                        sb.Append(ch);
                 }
 
-                return 0;
+                i++;
             }
 
-            return 0;
+            return sb.ToString();
         }
-
-        private static bool IsSingleDependentVowel(string s, ConversionConfig cfg)
-            => IsSingleChar(s, out char c) && cfg.DependentVowels.Contains(c);
-
-        private static void ProcessVattakshara(List<string> letters, string baseLetter, ConversionConfig cfg)
+        private static bool TryMatchMapping(
+            string txt,
+            int pos,
+            int txtLen,
+            int maxToken,
+            ConversionConfig cfg,
+            out string mapped,
+            out int matchLen)
         {
-            string last = letters.Count > 0 ? letters[^1] : string.Empty;
+            mapped = string.Empty;
+            matchLen = 0;
 
-            if (IsSingleDependentVowel(last, cfg))
+            var buckets = cfg.MappingKeysByLen;
+            if (buckets == null) return false;
+
+            int remaining = txtLen - pos;
+            int top = Math.Min(maxToken, remaining);
+            if (top <= 0) return false;
+
+            for (int len = top; len >= 1; len--)
             {
-                letters[^1] = cfg.Halant.ToString();
-                letters.Add(baseLetter);
-                letters.Add(last);
+                // Defensive: bucket array size depends on MaxTokenLength
+                if ((uint)len >= (uint)buckets.Length) continue;
+
+                var keys = buckets[len];
+                if (keys.Count == 0) continue;
+
+                for (int k = 0; k < keys.Count; k++)
+                {
+                    string key = keys[k];
+
+                    // compare directly against the source string (no Substring allocation)
+                    if (string.CompareOrdinal(txt, pos, key, 0, len) == 0)
+                    {
+                        mapped = cfg.Mapping[key];
+                        matchLen = len;
+                        return true;
+                    }
+                }
             }
-            else
-            {
-                letters.Add(cfg.Halant.ToString());
-                letters.Add(baseLetter);
-            }
+
+            return false;
         }
 
-        private static void ProcessArkavattu(List<string> letters, string raLetter, ConversionConfig cfg)
+        private static void ApplyBrokenCase(StringBuilder sb, BrokenCase bc, ConversionConfig cfg)
         {
-            string last = letters.Count > 0 ? letters[^1] : string.Empty;
-            string secondLast = letters.Count > 1 ? letters[^2] : string.Empty;
+            if (sb.Length == 0) return;
 
-            if (IsSingleDependentVowel(last, cfg))
-            {
-                if (letters.Count >= 2)
-                {
-                    letters[^2] = raLetter;
-                    letters[^1] = cfg.Halant.ToString();
-                    letters.Add(secondLast);
-                    letters.Add(last);
-                }
-                else
-                {
-                    letters.Add(raLetter);
-                    letters.Add(cfg.Halant.ToString());
-                }
-            }
-            else
-            {
-                if (letters.Count >= 1)
-                {
-                    letters[^1] = raLetter;
-                    letters.Add(cfg.Halant.ToString());
-                    letters.Add(last);
-                }
-                else
-                {
-                    letters.Add(raLetter);
-                    letters.Add(cfg.Halant.ToString());
-                }
-            }
+            char last = sb[sb.Length - 1];
+            if (cfg.DependentVowels.Contains(last) && bc.Mapping.TryGetValue(last, out char replacement))
+                sb[sb.Length - 1] = replacement;
         }
 
-        private static void ProcessBrokenCase(List<string> letters, BrokenCase bc, ConversionConfig cfg)
-        {
-            if (letters.Count == 0)
-                return; // drop modifier if nothing to modify
 
-            string last = letters[^1];
 
-            // Only allow modifier to act on a single dependent vowel sign.
-            if (IsSingleChar(last, out char lastChar) &&
-                cfg.DependentVowels.Contains(lastChar) &&
-                bc.Mapping.TryGetValue(lastChar, out char replacement))
-            {
-                letters[^1] = replacement.ToString();
-                return;
-            }
-
-            // Otherwise: drop it (prevents stray "ೀ" / "ು" etc showing up)
-            // If you want debugging, you can instead: letters.Add(bc.Value);
-        }
 
 
         // =========================================================
         // A2U: pre-normalization / join rules
         // =========================================================
-        public static string PreNormalizeAscii(string input, char asciiHalantChar, HashSet<char> joinCharsBeforeNoSpace)
+        public static string PreNormalizeAscii(
+            string input,
+            char asciiHalantChar,
+            HashSet<char> joinCharsBeforeNoSpace,
+            HashSet<char> asciiConsonantStartChars)
         {
             if (string.IsNullOrEmpty(input)) return input;
 
+            // Remove whitespace after explicit halant marker
             input = input.Replace($"{asciiHalantChar} ", asciiHalantChar.ToString(), StringComparison.Ordinal)
                          .Replace($"{asciiHalantChar}\t", asciiHalantChar.ToString(), StringComparison.Ordinal);
 
-            if (joinCharsBeforeNoSpace != null && joinCharsBeforeNoSpace.Count > 0)
+            if (joinCharsBeforeNoSpace == null || joinCharsBeforeNoSpace.Count == 0)
+                return input;
+
+            asciiConsonantStartChars ??= new HashSet<char>();
+
+            var sb = new StringBuilder(input.Length);
+
+            for (int i = 0; i < input.Length; i++)
             {
-                var sb = new StringBuilder(input.Length);
-                for (int i = 0; i < input.Length; i++)
+                char ch = input[i];
+
+                // Remove whitespace only when it is clearly inside Kannada-ASCII encoding stream
+                if ((ch == ' ' || ch == '\t') && i + 1 < input.Length)
                 {
-                    char ch = input[i];
+                    char prev = i > 0 ? input[i - 1] : '\0';
+                    char next = input[i + 1];
 
-                    if ((ch == ' ' || ch == '\t') && i + 1 < input.Length)
-                    {
-                        char next = input[i + 1];
-                        if (joinCharsBeforeNoSpace.Contains(next))
-                            continue;
-                    }
+                    bool prevLooksKannadaAscii =
+                        prev >= 0x0080 || prev == asciiHalantChar || asciiConsonantStartChars.Contains(prev);
 
-                    sb.Append(ch);
+                    bool nextLooksKannadaAscii =
+                        next >= 0x0080 || asciiConsonantStartChars.Contains(next) || joinCharsBeforeNoSpace.Contains(next);
+
+                    if (prevLooksKannadaAscii && nextLooksKannadaAscii && joinCharsBeforeNoSpace.Contains(next))
+                        continue;
                 }
-                input = sb.ToString();
+
+                sb.Append(ch);
             }
 
-            return input;
+            return sb.ToString();
         }
 
         public static string PreInsertZwnj(
@@ -216,6 +211,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
         {
             if (string.IsNullOrEmpty(input)) return input;
             if (input.IndexOf(asciiHalantChar) < 0) return input;
+            if (asciiConsonantStartChars == null || asciiConsonantStartChars.Count == 0) return input;
 
             var sb = new StringBuilder(input.Length + 16);
 
@@ -228,7 +224,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
                 {
                     char next = input[i + 1];
 
-                    // NEW: don't inject ZWNJ before plain ASCII letters/digits
+                    // don't inject ZWNJ before plain ASCII identifiers
                     if (next <= 0x007F && (char.IsLetterOrDigit(next) || next == '_' || next == '-'))
                         continue;
 
@@ -241,7 +237,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // =========================================================
-        // A2U: Kannada-run post processing
+        // Kannada-run post processing (unchanged from yours)
         // =========================================================
         public static string ApplyPostFixupsKannadaRuns(string txt, IReadOnlyList<(string From, string To)> fixups)
         {
@@ -324,6 +320,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     continue;
                 }
 
+                // vowel + halant-chain => move chain before vowel
                 if (i + 1 < run.Length && run[i + 1] == halant)
                 {
                     char vowel = ch;

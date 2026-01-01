@@ -66,6 +66,8 @@ namespace KannadaNudiEditor.Helpers.Conversion
             public required Regex RegexUniConsonantPlusVowel { get; init; }
             public required Regex RegexUniVattakshara { get; init; }
             public required Regex RegexUniRephWithoutZwj { get; init; }
+            public IReadOnlyList<string>[]? MappingKeysByLen { get; init; } // index = token length
+            public int MaxKeyLenInMapping { get; init; }
 
             // Numbers (A2U)
             public required Dictionary<char, string> AsciiDigitToKannada { get; init; }
@@ -77,6 +79,34 @@ namespace KannadaNudiEditor.Helpers.Conversion
 
                 int maxToken = root.Meta.MaxTokenLength > 0 ? root.Meta.MaxTokenLength : 4;
                 if (maxToken > 16) maxToken = 16;
+
+
+                // Build mapping key buckets by token length (perf: avoids Substring allocations)
+                int bucketSize = maxToken + 1;
+                var temp = new List<string>[bucketSize];
+                int maxKeyLen = 0;
+
+                foreach (var key in root.Mapping.Keys)
+                {
+                    int len = key.Length;
+                    if (len <= 0 || len > maxToken) continue;
+
+                    if (len > maxKeyLen) maxKeyLen = len;
+
+                    temp[len] ??= new List<string>();
+                    temp[len].Add(key);
+                }
+
+                IReadOnlyList<string>[] buckets = new IReadOnlyList<string>[bucketSize];
+                for (int len = 0; len < bucketSize; len++)
+                {
+                    buckets[len] = temp[len] ?? (IReadOnlyList<string>)Array.Empty<string>();
+                }
+
+                // assign
+                // MappingKeysByLen = buckets,
+                // MaxKeyLenInMapping =
+
 
                 char zwj = FirstOrDefault(root.Meta.Zwj, '\u200D');
                 char zwnj = FirstOrDefault(root.Meta.Zwnj, '\u200C');
@@ -186,6 +216,10 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     RegexUniRephWithoutZwj = new Regex(p4, RegexOptions.Compiled),
 
                     AsciiDigitToKannada = asciiDigitToKannada,
+
+                    MappingKeysByLen = buckets,
+                    MaxKeyLenInMapping = maxKeyLen,
+
                 };
             }
 
