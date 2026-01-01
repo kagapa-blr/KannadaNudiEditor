@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Media.Animation;
 using Syncfusion.Licensing;
@@ -44,4 +42,20 @@ namespace KannadaNudiEditor.Helpers
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+
+    public static class TimeHelper
+    {
+        // Formats elapsed time like "30 mins 10 seconds"
+        public static string FormatElapsed(TimeSpan t)
+        {
+            if (t.TotalHours >= 1)
+                return $"{(int)t.TotalHours} hours {t.Minutes} mins {t.Seconds} seconds";
+
+            return $"{t.Minutes} mins {t.Seconds} seconds";
+        }
+    }
+
+
+
 }

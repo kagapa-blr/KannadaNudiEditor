@@ -2728,9 +2728,12 @@ namespace KannadaNudiEditor
             };
 
             if (dlg.ShowDialog() != true) return;
-            SimpleLogger.Log($"{operationName} - file selected: {dlg.FileName}");
 
+            SimpleLogger.Log($"{operationName} - file selected: {dlg.FileName}");
             LoadingView.Show();
+
+            var sw = Stopwatch.StartNew();
+
             try
             {
                 var filePath = dlg.FileName;
@@ -2744,25 +2747,35 @@ namespace KannadaNudiEditor
                 richTextBoxAdv.Document = result.Document;
                 richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(filePath);
                 currentFilePath = string.Empty;
-                SimpleLogger.Log($"{operationName} - file converted and loaded. Paragraphs converted: {result.ConvertedParagraphs}");
-                MessageBox.Show($"Conversion completed!\n\nParagraphs: {result.ConvertedParagraphs}",
+
+                string elapsedText = TimeHelper.FormatElapsed(sw.Elapsed);
+
+                SimpleLogger.Log(
+                    $"{operationName} - done. Paragraphs: {result.ConvertedParagraphs}. Time: {elapsedText}");
+
+                MessageBox.Show(
+                    $"Conversion completed!\n\nParagraphs: {result.ConvertedParagraphs}\nTime: {elapsedText}",
                     operationName, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                SimpleLogger.LogException(ex, $"{operationName} failed");
-                MessageBox.Show($"Failed:\n\n{ex.Message}", operationName,
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(
+                    ex, $"{operationName} failed after {sw.Elapsed.TotalSeconds:0.000}s");
+
+                MessageBox.Show(
+                    $"Failed:\n\n{ex.Message}",
+                    operationName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
+                sw.Stop(); // <-- single, guaranteed stop point
+
                 LoadingView.Hide();
                 richTextBoxAdv?.Focus();
-                if (ribbon != null) ribbon.IsBackStageVisible = false;
+                if (ribbon != null)
+                    ribbon.IsBackStageVisible = false;
             }
         }
-
-
 
 
 
