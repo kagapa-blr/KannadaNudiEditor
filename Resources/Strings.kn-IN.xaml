@@ -474,8 +474,10 @@
   <sys:String x:Key="AsciiToUnicodeLabel">ಆಸ್ಕಿಯಿಂದ ಯೂನಿಕೋಡ್‌ ಶಿಷ್ಟತೆಗೆ</sys:String>
   <sys:String x:Key="UnicodeToAsciiLabel">ಯೂನಿಕೋಡ್‌ ಶಿಷ್ಟತೆಯಿಂದ ಆಸ್ಕಿಗೆ</sys:String>
 
-
-
+  <!-- =========================== -->
+  <!-- BackStage : RECENT TAB -->
+  <!-- =========================== -->
+  <sys:String x:Key="RecentFilesLabel">ಇತ್ತೀಚಿನ ಕಡತಗಳು</sys:String>
 
 </ResourceDictionary>
 

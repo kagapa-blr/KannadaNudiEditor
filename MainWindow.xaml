@@ -938,7 +938,7 @@
                     </Syncfusion:BackstageTabItem>
 
 
-                    <Syncfusion:BackstageTabItem Header="Recent Files">
+                    <Syncfusion:BackstageTabItem Header="{DynamicResource RecentFilesLabel}">
                         <Grid Margin="30"
                               Background="White"
                               HorizontalAlignment="Stretch"

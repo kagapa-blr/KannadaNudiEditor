@@ -526,5 +526,11 @@
   <sys:String x:Key="UnicodeToAsciiLabel">Unicode to ASCII</sys:String>
 
 
+  <!-- =========================== -->
+  <!-- BackStage : RECENT TAB -->
+  <!-- =========================== -->
+
+  <sys:String x:Key="RecentFilesLabel">Recent Files</sys:String>
+
 
 </ResourceDictionary>
