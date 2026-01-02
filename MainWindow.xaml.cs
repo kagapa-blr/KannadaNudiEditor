@@ -561,94 +561,25 @@ namespace KannadaNudiEditor
         {
             try
             {
-                SimpleLogger.Log("[OPEN] Command triggered (OpenDocumentCommand).");
-                await PromptAndOpenFileAsync();
-            }
-            catch (Exception ex)
-            {
-                // Final safety net
-                SimpleLogger.LogException(ex, "[OPEN] OnOpenExecuted crashed");
-                MessageBox.Show($"Unexpected error:\n{ex.Message}",
-                    "Open Failed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-        }
-
-        private async Task PromptAndOpenFileAsync()
-        {
-            await _openGate.WaitAsync();
-            try
-            {
-                SimpleLogger.Log("[OPEN] Prompt dialog started.");
-
-                // Close backstage before opening modal dialog
-                if (ribbon != null)
-                    ribbon.IsBackStageVisible = false;
-
-                await Task.Yield(); // allow UI to settle
-
-                // Only for file-picking UI
                 LoadingView.Show();
-
-                var openDialog = new OpenFileDialog
-                {
-                    Filter =
-                        "All supported files (*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.docx;*.doc;*.htm;*.html;*.rtf;*.txt;*.xaml|" +
-                        "Word Document (*.docx)|*.docx|" +
-                        "Word 97 - 2003 Document (*.doc)|*.doc|" +
-                        "Web Page (*.htm,*.html)|*.htm;*.html|" +
-                        "Rich Text File (*.rtf)|*.rtf|" +
-                        "Text File (*.txt)|*.txt|" +
-                        "Xaml File (*.xaml)|*.xaml",
-                    FilterIndex = 1,
-                    Multiselect = false
-                };
-
-                var result = openDialog.ShowDialog();
-
-                // Immediately hide after selection/cancel
-                LoadingView.Hide();
-
-                if (result != true)
-                {
-                    SimpleLogger.Log("[OPEN] Prompt canceled by user.");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(openDialog.FileName))
-                {
-                    SimpleLogger.Log("[OPEN] Prompt returned empty FileName (unexpected).");
-                    return;
-                }
-
-                var selectedPath = openDialog.FileName;
-                SimpleLogger.Log($"[OPEN] Prompt selected: {selectedPath}");
-
-                // No LoadingView here; Syncfusion shows its own loading/progress
-                var ok = await OpenDocumentFromPathAsync(selectedPath, updateRecentFiles: true);
-
-                SimpleLogger.Log($"[OPEN] Prompt open result: {(ok ? "SUCCESS" : "FAILED")} Path={selectedPath}");
+                await Task.Run(() => Application.Current.Dispatcher.Invoke(() => WordImport()));
             }
             catch (Exception ex)
             {
-                // Covers dialog creation/show + path selection + unexpected failures
-                SimpleLogger.LogException(ex, "[OPEN] PromptAndOpenFileAsync failed");
-                MessageBox.Show($"Error while selecting/opening file:\n{ex.Message}",
-                    "Open Failed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-
-                try { LoadingView.Hide(); } catch { /* ignore */ }
+                MessageBox.Show($"Error while opening document:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
-                _openGate.Release();
+                LoadingView.Hide();
+                richTextBoxAdv?.Focus();
+                if (ribbon != null) ribbon.IsBackStageVisible = false;
             }
         }
 
+  
         private async Task<bool> OpenDocumentFromPathAsync(string fullPath, bool updateRecentFiles = true)
         {
+            await _openGate.WaitAsync();
             var swTotal = Stopwatch.StartNew();
 
             try
@@ -690,7 +621,6 @@ namespace KannadaNudiEditor
                 var formatType = GetFormatType(fileExtension);
                 SimpleLogger.Log($"[OPEN] Begin load. Path={normalizedPath} Ext={fileExtension} FormatType={formatType}");
 
-                // Cancel previous load if still running
                 if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
                 {
                     SimpleLogger.Log("[OPEN] Canceling previous LoadAsync...");
@@ -727,7 +657,6 @@ namespace KannadaNudiEditor
                 }
                 catch (Exception exLoad)
                 {
-                    // This is the important one to diagnose Syncfusion importer issues
                     SimpleLogger.LogException(exLoad, $"[OPEN] Load failed after {swLoad.ElapsedMilliseconds} ms. Path={normalizedPath}");
 
                     MessageBox.Show($"Failed to open document:\n{exLoad.Message}",
@@ -744,7 +673,6 @@ namespace KannadaNudiEditor
                     loadAsync = null;
                 }
 
-                // Success: update app state
                 richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(fileName);
                 currentFilePath = normalizedPath;
 
@@ -752,13 +680,20 @@ namespace KannadaNudiEditor
 
                 if (updateRecentFiles)
                 {
-                    var fileType = fileExtension.TrimStart('.').ToLowerInvariant();
-                    bool isAscii = false;
-                    bool isUnicode = true;
+                    try
+                    {
+                        var fileType = fileExtension.TrimStart('.').ToLowerInvariant();
+                        bool isAscii = false;
+                        bool isUnicode = true;
 
-                    SimpleLogger.Log($"[OPEN] RecentFilesStore.AddOrUpdate start. Path={currentFilePath} Type={fileType} Name={fileName}");
-                    RecentFilesStore.AddOrUpdate(currentFilePath, isAscii, isUnicode, fileType, fileName);
-                    SimpleLogger.Log("[OPEN] RecentFilesStore.AddOrUpdate done.");
+                        SimpleLogger.Log($"[OPEN] RecentFilesStore.AddOrUpdate start. Path={currentFilePath} Type={fileType} Name={fileName}");
+                        RecentFilesStore.AddOrUpdate(currentFilePath, isAscii, isUnicode, fileType, fileName);
+                        SimpleLogger.Log("[OPEN] RecentFilesStore.AddOrUpdate done.");
+                    }
+                    catch (Exception exRecent)
+                    {
+                        SimpleLogger.LogException(exRecent, "[OPEN] RecentFilesStore.AddOrUpdate failed");
+                    }
                 }
 
                 return true;
@@ -777,21 +712,17 @@ namespace KannadaNudiEditor
                 swTotal.Stop();
                 SimpleLogger.Log($"[OPEN] End. TotalTime={swTotal.ElapsedMilliseconds} ms.");
 
-                // UI cleanup (safe + minimal)
-                try { richTextBoxAdv?.Focus(); } catch { /* ignore */ }
-
+                try { richTextBoxAdv?.Focus(); } catch { }
                 try
                 {
                     if (ribbon != null)
                         ribbon.IsBackStageVisible = false;
                 }
-                catch { /* ignore */ }
+                catch { }
+
+                _openGate.Release();
             }
         }
-
-
-
-
 
 
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
