@@ -299,6 +299,8 @@ namespace KannadaNudiEditor
         {
             if (ribbon != null)
                 ribbon.Loaded += Ribbon_Loaded;
+
+            RefreshRecentFiles();
         }
 
         void RichTextBoxAdv_RequestNavigate(object obj, Syncfusion.Windows.Controls.RichTextBoxAdv.RequestNavigateEventArgs args)
@@ -2789,100 +2791,30 @@ namespace KannadaNudiEditor
 
 
 
-        private void ShowRecentFilesState(string state)
+
+        //Recent File Tab
+        private enum RecentFilesUiState { Init, Loading, Empty, List }
+
+        private void InitRecentFilesUi()
         {
-            // Default all hidden
-            RecentFilesList.Visibility = Visibility.Collapsed;
-            RecentFilesLoadingMessage.Visibility = Visibility.Collapsed;
-            EmptyRecentFilesMessage.Visibility = Visibility.Collapsed;
-
-            switch (state)
-            {
-                case "init":
-                    EmptyRecentFilesMessage.Text = "Click Refresh to load recent files.";
-                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
-                    break;
-
-                case "loading":
-                    RecentFilesLoadingMessage.Visibility = Visibility.Visible;
-                    break;
-
-                case "empty":
-                    EmptyRecentFilesMessage.Text = "No recent files found.";
-                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
-                    break;
-
-                case "list":
-                    RecentFilesList.Visibility = Visibility.Visible;
-                    break;
-
-                default:
-                    EmptyRecentFilesMessage.Text = "Unknown state.";
-                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
-                    break;
-            }
-
-            SimpleLogger.Log($"[RECENTFILE] UI state -> {state}");
+            RecentFilesList.ItemsSource = RecentFiles;
+            SetRecentFilesState(RecentFilesUiState.Init);
         }
 
         private void RefreshRecentFilesClick(object sender, RoutedEventArgs e)
-        {
-            SimpleLogger.Log("[RECENTFILE] Refresh clicked");
-            ShowRecentFilesState("loading");
-
-            try
-            {
-                RecentFiles.Clear();
-
-                var items = RecentFilesStore.ReadAll()?.ToList() ?? new List<RecentFileItem>();
-                SimpleLogger.Log($"[RECENTFILE] Store returned {items.Count} items");
-
-                foreach (var item in items)
-                {
-                    SimpleLogger.Log($"[RECENTFILE] Item: {item.FullPath}");
-                    RecentFiles.Add(item);
-                }
-
-                // Force the ListBox to use this collection (prevents DataContext/binding issues)
-                RecentFilesList.ItemsSource = RecentFiles;
-
-                ShowRecentFilesState(RecentFiles.Count > 0 ? "list" : "empty");
-
-                // Optional: force redraw
-                RecentFilesList.Items.Refresh();
-
-                SimpleLogger.Log($"[RECENTFILE] UI now has {RecentFiles.Count} items");
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.Log($"[RECENTFILE] ERROR {ex}");
-                RecentFiles.Clear();
-                RecentFilesList.ItemsSource = RecentFiles;
-                ShowRecentFilesState("empty");
-            }
-        }
+            => RefreshRecentFiles();
 
         private void ClearRecentFilesClick(object sender, RoutedEventArgs e)
         {
             SimpleLogger.Log("[RECENTFILE] Clear clicked");
+            RecentFilesStore.Clear();
 
-            try
-            {
-                RecentFilesStore.Clear();
-                RecentFiles.Clear();
-                RecentFilesList.ItemsSource = RecentFiles;
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.Log($"[RECENTFILE] ERROR {ex}");
-            }
-
-            ShowRecentFilesState("init");
+            RecentFiles.Clear();
+            SetRecentFilesState(RecentFilesUiState.Init);
         }
 
         private void RecentFilesListBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Use SelectedItem from the ListBox; do not rely on SelectedRecentFile binding
             if (RecentFilesList.SelectedItem is not RecentFileItem item)
             {
                 SimpleLogger.Log("[RECENTFILE] DoubleClick ignored (no selection)");
@@ -2905,28 +2837,62 @@ namespace KannadaNudiEditor
             // OpenFileFromPath(path);
         }
 
-        // Call this once after InitializeComponent() (constructor)
-        private void InitRecentFilesUi()
+        private void RefreshRecentFiles()
         {
-            RecentFilesList.ItemsSource = RecentFiles;
-            ShowRecentFilesState("init");
+            SetRecentFilesState(RecentFilesUiState.Loading);
+
+            try
+            {
+                SimpleLogger.Log("[RECENTFILE] Refreshing the Recent File Tab");
+
+                var items = RecentFilesStore.RefreshFromDisk();
+
+                RecentFiles.Clear();
+                foreach (var item in items)
+                    RecentFiles.Add(item);
+
+                SetRecentFilesState(RecentFiles.Count == 0 ? RecentFilesUiState.Empty : RecentFilesUiState.List);
+
+                SimpleLogger.Log($"[RECENTFILE] UI now has {RecentFiles.Count} items");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "[RECENTFILE] Refresh failed");
+
+                RecentFiles.Clear();
+                SetRecentFilesState(RecentFilesUiState.Empty);
+            }
         }
 
+        private void SetRecentFilesState(RecentFilesUiState state)
+        {
+            RecentFilesList.Visibility = Visibility.Collapsed;
+            RecentFilesLoadingMessage.Visibility = Visibility.Collapsed;
+            EmptyRecentFilesMessage.Visibility = Visibility.Collapsed;
 
+            switch (state)
+            {
+                case RecentFilesUiState.Init:
+                    EmptyRecentFilesMessage.Text = "Click Refresh to load recent files.";
+                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
+                    break;
 
+                case RecentFilesUiState.Loading:
+                    RecentFilesLoadingMessage.Visibility = Visibility.Visible;
+                    break;
 
+                case RecentFilesUiState.Empty:
+                    EmptyRecentFilesMessage.Text = "No recent files found.";
+                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
+                    break;
 
+                case RecentFilesUiState.List:
+                    RecentFilesList.Visibility = Visibility.Visible;
+                    break;
+            }
 
-
-
-
-
-
-
-
-
-
-
+            SimpleLogger.Log($"[RECENTFILE] UI state -> {state}");
+        }
 
 
 
