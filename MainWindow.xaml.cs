@@ -38,6 +38,7 @@ namespace KannadaNudiEditor
         Dictionary<string, List<double>>? pageMarginsCollection = null;
         Dictionary<string, List<double>>? pageSizesCollection = null;
         private string currentFilePath = string.Empty;
+        private readonly SemaphoreSlim _openGate = new(1, 1);
 
         #region Page Fields
         private string customTopMargin;
@@ -560,25 +561,237 @@ namespace KannadaNudiEditor
         {
             try
             {
-                LoadingView.Show(); // Show loading UI
-
-                await Task.Run(() =>
-                {
-                    // Run WordImport in background thread
-                    Application.Current.Dispatcher.Invoke(() => WordImport());
-                });
+                SimpleLogger.Log("[OPEN] Command triggered (OpenDocumentCommand).");
+                await PromptAndOpenFileAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while opening document:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Final safety net
+                SimpleLogger.LogException(ex, "[OPEN] OnOpenExecuted crashed");
+                MessageBox.Show($"Unexpected error:\n{ex.Message}",
+                    "Open Failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private async Task PromptAndOpenFileAsync()
+        {
+            await _openGate.WaitAsync();
+            try
+            {
+                SimpleLogger.Log("[OPEN] Prompt dialog started.");
+
+                // Close backstage before opening modal dialog
+                if (ribbon != null)
+                    ribbon.IsBackStageVisible = false;
+
+                await Task.Yield(); // allow UI to settle
+
+                // Only for file-picking UI
+                LoadingView.Show();
+
+                var openDialog = new OpenFileDialog
+                {
+                    Filter =
+                        "All supported files (*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.docx;*.doc;*.htm;*.html;*.rtf;*.txt;*.xaml|" +
+                        "Word Document (*.docx)|*.docx|" +
+                        "Word 97 - 2003 Document (*.doc)|*.doc|" +
+                        "Web Page (*.htm,*.html)|*.htm;*.html|" +
+                        "Rich Text File (*.rtf)|*.rtf|" +
+                        "Text File (*.txt)|*.txt|" +
+                        "Xaml File (*.xaml)|*.xaml",
+                    FilterIndex = 1,
+                    Multiselect = false
+                };
+
+                var result = openDialog.ShowDialog();
+
+                // Immediately hide after selection/cancel
+                LoadingView.Hide();
+
+                if (result != true)
+                {
+                    SimpleLogger.Log("[OPEN] Prompt canceled by user.");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(openDialog.FileName))
+                {
+                    SimpleLogger.Log("[OPEN] Prompt returned empty FileName (unexpected).");
+                    return;
+                }
+
+                var selectedPath = openDialog.FileName;
+                SimpleLogger.Log($"[OPEN] Prompt selected: {selectedPath}");
+
+                // No LoadingView here; Syncfusion shows its own loading/progress
+                var ok = await OpenDocumentFromPathAsync(selectedPath, updateRecentFiles: true);
+
+                SimpleLogger.Log($"[OPEN] Prompt open result: {(ok ? "SUCCESS" : "FAILED")} Path={selectedPath}");
+            }
+            catch (Exception ex)
+            {
+                // Covers dialog creation/show + path selection + unexpected failures
+                SimpleLogger.LogException(ex, "[OPEN] PromptAndOpenFileAsync failed");
+                MessageBox.Show($"Error while selecting/opening file:\n{ex.Message}",
+                    "Open Failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                try { LoadingView.Hide(); } catch { /* ignore */ }
             }
             finally
             {
-                LoadingView.Hide(); // Hide loading in any case
-                richTextBoxAdv.Focus();
-                ribbon.IsBackStageVisible = false;
+                _openGate.Release();
             }
         }
+
+        private async Task<bool> OpenDocumentFromPathAsync(string fullPath, bool updateRecentFiles = true)
+        {
+            var swTotal = Stopwatch.StartNew();
+
+            try
+            {
+                if (richTextBoxAdv == null)
+                {
+                    SimpleLogger.Log("[OPEN] Abort: richTextBoxAdv is null.");
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(fullPath))
+                {
+                    SimpleLogger.Log("[OPEN] Abort: fullPath is empty.");
+                    return false;
+                }
+
+                var normalizedPath = Path.GetFullPath(fullPath);
+
+                if (!File.Exists(normalizedPath))
+                {
+                    SimpleLogger.Log($"[OPEN] File not found: {normalizedPath}");
+                    MessageBox.Show("File not found:\n" + normalizedPath,
+                        "Kannada Nudi Editor",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return false;
+                }
+
+                var file = new FileInfo(normalizedPath);
+                var fileName = file.Name;
+                var fileExtension = file.Extension;
+
+                if (string.IsNullOrWhiteSpace(fileExtension))
+                {
+                    SimpleLogger.Log($"[OPEN] Abort: file has no extension: {normalizedPath}");
+                    return false;
+                }
+
+                var formatType = GetFormatType(fileExtension);
+                SimpleLogger.Log($"[OPEN] Begin load. Path={normalizedPath} Ext={fileExtension} FormatType={formatType}");
+
+                // Cancel previous load if still running
+                if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
+                {
+                    SimpleLogger.Log("[OPEN] Canceling previous LoadAsync...");
+                    cancellationTokenSource.Cancel();
+
+                    try
+                    {
+                        if (!loadAsync.IsCanceled)
+                            await loadAsync;
+                    }
+                    catch (Exception exPrev)
+                    {
+                        SimpleLogger.LogException(exPrev, "[OPEN] Previous LoadAsync ended with error");
+                    }
+                }
+
+                var swLoad = Stopwatch.StartNew();
+
+                try
+                {
+                    cancellationTokenSource = new CancellationTokenSource();
+
+                    using var fileStream = File.OpenRead(normalizedPath);
+                    loadAsync = richTextBoxAdv.LoadAsync(fileStream, formatType, cancellationTokenSource.Token);
+
+                    await loadAsync;
+
+                    SimpleLogger.Log($"[OPEN] LoadAsync completed in {swLoad.ElapsedMilliseconds} ms. Path={normalizedPath}");
+                }
+                catch (OperationCanceledException oce)
+                {
+                    SimpleLogger.LogException(oce, $"[OPEN] Load canceled after {swLoad.ElapsedMilliseconds} ms. Path={normalizedPath}");
+                    return false;
+                }
+                catch (Exception exLoad)
+                {
+                    // This is the important one to diagnose Syncfusion importer issues
+                    SimpleLogger.LogException(exLoad, $"[OPEN] Load failed after {swLoad.ElapsedMilliseconds} ms. Path={normalizedPath}");
+
+                    MessageBox.Show($"Failed to open document:\n{exLoad.Message}",
+                        "Open Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                    return false;
+                }
+                finally
+                {
+                    cancellationTokenSource?.Dispose();
+                    cancellationTokenSource = null;
+                    loadAsync = null;
+                }
+
+                // Success: update app state
+                richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(fileName);
+                currentFilePath = normalizedPath;
+
+                SimpleLogger.Log($"[OPEN] Document loaded and activated. Title={richTextBoxAdv.DocumentTitle} CurrentPath={currentFilePath}");
+
+                if (updateRecentFiles)
+                {
+                    var fileType = fileExtension.TrimStart('.').ToLowerInvariant();
+                    bool isAscii = false;
+                    bool isUnicode = true;
+
+                    SimpleLogger.Log($"[OPEN] RecentFilesStore.AddOrUpdate start. Path={currentFilePath} Type={fileType} Name={fileName}");
+                    RecentFilesStore.AddOrUpdate(currentFilePath, isAscii, isUnicode, fileType, fileName);
+                    SimpleLogger.Log("[OPEN] RecentFilesStore.AddOrUpdate done.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "[OPEN] OpenDocumentFromPathAsync crashed");
+                MessageBox.Show($"Error while opening document:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return false;
+            }
+            finally
+            {
+                swTotal.Stop();
+                SimpleLogger.Log($"[OPEN] End. TotalTime={swTotal.ElapsedMilliseconds} ms.");
+
+                // UI cleanup (safe + minimal)
+                try { richTextBoxAdv?.Focus(); } catch { /* ignore */ }
+
+                try
+                {
+                    if (ribbon != null)
+                        ribbon.IsBackStageVisible = false;
+                }
+                catch { /* ignore */ }
+            }
+        }
+
+
+
+
 
 
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -1493,7 +1706,7 @@ namespace KannadaNudiEditor
             fontSizeComboBox = null;
             fontColorPicker = null;
             restrictEditingButton = null;
-#if !Framework3_5 
+#if !Framework3_5
 #if !Framework4_0
             //Handled to cancel the asynchronous load operation.
             if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
@@ -2812,29 +3025,12 @@ namespace KannadaNudiEditor
             RecentFiles.Clear();
             SetRecentFilesState(RecentFilesUiState.Init);
         }
-
-        private void RecentFilesListBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void RecentFilesListBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RecentFilesList.SelectedItem is not RecentFileItem item)
-            {
-                SimpleLogger.Log("[RECENTFILE] DoubleClick ignored (no selection)");
                 return;
-            }
 
-            var path = item.FullPath;
-            SimpleLogger.Log($"[RECENTFILE] DoubleClick: {path}");
-
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                MessageBox.Show("File not found:\n" + path,
-                    "Kannada Nudi Editor",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-                return;
-            }
-
-            // TODO: integrate with open logic
-            // OpenFileFromPath(path);
+            await OpenDocumentFromPathAsync(item.FullPath, updateRecentFiles: true);
         }
 
         private void RefreshRecentFiles()

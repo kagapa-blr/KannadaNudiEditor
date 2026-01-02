@@ -940,46 +940,94 @@
 
                     <Syncfusion:BackstageTabItem Header="Recent Files">
                         <Grid Margin="30"
-                              Background="White">
+                              Background="White"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="0,0,0,10">
-                                <Button Content="Refresh"
-                                        Click="RefreshRecentFilesClick"
-                                        Margin="0,0,8,0"/>
-                                <Button Content="Clear"
-                                        Click="ClearRecentFilesClick"/>
-                            </StackPanel>
+                            <!-- Top actions -->
+                            <DockPanel Grid.Row="0"
+                                       LastChildFill="False"
+                                       Margin="0,0,0,12">
+                                <StackPanel Orientation="Horizontal"
+                                            DockPanel.Dock="Left">
+                                    <Button Content="Refresh"
+                                            Click="RefreshRecentFilesClick"
+                                            MinWidth="90"
+                                            Margin="0,0,8,0"/>
+                                    <Button Content="Clear"
+                                            Click="ClearRecentFilesClick"
+                                            MinWidth="90"/>
+                                </StackPanel>
 
-                            <Grid Grid.Row="1">
+                                <!-- Optional hint (remove if not needed) -->
+                                <TextBlock DockPanel.Dock="Right"
+                                           VerticalAlignment="Center"
+                                           Foreground="#667085"
+                                           FontSize="12"
+                                           Text="Double-click to open."
+                                           Margin="12,0,0,0"/>
+                            </DockPanel>
+
+                            <!-- Content area -->
+                            <Grid Grid.Row="1"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+
+                                <!-- List -->
                                 <ListBox x:Name="RecentFilesList"
                                          MouseDoubleClick="RecentFilesListBoxMouseDoubleClick"
                                          Background="White"
                                          Foreground="Black"
+                                         Visibility="Collapsed"
+                                         HorizontalContentAlignment="Stretch"
+                                         BorderThickness="0"
                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                         Visibility="Collapsed">
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.CanContentScroll="True"
+                                         VirtualizingPanel.IsVirtualizing="True"
+                                         VirtualizingPanel.VirtualizationMode="Recycling"
+                                         VirtualizingPanel.ScrollUnit="Pixel"
+                                         SnapsToDevicePixels="True">
+
+                                    <!-- Optional: reduce spacing between items -->
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Padding"
+                                                    Value="0"/>
+                                            <Setter Property="Margin"
+                                                    Value="0"/>
+                                            <Setter Property="HorizontalContentAlignment"
+                                                    Value="Stretch"/>
+                                            <Setter Property="VerticalContentAlignment"
+                                                    Value="Center"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
 
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Margin="6"
+                                            <Border Margin="4"
                                                     Padding="10"
                                                     BorderBrush="#E0E0E0"
                                                     BorderThickness="1"
                                                     CornerRadius="8"
                                                     Background="White">
+
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="Auto"/>
                                                     </Grid.RowDefinitions>
+
+                                                    <!-- Fixed right column keeps dates aligned across rows -->
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="220"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <!-- File name -->
@@ -994,7 +1042,9 @@
                                                     <StackPanel Grid.Row="0"
                                                                 Grid.Column="1"
                                                                 Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
                                                                 VerticalAlignment="Center">
+
                                                         <Border Padding="8,2"
                                                                 CornerRadius="10"
                                                                 Background="#F2F4F7"
@@ -1020,16 +1070,16 @@
                                                                TextTrimming="CharacterEllipsis"/>
 
                                                     <!-- Flags row -->
-                                                    <StackPanel Grid.Row="2"
-                                                                Grid.ColumnSpan="2"
-                                                                Orientation="Horizontal"
-                                                                Margin="0,8,0,0">
+                                                    <WrapPanel Grid.Row="2"
+                                                               Grid.ColumnSpan="2"
+                                                               Margin="0,8,0,0"
+                                                               Orientation="Horizontal">
 
                                                         <!-- Encoding -->
                                                         <Border Padding="8,2"
                                                                 CornerRadius="10"
                                                                 Background="#EEF4FF"
-                                                                Margin="0,0,6,0">
+                                                                Margin="0,0,6,6">
                                                             <TextBlock FontSize="12"
                                                                        Foreground="#3538CD">
                                                                 <TextBlock.Style>
@@ -1057,7 +1107,7 @@
                                                         <Border Padding="8,2"
                                                                 CornerRadius="10"
                                                                 Background="#FFFAEB"
-                                                                Margin="0,0,6,0">
+                                                                Margin="0,0,6,6">
                                                             <TextBlock FontSize="12"
                                                                        Foreground="#B54708">
                                                                 <TextBlock.Style>
@@ -1076,10 +1126,11 @@
                                                             </TextBlock>
                                                         </Border>
 
-                                                        <!-- Optional: raw flags as icons -->
+                                                        <!-- Unicode tick (optional extra badge) -->
                                                         <Border Padding="8,2"
                                                                 CornerRadius="10"
-                                                                Background="#ECFDF3">
+                                                                Background="#ECFDF3"
+                                                                Margin="0,0,6,6">
                                                             <TextBlock FontSize="12"
                                                                        Foreground="#027A48">
                                                                 <TextBlock.Style>
@@ -1098,15 +1149,14 @@
                                                             </TextBlock>
                                                         </Border>
 
-                                                    </StackPanel>
+                                                    </WrapPanel>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
-
-
                                 </ListBox>
 
+                                <!-- Loading message -->
                                 <TextBlock x:Name="RecentFilesLoadingMessage"
                                            Text="Loading recent files..."
                                            FontStyle="Italic"
@@ -1114,6 +1164,7 @@
                                            VerticalAlignment="Center"
                                            Visibility="Collapsed"/>
 
+                                <!-- Empty/init message -->
                                 <TextBlock x:Name="EmptyRecentFilesMessage"
                                            Text="Click Refresh to load recent files."
                                            FontStyle="Italic"
@@ -1123,7 +1174,6 @@
                             </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
-
 
                 </Syncfusion:Backstage>
             </Syncfusion:Ribbon.BackStage>
