@@ -962,18 +962,149 @@
                                          Foreground="Black"
                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                                          Visibility="Collapsed">
+
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Margin="6">
-                                                <TextBlock Text="{Binding FileName}"
-                                                           FontSize="14"
-                                                           FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding FullPath}"
-                                                           FontSize="12"
-                                                           Opacity="0.75"/>
-                                            </StackPanel>
+                                            <Border Margin="6"
+                                                    Padding="10"
+                                                    BorderBrush="#E0E0E0"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8"
+                                                    Background="White">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- File name -->
+                                                    <TextBlock Grid.Row="0"
+                                                               Grid.Column="0"
+                                                               Text="{Binding FileName}"
+                                                               FontSize="14"
+                                                               FontWeight="SemiBold"
+                                                               TextTrimming="CharacterEllipsis"/>
+
+                                                    <!-- Type + Last open -->
+                                                    <StackPanel Grid.Row="0"
+                                                                Grid.Column="1"
+                                                                Orientation="Horizontal"
+                                                                VerticalAlignment="Center">
+                                                        <Border Padding="8,2"
+                                                                CornerRadius="10"
+                                                                Background="#F2F4F7"
+                                                                Margin="0,0,8,0">
+                                                            <TextBlock Text="{Binding FileType}"
+                                                                       FontSize="12"
+                                                                       Foreground="#344054"/>
+                                                        </Border>
+
+                                                        <TextBlock Text="{Binding LastOpen, StringFormat=yyyy-MM-dd HH:mm}"
+                                                                   FontSize="12"
+                                                                   Foreground="#667085"/>
+                                                    </StackPanel>
+
+                                                    <!-- Full path -->
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.ColumnSpan="2"
+                                                               Margin="0,6,0,0"
+                                                               Text="{Binding FullPath}"
+                                                               FontSize="12"
+                                                               Foreground="#475467"
+                                                               Opacity="0.9"
+                                                               TextTrimming="CharacterEllipsis"/>
+
+                                                    <!-- Flags row -->
+                                                    <StackPanel Grid.Row="2"
+                                                                Grid.ColumnSpan="2"
+                                                                Orientation="Horizontal"
+                                                                Margin="0,8,0,0">
+
+                                                        <!-- Encoding -->
+                                                        <Border Padding="8,2"
+                                                                CornerRadius="10"
+                                                                Background="#EEF4FF"
+                                                                Margin="0,0,6,0">
+                                                            <TextBlock FontSize="12"
+                                                                       Foreground="#3538CD">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text"
+                                                                                Value="Encoding: Unknown"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsAscii}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Text"
+                                                                                        Value="Encoding: ASCII"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding IsUnicode}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Text"
+                                                                                        Value="Encoding: Unicode"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Border>
+
+                                                        <!-- Updated/New -->
+                                                        <Border Padding="8,2"
+                                                                CornerRadius="10"
+                                                                Background="#FFFAEB"
+                                                                Margin="0,0,6,0">
+                                                            <TextBlock FontSize="12"
+                                                                       Foreground="#B54708">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text"
+                                                                                Value="New"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsUpdated}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Text"
+                                                                                        Value="Updated"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Border>
+
+                                                        <!-- Optional: raw flags as icons -->
+                                                        <Border Padding="8,2"
+                                                                CornerRadius="10"
+                                                                Background="#ECFDF3">
+                                                            <TextBlock FontSize="12"
+                                                                       Foreground="#027A48">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text"
+                                                                                Value="Unicode: ✗"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsUnicode}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Text"
+                                                                                        Value="Unicode: ✓"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Border>
+
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
+
+
                                 </ListBox>
 
                                 <TextBlock x:Name="RecentFilesLoadingMessage"
