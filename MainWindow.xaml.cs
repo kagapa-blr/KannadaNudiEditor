@@ -78,6 +78,11 @@ namespace KannadaNudiEditor
         private PageSize? _customSizeItem; // Holds the "Custom" row instance
         private ObservableCollection<PageSize>? _sizeItems; // Binds to pageSize.ItemsSource
 
+
+        // Recent Files collection
+        public ObservableCollection<RecentFileItem> RecentFiles { get; } = new();
+        public RecentFileItem? SelectedRecentFile { get; set; }
+
         // Near top of MainWindow class
         private bool _ignorePageSizeChange = false;
 
@@ -92,6 +97,7 @@ namespace KannadaNudiEditor
             // Enables touch manipulation.
             richTextBoxAdv.IsManipulationEnabled = true;
 #endif
+            //DataContext = this;
             DataContext = richTextBoxAdv;
 
             richTextBoxAdv.DocumentTitle = "Untitled";
@@ -121,6 +127,8 @@ namespace KannadaNudiEditor
             InitializePageSizes();
             ApplyDefaultPageSettings();
             ConfigureSpellChecker();
+            InitRecentFilesUi();
+
             SimpleLogger.Log("MainWindow initialized.");
         }
         #endregion
@@ -2787,30 +2795,130 @@ namespace KannadaNudiEditor
         }
 
 
-        // Code-behind placeholders for Recent Files backstage tab
+
+        private void ShowRecentFilesState(string state)
+        {
+            // Default all hidden
+            RecentFilesList.Visibility = Visibility.Collapsed;
+            RecentFilesLoadingMessage.Visibility = Visibility.Collapsed;
+            EmptyRecentFilesMessage.Visibility = Visibility.Collapsed;
+
+            switch (state)
+            {
+                case "init":
+                    EmptyRecentFilesMessage.Text = "Click Refresh to load recent files.";
+                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
+                    break;
+
+                case "loading":
+                    RecentFilesLoadingMessage.Visibility = Visibility.Visible;
+                    break;
+
+                case "empty":
+                    EmptyRecentFilesMessage.Text = "No recent files found.";
+                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
+                    break;
+
+                case "list":
+                    RecentFilesList.Visibility = Visibility.Visible;
+                    break;
+
+                default:
+                    EmptyRecentFilesMessage.Text = "Unknown state.";
+                    EmptyRecentFilesMessage.Visibility = Visibility.Visible;
+                    break;
+            }
+
+            SimpleLogger.Log($"[RECENTFILE] UI state -> {state}");
+        }
+
+        private void RefreshRecentFilesClick(object sender, RoutedEventArgs e)
+        {
+            SimpleLogger.Log("[RECENTFILE] Refresh clicked");
+            ShowRecentFilesState("loading");
+
+            try
+            {
+                RecentFiles.Clear();
+
+                var items = RecentFilesStore.ReadAll()?.ToList() ?? new List<RecentFileItem>();
+                SimpleLogger.Log($"[RECENTFILE] Store returned {items.Count} items");
+
+                foreach (var item in items)
+                {
+                    SimpleLogger.Log($"[RECENTFILE] Item: {item.FullPath}");
+                    RecentFiles.Add(item);
+                }
+
+                // Force the ListBox to use this collection (prevents DataContext/binding issues)
+                RecentFilesList.ItemsSource = RecentFiles;
+
+                ShowRecentFilesState(RecentFiles.Count > 0 ? "list" : "empty");
+
+                // Optional: force redraw
+                RecentFilesList.Items.Refresh();
+
+                SimpleLogger.Log($"[RECENTFILE] UI now has {RecentFiles.Count} items");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[RECENTFILE] ERROR {ex}");
+                RecentFiles.Clear();
+                RecentFilesList.ItemsSource = RecentFiles;
+                ShowRecentFilesState("empty");
+            }
+        }
 
         private void ClearRecentFilesClick(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement logic to clear the recent files list
-            // Example: RecentFiles.Clear();
+            SimpleLogger.Log("[RECENTFILE] Clear clicked");
+
+            try
+            {
+                RecentFilesStore.Clear();
+                RecentFiles.Clear();
+                RecentFilesList.ItemsSource = RecentFiles;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"[RECENTFILE] ERROR {ex}");
+            }
+
+            ShowRecentFilesState("init");
         }
 
         private void RecentFilesListBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // TODO: Implement logic to open the selected recent file
-            // Example: var item = SelectedRecentFile;
+            // Use SelectedItem from the ListBox; do not rely on SelectedRecentFile binding
+            if (RecentFilesList.SelectedItem is not RecentFileItem item)
+            {
+                SimpleLogger.Log("[RECENTFILE] DoubleClick ignored (no selection)");
+                return;
+            }
+
+            var path = item.FullPath;
+            SimpleLogger.Log($"[RECENTFILE] DoubleClick: {path}");
+
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                MessageBox.Show("File not found:\n" + path,
+                    "Kannada Nudi Editor",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            // TODO: integrate with open logic
+            // OpenFileFromPath(path);
         }
 
-        public ObservableCollection<RecentFileItem> RecentFiles { get; set; }
-
-        public RecentFileItem SelectedRecentFile { get; set; }
-
-        // Optional model placeholder — replace with your actual one
-        public class RecentFileItem
+        // Call this once after InitializeComponent() (constructor)
+        private void InitRecentFilesUi()
         {
-            public string DisplayName { get; set; }
-            public string FullPath { get; set; }
+            RecentFilesList.ItemsSource = RecentFiles;
+            ShowRecentFilesState("init");
         }
+
 
 
 

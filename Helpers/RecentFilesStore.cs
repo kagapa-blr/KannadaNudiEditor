@@ -176,6 +176,22 @@ namespace KannadaNudiEditor.Helpers
             return string.IsNullOrWhiteSpace(ext) ? "unknown" : ext.TrimStart('.').ToLowerInvariant();
         }
 
+
+        public static void Clear()
+        {
+            try
+            {
+                if (File.Exists(RecentFilesJsonPath))
+                    File.Delete(RecentFilesJsonPath);
+
+                SimpleLogger.Log("[RECENTFILE] Cleared store");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "[RECENTFILE] Clear failed");
+            }
+        }
+
         private static string NormalizeFileType(string fileType)
         {
             var t = fileType.Trim();

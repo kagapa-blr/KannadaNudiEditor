@@ -938,98 +938,60 @@
                     </Syncfusion:BackstageTabItem>
 
 
-
-
                     <Syncfusion:BackstageTabItem Header="Recent Files">
                         <Grid Margin="30"
-                              DataContext="{Binding RelativeSource={RelativeSource AncestorType=Syncfusion:RibbonWindow}}">
+                              Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,10">
+                                <Button Content="Refresh"
+                                        Click="RefreshRecentFilesClick"
+                                        Margin="0,0,8,0"/>
+                                <Button Content="Clear"
+                                        Click="ClearRecentFilesClick"/>
+                            </StackPanel>
 
-                            <!-- LEFT SECTION -->
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
+                            <Grid Grid.Row="1">
+                                <ListBox x:Name="RecentFilesList"
+                                         MouseDoubleClick="RecentFilesListBoxMouseDoubleClick"
+                                         Background="White"
+                                         Foreground="Black"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         Visibility="Collapsed">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="6">
+                                                <TextBlock Text="{Binding FileName}"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding FullPath}"
+                                                           FontSize="12"
+                                                           Opacity="0.75"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
 
-                                <!-- Title -->
-                                <TextBlock Text="Recent Files"
-                                           FontFamily="NudiParijatha"
-                                           FontSize="20"
-                                           Margin="10"/>
-
-                                <!-- Divider -->
-                                <Rectangle Grid.Row="1"
-                                           Stroke="Gray"
-                                           HorizontalAlignment="Stretch"
-                                           StrokeThickness="1"
-                                           StrokeDashArray="5"
-                                           Margin="10"
-                                           Height="1"/>
-
-                                <!-- Content -->
-                                <Grid Grid.Row="2"
-                                      Margin="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-
-                                    <StackPanel Orientation="Horizontal"
-                                                Grid.Row="0">
-                                        <Button Content="Clear"
-                                                Click="ClearRecentFilesClick"
-                                                Margin="0,0,8,8"/>
-                                    </StackPanel>
-
-                                    <ListBox Grid.Row="1"
-                                             ItemsSource="{Binding RecentFiles}"
-                                             SelectedItem="{Binding SelectedRecentFile, Mode=TwoWay}"
-                                             MouseDoubleClick="RecentFilesListBoxMouseDoubleClick">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Margin="0,6">
-                                                    <TextBlock Text="{Binding DisplayName}"
-                                                               FontWeight="SemiBold"/>
-                                                    <TextBlock Text="{Binding FullPath}"
-                                                               Opacity="0.75"
-                                                               FontSize="12"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </Grid>
-                            </Grid>
-
-                            <!-- MIDDLE SEPARATOR -->
-                            <Border Grid.Column="1"
-                                    BorderThickness="0.5"
-                                    BorderBrush="#FFBCBCBC"
-                                    Margin="15"
-                                    HorizontalAlignment="Left"/>
-
-                            <!-- RIGHT HINT PANEL -->
-                            <Grid Grid.Column="2"
-                                  VerticalAlignment="Top"
-                                  HorizontalAlignment="Left"
-                                  Margin="20,5,0,0">
-                                <TextBlock Text="Double-click a file to open it in the editor."
+                                <TextBlock x:Name="RecentFilesLoadingMessage"
+                                           Text="Loading recent files..."
                                            FontStyle="Italic"
-                                           FontSize="14"
-                                           TextWrapping="Wrap"
-                                           Width="300"/>
-                            </Grid>
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
 
+                                <TextBlock x:Name="EmptyRecentFilesMessage"
+                                           Text="Click Refresh to load recent files."
+                                           FontStyle="Italic"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="Visible"/>
+                            </Grid>
                         </Grid>
                     </Syncfusion:BackstageTabItem>
-
-
 
 
                 </Syncfusion:Backstage>
