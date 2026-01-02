@@ -88,16 +88,11 @@ namespace KannadaNudiEditor
 
         private bool _isDocumentModified = false;
 
-
-        #region Constructor
         public MainWindow()
         {
             InitializeComponent();
-#if !Framework3_5
-            // Enables touch manipulation.
+
             richTextBoxAdv.IsManipulationEnabled = true;
-#endif
-            //DataContext = this;
             DataContext = richTextBoxAdv;
 
             richTextBoxAdv.DocumentTitle = "Untitled";
@@ -105,16 +100,17 @@ namespace KannadaNudiEditor
             richTextBoxAdv.SelectionChanged += RichTextBoxAdv_SelectionChanged;
             richTextBoxAdv.DocumentChanged += RichTextBoxAdv_DocumentChanged;
 
-            this.Loaded += OnLoaded;
-            this.Unloaded += OnUnloaded;
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
             ribbon.DataContextChanged += Ribbon_DataContextChanged;
 
             ribbonGallery = PART_RibbonGallery;
 
             if (fontColorPicker != null)
             {
-                fontColorPicker.SetBinding(ColorPickerPalette.ColorProperty,
-                    new Binding()
+                fontColorPicker.SetBinding(
+                    ColorPickerPalette.ColorProperty,
+                    new Binding
                     {
                         Path = new PropertyPath("Selection.CharacterFormat.FontColor"),
                         Mode = BindingMode.TwoWay,
@@ -131,9 +127,6 @@ namespace KannadaNudiEditor
 
             SimpleLogger.Log("MainWindow initialized.");
         }
-        #endregion
-
-
 
 
 
