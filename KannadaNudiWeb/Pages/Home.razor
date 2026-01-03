@@ -10,9 +10,8 @@
     <div class="toolbar-group">
         <label class="toolbar-label">Input Mode:</label>
         <div class="form-check form-switch">
-            <!-- Used @onchange to avoid conflicts -->
-            <input class="form-check-input" type="checkbox" id="inputModeSwitch" checked="@isKannadaInput" @onchange="OnInputModeChange">
-            <label class="form-check-label" for="inputModeSwitch">@(isKannadaInput ? "KAN" : "ENG")</label>
+            <input class="form-check-input" type="checkbox" id="inputModeSwitch" @bind="IsKannadaInput">
+            <label class="form-check-label" for="inputModeSwitch">@(IsKannadaInput ? "KAN" : "ENG")</label>
         </div>
     </div>
 
@@ -42,22 +41,29 @@
 <script>
     window.registerKeyInterceptor = (dotNetObj) => {
         const editorDiv = document.getElementById('quill-editor');
-        if(!editorDiv) return;
+        if(!editorDiv) {
+            console.error("Quill editor div not found during registration");
+            return;
+        }
 
-        // Use capture: true to intercept before Quill
+        console.log("Registering key interceptor on #quill-editor");
+
         editorDiv.addEventListener('keydown', (e) => {
             if (window.isKannadaMode) {
+                console.log("Keydown intercepted (Kannada Mode):", e.key);
+
                 // Handle Backspace
                 if (e.key === 'Backspace') {
-                    // We let Quill handle the deletion, but we must update our buffer.
+                    console.log("Processing Backspace");
                     dotNetObj.invokeMethodAsync('ProcessBackspace');
                     return;
                 }
 
                 // Handle single chars
                 if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                    console.log("Preventing default and processing key:", e.key);
                     e.preventDefault();
-                    e.stopPropagation(); // Stop bubbling to Quill
+                    e.stopPropagation();
                     dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
                 }
             }
@@ -65,6 +71,7 @@
     };
 
     window.setKannadaMode = (val) => {
+        console.log("Setting Kannada Mode:", val);
         window.isKannadaMode = val;
     };
 </script>
@@ -89,7 +96,26 @@
 </style>
 
 @code {
-    bool isKannadaInput = false;
+    private bool _isKannadaInput = false;
+
+    public bool IsKannadaInput
+    {
+        get => _isKannadaInput;
+        set
+        {
+            if (_isKannadaInput != value)
+            {
+                _isKannadaInput = value;
+                if (!_isKannadaInput)
+                {
+                    TransliterationService.ClearBuffer();
+                }
+                // Fire and forget JS update
+                JSRuntime.InvokeVoidAsync("setKannadaMode", _isKannadaInput);
+            }
+        }
+    }
+
     bool isListening = false;
     string speechLang = "kn-IN";
     DotNetObjectReference<Home>? objRef;
@@ -110,16 +136,6 @@
             await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
             await JSRuntime.InvokeVoidAsync("registerKeyInterceptor", objRef);
         }
-    }
-
-    private async Task OnInputModeChange(ChangeEventArgs args)
-    {
-        isKannadaInput = (bool)(args.Value ?? false);
-        if (!isKannadaInput)
-        {
-            TransliterationService.ClearBuffer();
-        }
-        await JSRuntime.InvokeVoidAsync("setKannadaMode", isKannadaInput);
     }
 
     [JSInvokable]
