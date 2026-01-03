@@ -10,7 +10,8 @@
     <div class="toolbar-group">
         <label class="toolbar-label">Input Mode:</label>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="inputModeSwitch" @bind="isKannadaInput" @oninput="OnInputModeChange">
+            <!-- Used @onchange to avoid conflicts -->
+            <input class="form-check-input" type="checkbox" id="inputModeSwitch" checked="@isKannadaInput" @onchange="OnInputModeChange">
             <label class="form-check-label" for="inputModeSwitch">@(isKannadaInput ? "KAN" : "ENG")</label>
         </div>
     </div>
@@ -43,14 +44,24 @@
         const editorDiv = document.getElementById('quill-editor');
         if(!editorDiv) return;
 
+        // Use capture: true to intercept before Quill
         editorDiv.addEventListener('keydown', (e) => {
-            if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-                if (window.isKannadaMode) {
+            if (window.isKannadaMode) {
+                // Handle Backspace
+                if (e.key === 'Backspace') {
+                    // We let Quill handle the deletion, but we must update our buffer.
+                    dotNetObj.invokeMethodAsync('ProcessBackspace');
+                    return;
+                }
+
+                // Handle single chars
+                if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
                     e.preventDefault();
+                    e.stopPropagation(); // Stop bubbling to Quill
                     dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
                 }
             }
-        });
+        }, true);
     };
 
     window.setKannadaMode = (val) => {
@@ -96,7 +107,7 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor");
+            await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
             await JSRuntime.InvokeVoidAsync("registerKeyInterceptor", objRef);
         }
     }
@@ -109,6 +120,18 @@
             TransliterationService.ClearBuffer();
         }
         await JSRuntime.InvokeVoidAsync("setKannadaMode", isKannadaInput);
+    }
+
+    [JSInvokable]
+    public void OnSelectionChanged()
+    {
+        TransliterationService.ClearBuffer();
+    }
+
+    [JSInvokable]
+    public void ProcessBackspace()
+    {
+        TransliterationService.RemoveLast();
     }
 
     [JSInvokable]

@@ -1,11 +1,14 @@
 window.quillInterop = {
     quill: null,
+    dotNetRef: null,
 
-    init: function (elementId) {
+    init: function (elementId, dotNetReference) {
         if (!window.Quill) {
             console.error("Quill JS not found");
             return;
         }
+
+        this.dotNetRef = dotNetReference;
         this.quill = new Quill(elementId, {
             theme: 'snow',
             modules: {
@@ -17,23 +20,24 @@ window.quillInterop = {
                 ]
             }
         });
+
+        this.quill.on('selection-change', function(range, oldRange, source) {
+            if (source === 'user' && dotNetReference) {
+                dotNetReference.invokeMethodAsync('OnSelectionChanged');
+            }
+        });
     },
 
     insertText: function (text) {
         if (this.quill) {
             const range = this.quill.getSelection(true);
             if (range) {
-                // If there is a selection range (highlighted text), delete it first?
-                // Quill insertText inserts at index.
                 if (range.length > 0) {
                     this.quill.deleteText(range.index, range.length);
                 }
                 this.quill.insertText(range.index, text);
                 this.quill.setSelection(range.index + text.length);
             } else {
-                // Fallback to length if no selection?
-                // Usually getSelection returns null if not focused.
-                // We might need to focus.
                 this.quill.focus();
                 const len = this.quill.getLength();
                 this.quill.insertText(len - 1, text);
