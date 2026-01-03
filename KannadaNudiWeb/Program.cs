@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Components.Web; // Added for HeadOutlet
-using Syncfusion.Blazor;
+using Microsoft.AspNetCore.Components.Web;
 using KannadaNudiWeb.Services;
 using KannadaNudiEditor.Helpers.Conversion;
 
@@ -20,10 +19,6 @@ namespace KannadaNudiWeb
             builder.Services.AddScoped<FileConversionService>();
             builder.Services.AddScoped<TransliterationService>();
             builder.Services.AddScoped<SpeechService>();
-
-            // Register Syncfusion
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("YOUR_COMMUNITY_LICENSE_KEY");
-            builder.Services.AddSyncfusionBlazor();
 
             await builder.Build().RunAsync();
         }

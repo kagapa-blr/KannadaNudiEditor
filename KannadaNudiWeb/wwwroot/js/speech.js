@@ -3,15 +3,16 @@ window.speechInterop = {
     dotNetRef: null,
 
     start: function (dotNetReference, lang) {
-        if (!('webkitSpeechRecognition' in window)) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
             console.error("Web Speech API not supported.");
             return false;
         }
 
         this.dotNetRef = dotNetReference;
-        this.recognition = new webkitSpeechRecognition();
+        this.recognition = new SpeechRecognition();
         this.recognition.continuous = true;
-        this.recognition.interimResults = false; // We only want final results
+        this.recognition.interimResults = false;
         this.recognition.lang = lang || 'kn-IN';
 
         this.recognition.onresult = function (event) {
@@ -29,10 +30,6 @@ window.speechInterop = {
         this.recognition.onerror = function (event) {
             console.error("Speech recognition error", event.error);
             dotNetReference.invokeMethodAsync('OnSpeechError', event.error);
-        };
-
-        this.recognition.onend = function () {
-             // specific logic if needed
         };
 
         this.recognition.start();

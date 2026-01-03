@@ -10,8 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
-    <PackageReference Include="Syncfusion.Blazor.WordProcessor" Version="27.1.52" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="27.1.52" />
   </ItemGroup>
 
 </Project>

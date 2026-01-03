@@ -1,7 +1,4 @@
 @page "/"
-@using Syncfusion.Blazor.DocumentEditor
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Buttons
 @using KannadaNudiWeb.Services
 @inject TransliterationService TransliterationService
 @inject SpeechService SpeechService
@@ -12,11 +9,16 @@
 <div class="toolbar-container">
     <div class="toolbar-group">
         <label class="toolbar-label">Input Mode:</label>
-        <SfSwitch @bind-Checked="isKannadaInput" OffLabel="ENG" OnLabel="KAN" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args) => OnInputModeChange(args))" />
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="inputModeSwitch" @bind="isKannadaInput" @oninput="OnInputModeChange">
+            <label class="form-check-label" for="inputModeSwitch">@(isKannadaInput ? "KAN" : "ENG")</label>
+        </div>
     </div>
 
     <div class="toolbar-group">
-         <SfButton OnClick="ToggleSpeech" IsPrimary="@isListening" Content="@(isListening ? "Stop Speech" : "Start Speech")" IconCss="e-icons e-mic" />
+         <button class="btn @(isListening ? "btn-danger" : "btn-primary")" @onclick="ToggleSpeech">
+             <span class="bi bi-mic"></span> @(isListening ? "Stop Speech" : "Start Speech")
+         </button>
          <select class="form-select ms-2" style="width:auto; display:inline-block;" @bind="speechLang">
              <option value="kn-IN">Kannada</option>
              <option value="en-IN">English</option>
@@ -24,33 +26,35 @@
     </div>
 
     <div class="toolbar-group">
-         <SfButton OnClick="SaveDocument" Content="Save" IconCss="e-icons e-save" />
+         <button class="btn btn-secondary" @onclick="SaveDocument">
+             <span class="bi bi-save"></span> Save
+         </button>
          <InputFile OnChange="LoadDocument" class="file-input-hidden" id="fileUpload" />
-         <label for="fileUpload" class="e-btn e-primary"><span class="e-icons e-open"></span> Open</label>
+         <label for="fileUpload" class="btn btn-secondary"><span class="bi bi-folder2-open"></span> Open</label>
     </div>
 </div>
 
-<div id="editor-container" tabindex="0" style="outline:none;">
-    <SfDocumentEditorContainer @ref="editor" Height="800px" EnableToolbar="true">
-        <DocumentEditorContainerEvents Created="OnCreated" DocumentChanged="OnDocumentChanged"></DocumentEditorContainerEvents>
-    </SfDocumentEditorContainer>
+<div id="editor-wrapper" tabindex="0" style="outline:none;">
+    <div id="quill-editor" style="height: 600px;"></div>
 </div>
 
 <script>
     window.registerKeyInterceptor = (dotNetObj) => {
-        const container = document.getElementById('editor-container');
-        if(!container) return;
+        const editorDiv = document.getElementById('quill-editor');
+        if(!editorDiv) return;
 
-        container.addEventListener('keydown', (e) => {
+        editorDiv.addEventListener('keydown', (e) => {
             if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-                dotNetObj.invokeMethodAsync('ShouldInterceptKey', e.key).then(shouldIntercept => {
-                    if (shouldIntercept) {
-                        e.preventDefault();
-                        dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
-                    }
-                });
+                if (window.isKannadaMode) {
+                    e.preventDefault();
+                    dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
+                }
             }
         });
+    };
+
+    window.setKannadaMode = (val) => {
+        window.isKannadaMode = val;
     };
 </script>
 
@@ -74,7 +78,6 @@
 </style>
 
 @code {
-    SfDocumentEditorContainer? editor;
     bool isKannadaInput = false;
     bool isListening = false;
     string speechLang = "kn-IN";
@@ -93,27 +96,19 @@
     {
         if (firstRender)
         {
+            await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor");
             await JSRuntime.InvokeVoidAsync("registerKeyInterceptor", objRef);
         }
     }
 
-    public void OnCreated(object args)
+    private async Task OnInputModeChange(ChangeEventArgs args)
     {
-        // Editor created
-    }
-
-    private void OnInputModeChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
-    {
-        if (!args.Checked)
+        isKannadaInput = (bool)(args.Value ?? false);
+        if (!isKannadaInput)
         {
             TransliterationService.ClearBuffer();
         }
-    }
-
-    [JSInvokable]
-    public bool ShouldInterceptKey(string key)
-    {
-        return isKannadaInput;
+        await JSRuntime.InvokeVoidAsync("setKannadaMode", isKannadaInput);
     }
 
     [JSInvokable]
@@ -123,13 +118,12 @@
 
         if (result.backspaceCount > 0)
         {
-            // Placeholder logic.
+            await JSRuntime.InvokeVoidAsync("quillInterop.backspace", result.backspaceCount);
         }
 
         if (!string.IsNullOrEmpty(result.text))
         {
-            if (editor != null)
-                await editor.DocumentEditor.Editor.InsertTextAsync(result.text);
+            await JSRuntime.InvokeVoidAsync("quillInterop.insertText", result.text);
         }
     }
 
@@ -151,8 +145,7 @@
     {
         InvokeAsync(async () =>
         {
-            if (editor != null)
-                await editor.DocumentEditor.Editor.InsertTextAsync(text + " ");
+            await JSRuntime.InvokeVoidAsync("quillInterop.insertText", text + " ");
         });
     }
 
@@ -165,8 +158,8 @@
 
     private async Task SaveDocument()
     {
-        if (editor != null)
-            await editor.DocumentEditor.SaveAsync("Document.docx", FormatType.Docx);
+        string html = await JSRuntime.InvokeAsync<string>("quillInterop.getHtml");
+        await JSRuntime.InvokeVoidAsync("quillInterop.downloadFile", "Document.html", html);
     }
 
     private async Task LoadDocument(InputFileChangeEventArgs e)
@@ -174,23 +167,16 @@
         try
         {
             var file = e.File;
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
-            using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
-            ms.Position = 0;
-            // Changed FormatType.Docx to ImportFormatType.Docx
-            if (editor != null)
-                await editor.DocumentEditor.OpenAsync(ms, ImportFormatType.Docx);
+            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024);
+            using var reader = new StreamReader(stream);
+            string content = await reader.ReadToEndAsync();
+
+            await JSRuntime.InvokeVoidAsync("quillInterop.setHtml", content);
         }
         catch(Exception ex)
         {
             Console.WriteLine("Error loading file: " + ex.Message);
         }
-    }
-
-    public void OnDocumentChanged(ContainerDocumentChangeEventArgs args)
-    {
-        // Document content changed
     }
 
     public void Dispose()
