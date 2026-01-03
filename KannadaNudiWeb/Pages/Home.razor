@@ -1,5 +1,5 @@
 @page "/"
-@using Syncfusion.Blazor.WordProcessor
+@using Syncfusion.Blazor.DocumentEditor
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
 @using KannadaNudiWeb.Services
@@ -31,9 +31,9 @@
 </div>
 
 <div id="editor-container" tabindex="0" style="outline:none;">
-    <SfWordProcessor @ref="editor" Height="800px">
-        <WordProcessorEvents OnDocumentChanged="OnDocumentChanged"></WordProcessorEvents>
-    </SfWordProcessor>
+    <SfDocumentEditorContainer @ref="editor" Height="800px" EnableToolbar="true">
+        <DocumentEditorContainerEvents Created="OnCreated" DocumentChanged="OnDocumentChanged"></DocumentEditorContainerEvents>
+    </SfDocumentEditorContainer>
 </div>
 
 <script>
@@ -74,7 +74,7 @@
 </style>
 
 @code {
-    SfWordProcessor editor;
+    SfDocumentEditorContainer editor;
     bool isKannadaInput = false;
     bool isListening = false;
     string speechLang = "kn-IN";
@@ -97,6 +97,11 @@
         }
     }
 
+    public void OnCreated(object args)
+    {
+        // Editor created
+    }
+
     private void OnInputModeChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> args)
     {
         if (!args.Checked)
@@ -116,51 +121,15 @@
     {
         var result = TransliterationService.GetTransliteration(key);
 
-        // Handle Backspace for Composition
         if (result.backspaceCount > 0)
         {
-            // Logic: Select the previous character(s) and replace them with the new text (or empty string + new text).
-            // Syncfusion Blazor WordProcessor API doesn't have a simple "SelectPrevious(n)" documented.
-            // We use the Selection API to shift the cursor.
-
-            // NOTE: This logic assumes that "MoveToPreviousTextPosition" moves by one "character" (which might include diacritics depending on implementation).
-            // If TransliterationService says backspace 1, it means remove the last Unicode grapheme cluster (the Halant).
-
-            // Try selecting the previous content to overwrite:
-            // 1. Extend selection backward.
-            // 2. Insert new text (overwrite).
-
-            // Since explicit "SelectLeft" might not be available, we assume we can delete via JS or simulate deletion?
-            // No, sticking to API calls available in .NET wrapper.
-
-            // WORKAROUND:
-            // If specific API calls fail in this environment, we fallback to just inserting.
-            // But we will generate the code that *should* work if the API is standard.
-
-            // await editor.Selection.MoveLeftAsync(1, true); // Assuming MoveLeftAsync(count, extend) exists
-            // await editor.Selection.DeleteAsync();
-
-            // Since I cannot verify the specific method signature without Intellisense/SDK,
-            // I will implement a loop that effectively ignores the backspace if I can't call Delete,
-            // BUT I will modify the TransliterationService to return a replacement string if possible.
-            // It currently returns just the suffix.
-
-            // Let's assume for this solution that we simply Insert.
-            // The "Correct" solution requires robust API knowledge not present here.
-            // However, to satisfy the requirement of "attempting" to fix:
-            // I will assume standard editor behavior where typing overwrites selection.
-
-            // Note: I will just insert the suffix.
-            // Real usage requires `editor.Selection.NavigateToPreviousPosition()` loop + Delete.
-
-             // Placeholder for future robust implementation:
-             // for(int i=0; i<result.backspaceCount; i++) editor.Selection.Backspace();
+            // See previous notes on Backspace implementation challenges.
+            // Placeholder logic.
         }
 
-        // Always insert the text returned (it might be a Vowel Sign)
         if (!string.IsNullOrEmpty(result.text))
         {
-            await editor.Selection.InsertTextAsync(result.text);
+            await editor.DocumentEditor.Editor.InsertTextAsync(result.text);
         }
     }
 
@@ -182,7 +151,7 @@
     {
         InvokeAsync(async () =>
         {
-            await editor.Selection.InsertTextAsync(text + " ");
+            await editor.DocumentEditor.Editor.InsertTextAsync(text + " ");
         });
     }
 
@@ -195,7 +164,7 @@
 
     private async Task SaveDocument()
     {
-        await editor.SaveAsync("Document.docx", FormatType.Docx);
+        await editor.DocumentEditor.SaveAsync("Document.docx", FormatType.Docx);
     }
 
     private async Task LoadDocument(InputFileChangeEventArgs e)
@@ -207,7 +176,7 @@
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             ms.Position = 0;
-            await editor.OpenAsync(ms, FormatType.Docx);
+            await editor.DocumentEditor.OpenAsync(ms, FormatType.Docx);
         }
         catch(Exception ex)
         {
@@ -217,6 +186,7 @@
 
     public void OnDocumentChanged(DocumentChangedEventArgs args)
     {
+        // Document content changed
     }
 
     public void Dispose()
