@@ -38,41 +38,7 @@
     <div id="quill-editor" style="height: 600px;"></div>
 </div>
 
-<script>
-    window.registerKeyInterceptor = (dotNetObj) => {
-        const editorDiv = document.getElementById('quill-editor');
-        if(!editorDiv) {
-            console.error("Quill editor div not found during registration");
-            return;
-        }
-
-        console.log("Registering key interceptor on #quill-editor");
-
-        editorDiv.addEventListener('keydown', (e) => {
-            if (window.isKannadaMode) {
-                // Handle Backspace
-                if (e.key === 'Backspace') {
-                    console.log("Processing Backspace");
-                    dotNetObj.invokeMethodAsync('ProcessBackspace');
-                    return;
-                }
-
-                // Handle single chars
-                if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-                    console.log("Preventing default and processing key:", e.key);
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
-                }
-            }
-        }, true);
-    };
-
-    window.setKannadaMode = (val) => {
-        console.log("Setting Kannada Mode:", val);
-        window.isKannadaMode = val;
-    };
-</script>
+<!-- Removed <script> block, logic moved to quillInterop.js -->
 
 <style>
     .toolbar-container {
@@ -102,11 +68,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        objRef = DotNetObjectReference.Create(this);
         await TransliterationService.InitializeAsync();
         SpeechService.OnResult += OnSpeechResult;
         SpeechService.OnError += OnSpeechError;
-
-        objRef = DotNetObjectReference.Create(this);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -114,7 +79,8 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
-            await JSRuntime.InvokeVoidAsync("registerKeyInterceptor", objRef);
+            // Updated call to use namespaced function
+            await JSRuntime.InvokeVoidAsync("quillInterop.registerKeyInterceptor", objRef);
         }
     }
 
@@ -125,7 +91,7 @@
         {
             TransliterationService.ClearBuffer();
         }
-        await JSRuntime.InvokeVoidAsync("setKannadaMode", IsKannadaInput);
+        await JSRuntime.InvokeVoidAsync("quillInterop.setKannadaMode", IsKannadaInput);
     }
 
     [JSInvokable]

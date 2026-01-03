@@ -24,7 +24,6 @@ window.quillInterop = {
 
         this.quill.on('selection-change', function(range, oldRange, source) {
             if (source === 'user' && dotNetReference) {
-                // console.log("Selection changed (user), clearing buffer");
                 dotNetReference.invokeMethodAsync('OnSelectionChanged');
             }
         });
@@ -32,9 +31,7 @@ window.quillInterop = {
 
     insertText: function (text) {
         if (this.quill) {
-            const range = this.quill.getSelection(true); // true forces focus check? No, it returns null if not focused unless true passed?
-            // "If true is passed as an argument, getSelection will check for selection even if the editor does not have focus."
-
+            const range = this.quill.getSelection(true);
             console.log("Inserting text:", text);
 
             if (range) {
@@ -42,10 +39,8 @@ window.quillInterop = {
                     this.quill.deleteText(range.index, range.length);
                 }
                 this.quill.insertText(range.index, text, 'api');
-                // Ensure we move selection to end of inserted text
                 this.quill.setSelection(range.index + text.length, 0, 'api');
             } else {
-                // Focus and append
                 this.quill.focus();
                 const len = this.quill.getLength();
                 this.quill.insertText(len - 1, text, 'api');
@@ -87,5 +82,48 @@ window.quillInterop = {
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
+    },
+
+    // Input Interception Logic moved here
+    registerKeyInterceptor: function (dotNetObj) {
+        // We use the container or editor div.
+        // Quill usually creates .ql-editor inside the container.
+        // We can listen on window or the container.
+        // Listening on container is safer.
+        const editorDiv = document.getElementById('quill-editor'); // This is the container passed to init
+
+        if(!editorDiv) {
+            console.error("Quill editor div not found during registration");
+            return;
+        }
+
+        console.log("Registering key interceptor on #quill-editor");
+
+        editorDiv.addEventListener('keydown', (e) => {
+            if (window.isKannadaMode) {
+                console.log("Keydown intercepted (Kannada Mode):", e.key);
+
+                // Handle Backspace
+                if (e.key === 'Backspace') {
+                    console.log("Processing Backspace");
+                    // We notify C# to update buffer, but we let Quill perform the deletion normally.
+                    dotNetObj.invokeMethodAsync('ProcessBackspace');
+                    return;
+                }
+
+                // Handle single chars
+                if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                    console.log("Preventing default and processing key:", e.key);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dotNetObj.invokeMethodAsync('ProcessKannadaKey', e.key);
+                }
+            }
+        }, true); // Capture phase
+    },
+
+    setKannadaMode: function (val) {
+        console.log("Setting Kannada Mode:", val);
+        window.isKannadaMode = val;
     }
 };

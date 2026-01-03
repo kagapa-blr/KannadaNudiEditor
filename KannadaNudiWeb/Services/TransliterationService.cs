@@ -59,9 +59,19 @@ namespace KannadaNudiWeb.Services
             // If key is a vowel and buffer ends in consonant key
             if (_vowelSigns.ContainsKey(key) && _buffer.Length > 0 && IsConsonantKey(_buffer[_buffer.Length - 1]))
             {
-                _buffer.Append(key);
+                // We need to replace the Halant form with the Vowel form.
+                // Previous output: 'ಕ್' (Consonant + Halant)
+                // New output: 'ಕ' (Consonant + Inherent Vowel) or 'ಕಾ' (Consonant + Vowel Sign)
+
+                string lastKey = _buffer[_buffer.Length - 1].ToString();
+                string halantForm = _typingMap[lastKey]; // e.g. "ಕ್"
+                string baseForm = halantForm.TrimEnd('\u0CCD'); // e.g. "ಕ"
                 string sign = _vowelSigns[key];
-                return (sign, 1);
+
+                string replacement = baseForm + sign;
+
+                _buffer.Append(key);
+                return (replacement, 1); // Backspace 1 (the Halant Cluster), insert Full Syllable
             }
 
             // If key is a consonant
