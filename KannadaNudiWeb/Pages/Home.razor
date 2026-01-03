@@ -10,7 +10,7 @@
     <div class="toolbar-group">
         <label class="toolbar-label">Input Mode:</label>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="inputModeSwitch" @bind="IsKannadaInput">
+            <input class="form-check-input" type="checkbox" id="inputModeSwitch" checked="@IsKannadaInput" @onchange="OnInputModeChange">
             <label class="form-check-label" for="inputModeSwitch">@(IsKannadaInput ? "KAN" : "ENG")</label>
         </div>
     </div>
@@ -50,8 +50,6 @@
 
         editorDiv.addEventListener('keydown', (e) => {
             if (window.isKannadaMode) {
-                console.log("Keydown intercepted (Kannada Mode):", e.key);
-
                 // Handle Backspace
                 if (e.key === 'Backspace') {
                     console.log("Processing Backspace");
@@ -96,25 +94,7 @@
 </style>
 
 @code {
-    private bool _isKannadaInput = false;
-
-    public bool IsKannadaInput
-    {
-        get => _isKannadaInput;
-        set
-        {
-            if (_isKannadaInput != value)
-            {
-                _isKannadaInput = value;
-                if (!_isKannadaInput)
-                {
-                    TransliterationService.ClearBuffer();
-                }
-                // Fire and forget JS update
-                JSRuntime.InvokeVoidAsync("setKannadaMode", _isKannadaInput);
-            }
-        }
-    }
+    public bool IsKannadaInput { get; set; } = false;
 
     bool isListening = false;
     string speechLang = "kn-IN";
@@ -136,6 +116,16 @@
             await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
             await JSRuntime.InvokeVoidAsync("registerKeyInterceptor", objRef);
         }
+    }
+
+    private async Task OnInputModeChange(ChangeEventArgs args)
+    {
+        IsKannadaInput = (bool)(args.Value ?? false);
+        if (!IsKannadaInput)
+        {
+            TransliterationService.ClearBuffer();
+        }
+        await JSRuntime.InvokeVoidAsync("setKannadaMode", IsKannadaInput);
     }
 
     [JSInvokable]
