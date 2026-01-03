@@ -38,6 +38,34 @@
     <div id="quill-editor" style="height: 600px;"></div>
 </div>
 
+@if (showSaveModal)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal show" style="display:block;" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Save Document</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="filenameInput" class="form-label">Filename</label>
+                        <input type="text" class="form-control" id="filenameInput" @bind="saveFileName">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" @onclick="DownloadDocx">Download as DocX</button>
+                        <button class="btn btn-secondary" @onclick="DownloadTxt">Download as TXT</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <!-- Removed <script> block, logic moved to quillInterop.js -->
 
 <style>
@@ -57,12 +85,17 @@
     .file-input-hidden {
         display: none;
     }
+    .modal-backdrop {
+        background-color: rgba(0,0,0,0.5);
+    }
 </style>
 
 @code {
     public bool IsKannadaInput { get; set; } = false;
 
     bool isListening = false;
+    bool showSaveModal = false;
+    string saveFileName = "Document";
     string speechLang = "kn-IN";
     DotNetObjectReference<Home>? objRef;
 
@@ -151,10 +184,30 @@
         StateHasChanged();
     }
 
-    private async Task SaveDocument()
+    private void SaveDocument()
+    {
+        showSaveModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showSaveModal = false;
+    }
+
+    private async Task DownloadDocx()
     {
         string html = await JSRuntime.InvokeAsync<string>("quillInterop.getHtml");
-        await JSRuntime.InvokeVoidAsync("quillInterop.downloadFile", "Document.html", html);
+        string filename = string.IsNullOrWhiteSpace(saveFileName) ? "Document.docx" : $"{saveFileName}.docx";
+        await JSRuntime.InvokeVoidAsync("quillInterop.saveAsDocx", filename, html);
+        CloseModal();
+    }
+
+    private async Task DownloadTxt()
+    {
+        string text = await JSRuntime.InvokeAsync<string>("quillInterop.getText");
+        string filename = string.IsNullOrWhiteSpace(saveFileName) ? "Document.txt" : $"{saveFileName}.txt";
+        await JSRuntime.InvokeVoidAsync("quillInterop.downloadFile", filename, text, "text/plain");
+        CloseModal();
     }
 
     private async Task LoadDocument(InputFileChangeEventArgs e)
