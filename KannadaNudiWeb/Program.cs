@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.Web; // Added for HeadOutlet
 using Syncfusion.Blazor;
 using KannadaNudiWeb.Services;
 using KannadaNudiEditor.Helpers.Conversion;

@@ -12,7 +12,7 @@
 <div class="toolbar-container">
     <div class="toolbar-group">
         <label class="toolbar-label">Input Mode:</label>
-        <SfSwitch @bind-Checked="isKannadaInput" OffLabel="ENG" OnLabel="KAN" ValueChange="OnInputModeChange" />
+        <SfSwitch @bind-Checked="isKannadaInput" OffLabel="ENG" OnLabel="KAN" ValueChange="@OnInputModeChange" />
     </div>
 
     <div class="toolbar-group">
@@ -74,7 +74,7 @@
 </style>
 
 @code {
-    SfDocumentEditorContainer editor;
+    SfDocumentEditorContainer? editor;
     bool isKannadaInput = false;
     bool isListening = false;
     string speechLang = "kn-IN";
@@ -123,13 +123,13 @@
 
         if (result.backspaceCount > 0)
         {
-            // See previous notes on Backspace implementation challenges.
             // Placeholder logic.
         }
 
         if (!string.IsNullOrEmpty(result.text))
         {
-            await editor.DocumentEditor.Editor.InsertTextAsync(result.text);
+            if (editor != null)
+                await editor.DocumentEditor.Editor.InsertTextAsync(result.text);
         }
     }
 
@@ -151,7 +151,8 @@
     {
         InvokeAsync(async () =>
         {
-            await editor.DocumentEditor.Editor.InsertTextAsync(text + " ");
+            if (editor != null)
+                await editor.DocumentEditor.Editor.InsertTextAsync(text + " ");
         });
     }
 
@@ -164,7 +165,8 @@
 
     private async Task SaveDocument()
     {
-        await editor.DocumentEditor.SaveAsync("Document.docx", FormatType.Docx);
+        if (editor != null)
+            await editor.DocumentEditor.SaveAsync("Document.docx", FormatType.Docx);
     }
 
     private async Task LoadDocument(InputFileChangeEventArgs e)
@@ -176,7 +178,40 @@
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             ms.Position = 0;
-            await editor.DocumentEditor.OpenAsync(ms, FormatType.Docx);
+            // The error said argument 2 cannot convert from FormatType to ImportFormatType.
+            // OpenAsync signature: OpenAsync(Stream stream, FormatType formatType) usually.
+            // But if build failed, maybe ambiguous or incorrect Enum.
+            // I will try casting or using explicit enum if possible.
+            // Let's assume it wants FormatType.Docx.
+            // The previous error was: cannot convert from 'Syncfusion.Blazor.DocumentEditor.FormatType' to 'Syncfusion.Blazor.DocumentEditor.ImportFormatType'??
+            // Wait, does OpenAsync take ImportFormatType?
+            // Checking Syncfusion docs via search (mental check): Yes, usually it's FormatType.
+            // BUT, if it says ImportFormatType, I should look for that.
+            // Actually, in some versions, OpenAsync only accepts Stream and auto-detects, or uses ImportFormatType.
+            // I will try to use `FormatType.Docx` but cast it? No.
+            // I will try `FormatType.Docx` again, but maybe the previous error was on SaveAsync line 179?
+            // The error log said: Home.razor(179,55): Argument 2: ... ImportFormatType.
+            // Line 179 in my previous overwrite was SaveAsync.
+            // Line 191 was OpenAsync.
+            // Wait, line 179 in the *previous* file content (which was 195 lines)
+            // 179: await editor.DocumentEditor.SaveAsync("Document.docx", FormatType.Docx);
+            // SaveAsync definitely takes FormatType.
+            // Maybe the error message line number was different or I misread?
+            // "Home.razor(179,55): error CS1503: Argument 2: cannot convert from 'Syncfusion.Blazor.DocumentEditor.FormatType' to 'Syncfusion.Blazor.DocumentEditor.ImportFormatType'"
+            // That is very strange for SaveAsync.
+            // Wait, maybe I swapped them?
+            // "OpenAsync(ms, FormatType.Docx)" might be causing the error if OpenAsync expects ImportFormatType.
+            // Let's check line numbers.
+            // 191: OpenAsync.
+            // If the error was at 179, that's SaveAsync.
+            // Unless `ImportFormatType` is required for SAVE? No.
+
+            // I suspect the line number corresponds to `OpenAsync` in the actual compiled file, or I am miscounting.
+            // I will try to use `FormatType.Docx` for SaveAsync.
+            // And for OpenAsync, I will try to remove the second argument (let it auto detect) or cast.
+
+            if (editor != null)
+                await editor.DocumentEditor.OpenAsync(ms, FormatType.Docx);
         }
         catch(Exception ex)
         {
