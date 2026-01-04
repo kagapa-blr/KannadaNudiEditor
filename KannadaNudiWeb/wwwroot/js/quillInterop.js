@@ -38,6 +38,12 @@ window.quillInterop = {
         }
 
         this.quill.on('selection-change', function(range, oldRange, source) {
+            // Prevent buffer clearing if we just handled a key/input event recently
+            if (Date.now() - window.quillInterop.lastKeyHandledTime < 500) {
+                console.log("Ignoring selection change due to recent input");
+                return;
+            }
+
             if (source === 'user' && dotNetReference) {
                 dotNetReference.invokeMethodAsync('OnSelectionChanged');
             }
@@ -59,19 +65,16 @@ window.quillInterop = {
                     } else if (op.insert && typeof op.insert === 'string') {
                         // Handle single character insertions (excluding newlines)
                         if (op.insert.length === 1 && op.insert !== '\n') {
+                            // Update timestamp to prevent selection-change from clearing buffer
+                            this.lastKeyHandledTime = Date.now();
+
                             // Revert the user's insertion immediately by deleting it
                             this.quill.deleteText(index, op.insert.length, 'silent');
 
                             // Send the character to C# for transliteration
                             this.dotNetRef.invokeMethodAsync('ProcessKannadaKey', op.insert);
                             handled = true;
-                            // We do NOT break here to allow processing subsequent ops if any (though rare in typing)
-                            // But actually, if we modify the doc (deleteText), the subsequent ops might be invalid relative to indices.
-                            // However, in standard typing, we usually get one insert.
-                            // If we have replace (delete + insert), we handle delete first?
-                            // Delta order: Usually retain, delete, insert.
-                            // If we handle delete, index doesn't increment.
-                            // Then we handle insert.
+                            break;
                         }
                         index += op.insert.length;
                     } else if (op.delete) {
@@ -79,6 +82,9 @@ window.quillInterop = {
                          const now = Date.now();
                          // We only handle it if keydown didn't catch it recently
                          if (now - this.lastKeyHandledTime > 100) {
+                             // Update timestamp
+                             this.lastKeyHandledTime = Date.now();
+
                              if (op.delete > 1) {
                                  // Bulk deletion: Sync state by clearing buffer
                                  this.dotNetRef.invokeMethodAsync('OnSelectionChanged');
@@ -88,8 +94,7 @@ window.quillInterop = {
                              }
                              handled = true;
                          }
-                         // For delete, we don't need to 'revert' anything, just notify C#.
-                         // And we don't break, in case there is an insert following (replace).
+                         break;
                     }
                 }
             }
@@ -201,7 +206,7 @@ window.quillInterop = {
                 // Handle Backspace
                 if (e.key === 'Backspace') {
                     console.log("Processing Backspace");
-                    this.lastKeyHandledTime = Date.now(); // Mark as handled
+                    window.quillInterop.lastKeyHandledTime = Date.now(); // Mark as handled
                     // We notify C# to update buffer, but we let Quill perform the deletion normally.
                     dotNetReference.invokeMethodAsync('ProcessBackspace');
                     return;
@@ -212,7 +217,7 @@ window.quillInterop = {
                     console.log("Preventing default and processing key:", e.key);
                     e.preventDefault();
                     e.stopPropagation();
-                    this.lastKeyHandledTime = Date.now(); // Mark as handled
+                    window.quillInterop.lastKeyHandledTime = Date.now(); // Mark as handled
                     dotNetReference.invokeMethodAsync('ProcessKannadaKey', e.key);
                 }
             }
