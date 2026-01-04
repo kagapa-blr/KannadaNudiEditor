@@ -128,20 +128,21 @@ namespace KannadaNudiWeb.Services
 
         private (string text, int backspaceCount) GetNudiTransliteration(string key)
         {
-            // Restore logic: Buffer-based phonetic/map logic from original file
+            // Nudi/KGP Legacy Logic:
 
-            // If key is a vowel and buffer ends in consonant key
+            // If key is a vowel modifier and buffer ends in consonant key
             if (_nudiVowelSigns.ContainsKey(key) && _buffer.Length > 0 && IsNudiConsonantKey(_buffer[_buffer.Length - 1]))
             {
                 string lastKey = _buffer[_buffer.Length - 1].ToString();
-                string halantForm = _nudiMap[lastKey]; // e.g. "ಕ್"
+                string halantForm = _nudiMap[lastKey]; // e.g. "ಕ್" (2 chars: 0C95 0CCD)
                 string baseForm = halantForm.TrimEnd('\u0CCD'); // e.g. "ಕ"
                 string sign = _nudiVowelSigns[key];
 
                 string replacement = baseForm + sign;
+                int removeCount = halantForm.Length; // Remove the full previous sequence (e.g. 2 chars)
 
                 _buffer.Append(key);
-                return (replacement, 1); // Backspace 1 (the Halant Cluster), insert Full Syllable
+                return (replacement, removeCount);
             }
 
             // If key is a consonant
@@ -159,103 +160,75 @@ namespace KannadaNudiWeb.Services
 
         private (string text, int backspaceCount) GetBarahaTransliteration(string key)
         {
-            // Baraha Logic
-
-            // 1. Check if Buffer + Key forms a multi-key consonant or vowel (e.g., 't'+'h' -> 'th' -> 'ಥ್')
             string combinedKey = (_buffer.ToString() + key);
 
-            // Try to match longest possible suffix from buffer
-            // Since we only really care about the last few chars.
-            // But let's stick to the simpler buffer model: the buffer accumulates chars that *might* be modified.
-
-            // CASE A: Modifier/Matra Application
-            // If we have a consonant in buffer (last entered), and user types a vowel sign key
             if (_buffer.Length > 0)
             {
-                // Find the last mapped token in the buffer.
-                // This is tricky because we might have "th" which mapped to "ಥ್".
-                // We need to know what the last 'unit' was.
-
-                // Let's assume the buffer stores raw keystrokes.
-                // We need to check if the *end* of the buffer corresponds to a Consonant.
-
-                string lastToken = GetLastTokenFromBuffer(_buffer.ToString(), _barahaMap);
-
-                if (!string.IsNullOrEmpty(lastToken) && IsBarahaConsonant(lastToken))
-                {
-                    // If the new key is a vowel sign start
-                    if (_barahaVowelSigns.ContainsKey(key))
-                    {
-                         string consonant = _barahaMap[lastToken]; // "ಥ್" or "ಕ್"
-                         string baseConsonant = consonant.TrimEnd('\u0CCD');
-                         string matra = _barahaVowelSigns[key];
-
-                         _buffer.Append(key);
-                         return (baseConsonant + matra, 1); // Remove the consonant, add modified
-                    }
-
-                    // Check if combined key creates a specific vowel sign (e.g. 'a'+'a' -> 'aa')
-                    // Wait, usually 'a' is empty matra. So 'k'+'a' -> 'ka'. Buffer is "ka".
-                    // Then user types 'a'. Combined "kaa" -> "aa" matra.
-
-                    // Actually, if we have "ka" in buffer (which output 'ಕ'), and user types 'a'.
-                    // We need to replace 'ಕ' with 'ಕಾ'.
-                    // The last output was 'base + matra(a)'.
-                    // This gets complicated.
-
-                    // SIMPLIFIED LOGIC:
-                    // If the last operation produced a Char+Matra, and this new key extends the Matra.
-                    // This requires storing state of 'Last Output Type'.
-
-                    // Instead, let's rely on the fact that we can backspace.
-
-                    // If buffer ends in a sequence that forms a Vowel Sign when added to:
-                    // e.g. Buffer="k", Key="a". "ka" is not a key in _barahaMap.
-                    // But 'a' is a vowel sign.
-
-                    // What if Buffer="k", Key="h"? "kh" is in _barahaMap ("ಖ್").
-                    if (_barahaMap.ContainsKey(combinedKey))
-                    {
-                         _buffer.Clear();
-                         _buffer.Append(combinedKey);
-                         return (_barahaMap[combinedKey], 1); // Replace 'k' ('ಕ್') with 'kh' ('ಖ್')
-                    }
-                }
-
-                // Special Case: Previous char was a Vowel Sign application?
-                // e.g. "ka" -> 'ಕ'. Now type 'a' -> "kaa" -> 'ಕಾ'.
-                // If we treat "ka" as a unit.
-
-                // Let's try matching combinedKey against Consonant+Vowel combinations? No, map is too big.
-
-                // Let's look at the buffer.
-                // If buffer is "ka", and key is "a".
-                // Last token "ka" is NOT in _barahaMap.
-                // But "k" is. And "a" is matra.
-                // "aa" is also matra.
-
-                // Attempt to split combinedKey into (Consonant Token) + (Vowel Token)
-                // Iterate backwards to find longest consonant match.
+                // 1. Try to match longest sequence backwards for VOWEL MODIFIERS on CONSONANTS
                 for (int i = combinedKey.Length - 1; i >= 0; i--)
                 {
-                    string potentialConsonant = combinedKey.Substring(0, i);
-                    string potentialVowel = combinedKey.Substring(i);
+                    string potentialConsonantToken = combinedKey.Substring(0, i); // e.g. "k" or "kh"
+                    string potentialVowelToken = combinedKey.Substring(i); // e.g. "a" or "aa"
 
-                    if (_barahaMap.ContainsKey(potentialConsonant) && IsBarahaConsonant(potentialConsonant))
+                    if (_barahaMap.ContainsKey(potentialConsonantToken) && IsBarahaConsonant(potentialConsonantToken))
                     {
-                        if (_barahaVowelSigns.ContainsKey(potentialVowel))
+                        if (_barahaVowelSigns.ContainsKey(potentialVowelToken))
                         {
                             // Found a valid C+V combo!
                             // e.g. "kh" + "aa"
 
-                            string consChar = _barahaMap[potentialConsonant];
+                            // To correctly calculate backspace, we need to know what was output for 'potentialConsonantToken'.
+                            // The buffer contains 'potentialConsonantToken' (plus maybe previous parts of vowel if we are extending 'a' -> 'aa'?)
+                            // No, the buffer only contains keys.
+                            // If buffer="k", output was "ಕ್" (2 chars).
+                            // If buffer="kh", output was "ಖ್" (2 chars).
+
+                            // BUT: If buffer="ka", output was "ಕ" (1 char). Now user types 'a' -> "kaa".
+                            // We need to replace "ಕ" (1 char) with "ಕಾ" (2 chars).
+
+                            // We need to know what characters were produced by the *previous* state of the buffer.
+                            // This state isn't tracked explicitly here.
+
+                            // However, we can reconstruct what the PREVIOUS transliteration for the buffer was.
+                            // But that's complex because the buffer might be "namaska". 's'+'k'+'a'.
+
+                            // Simplification: We assume the buffer represents ONE phonetic unit being built.
+                            // So if Buffer="ka", the previous output was Transliterate("ka").
+                            // BackspaceCount = Length of Transliterate(Buffer).
+
+                            // Let's verify this assumption.
+                            // T1: 'k' -> Buffer="k", Out="ಕ್" (2).
+                            // T2: 'a' -> Buffer="ka". Previous was "k" -> "ಕ್". Backspace=2. New="ಕ".
+                            // T3: 'a' -> Buffer="kaa". Previous was "ka" -> "ಕ" (1). Backspace=1. New="ಕಾ".
+
+                            // This logic holds if we can accurately determine the string produced by the *previous* buffer content.
+
+                            string previousOutput = RecalculateOutput(_buffer.ToString());
+                            if (string.IsNullOrEmpty(previousOutput)) previousOutput = ""; // Should generally not happen if buffer > 0
+
+                            string consChar = _barahaMap[potentialConsonantToken];
                             string baseChar = consChar.TrimEnd('\u0CCD');
-                            string matra = _barahaVowelSigns[potentialVowel];
+                            string matra = _barahaVowelSigns[potentialVowelToken];
+
+                            string replacement = baseChar + matra;
 
                             _buffer.Append(key);
-                            return (baseChar + matra, 1); // Backspace 1 (the previous state)
+                            return (replacement, previousOutput.Length);
                         }
                     }
+                }
+
+                // 2. Check if combined key is a valid Consonant or Vowel (Extension)
+                // e.g. Buffer="t", Key="h" -> "th" -> "ಥ್".
+                // Previous was "t" -> "ಟ್" (2 chars).
+                // We replace "ಟ್" with "ಥ್".
+                if (_barahaMap.ContainsKey(combinedKey))
+                {
+                    string previousOutput = RecalculateOutput(_buffer.ToString());
+
+                    _buffer.Clear();
+                    _buffer.Append(combinedKey);
+                    return (_barahaMap[combinedKey], previousOutput.Length);
                 }
             }
 
@@ -267,10 +240,44 @@ namespace KannadaNudiWeb.Services
                 return (_barahaMap[key], 0);
             }
 
-            // If we are here, it's an unmapped key.
+            // Unmapped
             _buffer.Clear();
             _buffer.Append(key);
             return (key, 0);
+        }
+
+        // Helper to determine what string a given key buffer would have produced.
+        // This effectively simulates the logic.
+        private string RecalculateOutput(string bufferKeys)
+        {
+            if (string.IsNullOrEmpty(bufferKeys)) return "";
+
+            // Try to match C+V
+            for (int i = bufferKeys.Length - 1; i >= 0; i--)
+            {
+                string c = bufferKeys.Substring(0, i);
+                string v = bufferKeys.Substring(i);
+
+                if (_barahaMap.ContainsKey(c) && IsBarahaConsonant(c) && _barahaVowelSigns.ContainsKey(v))
+                {
+                    string cons = _barahaMap[c];
+                    string baseChar = cons.TrimEnd('\u0CCD');
+                    string matra = _barahaVowelSigns[v];
+                    return baseChar + matra;
+                }
+            }
+
+            // Try match full key
+            if (_barahaMap.ContainsKey(bufferKeys))
+            {
+                return _barahaMap[bufferKeys];
+            }
+
+            // Fallback (likely shouldn't happen for valid sequences in buffer, but...)
+            // Just return the last key's mapping if possible, or ?
+            // In our logic, the buffer is cleared if not matched.
+            // So if we are here, the buffer *should* be a valid sequence.
+            return "";
         }
 
         public void RemoveLast()
@@ -291,12 +298,12 @@ namespace KannadaNudiWeb.Services
         {
             if (!_barahaMap.ContainsKey(k)) return false;
             string val = _barahaMap[k];
+            // Check for Halant at end
             return val.EndsWith("\u0CCD");
         }
 
         private string GetLastTokenFromBuffer(string buffer, Dictionary<string, string> map)
         {
-             // Find the longest suffix of buffer that is a key in map
              for (int i = 0; i < buffer.Length; i++)
              {
                  string sub = buffer.Substring(i);
