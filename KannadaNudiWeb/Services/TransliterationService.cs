@@ -19,7 +19,38 @@ namespace KannadaNudiWeb.Services
 
         public KeyboardLayout CurrentLayout { get; private set; } = KeyboardLayout.Nudi;
 
-        // Baraha Phonetic Map (Expanded)
+        // ORIGINAL MAP (Restored as the Nudi/KGP option per user request)
+        private readonly Dictionary<string, string> _nudiMap = new Dictionary<string, string>
+        {
+            // Consonants (Defaults to Halant form)
+            { "k", "ಕ್" }, { "g", "ಗ್" }, { "c", "ಚ್" }, { "j", "ಜ್" },
+            { "t", "ಟ್" }, { "d", "ಡ್" }, { "N", "ಣ್" },
+            { "w", "ತ್" }, { "q", "ದ್" }, { "n", "ನ್" },
+            { "p", "ಪ್" }, { "b", "ಬ್" }, { "m", "ಮ್" },
+            { "y", "ಯ್" }, { "r", "ರ್" }, { "l", "ಲ್" }, { "v", "ವ್" },
+            { "s", "ಸ್" }, { "h", "ಹ್" }, { "L", "ಳ್" },
+
+            // Vowels (Independent)
+            { "a", "ಅ" }, { "A", "ಆ" }, { "i", "ಇ" }, { "I", "ಈ" },
+            { "u", "ಉ" }, { "U", "ಊ" }, { "e", "ಎ" }, { "E", "ಏ" },
+            { "o", "ಒ" }, { "O", "ಓ" },
+        };
+
+        private readonly Dictionary<string, string> _nudiVowelSigns = new Dictionary<string, string>
+        {
+            { "a", "" }, // 'a' removes halant (inherent vowel)
+            { "A", "ಾ" },
+            { "i", "ಿ" },
+            { "I", "ೀ" },
+            { "u", "ು" },
+            { "U", "ೂ" },
+            { "e", "ೆ" },
+            { "E", "ೇ" },
+            { "o", "ೊ" },
+            { "O", "ೋ" }
+        };
+
+        // Baraha Phonetic Map
         private readonly Dictionary<string, string> _barahaMap = new Dictionary<string, string>
         {
             // Consonants (Halant default)
@@ -64,20 +95,6 @@ namespace KannadaNudiWeb.Services
             { "au", "ೌ" }, { "ou", "ೌ" }
         };
 
-        // Nudi/KGP Layout Map (Direct Mapping)
-        // Based on Nudi 4.0/5.0 Standard QWERTY map
-        private readonly Dictionary<string, string> _nudiMap = new Dictionary<string, string>
-        {
-             // Lowercase
-            { "q", "ೌ" }, { "w", "ೈ" }, { "e", "ಾ" }, { "r", "ೀ" }, { "t", "ೂ" }, { "y", "ಬ" }, { "u", "ಹ" }, { "i", "ಗ" }, { "o", "ದ" }, { "p", "ಜ" }, { "[", "ಡ" }, { "]", "̣" },
-            { "a", "ೊ" }, { "s", "ೇ" }, { "d", "್" }, { "f", "ಿ" }, { "g", "ು" }, { "h", "ಪ" }, { "j", "ರ" }, { "k", "ಕ" }, { "l", "ತ" }, { ";", "ಚ" }, { "'", "ಟ" },
-            { "z", "ೞ" }, { "x", "ಂ" }, { "c", "ಮ" }, { "v", "ನ" }, { "b", "ವ" }, { "n", "ಲ" }, { "m", "ಸ" }, { ",", "ಯ" }, { ".", "." }, { "/", "" },
-
-            // Uppercase (Shift)
-            { "Q", "ಔ" }, { "W", "ಐ" }, { "E", "ಆ" }, { "R", "ಈ" }, { "T", "ಊ" }, { "Y", "ಭ" }, { "U", "ಙ" }, { "I", "ಘ" }, { "O", "ಧ" }, { "P", "ಝ" }, { "{", "ಢ" }, { "}", "ಞ" },
-            { "A", "ಓ" }, { "S", "ಏ" }, { "D", "ಅ" }, { "F", "ಇ" }, { "G", "ಉ" }, { "H", "ಫ" }, { "J", "ಱ" }, { "K", "ಖ" }, { "L", "ಥ" }, { ":", "ಛ" }, { "\"", "ಠ" },
-            { "Z", "ಋ" }, { "X", "ಃ" }, { "C", "ಣ" }, { "V", "ಞ" }, { "B", "ಳ" }, { "N", "ಶ" }, { "M", "ಷ" }, { "<", "ಯ" } // Some duplicates or variations exist, standardized
-        };
 
         public TransliterationService(FileConversionService conversionService)
         {
@@ -111,102 +128,148 @@ namespace KannadaNudiWeb.Services
 
         private (string text, int backspaceCount) GetNudiTransliteration(string key)
         {
-            // Nudi is direct mapping, no buffer usually needed for single chars
-            // However, Nudi has a specific behavior for 'f' (Virama) and 'e' (Aa) etc.
-            // But they are mapped to keys.
-            // The only 'state' might be if we wanted to prevent illegal combos, but standard Nudi typing just inserts char.
+            // Restore logic: Buffer-based phonetic/map logic from original file
 
-            // Check mapping
+            // If key is a vowel and buffer ends in consonant key
+            if (_nudiVowelSigns.ContainsKey(key) && _buffer.Length > 0 && IsNudiConsonantKey(_buffer[_buffer.Length - 1]))
+            {
+                string lastKey = _buffer[_buffer.Length - 1].ToString();
+                string halantForm = _nudiMap[lastKey]; // e.g. "ಕ್"
+                string baseForm = halantForm.TrimEnd('\u0CCD'); // e.g. "ಕ"
+                string sign = _nudiVowelSigns[key];
+
+                string replacement = baseForm + sign;
+
+                _buffer.Append(key);
+                return (replacement, 1); // Backspace 1 (the Halant Cluster), insert Full Syllable
+            }
+
+            // If key is a consonant
             if (_nudiMap.TryGetValue(key, out string? val))
             {
-                // Special handling: 'd' is Virama (್).
-                // If previous char was not a consonant, it might render standalone.
-                // But generally we just return the char.
+                _buffer.Append(key);
                 return (val, 0);
             }
 
-            // If not in map (e.g. numbers, symbols not mapped), return as is
+            // Default: just insert key, clear buffer
+            _buffer.Clear();
+            _buffer.Append(key);
             return (key, 0);
         }
 
         private (string text, int backspaceCount) GetBarahaTransliteration(string key)
         {
-            // Check for vowel modifiers first if buffer has content
+            // Baraha Logic
+
+            // 1. Check if Buffer + Key forms a multi-key consonant or vowel (e.g., 't'+'h' -> 'th' -> 'ಥ್')
+            string combinedKey = (_buffer.ToString() + key);
+
+            // Try to match longest possible suffix from buffer
+            // Since we only really care about the last few chars.
+            // But let's stick to the simpler buffer model: the buffer accumulates chars that *might* be modified.
+
+            // CASE A: Modifier/Matra Application
+            // If we have a consonant in buffer (last entered), and user types a vowel sign key
             if (_buffer.Length > 0)
             {
-                 string combinedKey = _buffer.ToString() + key;
+                // Find the last mapped token in the buffer.
+                // This is tricky because we might have "th" which mapped to "ಥ್".
+                // We need to know what the last 'unit' was.
 
-                 // Check if the combination matches a Vowel Sign (e.g., 'a' after 'k')
-                 // But wait, the buffer holds 'k', which was transliterated to 'ಕ್'.
-                 // We need to know what was TYPED.
-                 // Actually, the buffer should hold the TYPED characters that haven't been 'finalized' or can be modified.
+                // Let's assume the buffer stores raw keystrokes.
+                // We need to check if the *end* of the buffer corresponds to a Consonant.
 
-                 // Scenario 1: User typed 'k'. Output: 'ಕ್'. Buffer: 'k'.
-                 // User types 'a'. Combined: 'ka'.
-                 // We need to remove 'ಕ್' and output 'ಕ'.
+                string lastToken = GetLastTokenFromBuffer(_buffer.ToString(), _barahaMap);
 
-                 // Check if the current buffer + key forms a valid Vowel Sign context
-                 // The buffer usually ends in a Consonant.
-
-                 char lastCharTyped = _buffer[_buffer.Length - 1];
-
-                 // If last typed was consonant
-                 if (IsBarahaConsonant(lastCharTyped.ToString()))
-                 {
-                     // Check if 'key' is a start of a vowel sign
-                     // e.g. key='a'.
-                     if (_barahaVowelSigns.ContainsKey(key))
-                     {
-                         // We are applying a vowel sign to a consonant.
-                         // Get the base consonant char.
-                         string consonant = _barahaMap[lastCharTyped.ToString()]; // "ಕ್"
-                         string baseConsonant = consonant.TrimEnd('\u0CCD'); // "ಕ"
-                         string matra = _barahaVowelSigns[key]; // "" or "ಾ"
+                if (!string.IsNullOrEmpty(lastToken) && IsBarahaConsonant(lastToken))
+                {
+                    // If the new key is a vowel sign start
+                    if (_barahaVowelSigns.ContainsKey(key))
+                    {
+                         string consonant = _barahaMap[lastToken]; // "ಥ್" or "ಕ್"
+                         string baseConsonant = consonant.TrimEnd('\u0CCD');
+                         string matra = _barahaVowelSigns[key];
 
                          _buffer.Append(key);
-                         // Backspace 1 (remove half-consonant), insert full char + matra
-                         return (baseConsonant + matra, 1);
-                     }
-                 }
+                         return (baseConsonant + matra, 1); // Remove the consonant, add modified
+                    }
 
-                 // Scenario 2: Double letters (e.g. 'ee', 'oo') or aspirated (e.g. 'dh')
-                 // User typed 'e'. Output 'ಎ'. Buffer 'e'.
-                 // User types 'e'. Combined 'ee'. Output 'ಏ'.
-                 // User typed 'd'. Output 'ದ್'. Buffer 'd'.
-                 // User types 'h'. Combined 'dh'. Output 'ಧ್'.
+                    // Check if combined key creates a specific vowel sign (e.g. 'a'+'a' -> 'aa')
+                    // Wait, usually 'a' is empty matra. So 'k'+'a' -> 'ka'. Buffer is "ka".
+                    // Then user types 'a'. Combined "kaa" -> "aa" matra.
 
-                 // Check if combined key exists in map (Consonants or Vowels)
-                 if (_barahaMap.ContainsKey(combinedKey))
-                 {
-                     _buffer.Clear();
-                     _buffer.Append(combinedKey);
-                     return (_barahaMap[combinedKey], 1); // Replace previous char
-                 }
+                    // Actually, if we have "ka" in buffer (which output 'ಕ'), and user types 'a'.
+                    // We need to replace 'ಕ' with 'ಕಾ'.
+                    // The last output was 'base + matra(a)'.
+                    // This gets complicated.
 
-                 // Check if combined key exists in Vowel Signs (e.g. 'aa' after consonant)
-                 // This is tricky. If buffer is 'k'+'a' (we output 'ಕ'), and user types 'a'.
-                 // Typed: 'k', 'a', 'a'.
-                 // Buffer: 'ka'.
-                 // We need to track if we are currently building a syllable.
+                    // SIMPLIFIED LOGIC:
+                    // If the last operation produced a Char+Matra, and this new key extends the Matra.
+                    // This requires storing state of 'Last Output Type'.
 
-                 // For simplicity in this buffer model:
-                 // We only keep the last "token" in buffer.
+                    // Instead, let's rely on the fact that we can backspace.
+
+                    // If buffer ends in a sequence that forms a Vowel Sign when added to:
+                    // e.g. Buffer="k", Key="a". "ka" is not a key in _barahaMap.
+                    // But 'a' is a vowel sign.
+
+                    // What if Buffer="k", Key="h"? "kh" is in _barahaMap ("ಖ್").
+                    if (_barahaMap.ContainsKey(combinedKey))
+                    {
+                         _buffer.Clear();
+                         _buffer.Append(combinedKey);
+                         return (_barahaMap[combinedKey], 1); // Replace 'k' ('ಕ್') with 'kh' ('ಖ್')
+                    }
+                }
+
+                // Special Case: Previous char was a Vowel Sign application?
+                // e.g. "ka" -> 'ಕ'. Now type 'a' -> "kaa" -> 'ಕಾ'.
+                // If we treat "ka" as a unit.
+
+                // Let's try matching combinedKey against Consonant+Vowel combinations? No, map is too big.
+
+                // Let's look at the buffer.
+                // If buffer is "ka", and key is "a".
+                // Last token "ka" is NOT in _barahaMap.
+                // But "k" is. And "a" is matra.
+                // "aa" is also matra.
+
+                // Attempt to split combinedKey into (Consonant Token) + (Vowel Token)
+                // Iterate backwards to find longest consonant match.
+                for (int i = combinedKey.Length - 1; i >= 0; i--)
+                {
+                    string potentialConsonant = combinedKey.Substring(0, i);
+                    string potentialVowel = combinedKey.Substring(i);
+
+                    if (_barahaMap.ContainsKey(potentialConsonant) && IsBarahaConsonant(potentialConsonant))
+                    {
+                        if (_barahaVowelSigns.ContainsKey(potentialVowel))
+                        {
+                            // Found a valid C+V combo!
+                            // e.g. "kh" + "aa"
+
+                            string consChar = _barahaMap[potentialConsonant];
+                            string baseChar = consChar.TrimEnd('\u0CCD');
+                            string matra = _barahaVowelSigns[potentialVowel];
+
+                            _buffer.Append(key);
+                            return (baseChar + matra, 1); // Backspace 1 (the previous state)
+                        }
+                    }
+                }
             }
 
-            // Standard processing
+            // Standard processing (Independent Char)
             if (_barahaMap.ContainsKey(key))
             {
-                _buffer.Clear(); // New independent char starts
+                _buffer.Clear();
                 _buffer.Append(key);
                 return (_barahaMap[key], 0);
             }
 
-            // If key is a vowel sign but buffer is empty or invalid, it might be independent vowel?
-            // No, vowels are in _barahaMap.
-
-            // If nothing matched, clear buffer and return key
+            // If we are here, it's an unmapped key.
             _buffer.Clear();
-            _buffer.Append(key); // Might start a new sequence? E.g. non-mapped char.
+            _buffer.Append(key);
             return (key, 0);
         }
 
@@ -218,19 +281,28 @@ namespace KannadaNudiWeb.Services
             }
         }
 
+        private bool IsNudiConsonantKey(char k)
+        {
+            string s = k.ToString();
+            return _nudiMap.ContainsKey(s) && !_nudiVowelSigns.ContainsKey(s);
+        }
+
         private bool IsBarahaConsonant(string k)
         {
-            // A consonant in our map implies it has a Halant form by default.
-            // And it is NOT a vowel (independent).
-            // Our _barahaMap has both.
-            // Vowels map to A, AA, I, II...
-            // Consonants map to Ka+Halant, etc.
-
             if (!_barahaMap.ContainsKey(k)) return false;
-
             string val = _barahaMap[k];
-            // Check if it ends in Halant (Virama)
             return val.EndsWith("\u0CCD");
+        }
+
+        private string GetLastTokenFromBuffer(string buffer, Dictionary<string, string> map)
+        {
+             // Find the longest suffix of buffer that is a key in map
+             for (int i = 0; i < buffer.Length; i++)
+             {
+                 string sub = buffer.Substring(i);
+                 if (map.ContainsKey(sub)) return sub;
+             }
+             return "";
         }
 
         public void ClearBuffer()
