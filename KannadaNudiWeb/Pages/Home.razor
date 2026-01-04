@@ -15,6 +15,17 @@
         </div>
     </div>
 
+    @if (IsKannadaInput)
+    {
+        <div class="toolbar-group">
+            <label class="toolbar-label">Layout:</label>
+            <select class="form-select" style="width:auto; display:inline-block;" @onchange="OnLayoutChange">
+                <option value="Nudi">Nudi/KGP</option>
+                <option value="Baraha">Baraha (Phonetic)</option>
+            </select>
+        </div>
+    }
+
     <div class="toolbar-group">
          <button class="btn @(isListening ? "btn-danger" : "btn-primary")" @onclick="ToggleSpeech">
              <span class="bi bi-mic"></span> @(isListening ? "Stop Speech" : "Start Speech")
@@ -125,6 +136,14 @@
             TransliterationService.ClearBuffer();
         }
         await JSRuntime.InvokeVoidAsync("quillInterop.setKannadaMode", IsKannadaInput);
+    }
+
+    private void OnLayoutChange(ChangeEventArgs args)
+    {
+        if (args.Value != null && Enum.TryParse<KeyboardLayout>(args.Value.ToString(), out var layout))
+        {
+            TransliterationService.SetLayout(layout);
+        }
     }
 
     [JSInvokable]
