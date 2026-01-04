@@ -65,7 +65,13 @@ window.quillInterop = {
                             // Send the character to C# for transliteration
                             this.dotNetRef.invokeMethodAsync('ProcessKannadaKey', op.insert);
                             handled = true;
-                            break; // Handle one char at a time for safety
+                            // We do NOT break here to allow processing subsequent ops if any (though rare in typing)
+                            // But actually, if we modify the doc (deleteText), the subsequent ops might be invalid relative to indices.
+                            // However, in standard typing, we usually get one insert.
+                            // If we have replace (delete + insert), we handle delete first?
+                            // Delta order: Usually retain, delete, insert.
+                            // If we handle delete, index doesn't increment.
+                            // Then we handle insert.
                         }
                         index += op.insert.length;
                     } else if (op.delete) {
@@ -73,11 +79,17 @@ window.quillInterop = {
                          const now = Date.now();
                          // We only handle it if keydown didn't catch it recently
                          if (now - this.lastKeyHandledTime > 100) {
-                             this.dotNetRef.invokeMethodAsync('ProcessBackspace');
+                             if (op.delete > 1) {
+                                 // Bulk deletion: Sync state by clearing buffer
+                                 this.dotNetRef.invokeMethodAsync('OnSelectionChanged');
+                             } else {
+                                 // Single char deletion: Try to process backspace logic
+                                 this.dotNetRef.invokeMethodAsync('ProcessBackspace');
+                             }
                              handled = true;
                          }
                          // For delete, we don't need to 'revert' anything, just notify C#.
-                         break;
+                         // And we don't break, in case there is an insert following (replace).
                     }
                 }
             }
