@@ -46,7 +46,7 @@
 </div>
 
 <div id="editor-wrapper" tabindex="0" style="outline:none;">
-    <div id="quill-editor" style="height: 600px;"></div>
+    <div id="quill-editor"></div>
 </div>
 
 @if (showSaveModal)
@@ -87,12 +87,38 @@
         background: #f3f3f3;
         border-bottom: 1px solid #ccc;
         align-items: center;
+        flex-shrink: 0;
     }
     .toolbar-group {
         display: flex;
         align-items: center;
         gap: 10px;
     }
+
+    @@media (max-width: 600px) {
+        .toolbar-container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .toolbar-group {
+            justify-content: space-between;
+        }
+    }
+
+    #editor-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    #quill-editor {
+        flex: 1;
+        overflow: hidden;
+    }
+
     .file-input-hidden {
         display: none;
     }
