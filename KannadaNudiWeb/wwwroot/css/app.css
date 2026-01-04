@@ -11,9 +11,9 @@ h1:focus {
 }
 
 .card-container {
-    max-width: 750px;
+    max-width: 100%;
     width: 100%;
-    padding: 30px;
+    padding: 20px;
     background: #fff;
     border-radius: 7px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.01);
@@ -27,7 +27,7 @@ h1:focus {
 @media (max-width: 768px) {
     .card-container {
         max-width: 100%;
-        padding: 0;
+        padding: 10px;
         border-radius: 0;
         box-shadow: none;
         margin: 0;
