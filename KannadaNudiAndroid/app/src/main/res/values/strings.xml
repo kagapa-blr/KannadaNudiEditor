@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kannada Nudi Keyboard</string>
+    <string name="service_name">Kannada Nudi Keyboard</string>
+    <string name="subtype_phonetic">Kannada (Phonetic)</string>
+    <string name="subtype_nudi">Kannada (Nudi/Expert)</string>
+    <string name="subtype_inscript">Kannada (Inscript)</string>
+</resources>
