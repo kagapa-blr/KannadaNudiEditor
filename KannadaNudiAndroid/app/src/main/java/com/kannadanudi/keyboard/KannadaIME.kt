@@ -88,6 +88,11 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
         // Default to Phonetic (Baraha)
         transliterationEngine.setLayout(KeyboardLayout.Baraha)
+    }
+
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+        // Ensure keyboard is set when view is started
         keyboardView.keyboard = qwertyKeyboard
         keyboardView.invalidateAllKeys()
     }
