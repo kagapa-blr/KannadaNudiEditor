@@ -3,15 +3,28 @@
     <!-- Pressed state -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="#D1D1D1"/>
-            <corners android:radius="4dp"/>
+            <solid android:color="#E0E0E0"/>
+            <corners android:radius="6dp"/>
         </shape>
     </item>
-    <!-- Normal state -->
+
+    <!-- Normal state with shadow simulation -->
     <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#FFFFFF"/>
-            <corners android:radius="4dp"/>
-        </shape>
+        <layer-list>
+            <!-- Shadow Layer -->
+            <item android:top="2dp" android:left="0dp" android:right="0dp" android:bottom="0dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/key_shadow"/>
+                    <corners android:radius="6dp"/>
+                </shape>
+            </item>
+            <!-- Face Layer -->
+            <item android:bottom="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/key_bg"/>
+                    <corners android:radius="6dp"/>
+                </shape>
+            </item>
+        </layer-list>
     </item>
 </selector>

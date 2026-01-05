@@ -72,14 +72,15 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     }
 
     override fun onCreateInputView(): View {
-        keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as KeyboardView
+        val rootView = layoutInflater.inflate(R.layout.keyboard_view, null)
+        keyboardView = rootView.findViewById(R.id.keyboard)
         qwertyKeyboard = Keyboard(this, R.xml.qwerty)
         nudiKeyboard = Keyboard(this, R.xml.nudi_layout)
 
         keyboardView.keyboard = qwertyKeyboard
         keyboardView.setOnKeyboardActionListener(this)
 
-        return keyboardView
+        return rootView
     }
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {

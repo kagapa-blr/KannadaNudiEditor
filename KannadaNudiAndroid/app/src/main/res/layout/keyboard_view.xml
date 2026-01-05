@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.inputmethodservice.KeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/keyboard"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:background="@color/keyboard_bg"
-    android:keyBackground="@drawable/key_background"
-    android:keyTextColor="@color/key_text"
-/>
+    android:orientation="vertical"
+    android:background="@color/keyboard_bg">
+
+    <!-- Header Strip with Logo -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_nudi_logo"
+            android:contentDescription="Kannada Nudi Logo" />
+
+    </RelativeLayout>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/keyboard_bg"
+        android:keyBackground="@drawable/key_background"
+        android:keyTextColor="@color/key_text"
+        android:keyPreviewLayout="@null"
+    />
+</LinearLayout>
