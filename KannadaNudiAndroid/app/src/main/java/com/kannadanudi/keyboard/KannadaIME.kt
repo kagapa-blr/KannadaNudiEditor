@@ -16,6 +16,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import java.util.ArrayList
@@ -76,6 +78,12 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
         keyboardView = rootView.findViewById(R.id.keyboard)
         qwertyKeyboard = Keyboard(this, R.xml.qwerty)
         nudiKeyboard = Keyboard(this, R.xml.nudi_layout)
+
+        val switchButton = rootView.findViewById<TextView>(R.id.tv_switch_keyboard)
+        switchButton.setOnClickListener {
+            val imeManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imeManager.showInputMethodPicker()
+        }
 
         keyboardView.keyboard = qwertyKeyboard
         keyboardView.setOnKeyboardActionListener(this)

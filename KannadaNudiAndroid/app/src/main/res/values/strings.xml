@@ -4,4 +4,6 @@
     <string name="subtype_phonetic">Kannada (Phonetic)</string>
     <string name="subtype_nudi">Kannada (Nudi/Expert)</string>
     <string name="subtype_inscript">Kannada (Inscript)</string>
+    <string name="header_title">Nudi Keyboard</string>
+    <string name="header_switch">Switch</string>
 </resources>

@@ -5,21 +5,50 @@
     android:orientation="vertical"
     android:background="@color/keyboard_bg">
 
-    <!-- Header Strip with Logo -->
+    <!-- Header Strip -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
+        android:layout_height="40dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:gravity="center_vertical">
 
+        <!-- Logo (Left Aligned) -->
         <ImageView
+            android:id="@+id/img_logo"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_nudi_logo"
-            android:contentDescription="Kannada Nudi Logo" />
+            android:contentDescription="@string/app_name" />
+
+        <!-- Title Text (Next to Logo) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/img_logo"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:text="@string/header_title"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Switch Button (Right Aligned) -->
+        <TextView
+            android:id="@+id/tv_switch_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="@string/header_switch"
+            android:textColor="@color/purple_500"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
