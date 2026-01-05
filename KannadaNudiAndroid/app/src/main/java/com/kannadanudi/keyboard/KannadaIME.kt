@@ -116,6 +116,10 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 keyboardView.keyboard = qwertyKeyboard
                 keyboardView.invalidateAllKeys()
             }
+            -2 -> {
+                // Mode Change (123/Symbols) - Not implemented yet
+                // Fallthrough prevention
+            }
             else -> {
                 var code = primaryCode.toChar()
                 if (Character.isLetter(code) && isCaps) {
