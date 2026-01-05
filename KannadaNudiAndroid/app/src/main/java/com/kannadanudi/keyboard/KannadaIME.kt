@@ -32,38 +32,43 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
     override fun onCreate() {
         super.onCreate()
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-        speechRecognizer?.setRecognitionListener(object : RecognitionListener {
-            override fun onReadyForSpeech(params: Bundle?) {}
-            override fun onBeginningOfSpeech() {}
-            override fun onRmsChanged(rmsdB: Float) {}
-            override fun onBufferReceived(buffer: ByteArray?) {}
-            override fun onEndOfSpeech() {
-                isListening = false
-            }
-
-            override fun onError(error: Int) {
-                isListening = false
-                val message = when (error) {
-                    SpeechRecognizer.ERROR_NO_MATCH -> "No match"
-                    SpeechRecognizer.ERROR_NETWORK -> "Network error"
-                    SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Permission denied"
-                    else -> "Error: $error"
+        try {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+            speechRecognizer?.setRecognitionListener(object : RecognitionListener {
+                override fun onReadyForSpeech(params: Bundle?) {}
+                override fun onBeginningOfSpeech() {}
+                override fun onRmsChanged(rmsdB: Float) {}
+                override fun onBufferReceived(buffer: ByteArray?) {}
+                override fun onEndOfSpeech() {
+                    isListening = false
                 }
-                Toast.makeText(this@KannadaIME, message, Toast.LENGTH_SHORT).show()
-            }
 
-            override fun onResults(results: Bundle?) {
-                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                if (!matches.isNullOrEmpty()) {
-                    val text = matches[0]
-                    currentInputConnection.commitText(text, 1)
+                override fun onError(error: Int) {
+                    isListening = false
+                    val message = when (error) {
+                        SpeechRecognizer.ERROR_NO_MATCH -> "No match"
+                        SpeechRecognizer.ERROR_NETWORK -> "Network error"
+                        SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Permission denied"
+                        else -> "Error: $error"
+                    }
+                    Toast.makeText(this@KannadaIME, message, Toast.LENGTH_SHORT).show()
                 }
-            }
 
-            override fun onPartialResults(partialResults: Bundle?) {}
-            override fun onEvent(eventType: Int, params: Bundle?) {}
-        })
+                override fun onResults(results: Bundle?) {
+                    val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    if (!matches.isNullOrEmpty()) {
+                        val text = matches[0]
+                        currentInputConnection.commitText(text, 1)
+                    }
+                }
+
+                override fun onPartialResults(partialResults: Bundle?) {}
+                override fun onEvent(eventType: Int, params: Bundle?) {}
+            })
+        } catch (e: Exception) {
+            // Speech recognition not supported or initialization failed
+            speechRecognizer = null
+        }
     }
 
     override fun onCreateInputView(): View {
