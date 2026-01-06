@@ -20,7 +20,7 @@
             android:layout_height="24dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_nudi_logo"
+            android:src="@drawable/kannada_nudi_logo"
             android:contentDescription="@string/app_name" />
 
         <!-- Title Text (Next to Logo) -->
