@@ -68,9 +68,9 @@ main {
 }
 
 .header-logo {
-    position: absolute;
-    right: 0;
-    width: 100px;
-    height: 100px;
+    position: relative;
+    left: 0;
+    width: 75px;
+    height: 75px;
     object-fit: contain;
 }
