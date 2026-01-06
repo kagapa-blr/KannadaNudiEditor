@@ -57,3 +57,20 @@ main {
     padding: 0.5rem;
     z-index: 1000;
 }
+
+.header-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    padding-bottom: 10px; /* Optional spacing */
+}
+
+.header-logo {
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
