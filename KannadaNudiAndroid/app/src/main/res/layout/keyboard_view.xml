@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/keyboard_bg">
+
+    <!-- Header Strip -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Logo (Left Aligned) -->
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/kannada_nudi_logo"
+            android:contentDescription="@string/app_name" />
+
+        <!-- Title Text (Next to Logo) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/img_logo"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:text="@string/header_title"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Switch Button (Right Aligned) -->
+        <TextView
+            android:id="@+id/tv_switch_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="@string/header_switch"
+            android:textColor="@color/purple_500"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- Candidates View -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_candidates"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+    />
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/keyboard_bg"
+        android:keyBackground="@drawable/key_background"
+        android:keyTextColor="@color/key_text"
+        android:keyPreviewLayout="@null"
+    />
+</LinearLayout>

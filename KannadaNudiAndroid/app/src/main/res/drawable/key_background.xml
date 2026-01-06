@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#E0E0E0"/>
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
+
+    <!-- Normal state with shadow simulation -->
+    <item>
+        <layer-list>
+            <!-- Shadow Layer -->
+            <item android:top="2dp" android:left="0dp" android:right="0dp" android:bottom="0dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/key_shadow"/>
+                    <corners android:radius="6dp"/>
+                </shape>
+            </item>
+            <!-- Face Layer -->
+            <item android:bottom="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/key_bg"/>
+                    <corners android:radius="6dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
