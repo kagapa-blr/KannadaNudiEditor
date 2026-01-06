@@ -20,6 +20,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.kannadanudi.keyboard.prediction.DictionaryLoader
+import com.kannadanudi.keyboard.ui.CandidatesAdapter
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
@@ -32,8 +39,15 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     private var speechRecognizer: SpeechRecognizer? = null
     private var isListening = false
 
+    private lateinit var dictionaryLoader: DictionaryLoader
+    private lateinit var candidatesAdapter: CandidatesAdapter
+    private lateinit var candidatesView: RecyclerView
+    private val mainScope = MainScope()
+
     override fun onCreate() {
         super.onCreate()
+        dictionaryLoader = DictionaryLoader(this)
+        dictionaryLoader.loadDictionary()
         try {
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
             speechRecognizer?.setRecognitionListener(object : RecognitionListener {
@@ -76,6 +90,8 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     override fun onCreateInputView(): View {
         val rootView = layoutInflater.inflate(R.layout.keyboard_view, null)
         keyboardView = rootView.findViewById(R.id.keyboard)
+        candidatesView = rootView.findViewById(R.id.rv_candidates)
+
         qwertyKeyboard = Keyboard(this, R.xml.qwerty)
         nudiKeyboard = Keyboard(this, R.xml.nudi_layout)
 
@@ -84,6 +100,13 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
             val imeManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imeManager.showInputMethodPicker()
         }
+
+        // Setup Candidates View
+        candidatesAdapter = CandidatesAdapter { word ->
+            pickCandidate(word)
+        }
+        candidatesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        candidatesView.adapter = candidatesAdapter
 
         keyboardView.keyboard = qwertyKeyboard
         keyboardView.setOnKeyboardActionListener(this)
@@ -104,6 +127,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
         // Ensure keyboard is set when view is started
         keyboardView.keyboard = qwertyKeyboard
         keyboardView.invalidateAllKeys()
+        updateCandidates()
     }
 
     override fun onKey(primaryCode: Int, keyCodes: IntArray?) {
@@ -156,6 +180,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 inputConnection.commitText(result.text, 1)
             }
         }
+        updateCandidates()
     }
 
     private fun handleBackspace(inputConnection: InputConnection) {
@@ -163,6 +188,41 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
         // This treats backspace as "commit current and delete previous char"
         transliterationEngine.clearBuffer()
         inputConnection.deleteSurroundingText(1, 0)
+    }
+
+    private fun updateCandidates() {
+        mainScope.launch {
+            val inputConnection = currentInputConnection ?: return@launch
+            val textBeforeCursor = inputConnection.getTextBeforeCursor(50, 0)?.toString() ?: ""
+
+            // Simple tokenization: take last word
+            val lastWord = textBeforeCursor.split(Regex("\\s|\\p{Punct}")).lastOrNull() ?: ""
+
+            if (lastWord.isNotEmpty()) {
+                val suggestions = dictionaryLoader.getSuggestions(lastWord)
+                if (suggestions.isNotEmpty()) {
+                    candidatesAdapter.submitList(suggestions)
+                    candidatesView.visibility = View.VISIBLE
+                } else {
+                    candidatesView.visibility = View.GONE
+                }
+            } else {
+                candidatesView.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun pickCandidate(word: String) {
+        val inputConnection = currentInputConnection ?: return
+        val textBeforeCursor = inputConnection.getTextBeforeCursor(50, 0)?.toString() ?: ""
+        val lastWord = textBeforeCursor.split(Regex("\\s|\\p{Punct}")).lastOrNull() ?: ""
+
+        if (lastWord.isNotEmpty()) {
+            inputConnection.deleteSurroundingText(lastWord.length, 0)
+            inputConnection.commitText("$word ", 1)
+        }
+        transliterationEngine.clearBuffer()
+        candidatesView.visibility = View.GONE
     }
 
     private fun checkAudioPermissionAndListen() {
@@ -209,6 +269,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        mainScope.cancel()
         speechRecognizer?.destroy()
     }
 }

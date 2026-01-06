@@ -52,6 +52,18 @@
 
     </RelativeLayout>
 
+    <!-- Candidates View -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_candidates"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+    />
+
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
