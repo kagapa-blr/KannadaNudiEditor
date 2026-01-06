@@ -35,7 +35,10 @@ class Trie {
         // To keep it simple and somewhat deterministic, we iterate through keys.
         // For better quality, we might want to prioritize based on frequency if available,
         // but the wordlist is flat.
-        for ((char, childNode) in node.children) {
+        // Sort keys to ensure alphabetical order since we switched to HashMap
+        val sortedKeys = node.children.keys.sorted()
+        for (char in sortedKeys) {
+            val childNode = node.children[char]!!
             if (results.size >= limit) return
             collectWords(childNode, currentPrefix + char, results, limit)
         }
