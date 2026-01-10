@@ -135,7 +135,8 @@ namespace KannadaNudiEditor.Helpers
             Func<string, string> converter,
             string fontFamilyName)
         {
-            int paraCount = 0;
+            int convertedParaCount = 0;
+            int skippedParaCount = 0;
 
             foreach (SectionAdv section in doc.Sections)
             {
@@ -149,10 +150,25 @@ namespace KannadaNudiEditor.Helpers
                         .Where(s => !string.IsNullOrEmpty(s.Text))
                         .ToList();
 
-                    if (spans.Count == 0) continue;
+                    if (spans.Count == 0)
+                        continue;
+
+                    // 🔹 Check Nudi font condition
+                    bool hasNudiFont = spans.Any(s =>
+                        s.CharacterFormat.FontFamily?.Source != null &&
+                        s.CharacterFormat.FontFamily.Source
+                            .StartsWith("nudi", StringComparison.OrdinalIgnoreCase));
+
+                    // Skip non-Nudi paragraphs
+                    if (!hasNudiFont)
+                    {
+                        skippedParaCount++;
+                        continue;
+                    }
 
                     string originalText = string.Concat(spans.Select(s => s.Text));
-                    if (string.IsNullOrEmpty(originalText)) continue;
+                    if (string.IsNullOrEmpty(originalText))
+                        continue;
 
                     string converted = converter(originalText);
 
@@ -161,23 +177,28 @@ namespace KannadaNudiEditor.Helpers
 
                     var newSpan = new SpanAdv { Text = converted };
 
-                    // preserve formatting from first span
+                    // Preserve formatting
                     newSpan.CharacterFormat.FontSize = firstSpan.CharacterFormat.FontSize;
                     newSpan.CharacterFormat.Bold = firstSpan.CharacterFormat.Bold;
                     newSpan.CharacterFormat.Italic = firstSpan.CharacterFormat.Italic;
                     newSpan.CharacterFormat.Underline = firstSpan.CharacterFormat.Underline;
                     newSpan.CharacterFormat.FontColor = firstSpan.CharacterFormat.FontColor;
 
-                    // Kannada font
+                    // Force Unicode Kannada font
                     newSpan.CharacterFormat.FontFamily =
                         new System.Windows.Media.FontFamily(fontFamilyName);
 
                     para.Inlines.Add(newSpan);
-                    paraCount++;
+                    convertedParaCount++;
                 }
             }
 
-            return paraCount;
+            // Log summary
+            SimpleLogger.Log(
+                $"Convert - paragraphs converted: {convertedParaCount}, " +
+                $"skipped (non-Nudi font): {skippedParaCount}");
+
+            return convertedParaCount;
         }
 
         // ============================================================

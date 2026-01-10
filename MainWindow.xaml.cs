@@ -2802,9 +2802,6 @@ namespace KannadaNudiEditor
         private async void UnicodeToAsciiButton_Click(object sender, RoutedEventArgs e)
             => await ConvertFileAsync(FileConversionService.UnicodeToAsciiConverter, "Unicode to ASCII");
 
-
-
-
         private async Task ConvertFileAsync(Func<string, string> converter, string operationName)
         {
             var dlg = new OpenFileDialog
