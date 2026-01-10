@@ -25,7 +25,14 @@ namespace KannadaNudiEditor.Helpers.Conversion
             if (cfg.EnableKannadaClusterPostProcess)
                 mapped = PostProcessKannadaClusters(mapped, cfg.DependentVowels, cfg.Halant);
 
+            //repha normalization
+            mapped = NormalizeKannadaRepha(mapped);
+
+            // Existing fixups
             mapped = ApplyPostFixupsKannadaRuns(mapped, cfg.PostFixupsPairs);
+
+            //remove joiners
+            mapped = RemoveJoiners(mapped, cfg);
 
             return mapped.Normalize(NormalizationForm.FormC);
         }

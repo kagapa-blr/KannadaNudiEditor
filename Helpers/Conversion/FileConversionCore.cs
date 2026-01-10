@@ -318,5 +318,23 @@ namespace KannadaNudiEditor.Helpers.Conversion
             public string? Value { get; set; }
             public Dictionary<string, string>? Mapping { get; set; }
         }
+        private static string NormalizeKannadaRepha(string text)
+        {
+            // Move trailing "ರ್" to canonical repha position
+            // Example: ಕಾ + ರ್ → ರ್ + ಕಾ
+            return Regex.Replace(
+                text,
+                @"([ಕ-ಹ])(ಾ|ಿ|ೀ|ು|ೂ|ೃ|ೆ|ೇ|ೈ|ೊ|ೋ|ೌ)?ರ್",
+                m => "ರ್" + m.Groups[1].Value + m.Groups[2].Value,
+                RegexOptions.Compiled
+            );
+        }
+
+        private static string RemoveJoiners(string text, ConversionConfig cfg)
+        {
+            return text
+                .Replace(cfg.Zwj.ToString(), string.Empty)
+                .Replace(cfg.Zwnj.ToString(), string.Empty);
+        }
     }
 }
