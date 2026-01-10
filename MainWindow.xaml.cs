@@ -89,9 +89,15 @@ namespace KannadaNudiEditor
 
         private bool _isDocumentModified = false;
 
-        public MainWindow()
+
+
+        private readonly string? _startupFilePath;
+        private bool _startupFileOpened = false;
+
+        public MainWindow(string? startupFilePath = null)
         {
             InitializeComponent();
+            _startupFilePath = startupFilePath;
 
             richTextBoxAdv.IsManipulationEnabled = true;
             DataContext = richTextBoxAdv;
@@ -296,13 +302,28 @@ namespace KannadaNudiEditor
 
 
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (ribbon != null)
                 ribbon.Loaded += Ribbon_Loaded;
 
             RefreshRecentFiles();
+
+            // 🔴 ADD THIS BLOCK
+            if (!_startupFileOpened &&
+                !string.IsNullOrWhiteSpace(_startupFilePath) &&
+                File.Exists(_startupFilePath))
+            {
+                _startupFileOpened = true;
+
+                SimpleLogger.Log($"[STARTUP] Opening file: {_startupFilePath}");
+
+                await OpenDocumentFromPathAsync(
+                    _startupFilePath,
+                    updateRecentFiles: true);
+            }
         }
+
 
         void RichTextBoxAdv_RequestNavigate(object obj, Syncfusion.Windows.Controls.RichTextBoxAdv.RequestNavigateEventArgs args)
         {
@@ -541,7 +562,7 @@ namespace KannadaNudiEditor
                     System.Threading.Thread.Sleep(100);
                 });
 
-                MainWindow mainWindow = new MainWindow();
+                MainWindow mainWindow = new MainWindow(null);
                 mainWindow.Show();
             }
             catch (Exception ex)
@@ -576,14 +597,15 @@ namespace KannadaNudiEditor
             }
         }
 
-        private async Task<bool> OpenDocumentFromPathAsync(string fullPath, bool updateRecentFiles = true)
+        private async Task<bool> OpenDocumentFromPathAsync(
+            string fullPath,
+            bool updateRecentFiles = true)
         {
             await _openGate.WaitAsync();
             var swTotal = Stopwatch.StartNew();
 
             try
             {
-                // Early validation (keep for recent files)
                 if (richTextBoxAdv == null || string.IsNullOrWhiteSpace(fullPath))
                 {
                     SimpleLogger.Log("[OPEN] Abort: invalid state.");
@@ -594,71 +616,105 @@ namespace KannadaNudiEditor
                 if (!File.Exists(normalizedPath))
                 {
                     SimpleLogger.Log($"[OPEN] File not found: {normalizedPath}");
-                    MessageBox.Show($"File not found:\n{normalizedPath}", "Kannada Nudi Editor",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(
+                        $"File not found:\n{normalizedPath}",
+                        "Kannada Nudi Editor",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
                     return false;
                 }
 
                 var file = new FileInfo(normalizedPath);
                 var fileName = file.Name;
                 var fileExtension = file.Extension;
+
                 if (string.IsNullOrWhiteSpace(fileExtension))
                 {
-                    SimpleLogger.Log($"[OPEN] Abort: no extension.");
+                    SimpleLogger.Log("[OPEN] Abort: no extension.");
                     return false;
                 }
 
                 var formatType = GetFormatType(fileExtension);
-                SimpleLogger.Log($"[OPEN] Begin load. Path={normalizedPath} Ext={fileExtension} FormatType={formatType}");
+                SimpleLogger.Log(
+                    $"[OPEN] Begin load. Path={normalizedPath} Ext={fileExtension} Format={formatType}");
 
-                // Cancel previous (keep your pattern)
-                if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
+                // Cancel previous load
+                if (loadAsync != null &&
+                    !loadAsync.IsCompleted &&
+                    cancellationTokenSource != null)
                 {
-                    SimpleLogger.Log("[OPEN] Canceling previous...");
+                    SimpleLogger.Log("[OPEN] Canceling previous load...");
                     cancellationTokenSource.Cancel();
-                    try { if (!loadAsync.IsCanceled) await loadAsync; } catch { }
+                    try { await loadAsync; } catch { }
                 }
 
-                // EXACT WordImport() load pattern - works!
+                cancellationTokenSource?.Dispose();
+                cancellationTokenSource = new CancellationTokenSource();
+
                 try
                 {
-                    cancellationTokenSource?.Dispose();
-                    cancellationTokenSource = new CancellationTokenSource();
+                    // ALWAYS marshal to UI thread
+                    await Dispatcher.InvokeAsync(async () =>
+                    {
+                        using var stream = new FileStream(
+                            normalizedPath,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite);
 
-                    // Dialog-style stream (avoids importer issues)
-                    var openDialog = new OpenFileDialog { FileName = normalizedPath };
-                    using var fileStream = openDialog.OpenFile();
-                    loadAsync = richTextBoxAdv.LoadAsync(fileStream, formatType, cancellationTokenSource.Token);
-                    await loadAsync;
+                        loadAsync = richTextBoxAdv.LoadAsync(
+                            stream,
+                            formatType,
+                            cancellationTokenSource.Token);
+
+                        await loadAsync;
+                    });
                 }
-                catch (Exception exLoad)
+                catch (OperationCanceledException)
                 {
-                    SimpleLogger.LogException(exLoad, $"[OPEN] Load warning (swallowed): {normalizedPath}");
-                    // Swallow like WordImport() - still set title
+                    SimpleLogger.Log("[OPEN] Load canceled.");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    SimpleLogger.LogException(ex, $"[OPEN] Load failed: {normalizedPath}");
+                    MessageBox.Show(
+                        $"Cannot open this file type or file is corrupted.\n\n{fileName}",
+                        "Kannada Nudi Editor",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return false;
                 }
                 finally
                 {
-                    cancellationTokenSource?.Dispose();
+                    cancellationTokenSource.Dispose();
                     cancellationTokenSource = null;
                     loadAsync = null;
                 }
 
-                // ALWAYS set title/path like WordImport() - works for partial opens too
-                richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(fileName);
+                // Post-load UI state
+                richTextBoxAdv.DocumentTitle =
+                    Path.GetFileNameWithoutExtension(fileName);
+
                 currentFilePath = normalizedPath;
-                SimpleLogger.Log($"[OPEN] Title set: {richTextBoxAdv.DocumentTitle} Path={currentFilePath}");
 
                 if (updateRecentFiles)
                 {
                     try
                     {
                         var fileType = fileExtension.TrimStart('.').ToLowerInvariant();
-                        RecentFilesStore.AddOrUpdate(currentFilePath, isAscii: false, isUnicode: true, fileType, fileName);
-                        SimpleLogger.Log($"[OPEN] Recent upsert OK: {currentFilePath}");
+                        RecentFilesStore.AddOrUpdate(
+                            currentFilePath,
+                            isAscii: false,
+                            isUnicode: true,
+                            fileType,
+                            fileName);
+
+                        SimpleLogger.Log($"[OPEN] Recent updated: {currentFilePath}");
                     }
                     catch (Exception exRecent)
                     {
-                        SimpleLogger.LogException(exRecent, "[OPEN] Recent failed");
+                        SimpleLogger.LogException(exRecent, "[OPEN] Recent update failed");
                     }
                 }
 
@@ -667,12 +723,17 @@ namespace KannadaNudiEditor
             finally
             {
                 swTotal.Stop();
-                SimpleLogger.Log($"[OPEN] End. TotalTime={swTotal.ElapsedMilliseconds} ms.");
+                SimpleLogger.Log($"[OPEN] End. Total={swTotal.ElapsedMilliseconds} ms");
+
                 try { richTextBoxAdv?.Focus(); } catch { }
                 try { ribbon.IsBackStageVisible = false; } catch { }
+
                 _openGate.Release();
             }
         }
+
+
+
 
 
         private void OnShowEncryptDocumentExecuted(object sender, ExecutedRoutedEventArgs e)
