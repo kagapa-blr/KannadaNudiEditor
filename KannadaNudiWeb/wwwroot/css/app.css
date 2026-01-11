@@ -1,0 +1,92 @@
+html, body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #c89963;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+h1:focus {
+    outline: none;
+}
+
+.card-container {
+    max-width: 100%;
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.01);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+@media (max-width: 768px) {
+    .card-container {
+        max-width: 100%;
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+    }
+}
+
+.ql-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.ql-editor {
+    flex: 1;
+    overflow-y: auto;
+    font-family: 'Nudi Parijatha', 'Poppins', sans-serif;
+    font-size: 200%;
+}
+
+a, .btn-link {
+    color: #0071c1;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.loading-progress {
+    position: relative;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem auto;
+}
+
+.loading-progress circle {
+    fill: none;
+    stroke: #e0e0e0;
+    stroke-width: 0.6rem;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+}
+
+.loading-progress circle:last-child {
+    stroke: #1b6ec2;
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+    transition: stroke-dasharray 0.05s ease-in-out;
+}
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+}
+
+.loading-progress-text:after {
+    content: var(--blazor-load-percentage-text, "Loading");
+}
