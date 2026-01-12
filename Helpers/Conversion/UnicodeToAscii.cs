@@ -287,7 +287,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
             }
 
             // Append anusvara/visarga if it was first dep vowel. [file:53]
-            if (dep0IsAnusOrVis)
+            if (dep0IsAnusOrVis && dep0.HasValue)
                 sb.Append(MapOrSelf(dep0.Value.ToString(), cfg));
 
             // Append second dep vowel if present. [file:53]

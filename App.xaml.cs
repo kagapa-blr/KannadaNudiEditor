@@ -30,67 +30,45 @@ namespace KannadaNudiEditor
         {
             base.OnStartup(e);
 
-            // Capture file path from "Open With" command line args
             string? startupFilePath = null;
+            SimpleLogger.Log($"[APP] Args received: {e.Args.Length}");
 
-            SimpleLogger.Log($"[APP] Total args received: {e.Args.Length}");
-
-            // Try to find a valid file path among the arguments
-            // Handle both quoted and unquoted paths, and paths split across multiple args
             for (int i = 0; i < e.Args.Length; i++)
             {
-                string arg = e.Args[i];
+                string arg = e.Args[i].Trim('"', '\'');
                 SimpleLogger.Log($"[APP] Arg[{i}]: '{arg}'");
 
-                // Remove quotes if present
-                string cleanedArg = arg.Trim('"', '\'');
-                SimpleLogger.Log($"[APP] Cleaned arg[{i}]: '{cleanedArg}'");
-
-                // Check if this single arg is a valid file
-                if (!string.IsNullOrWhiteSpace(cleanedArg) && File.Exists(cleanedArg))
+                // Check if this arg is a valid file
+                if (File.Exists(arg))
                 {
-                    startupFilePath = cleanedArg;
-                    SimpleLogger.Log($"[APP] ✓ Startup file detected (single arg): {startupFilePath}");
+                    startupFilePath = arg;
+                    SimpleLogger.Log($"[APP] File detected: {startupFilePath}");
                     break;
                 }
 
-                // If not found as a single arg, try combining this arg with subsequent args
-                // (some shells / run helpers may split a quoted path into multiple arguments).
-                if (!string.IsNullOrWhiteSpace(cleanedArg))
+                // Try combining adjacent args (for shell-split quoted paths)
+                if (arg.Contains("\\"))
                 {
-                    // Heuristic: treat this arg as a path start if it contains a backslash (drive or folder)
-                    if (cleanedArg.Contains("\\"))
+                    var parts = new List<string> { arg };
+                    for (int j = i + 1; j < e.Args.Length; j++)
                     {
-                        var parts = new List<string> { cleanedArg };
-                        for (int j = i + 1; j < e.Args.Length; j++)
+                        string next = e.Args[j].Trim('"', '\'');
+                        parts.Add(next);
+                        string candidate = string.Join(' ', parts);
+                        if (File.Exists(candidate))
                         {
-                            string next = e.Args[j].Trim('"', '\'');
-                            parts.Add(next);
-                            string candidate = string.Join(' ', parts);
-                            SimpleLogger.Log($"[APP] Trying combined candidate: '{candidate}'");
-                            if (File.Exists(candidate))
-                            {
-                                startupFilePath = candidate;
-                                SimpleLogger.Log($"[APP] ✓ Startup file detected (combined args): {startupFilePath}");
-                                break;
-                            }
-                        }
-
-                        if (!string.IsNullOrEmpty(startupFilePath))
+                            startupFilePath = candidate;
+                            SimpleLogger.Log($"[APP] File detected (combined): {startupFilePath}");
                             break;
+                        }
                     }
-                }
-
-                if (!string.IsNullOrWhiteSpace(cleanedArg))
-                {
-                    SimpleLogger.Log($"[APP] ✗ File not found: {cleanedArg}");
+                    if (!string.IsNullOrEmpty(startupFilePath))
+                        break;
                 }
             }
 
             if (string.IsNullOrEmpty(startupFilePath))
-            {
-                SimpleLogger.Log("[APP] No startup file detected (normal launch)");
-            }
+                SimpleLogger.Log("[APP] No startup file detected");
             try
             {
                 LicenseHelper.RegisterSyncfusionLicense();

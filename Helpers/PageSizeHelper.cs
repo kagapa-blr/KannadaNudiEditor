@@ -59,14 +59,15 @@ namespace KannadaNudiEditor.Helpers
 
         public static IReadOnlyCollection<PageSizeInfo> All => (IReadOnlyCollection<PageSizeInfo>)_pageSizes.Values;
 
-        public static bool TryGet(string key, out PageSizeInfo pageSize)
+        public static bool TryGet(string key, out PageSizeInfo? pageSize)
         {
+            pageSize = null;
             return _pageSizes.TryGetValue(key, out pageSize);
         }
 
         public static Size ToPixelSize(string key, double dpi = 96)
         {
-            if (!TryGet(key, out var info))
+            if (!TryGet(key, out var info) || info == null)
                 throw new ArgumentException($"Unknown page size: {key}", nameof(key));
 
             return info.ToPixelSize(dpi);

@@ -34,21 +34,20 @@ namespace KannadaNudiEditor
         Task<bool>? loadAsync = null;
         CancellationTokenSource? cancellationTokenSource = null;
         private readonly RibbonGallery? ribbonGallery = null;
-        private readonly RibbonButton? RibbonButton = null;
         Dictionary<string, List<double>>? pageMarginsCollection = null;
         Dictionary<string, List<double>>? pageSizesCollection = null;
         private string currentFilePath = string.Empty;
         private readonly SemaphoreSlim _openGate = new(1, 1);
 
         #region Page Fields
-        private string customTopMargin;
-        private string customBottomMargin;
-        private string customLeftMargin;
-        private string customRightMargin;
-        private string customMarginUnit;
+        private string customTopMargin = string.Empty;
+        private string customBottomMargin = string.Empty;
+        private string customLeftMargin = string.Empty;
+        private string customRightMargin = string.Empty;
+        private string customMarginUnit = string.Empty;
 
-        private string customPageHeight;
-        private string customPageWidth;
+        private string customPageHeight = string.Empty;
+        private string customPageWidth = string.Empty;
 
         private string customSizeUnit = "in";   // default once at startup
 
@@ -98,6 +97,14 @@ namespace KannadaNudiEditor
         {
             InitializeComponent();
             _startupFilePath = startupFilePath;
+
+            // Ensure non-nullable fields are initialized
+            if (spellChecker == null)
+                spellChecker = new SpellChecker();
+            if (_customMarginsItem == null)
+                _customMarginsItem = new PageMargins { Key = "Custom", top = string.Empty, bottom = string.Empty, left = string.Empty, right = string.Empty };
+            if (_marginItems == null)
+                _marginItems = new ObservableCollection<PageMargins>();
 
             richTextBoxAdv.IsManipulationEnabled = true;
             DataContext = richTextBoxAdv;
@@ -235,67 +242,64 @@ namespace KannadaNudiEditor
 
         private void Ribbon_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            SfRichTextBoxAdv sfRichTextBoxAdv = null;
-            if ((sfRichTextBoxAdv = e.NewValue as SfRichTextBoxAdv) != null)
+            if (e.NewValue is SfRichTextBoxAdv sfRichTextBoxAdv && sfRichTextBoxAdv.Document != null)
             {
-                if (sfRichTextBoxAdv.Document != null)
-                {
-                    sfRichTextBoxAdv.Document.Styles.CollectionChanged += Styles_CollectionChanged; ;
-                }
+                sfRichTextBoxAdv.Document.Styles.CollectionChanged += Styles_CollectionChanged;
             }
         }
 
-        private void Styles_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Styles_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (ribbonGallery != null && ribbonGallery.Items != null)
-            {
-                DocumentStyle newStyle = null;
-                if ((newStyle = richTextBoxAdv.Document.Styles[e.NewStartingIndex] as ParagraphStyle) != null)
-                {
-                    if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                    {
-                        if (string.IsNullOrEmpty(newStyle.LinkStyleName))
-                        {
-                            AddRibbonGalleryItem(newStyle, 0, false);
-                        }
-                        else
-                        {
-                            int i = 0;
-                            foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
-                            {
-                                Grid grid = ribItem.Content as Grid;
-                                TextBlock textBlock = grid.Children[1] as TextBlock;
-                                DocumentStyle style = GetStyle(textBlock.Text);
-                                if (!string.IsNullOrEmpty(style.LinkStyleName))
-                                {
-                                    AddRibbonGalleryItem(newStyle, i, false);
-                                    break;
-                                }
-                                i++;
-                            }
-                        }
-                    }
-                    else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                    {
-                        ribbonGallery.Items.Clear();
-                        AddRibbonGalleryItems();
-                    }
-                    else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-                    {
-                        int i = 0;
-                        foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
-                        {
-                            Grid grid = ribItem.Content as Grid;
-                            TextBlock textBlock = grid.Children[1] as TextBlock;
+            if (ribbonGallery?.Items == null) return;
 
-                            if (newStyle.Name == textBlock.Text)
+            var style = richTextBoxAdv.Document.Styles[e.NewStartingIndex] as ParagraphStyle;
+            if (style == null) return;
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                if (string.IsNullOrEmpty(style.LinkStyleName))
+                {
+                    AddRibbonGalleryItem(style, 0, false);
+                }
+                else
+                {
+                    int i = 0;
+                    foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
+                    {
+                        Grid? grid = ribItem.Content as Grid;
+                        TextBlock? textBlock = grid?.Children[1] as TextBlock;
+                        if (textBlock != null)
+                        {
+                            DocumentStyle? foundStyle = GetStyle(textBlock.Text);
+                            if (foundStyle != null && !string.IsNullOrEmpty(foundStyle.LinkStyleName))
                             {
-                                AddRibbonGalleryItem(newStyle, i, true);
+                                AddRibbonGalleryItem(style, i, false);
                                 break;
                             }
-                            i++;
                         }
+                        i++;
                     }
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                ribbonGallery.Items.Clear();
+                AddRibbonGalleryItems();
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                int i = 0;
+                foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
+                {
+                    Grid? grid = ribItem.Content as Grid;
+                    TextBlock? textBlock = grid?.Children[1] as TextBlock;
+
+                    if (textBlock != null && style.Name == textBlock.Text)
+                    {
+                        AddRibbonGalleryItem(style, i, true);
+                        break;
+                    }
+                    i++;
                 }
             }
         }
@@ -350,23 +354,28 @@ namespace KannadaNudiEditor
         private void RichTextBoxAdv_SelectionChanged(object obj, Syncfusion.Windows.Controls.RichTextBoxAdv.SelectionChangedEventArgs args)
         {
             UpdateRichTextBoxAdvItems();
-            SelectionAdv currentSelection = (obj as SfRichTextBoxAdv).Selection;
-            if (ribbonGallery != null && !string.IsNullOrEmpty(currentSelection.Start.Paragraph.ParagraphFormat.StyleName))
+            var sfRichTextBox = obj as SfRichTextBoxAdv;
+            if (sfRichTextBox?.Selection != null)
             {
-                int i = 0;
-                foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
+                SelectionAdv currentSelection = sfRichTextBox.Selection;
+                if (ribbonGallery?.Items != null && !string.IsNullOrEmpty(currentSelection.Start?.Paragraph?.ParagraphFormat?.StyleName))
                 {
-                    i++;
-                    Grid grid = ribItem.Content as Grid;
-                    TextBlock textBlock = grid.Children[1] as TextBlock;
-                    if (textBlock.Text == currentSelection.Start.Paragraph.ParagraphFormat.StyleName)
+                    int i = 0;
+                    foreach (RibbonGalleryItem ribItem in ribbonGallery.Items)
                     {
-                        ribbonGallery.SelectedItem = ribbonGallery.Items[i - 1];
+                        i++;
+                        Grid? grid = ribItem.Content as Grid;
+                        TextBlock? textBlock = grid?.Children[1] as TextBlock;
+                        if (textBlock?.Text == currentSelection.Start.Paragraph.ParagraphFormat.StyleName)
+                        {
+                            ribbonGallery.SelectedItem = ribbonGallery.Items[i - 1];
+                        }
                     }
                 }
+                _isDocumentModified = true;
             }
-            _isDocumentModified = true;
         }
+
         /// <summary>
         /// update the page and word counts of RichTextBoxAdv
         /// </summary>
@@ -418,8 +427,10 @@ namespace KannadaNudiEditor
 
 
             if (fontFamilyComboBox != null)
+            {
                 fontFamilyComboBox.ItemsSource = GetFontFamilySource();
-            fontFamilyComboBox.SelectedValue = "NudiParijatha"; // set default selected value
+                fontFamilyComboBox.SelectedValue = "NudiParijatha";
+            }
 
             if (fontSizeComboBox != null)
                 fontSizeComboBox.ItemsSource = new double[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 26, 28, 36, 48, 72, 96 };
@@ -914,7 +925,7 @@ namespace KannadaNudiEditor
             increaseFontSizeButton.Click += IncreaseFontSizeButton_Click;
             decreaseFontSizeButton.Click += DecreaseFontSizeButton_Click;
             fontColorSplitButton.Click += FontColorSplitButton_Click;
-            fontColorPicker.ColorChanged += FontColorPicker_ColorChanged;
+            fontColorPicker.SelectedBrushChanged += FontColorPicker_SelectedBrushChanged;
             highlightColorSplitButton.Click += HighlightColorSplitButton_Click;
             noHighlightButton.Click += DropDownItem_Click;
             yellowHighlightButton.Click += DropDownItem_Click;
@@ -981,18 +992,17 @@ namespace KannadaNudiEditor
                     richTextBoxAdv.Selection.CharacterFormat.FontSize = fontSizeSource.OrderBy(d => Math.Abs(d - richTextBoxAdv.Selection.CharacterFormat.FontSize)).ElementAt(0);
             }
         }
-        void FontColorPicker_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        void FontColorPicker_SelectedBrushChanged(object? sender, SelectedBrushChangedEventArgs e)
         {
-            SplitButton splitbutton = (SplitButton)fontColorPicker.Parent;
-            if (splitbutton != null)
+            if (fontColorPicker?.Parent is SplitButton splitbutton)
                 splitbutton.IsDropDownOpen = false;
         }
         void FontColorSplitButton_Click(object sender, RoutedEventArgs e)
         {
             if (fontColorPicker != null && richTextBoxAdv != null)
             {
-                if (fontColorPicker.RecentlyUsedCollection.Count > 0 && fontColorPicker.RecentlyUsedCollection[0].Color is SolidColorBrush)
-                    richTextBoxAdv.Selection.CharacterFormat.FontColor = (fontColorPicker.RecentlyUsedCollection[0].Color as SolidColorBrush).Color;
+                if (fontColorPicker.RecentlyUsedCollection.Count > 0 && fontColorPicker.RecentlyUsedCollection[0].Color is SolidColorBrush brush)
+                    richTextBoxAdv.Selection.CharacterFormat.FontColor = brush.Color;
                 else
                     richTextBoxAdv.Selection.CharacterFormat.FontColor = Color.FromArgb(0x00, 0xff, 0x00, 0x00);
             }
@@ -1001,11 +1011,15 @@ namespace KannadaNudiEditor
 
         void HighlightColorSplitButton_Click(object sender, RoutedEventArgs e)
         {
-            if (richTextBoxAdv != null && richTextBoxAdv.Selection.CharacterFormat.HighlightColor != HighlightColor.NoColor)
-                richTextBoxAdv.Selection.CharacterFormat.HighlightColor = HighlightColor.NoColor;
-            else
-                richTextBoxAdv.Selection.CharacterFormat.HighlightColor = HighlightColor.Yellow;
+            if (richTextBoxAdv != null)
+            {
+                if (richTextBoxAdv.Selection.CharacterFormat.HighlightColor != HighlightColor.NoColor)
+                    richTextBoxAdv.Selection.CharacterFormat.HighlightColor = HighlightColor.NoColor;
+                else
+                    richTextBoxAdv.Selection.CharacterFormat.HighlightColor = HighlightColor.Yellow;
+            }
         }
+
         void BackstageButton_Click(object sender, RoutedEventArgs e)
         {
             CloseBackstage();
@@ -1074,25 +1088,23 @@ namespace KannadaNudiEditor
             if (richTextBoxAdv != null)
             {
                 IEnumerable tabs = ribbon.Items;
-                string visual = SkinStorage.GetVisualStyle(this);
+                string? visual = SkinStorage.GetVisualStyle(this);
                 foreach (var tab in tabs)
                 {
-                    RibbonTab ribbontab = tab as RibbonTab;
+                    RibbonTab? ribbontab = tab as RibbonTab;
                     if (ribbontab != null)
                     {
                         foreach (var bar in ribbontab.Items)
                         {
-                            RibbonBar ribbonBar = bar as RibbonBar;
+                            RibbonBar? ribbonBar = bar as RibbonBar;
                             if (ribbonBar != null)
                             {
-                                // Options that should work on read only mode should not be disabled.
-                                // Currently, Copy, Find and ShowComments options.
-                                if (ribbonBar.Header == (string)FindResource("Clipboard"))
+                                if (ribbonBar.Header == (string?)FindResource("Clipboard"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
-                                        RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label != (string)FindResource("Copy"))
+                                        RibbonButton? button = item as RibbonButton;
+                                        if (button != null && button.Label != (string?)FindResource("Copy"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -1101,12 +1113,12 @@ namespace KannadaNudiEditor
                                         }
                                     }
                                 }
-                                else if (ribbonBar.Header == (string)FindResource("EditingHeader"))
+                                else if (ribbonBar.Header == (string?)FindResource("EditingHeader"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
-                                        RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label == (string)FindResource("Replace"))
+                                        RibbonButton? button = item as RibbonButton;
+                                        if (button != null && button.Label == (string?)FindResource("Replace"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -1115,12 +1127,12 @@ namespace KannadaNudiEditor
                                         }
                                     }
                                 }
-                                else if (ribbonBar.Header == (string)FindResource("Comments"))
+                                else if (ribbonBar.Header == (string?)FindResource("Comments"))
                                 {
                                     foreach (var item in ribbonBar.Items)
                                     {
-                                        RibbonButton button = item as RibbonButton;
-                                        if (button != null && button.Label != (string)FindResource("ShowComments"))
+                                        RibbonButton? button = item as RibbonButton;
+                                        if (button != null && button.Label != (string?)FindResource("ShowComments"))
                                         {
                                             if (richTextBoxAdv.IsReadOnly)
                                                 button.IsEnabled = false;
@@ -1160,9 +1172,8 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         void TablePicker_Click(object sender, RoutedEventArgs e)
         {
-            if (richTextBoxAdv != null && sender is TablePickerUI)
+            if (richTextBoxAdv != null && sender is TablePickerUI tablePicker)
             {
-                TablePickerUI? tablePicker = sender as TablePickerUI;
                 int[] tableSize = new int[] { tablePicker.SelectedCell.Row + 1, tablePicker.SelectedCell.Column + 1 };
                 tablePicker.CommandParameter = tableSize;
                 CloseDropDown(tablePicker.Parent);
@@ -1176,22 +1187,22 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         private void DropDownItem_Click(object sender, RoutedEventArgs e)
         {
-            CloseDropDown((sender as FrameworkElement).Parent);
+            var element = sender as FrameworkElement;
+            CloseDropDown(element?.Parent);
         }
         /// <summary>
         /// Closes the drop down.
         /// </summary>
         /// <param name="obj"></param>
         /// <remarks></remarks>
-        void CloseDropDown(object obj)
+        void CloseDropDown(object? obj)
         {
-            while (!(obj is DropDownButton || obj is SplitButton))
+            while (obj != null && !(obj is DropDownButton || obj is SplitButton))
             {
-                obj = (obj as FrameworkElement).Parent;
+                obj = (obj as FrameworkElement)?.Parent;
             }
-            // SplitButton is derived from DropDown only. Hence no need to handle it specifically.
-            if (obj is DropDownButton)
-                (obj as DropDownButton).IsDropDownOpen = false;
+            if (obj is DropDownButton button)
+                button.IsDropDownOpen = false;
         }
         /// <summary>
         /// Initiates the List options
@@ -1251,11 +1262,15 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         void BulletedListSplitButton_Click(object sender, RoutedEventArgs e)
         {
-            ListViewModel viewModel = (sender as FrameworkElement).DataContext as ListViewModel;
-            if (string.IsNullOrEmpty(viewModel.ListName) || viewModel.ListName == "NoList" || viewModel.ListName == "Null" || !viewModel.ListName.StartsWith("_Bullet"))
-                viewModel.ListName = "_Bullet_Dot";
-            else
-                viewModel.ListName = "NoList";
+            var element = sender as FrameworkElement;
+            var viewModel = element?.DataContext as ListViewModel;
+            if (viewModel != null)
+            {
+                if (string.IsNullOrEmpty(viewModel.ListName) || viewModel.ListName == "NoList" || viewModel.ListName == "Null" || !viewModel.ListName.StartsWith("_Bullet"))
+                    viewModel.ListName = "_Bullet_Dot";
+                else
+                    viewModel.ListName = "NoList";
+            }
         }
         /// <summary>
         /// Called on numbered list split button clicked.
@@ -1265,11 +1280,15 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         void NumberedListSplitButton_Click(object sender, RoutedEventArgs e)
         {
-            ListViewModel viewModel = (sender as FrameworkElement).DataContext as ListViewModel;
-            if (string.IsNullOrEmpty(viewModel.ListName) || viewModel.ListName == "NoList" || viewModel.ListName == "Null" || !viewModel.ListName.StartsWith("_Numbering"))
-                viewModel.ListName = "_Numbering_Number_Dot";
-            else
-                viewModel.ListName = "NoList";
+            var element = sender as FrameworkElement;
+            var viewModel = element?.DataContext as ListViewModel;
+            if (viewModel != null)
+            {
+                if (string.IsNullOrEmpty(viewModel.ListName) || viewModel.ListName == "NoList" || viewModel.ListName == "Null" || !viewModel.ListName.StartsWith("_Numbering"))
+                    viewModel.ListName = "_Numbering_Number_Dot";
+                else
+                    viewModel.ListName = "NoList";
+            }
         }
         /// <summary>
         /// Called on line spacing item clicked.
@@ -1325,7 +1344,7 @@ namespace KannadaNudiEditor
             increaseFontSizeButton.Click -= IncreaseFontSizeButton_Click;
             decreaseFontSizeButton.Click -= DecreaseFontSizeButton_Click;
             fontColorSplitButton.Click -= FontColorSplitButton_Click;
-            fontColorPicker.ColorChanged -= FontColorPicker_ColorChanged;
+            fontColorPicker.SelectedBrushChanged -= FontColorPicker_SelectedBrushChanged;
             highlightColorSplitButton.Click -= HighlightColorSplitButton_Click;
             noHighlightButton.Click -= DropDownItem_Click;
             yellowHighlightButton.Click -= DropDownItem_Click;
@@ -1393,16 +1412,16 @@ namespace KannadaNudiEditor
             bulletedListButton.Click -= DropDownItem_Click;
             BindingOperations.ClearAllBindings(normalListButton);
             normalListButton.Click -= DropDownItem_Click;
-            if (multilevelListButton.DataContext is ListViewModel)
-                (multilevelListButton.DataContext as ListViewModel).Dispose();
+            if (multilevelListButton.DataContext is ListViewModel viewModel)
+                viewModel.Dispose();
             BindingOperations.ClearAllBindings(multilevelListButton);
             multilevelListButton.Click -= DropDownItem_Click;
-            if (bulletedListSplitButton.DataContext is ListViewModel)
-                (bulletedListSplitButton.DataContext as ListViewModel).Dispose();
+            if (bulletedListSplitButton.DataContext is ListViewModel vm1)
+                vm1.Dispose();
             bulletedListSplitButton.DataContext = null;
             bulletedListSplitButton.Click -= BulletedListSplitButton_Click;
-            if (numberedListSplitButton.DataContext is ListViewModel)
-                (numberedListSplitButton.DataContext as ListViewModel).Dispose();
+            if (numberedListSplitButton.DataContext is ListViewModel vm2)
+                vm2.Dispose();
             numberedListSplitButton.DataContext = null;
             numberedListSplitButton.Click -= NumberedListSplitButton_Click;
         }
@@ -1476,14 +1495,12 @@ namespace KannadaNudiEditor
                 saveDialog.Filter = "Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml";
             }
             ;
-            if ((bool)saveDialog.ShowDialog())
+            if (saveDialog.ShowDialog() == true)
             {
-                Stream fileStream = saveDialog.OpenFile();
-                FileInfo file = new FileInfo(saveDialog.FileName);
-                string fileExtension = file.Extension;
-                if (!string.IsNullOrEmpty(fileExtension))
+                Stream? fileStream = saveDialog.OpenFile();
+                if (fileStream == null) return;
                 {
-                    FormatType formatType = GetFormatType(fileExtension);
+                    FormatType formatType = GetFormatType(extension);
 #if Framework3_5
                     RichTextBoxAdv.Save(fileStream, formatType);
 #elif Framework4_0
@@ -1538,7 +1555,7 @@ namespace KannadaNudiEditor
 
             return fontFamilySource;
         }
-        internal DocumentStyle GetStyle(string styleName)
+        internal DocumentStyle? GetStyle(string styleName)
         {
             foreach (DocumentStyle style in richTextBoxAdv.Document.Styles)
             {
@@ -1566,6 +1583,7 @@ namespace KannadaNudiEditor
 
         private void AddRibbonGalleryItem(DocumentStyle style, int? index, bool isReplace)
         {
+            if (ribbonGallery == null) return;
             ParagraphStyle paragraphStyle = (ParagraphStyle)style;
             Grid grid = new Grid();
             grid.Background = new SolidColorBrush(Colors.White);
@@ -1624,15 +1642,15 @@ namespace KannadaNudiEditor
             {
                 ribbonGallery.Items.Add(ribbonGalleryItem);
             }
-            else
+            else if (index.HasValue)
             {
                 if (isReplace)
                 {
-                    ribbonGallery.Items[index.GetValueOrDefault()] = ribbonGalleryItem;
+                    ribbonGallery.Items[index.Value] = ribbonGalleryItem;
                 }
                 else
                 {
-                    ribbonGallery.Items.Insert(index.GetValueOrDefault(), ribbonGalleryItem);
+                    ribbonGallery.Items.Insert(index.Value, ribbonGalleryItem);
                 }
             }
         }
@@ -1695,14 +1713,8 @@ namespace KannadaNudiEditor
 
         private void pageColorColorPicker_ColorChanged(object sender, SelectedBrushChangedEventArgs e)
         {
-            if (e.NewColor != null)
-            {
-                richTextBoxAdv.Document.Background.Color = e.NewColor;
-            }
-            else
-            {
-                richTextBoxAdv.Document.Background.Color = Colors.White;
-            }
+            var color = e.NewColor is Color c ? c : Colors.White;
+            richTextBoxAdv.Document.Background.Color = color;
         }
         private void NoColorButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1715,18 +1727,17 @@ namespace KannadaNudiEditor
 
         private void InitializePageMargins()
         {
-            // ——— live custom row ———
-            _customMarginsItem = PageMarginHelper.GetPresetMargins(LanguageToggleButton.IsChecked == true)
+            var customMargin = PageMarginHelper.GetPresetMargins(LanguageToggleButton.IsChecked == true)
                 .FirstOrDefault(p => p.Key == "Custom");
+            if (customMargin != null)
+                _customMarginsItem = customMargin;
 
-            // ——— all items ———
             _marginItems = new ObservableCollection<PageMargins>(
                 PageMarginHelper.GetPresetMargins(LanguageToggleButton.IsChecked == true)
             );
 
-            pageMargins.ItemsSource = _marginItems;  // <‑‑ bind
+            pageMargins.ItemsSource = _marginItems;
 
-            // preset numeric lookup (inches)
             pageMarginsCollection = PageMarginHelper.GetMarginValues();
         }
 
@@ -1744,7 +1755,7 @@ namespace KannadaNudiEditor
             if (current is ComboBoxItem marginComboBoxItem &&
                 marginComboBoxItem.DataContext is PageMargins { Key: "Custom" })
             {
-                CustomMarginButton_Click(sender, null);
+                CustomMarginButton_Click(sender, new RoutedEventArgs());
                 e.Handled = true;
             }
             else if (current is ComboBoxItem sizeComboBoxItem &&
@@ -1757,14 +1768,15 @@ namespace KannadaNudiEditor
 
         private void pageMargins_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            string selectedKey = (pageMargins.SelectedItem as PageMargins)?.Key;
+            var marginItem = pageMargins.SelectedItem as PageMargins;
+            string? selectedKey = marginItem?.Key;
 
             // Skip if "Custom" was selected, already handled in mouse preview
             if (selectedKey == "Custom")
                 return;
 
             if (!string.IsNullOrEmpty(selectedKey) &&
-                pageMarginsCollection.TryGetValue(selectedKey, out var values))
+                pageMarginsCollection?.TryGetValue(selectedKey, out var values) == true)
             {
                 // Clear any previously saved custom values
                 customTopMargin = customBottomMargin = customLeftMargin = customRightMargin = customMarginUnit = string.Empty;
@@ -1781,7 +1793,7 @@ namespace KannadaNudiEditor
                 try
                 {
                     LoadingView.Show();
-                    foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                    foreach (SectionAdv section in richTextBoxAdv!.Document!.Sections)
                     {
                         section.SectionFormat.PageMargin = new Thickness(
                             values[2] * 96, // Left
@@ -1815,7 +1827,7 @@ namespace KannadaNudiEditor
             const double dpi = 96.0;
 
             // Get the current page margins from the first section
-            var firstSection = richTextBoxAdv.Document?.Sections?.FirstOrDefault() as SectionAdv;
+            var firstSection = richTextBoxAdv!.Document?.Sections?.FirstOrDefault() as SectionAdv;
             if (firstSection == null) return;
 
             Thickness current = firstSection.SectionFormat.PageMargin;
@@ -1846,7 +1858,7 @@ namespace KannadaNudiEditor
             if (dlg.ShowDialog() != true) return;
 
             // Save the entered values
-            customTopMargin = dlg.TopMarginTextBox.Text;
+            customTopMargin = dlg!.TopMarginTextBox.Text;
             customBottomMargin = dlg.BottomMarginTextBox.Text;
             customLeftMargin = dlg.LeftMarginTextBox.Text;
             customRightMargin = dlg.RightMarginTextBox.Text;
@@ -1862,17 +1874,17 @@ namespace KannadaNudiEditor
             pageMargins.SelectedItem = _customMarginsItem;
 
             // Apply margins to all sections with loading indicator
-            double dipFactor = UnitToDipFactor(dlg.Unit);
+            double dipFactor = UnitToDipFactor(dlg!.Unit);
             try
             {
                 LoadingView.Show();
-                foreach (SectionAdv section in richTextBoxAdv.Document.Sections)
+                foreach (SectionAdv section in richTextBoxAdv!.Document!.Sections)
                 {
                     section.SectionFormat.PageMargin = new Thickness(
-                        dlg.Left * dipFactor,
-                        dlg.Top * dipFactor,
-                        dlg.Right * dipFactor,
-                        dlg.Bottom * dipFactor);
+                        dlg!.Left * dipFactor,
+                        dlg!.Top * dipFactor,
+                        dlg!.Right * dipFactor,
+                        dlg!.Bottom * dipFactor);
                 }
             }
             finally
@@ -1978,12 +1990,13 @@ namespace KannadaNudiEditor
         /// <summary>Called when the user selects a predefined size in the ComboBox.</summary>
         private void pageSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (_ignorePageSizeChange) return;                       // programmatic change
+            if (_ignorePageSizeChange) return;
 
-            string key = (pageSize.SelectedItem as PageSize)?.Key;
+            var sizeItem = pageSize.SelectedItem as PageSize;
+            string? key = sizeItem?.Key;
             if (key == "Custom" || string.IsNullOrWhiteSpace(key)) return;
 
-            if (pageSizesCollection.TryGetValue(key, out var v))
+            if (pageSizesCollection?.TryGetValue(key, out var v) == true)
             {
                 customPageWidth = customPageHeight = customSizeUnit = string.Empty;
 
@@ -2168,12 +2181,12 @@ namespace KannadaNudiEditor
                     }
 
                     // Refresh layout
-                    // Refresh visual + internal layout
-                    richTextBoxAdv.InvalidateVisual();
-                    richTextBoxAdv.UpdateLayout();
-
-                    // Full logical refresh
-                    ForceDocumentRefresh(richTextBoxAdv);
+                    if (richTextBoxAdv != null)
+                    {
+                        richTextBoxAdv.InvalidateVisual();
+                        richTextBoxAdv.UpdateLayout();
+                        ForceDocumentRefresh(richTextBoxAdv);
+                    }
                     SimpleLogger.Log($"{type} Header/Footer applied and refreshed successfully.");
                     LoadingView.Hide();
 
@@ -2218,6 +2231,8 @@ namespace KannadaNudiEditor
                     section.SectionFormat.DifferentOddAndEvenPages = false;
                     break;
             }
+
+            if (header == null || footer == null) return;
 
             header.Blocks.Clear();
             footer.Blocks.Clear();

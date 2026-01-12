@@ -2,7 +2,8 @@ namespace KannadaNudiEditor.Helpers
 {
     public static class PageMarginHelper
     {
-        public static Dictionary<string, List<double>> pageMarginsCollection;
+        public static Dictionary<string, List<double>> pageMarginsCollection = new Dictionary<string, List<double>>();
+
 
         public static List<PageMargins> GetPresetMargins(bool isEnglish = true)
         {

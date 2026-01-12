@@ -32,8 +32,11 @@ namespace KannadaNudiEditor.Helpers
                     CreateNoWindow = true
                 });
 
-                _keyboardJob = new Job();
-                _keyboardJob.AddProcess(_kannadaKeyboardProcess);
+                if (_kannadaKeyboardProcess != null)
+                {
+                    _keyboardJob = new Job();
+                    _keyboardJob.AddProcess(_kannadaKeyboardProcess);
+                }
 
                 SimpleLogger.Log("kannadaKeyboard.exe started.");
             }

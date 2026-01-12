@@ -84,29 +84,37 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         void richTextBoxAdv_SelectionChanged(object obj, SelectionChangedEventArgs args)
         {
+            if (richTextBoxAdv == null) return;
+
             isRetrieving = true;
-            ListAdv list = richTextBoxAdv.Selection.ParagraphFormat.GetList();
+            ListAdv? list = richTextBoxAdv.Selection?.ParagraphFormat?.GetList();
             if (list == null)
             {
-                if (richTextBoxAdv.Selection.ParagraphFormat.ListLevelNumber == 0)
+                if (richTextBoxAdv.Selection?.ParagraphFormat?.ListLevelNumber == 0)
                     ListName = "NoList";
                 else
                     ListName = "Null";
             }
             else
             {
-                list = richTextBoxAdv.Selection.Start.Paragraph.ParagraphFormat.ListFormat.List;
+                list = richTextBoxAdv.Selection?.Start.Paragraph.ParagraphFormat.ListFormat.List;
                 bool hasList = false;
-                foreach (string name in lists.Keys)
+                var listKeys = lists?.Keys;
+                if (listKeys != null)
                 {
-                    if (lists[name] == list)
+                    foreach (string name in listKeys)
                     {
-                        ListName = name;
-                        hasList = true;
-                        break;
+                        if (lists![name] == list)
+                        {
+                            ListName = name;
+                            hasList = true;
+                            break;
+                        }
                     }
+                    if (!hasList)
+                        ListName = "List";
                 }
-                if (!hasList)
+                else
                     ListName = "List";
             }
             isRetrieving = false;
@@ -123,11 +131,11 @@ namespace KannadaNudiEditor
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            if (!isRetrieving)
+            if (!isRetrieving && richTextBoxAdv != null)
             {
                 if (listName == "NoList")
                     richTextBoxAdv.Selection.ParagraphFormat.SetList(null);
-                if (lists.ContainsKey(ListName))
+                if (!string.IsNullOrEmpty(ListName) && lists.ContainsKey(ListName))
                     richTextBoxAdv.Selection.ParagraphFormat.SetList(lists[ListName]);
             }
         }
@@ -253,12 +261,8 @@ namespace KannadaNudiEditor
         /// <remarks></remarks>
         internal void Dispose()
         {
-            listName = null;
-            if (lists != null)
-            {
-                lists.Clear();
-                lists = null;
-            }
+            listName = string.Empty;
+            lists?.Clear();
             if (richTextBoxAdv != null)
             {
                 richTextBoxAdv.SelectionChanged -= richTextBoxAdv_SelectionChanged;

@@ -90,7 +90,8 @@ namespace KannadaNudiEditor.Helpers
             {
                 SimpleLogger.Log("========== ExportToPdf: ERROR OCCURRED ==========");
                 SimpleLogger.Log($"EXCEPTION: {ex.Message}");
-                SimpleLogger.Log(ex.StackTrace);
+                if (!string.IsNullOrEmpty(ex.StackTrace))
+                    SimpleLogger.Log(ex.StackTrace);
                 throw;
             }
         }
@@ -134,7 +135,8 @@ namespace KannadaNudiEditor.Helpers
             {
                 SimpleLogger.Log("========== ExportToMarkdown: ERROR OCCURRED ==========");
                 SimpleLogger.Log($"EXCEPTION: {ex.Message}");
-                SimpleLogger.Log(ex.StackTrace);
+                if (!string.IsNullOrEmpty(ex.StackTrace))
+                    SimpleLogger.Log(ex.StackTrace);
                 throw;
             }
         }
@@ -170,7 +172,8 @@ namespace KannadaNudiEditor.Helpers
             {
                 SimpleLogger.Log("========== ExportToRtf: ERROR OCCURRED ==========");
                 SimpleLogger.Log($"EXCEPTION: {ex.Message}");
-                SimpleLogger.Log(ex.StackTrace);
+                if (!string.IsNullOrEmpty(ex.StackTrace))
+                    SimpleLogger.Log(ex.StackTrace);
                 throw;
             }
         }
