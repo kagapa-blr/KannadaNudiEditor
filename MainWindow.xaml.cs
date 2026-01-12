@@ -2902,7 +2902,7 @@ namespace KannadaNudiEditor
                 Stopwatch? convSw = Stopwatch.StartNew();
 
 
-                var result = await NudiFileManager.ConvertFileToDocumentAsync(
+                var result = await ConversionFileManager.ConvertFileToDocumentAsync(
                     filePath: filePath,
                     converter: converter,
                     fontFamilyName: "NudiParijatha",
