@@ -8,7 +8,7 @@ namespace KannadaNudiEditor.Helpers
     {
         public static void RegisterSyncfusionLicense()
         {
-            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWH1ccHRSR2hfWUJ2WURWYEs=");
+            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JGaF5cXGpCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWX5fdnZWQmdeWUx+X0NWYEs=");
 
             SimpleLogger.Log("Syncfusion license applied.");
         }
