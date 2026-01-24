@@ -85,6 +85,9 @@ jobs:
       - name: Compile Inno Setup Installer
         shell: pwsh
         run: |
+            Write-Host "Current working directory: $PWD"
+            Write-Host "Contents of setup folder:"
+            Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
             $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
             $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
             Write-Host "Using ISS file: $issFile"
