@@ -10,8 +10,8 @@
 ; Version handled dynamically by GitHub Actions
 #define MyAppVersion "1.0.0"
 
-; Define source directory for CI (relative to repository root)
-#define SourceDir ExpandConstant('{src}\setup')
+; CI-friendly source folder (relative to repository)
+#define SourceDir "setup"
 
 [Setup]
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
@@ -48,7 +48,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Use relative path for CI-friendly build
+; Use relative path for CI
 Source: "{#SourceDir}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
@@ -79,7 +79,7 @@ begin
 end;
 
 ; -------------------------------------------------
-; Log all files in publish folder
+; Log all files in publish folder at runtime
 ; -------------------------------------------------
 procedure LogPublishFiles();
 var

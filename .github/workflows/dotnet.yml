@@ -94,6 +94,8 @@ jobs:
 
       - name: Compile Inno Setup Installer
         shell: pwsh
+      - name: Compile Inno Setup Installer
+        shell: pwsh
         run: |
           Write-Host "Current working directory: $PWD"
           Write-Host "Contents of setup folder:"
@@ -103,13 +105,20 @@ jobs:
           $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
           Write-Host "Using ISS file: $issFile"
 
-          # Ensure publish folder exists
-          if (-not (Test-Path "$PWD\setup\publish")) {
+          # Check if publish folder exists
+          $publishFolder = "$PWD\setup\publish"
+          if (Test-Path $publishFolder) {
+              Write-Host "Publish folder exists. Contents:"
+              Get-ChildItem $publishFolder | ForEach-Object { Write-Host $_.FullName }
+          }
+          else {
               Write-Host "Publish folder is missing!"
               Exit 1
           }
 
+          # Compile the installer
           & $ISCC $issFile
+
 
       - name: Upload Installer Artifact
         uses: actions/upload-artifact@v4
