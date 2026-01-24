@@ -32,6 +32,9 @@ jobs:
       - name: Publish Build Output
         run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup/publish
 
+      - name: Verify Publish Folder
+        run: dir setup\publish
+
       - name: Upload Publish Folder (Optional)
         uses: actions/upload-artifact@v4
         with:

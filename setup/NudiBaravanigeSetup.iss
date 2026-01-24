@@ -7,12 +7,8 @@
 #define MyAppURL "https://kagapa.com/"
 #define MyAppExeName "KannadaNudiEditor.exe"
 
-; Version handling: GitHub Actions tag or fallback
-#ifdef GITHUB_REF_NAME
-  #define MyAppVersion Copy(GetEnv("GITHUB_REF_NAME"), 2)
-#else
-  #define MyAppVersion "1.0.0-dev"
-#endif
+; Version handled by GitHub Actions
+#define MyAppVersion "1.0.0"
 
 [Setup]
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
@@ -49,7 +45,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Use relative path to .iss (CI-friendly)
+; Relative path from .iss file (CI-ready)
 Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
