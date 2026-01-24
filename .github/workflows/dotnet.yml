@@ -107,7 +107,7 @@ jobs:
           $publishFolder = "$PWD\setup\publish"
           if (Test-Path $publishFolder) {
               Write-Host "Publish folder exists. Contents:"
-              Get-ChildItem $publishFolder | ForEach-Object { Write-Host $_.FullName }
+              Get-ChildItem $publishFolder -Recurse | ForEach-Object { Write-Host $_.FullName }
           }
           else {
               Write-Host "Publish folder is missing!"

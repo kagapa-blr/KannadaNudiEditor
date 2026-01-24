@@ -48,7 +48,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Use relative path for CI
 Source: "{#SourceDir}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
@@ -68,9 +67,6 @@ Root: HKCR; Subkey: ".html\OpenWithProgids"; ValueType: string; ValueName: "{#My
 Root: HKCR; Subkey: ".htm\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppExeName}"; ValueData: ""; Flags: uninsdeletevalue
 
 [Code]
-; -------------------------------------------------
-; Simple console logging for CI
-; -------------------------------------------------
 procedure Log(Message: string);
 var
   ResultCode: Integer;
@@ -78,9 +74,6 @@ begin
   Exec('cmd.exe', '/C echo ::notice::' + Message, '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;
 
-; -------------------------------------------------
-; Log all files in publish folder at runtime
-; -------------------------------------------------
 procedure LogPublishFiles();
 var
   FindRec: TFindRec;
@@ -107,9 +100,6 @@ begin
     Log('Publish folder is empty!');
 end;
 
-; -------------------------------------------------
-; Check for .NET 8 Desktop Runtime
-; -------------------------------------------------
 function HasDotNet8Desktop(): Boolean;
 var
   FindRec: TFindRec;
@@ -144,9 +134,6 @@ begin
     Log('No 8.0.* folders found.');
 end;
 
-; -------------------------------------------------
-; Setup initialization
-; -------------------------------------------------
 function InitializeSetup(): Boolean;
 begin
   Log('Initializing setup...');
@@ -156,15 +143,10 @@ begin
     Log('Microsoft .NET 8 Desktop Runtime not found! Setup will exit.');
 end;
 
-; -------------------------------------------------
-; Optional: log installation steps
-; -------------------------------------------------
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   case CurStep of
-    ssInstall:
-      Log('Starting file installation...');
-    ssPostInstall:
-      Log('Post-installation steps...');
+    ssInstall: Log('Starting file installation...');
+    ssPostInstall: Log('Post-installation steps...');
   end;
 end;
