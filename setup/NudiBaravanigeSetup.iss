@@ -65,14 +65,28 @@ Root: HKCR; Subkey: ".html\OpenWithProgids"; ValueType: string; ValueName: "{#My
 Root: HKCR; Subkey: ".htm\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppExeName}"; ValueData: ""; Flags: uninsdeletevalue
 
 [Code]
+; Simple console logging for CI
+procedure Log(Message: string);
+var
+  ResultCode: Integer;
+begin
+  Exec('cmd.exe', '/C echo ::notice::' + Message, '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+end;
+
 function HasDotNet8Desktop(): Boolean;
 var
   FindRec: TFindRec;
   BasePath: string;
 begin
-  Result := False;
   BasePath := ExpandConstant('{pf}\dotnet\shared\Microsoft.WindowsDesktop.App');
-  if not DirExists(BasePath) then Exit;
+  Log('Checking .NET runtime in: ' + BasePath);
+
+  Result := False;
+  if not DirExists(BasePath) then
+  begin
+    Log('Base path not found.');
+    Exit;
+  end;
 
   if FindFirst(BasePath + '\8.0.*', FindRec) then
   begin
@@ -80,6 +94,7 @@ begin
       repeat
         if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
         begin
+          Log('Found .NET 8 folder: ' + FindRec.Name);
           Result := True;
           Exit;
         end;
@@ -87,15 +102,26 @@ begin
     finally
       FindClose(FindRec);
     end;
-  end;
+  end
+  else
+    Log('No 8.0.* folders found.');
 end;
 
 function InitializeSetup(): Boolean;
 begin
+  Log('Initializing setup...');
   Result := HasDotNet8Desktop();
   if not Result then
-    MsgBox(
-      'Microsoft .NET 8 Desktop Runtime (x64) is required.' + #13#10#13#10 +
-      'https://dotnet.microsoft.com/download/dotnet/8.0',
-      mbError, MB_OK);
+    Log('Microsoft .NET 8 Desktop Runtime not found! Setup will exit.');
+end;
+
+;Optional: log during file installation
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  case CurStep of
+    ssInstall:
+      Log('Starting file installation...');
+    ssPostInstall:
+      Log('Post-installation steps...');
+  end;
 end;

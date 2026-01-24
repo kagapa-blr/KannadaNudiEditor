@@ -85,7 +85,6 @@ jobs:
       - name: Compile Inno Setup Installer
         shell: pwsh
         run: |
-          cd setup
           $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           & $ISCC "NudiBaravanigeSetup.iss"
 
