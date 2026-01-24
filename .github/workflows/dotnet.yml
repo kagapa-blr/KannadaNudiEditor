@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Needed for creating releases
+  contents: write  # Needed to create releases
 
 jobs:
   build:
@@ -30,13 +30,13 @@ jobs:
         run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
 
       - name: Publish Build Output
-        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup\publish
+        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup/publish
 
       - name: Upload Publish Folder (Optional)
         uses: actions/upload-artifact@v4
         with:
           name: publish-folder
-          path: publish
+          path: setup/publish
 
   release:
     name: Create GitHub Release with Installer

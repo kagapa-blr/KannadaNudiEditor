@@ -7,11 +7,7 @@
 #define MyAppURL "https://kagapa.com/"
 #define MyAppExeName "KannadaNudiEditor.exe"
 
-; =================================================
-; VERSION HANDLING
-; - GitHub Actions tag: e.g., 1.2.3
-; - Local build fallback: 1.0.0-dev
-; =================================================
+; Version handling: GitHub Actions tag or fallback
 #ifdef GITHUB_REF_NAME
   #define MyAppVersion Copy(GetEnv("GITHUB_REF_NAME"), 2)
 #else
@@ -19,9 +15,6 @@
 #endif
 
 [Setup]
-; -------------------------------
-; REQUIRED FIX: Correct AppId syntax
-; -------------------------------
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -41,11 +34,9 @@ WizardStyle=modern
 SolidCompression=yes
 Compression=lzma2
 
-; Output folder (CI-friendly)
 OutputDir=Output
 OutputBaseFilename=KannadaNudiEditor_{#MyAppVersion}
 
-; Relative paths (CI must be relative)
 SetupIconFile=..\Assets\nudi.ico
 LicenseFile=license.txt
 InfoBeforeFile=readme_before.txt
@@ -57,28 +48,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
-; -------------------------------------------------
-; FILES (from dotnet publish output)
-; -------------------------------------------------
 [Files]
-Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#CurrentScriptDir}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-; -------------------------------------------------
-; ICONS
-; -------------------------------------------------
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
-; -------------------------------------------------
-; RUN AFTER INSTALL
-; -------------------------------------------------
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-; -------------------------------------------------
-; FILE ASSOCIATIONS (Open With)
-; -------------------------------------------------
 [Registry]
 Root: HKCR; Subkey: "Applications\{#MyAppExeName}"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Applications\{#MyAppExeName}\shell\open\command"; ValueType: string; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
@@ -88,9 +67,6 @@ Root: HKCR; Subkey: ".docx\OpenWithProgids"; ValueType: string; ValueName: "{#My
 Root: HKCR; Subkey: ".html\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppExeName}"; ValueData: ""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".htm\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppExeName}"; ValueData: ""; Flags: uninsdeletevalue
 
-; -------------------------------------------------
-; .NET 8 DESKTOP RUNTIME CHECK
-; -------------------------------------------------
 [Code]
 function HasDotNet8Desktop(): Boolean;
 var
