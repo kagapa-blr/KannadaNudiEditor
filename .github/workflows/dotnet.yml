@@ -30,19 +30,19 @@ jobs:
         run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
 
       - name: Publish Build Output
-        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup/publish
+        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output publish
 
       - name: Verify Publish Folder
         run: |
           Write-Host "Current working directory: $PWD"
-          Write-Host "Contents of setup folder:"
-          Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
+          Write-Host "Contents of publish folder:"
+          Get-ChildItem "publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
 
       - name: Upload Publish Folder (Optional)
         uses: actions/upload-artifact@v4
         with:
           name: publish-folder
-          path: setup/publish
+          path: publish
 
   release:
     name: Create GitHub Release with Installer
@@ -59,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: publish-folder
-          path: setup/publish
+          path: publish
 
       - name: Get Latest Version Number
         id: get_version
@@ -96,25 +96,20 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Current working directory: $PWD"
-          Write-Host "Contents of setup folder:"
-          Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
+          Write-Host "Contents of publish folder:"
+          Get-ChildItem "publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
 
           $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
           Write-Host "Using ISS file: $issFile"
 
-          # Check if publish folder exists
-          $publishFolder = "$PWD\setup\publish"
-          if (Test-Path $publishFolder) {
-              Write-Host "Publish folder exists. Contents:"
-              Get-ChildItem $publishFolder -Recurse | ForEach-Object { Write-Host $_.FullName }
-          }
-          else {
-              Write-Host "Publish folder is missing!"
+          if (Test-Path "$PWD\publish") {
+              Write-Host "Publish folder exists."
+          } else {
+              Write-Host "Publish folder missing!"
               Exit 1
           }
 
-          # Compile the installer
           & $ISCC $issFile
 
       - name: Upload Installer Artifact

@@ -48,7 +48,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#SourceDir}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Point to publish folder at repository root
+Source: "{#SourceDir}\..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -79,7 +80,7 @@ var
   FindRec: TFindRec;
   PublishPath: string;
 begin
-  PublishPath := ExpandConstant('{#SourceDir}\publish');
+  PublishPath := ExpandConstant('{#SourceDir}\..\publish');
   Log('Checking publish folder: ' + PublishPath);
 
   if not DirExists(PublishPath) then
