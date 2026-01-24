@@ -7,7 +7,7 @@
 #define MyAppURL "https://kagapa.com/"
 #define MyAppExeName "KannadaNudiEditor.exe"
 
-; Version handled by GitHub Actions
+; Version handled dynamically by GitHub Actions
 #define MyAppVersion "1.0.0"
 
 [Setup]
@@ -31,7 +31,7 @@ SolidCompression=yes
 Compression=lzma2
 
 OutputDir=Output
-OutputBaseFilename=KannadaNudiEditor_{#MyAppVersion}
+OutputBaseFilename=KannadaNudiEditor_{#MyAppVersion} ; Installer will automatically include version
 
 SetupIconFile=..\Assets\nudi.ico
 LicenseFile=license.txt
@@ -45,9 +45,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Relative path from .iss file (CI-ready)
-Source: ".\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-
+; Source folder relative to .iss (CI ready)
+Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

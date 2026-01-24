@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Needed to create releases
+  contents: write
 
 jobs:
   build:
@@ -85,26 +85,20 @@ jobs:
       - name: Compile Inno Setup Installer
         shell: pwsh
         run: |
+          cd setup
           $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          & $ISCC "setup\NudiBaravanigeSetup.iss"
-
-      - name: Rename Installer to Modern Extension (.setup)
-        shell: pwsh
-        run: |
-          $outDir = "setup\Output"
-          $exe = Get-ChildItem $outDir -Filter "*.exe" | Select-Object -First 1
-          Rename-Item $exe.FullName "$outDir\KannadaNudiEditor_$env:RELEASE_VERSION.setup"
+          & $ISCC "NudiBaravanigeSetup.iss"
 
       - name: Upload Installer Artifact
         uses: actions/upload-artifact@v4
         with:
           name: KannadaNudiInstaller
-          path: setup\Output\*.setup
+          path: setup\Output\*.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
-          files: setup\Output\*.setup
+          files: setup\Output\*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
