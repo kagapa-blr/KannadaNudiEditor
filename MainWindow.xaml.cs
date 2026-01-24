@@ -2872,13 +2872,23 @@ namespace KannadaNudiEditor
 
 
 
+        // ============================================================
+        // BUTTON CLICK HANDLERS
+        // ============================================================
         private async void AsciiToUnicodeButton_Click(object sender, RoutedEventArgs e)
-            => await ConvertFileAsync(FileConversionService.AsciiToUnicodeConverter, "ASCII to Unicode");
+        {
+            await ConvertFileAsync(asciiToUnicode: true, operationName: "ASCII to Unicode");
+        }
 
         private async void UnicodeToAsciiButton_Click(object sender, RoutedEventArgs e)
-            => await ConvertFileAsync(FileConversionService.UnicodeToAsciiConverter, "Unicode to ASCII");
+        {
+            await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
+        }
 
-        private async Task ConvertFileAsync(Func<string, string> converter, string operationName)
+        // ============================================================
+        // FILE CONVERSION USING SDK
+        // ============================================================
+        private async Task ConvertFileAsync(bool asciiToUnicode, string operationName)
         {
             var dlg = new OpenFileDialog
             {
@@ -2888,7 +2898,8 @@ namespace KannadaNudiEditor
 
             if (dlg.ShowDialog() != true) return;
 
-            SimpleLogger.Log($"{operationName} - file selected: {dlg.FileName}");
+            string filePath = dlg.FileName;
+            SimpleLogger.Log($"{operationName} - file selected: {filePath}");
             LoadingView.Show();
 
             var totalSw = Stopwatch.StartNew();
@@ -2896,17 +2907,16 @@ namespace KannadaNudiEditor
 
             try
             {
-                var filePath = dlg.FileName;
-
                 // ---- Conversion timing ----
                 Stopwatch? convSw = Stopwatch.StartNew();
 
-
+                // Call SDK-backed ConversionFileManager
                 var result = await ConversionFileManager.ConvertFileToDocumentAsync(
                     filePath: filePath,
-                    converter: converter,
+                    asciiToUnicode: asciiToUnicode,
                     fontFamilyName: "NudiParijatha",
-                    applyA4NormalMargins: true);
+                    applyA4NormalMargins: true
+                );
 
                 convSw.Stop();
 
@@ -2918,7 +2928,6 @@ namespace KannadaNudiEditor
                 currentFilePath = string.Empty;
 
                 uiSw.Stop();
-
                 totalSw.Stop();
 
                 string convTime = TimeHelper.FormatElapsed(convSw.Elapsed);
@@ -2955,7 +2964,6 @@ namespace KannadaNudiEditor
                     ribbon.IsBackStageVisible = false;
             }
         }
-
 
 
 

@@ -38,6 +38,7 @@
 
   <!-- NuGet Packages -->
   <ItemGroup>
+    <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="32.1.23" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="32.1.23" />

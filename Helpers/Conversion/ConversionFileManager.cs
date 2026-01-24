@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
+using Kannada.AsciiUnicode.Converters;
 
 namespace KannadaNudiEditor.Helpers.Conversion
 {
@@ -10,20 +11,21 @@ namespace KannadaNudiEditor.Helpers.Conversion
     {
         public sealed record ConvertResult(DocumentAdv Document, int ConvertedParagraphs);
 
+        // Singleton instance of the SDK
+        private static readonly KannadaConverter sdkConverter = KannadaConverter.Instance;
+
         // ============================================================
         // MAIN ENTRY POINT
         // ============================================================
         public static Task<ConvertResult> ConvertFileToDocumentAsync(
             string filePath,
-            Func<string, string> converter,
+            bool asciiToUnicode = true, // New: direction
             string fontFamilyName = "NudiParijatha",
             bool applyA4NormalMargins = true,
             string[]? nudiFontKeywords = null)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("File path is empty.", nameof(filePath));
-
-            ArgumentNullException.ThrowIfNull(converter);
 
             string fileName = Path.GetFileName(filePath);
             SimpleLogger.Log($"Convert started: {fileName}");
@@ -41,7 +43,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
 
                 int paraCount = ConvertDocumentInPlace(
                     tempEditor.Document,
-                    converter,
+                    asciiToUnicode,
                     fontFamilyName,
                     nudiFontKeywords
                 );
@@ -60,7 +62,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
         // ============================================================
         private static int ConvertDocumentInPlace(
             DocumentAdv doc,
-            Func<string, string> converter,
+            bool asciiToUnicode,
             string fontFamilyName,
             string[]? nudiFontKeywords)
         {
@@ -72,9 +74,9 @@ namespace KannadaNudiEditor.Helpers.Conversion
             {
                 for (int i = 0; i < section.Blocks.Count; i++)
                 {
-                    ProcessBlockFast(
+                    ProcessBlockWithSDK(
                         section.Blocks[i],
-                        converter,
+                        asciiToUnicode,
                         targetFont,
                         keywords,
                         ref stats
@@ -87,11 +89,11 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // ============================================================
-        // ORDER-PRESERVING PARAGRAPH PROCESSOR
+        // PARAGRAPH PROCESSOR USING SDK
         // ============================================================
-        private static void ProcessBlockFast(
+        private static void ProcessBlockWithSDK(
             BlockAdv block,
-            Func<string, string> converter,
+            bool asciiToUnicode,
             FontFamily targetFont,
             string[] keywords,
             ref ConversionStats stats)
@@ -121,17 +123,16 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     // Flush pending Nudi text before non-Nudi span
                     if (nudiBuffer.Length > 0 && nudiFormat != null)
                     {
+                        var convertedText = asciiToUnicode
+                            ? sdkConverter.ConvertAsciiToUnicode(nudiBuffer.ToString())
+                            : sdkConverter.ConvertUnicodeToAscii(nudiBuffer.ToString());
+
                         var convertedSpan = new SpanAdv
                         {
-                            Text = converter(nudiBuffer.ToString())
+                            Text = convertedText
                         };
 
-                        convertedSpan.CharacterFormat.FontFamily = targetFont;
-                        convertedSpan.CharacterFormat.FontSize = nudiFormat.FontSize;
-                        convertedSpan.CharacterFormat.Bold = nudiFormat.Bold;
-                        convertedSpan.CharacterFormat.Italic = nudiFormat.Italic;
-                        convertedSpan.CharacterFormat.Underline = nudiFormat.Underline;
-                        convertedSpan.CharacterFormat.FontColor = nudiFormat.FontColor;
+                        ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
 
                         newInlines.Add(convertedSpan);
 
@@ -150,17 +151,16 @@ namespace KannadaNudiEditor.Helpers.Conversion
             // Flush trailing Nudi text
             if (nudiBuffer.Length > 0 && nudiFormat != null)
             {
+                var convertedText = asciiToUnicode
+                    ? sdkConverter.ConvertAsciiToUnicode(nudiBuffer.ToString())
+                    : sdkConverter.ConvertUnicodeToAscii(nudiBuffer.ToString());
+
                 var convertedSpan = new SpanAdv
                 {
-                    Text = converter(nudiBuffer.ToString())
+                    Text = convertedText
                 };
 
-                convertedSpan.CharacterFormat.FontFamily = targetFont;
-                convertedSpan.CharacterFormat.FontSize = nudiFormat.FontSize;
-                convertedSpan.CharacterFormat.Bold = nudiFormat.Bold;
-                convertedSpan.CharacterFormat.Italic = nudiFormat.Italic;
-                convertedSpan.CharacterFormat.Underline = nudiFormat.Underline;
-                convertedSpan.CharacterFormat.FontColor = nudiFormat.FontColor;
+                ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
 
                 newInlines.Add(convertedSpan);
 
@@ -182,6 +182,21 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // ============================================================
+        // APPLY FONT PROPERTIES
+        // ============================================================
+        private static void ApplyCharacterFormat(CharacterFormat source, CharacterFormat target, FontFamily font)
+        {
+            target.FontFamily = font;
+            target.FontSize = source.FontSize;
+            target.Bold = source.Bold;
+            target.Italic = source.Italic;
+            target.Underline = source.Underline;
+            target.FontColor = source.FontColor;
+            target.HighlightColor = source.HighlightColor;
+            target.BaselineAlignment = source.BaselineAlignment;
+        }
+
+        // ============================================================
         // FONT DETECTION
         // ============================================================
         private static bool IsNudiFontFast(SpanAdv span, string[] keywords)
@@ -192,20 +207,6 @@ namespace KannadaNudiEditor.Helpers.Conversion
 
             string fontLower = source.ToLowerInvariant();
             return keywords.Any(fontLower.Contains);
-        }
-
-        // ============================================================
-        // FORMAT COPY (SYNCFUSION-SAFE)
-        // ============================================================
-        private static void CopyCharacterFormat(CharacterFormat source, CharacterFormat target)
-        {
-            target.FontSize = source.FontSize;
-            target.Bold = source.Bold;
-            target.Italic = source.Italic;
-            target.Underline = source.Underline;
-            target.FontColor = source.FontColor;
-            target.HighlightColor = source.HighlightColor;
-            target.BaselineAlignment = source.BaselineAlignment;
         }
 
         // ============================================================
