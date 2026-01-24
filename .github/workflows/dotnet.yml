@@ -116,6 +116,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
-          files: setup\Output\KannadaNudiEditor_${{ env.RELEASE_VERSION }}.exe
+          files: setup/Output/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
