@@ -10,6 +10,9 @@
 ; Version handled dynamically by GitHub Actions
 #define MyAppVersion "1.0.0"
 
+; CI-friendly folder of the ISS file
+#define SetupFolder GetCurrentDir()
+
 [Setup]
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
 AppName={#MyAppName}
@@ -31,7 +34,7 @@ SolidCompression=yes
 Compression=lzma2
 
 OutputDir=Output
-OutputBaseFilename=KannadaNudiEditor_{#MyAppVersion} ; Installer will automatically include version
+OutputBaseFilename=KannadaNudiEditor_{#MyAppVersion}
 
 SetupIconFile=..\Assets\nudi.ico
 LicenseFile=license.txt
@@ -45,8 +48,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Source folder relative to .iss (CI ready)
-Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Use SetupFolder macro for CI correctness
+Source: "{#SetupFolder}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
