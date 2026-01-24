@@ -95,17 +95,11 @@ jobs:
       - name: Compile Inno Setup Installer
         shell: pwsh
         run: |
-          Write-Host "Current working directory: $PWD"
-          Write-Host "Contents of publish folder:"
-          Get-ChildItem "publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
-
           $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
-          Write-Host "Using ISS file: $issFile"
+          Write-Host "Compiling installer using ISS file: $issFile"
 
-          if (Test-Path "$PWD\publish") {
-              Write-Host "Publish folder exists."
-          } else {
+          if (-not (Test-Path "$PWD\publish")) {
               Write-Host "Publish folder missing!"
               Exit 1
           }
@@ -116,12 +110,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: KannadaNudiInstaller
-          path: setup\Output\*.exe
+          path: setup\Output\KannadaNudiEditor_${{ env.RELEASE_VERSION }}.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
-          files: setup\Output\*.exe
+          files: setup\Output\KannadaNudiEditor_${{ env.RELEASE_VERSION }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
