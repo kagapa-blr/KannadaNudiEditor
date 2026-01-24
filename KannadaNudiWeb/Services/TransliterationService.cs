@@ -19,35 +19,78 @@ namespace KannadaNudiWeb.Services
 
         public KeyboardLayout CurrentLayout { get; private set; } = KeyboardLayout.Nudi;
 
-        // ORIGINAL MAP (Restored as the Nudi/KGP option per user request)
-        private readonly Dictionary<string, string> _nudiMap = new Dictionary<string, string>
+        // Nudi 6.1 Maps
+        private readonly Dictionary<string, string> _nudiConsonants = new Dictionary<string, string>
         {
-            // Consonants (Defaults to Halant form)
-            { "k", "ಕ್" }, { "g", "ಗ್" }, { "c", "ಚ್" }, { "j", "ಜ್" },
-            { "t", "ಟ್" }, { "d", "ಡ್" }, { "N", "ಣ್" },
-            { "w", "ತ್" }, { "q", "ದ್" }, { "n", "ನ್" },
-            { "p", "ಪ್" }, { "b", "ಬ್" }, { "m", "ಮ್" },
-            { "y", "ಯ್" }, { "r", "ರ್" }, { "l", "ಲ್" }, { "v", "ವ್" },
-            { "s", "ಸ್" }, { "h", "ಹ್" }, { "L", "ಳ್" },
-
-            // Vowels (Independent)
-            { "a", "ಅ" }, { "A", "ಆ" }, { "i", "ಇ" }, { "I", "ಈ" },
-            { "u", "ಉ" }, { "U", "ಊ" }, { "e", "ಎ" }, { "E", "ಏ" },
-            { "o", "ಒ" }, { "O", "ಓ" },
+            { "k", "ಕ" }, { "K", "ಖ" }, { "g", "ಗ" }, { "G", "ಘ" }, { "Z", "ಙ" },
+            { "c", "ಚ" }, { "C", "ಛ" }, { "j", "ಜ" }, { "z", "ಞ" },
+            { "q", "ಟ" }, { "Q", "ಠ" }, { "w", "ಡ" }, { "W", "ಢ" }, { "N", "ಣ" },
+            { "t", "ತ" }, { "T", "ಥ" }, { "d", "ದ" }, { "D", "ಧ" }, { "n", "ನ" },
+            { "p", "ಪ" }, { "P", "ಫ" }, { "b", "ಬ" }, { "B", "ಭ" }, { "m", "ಮ" },
+            { "y", "ಯ" }, { "r", "ರ" }, { "l", "ಲ" }, { "v", "ವ್" },
+            { "S", "ಶ" }, { "x", "ಷ" }, { "s", "ಸ" }, { "h", "ಹ" }, { "L", "ಳ" }
         };
 
-        private readonly Dictionary<string, string> _nudiVowelSigns = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _nudiVowels = new Dictionary<string, string>
         {
-            { "a", "" }, // 'a' removes halant (inherent vowel)
+            { "a", "ಅ" }, { "A", "ಆ" },
+            { "i", "ಇ" }, { "I", "ಈ" },
+            { "u", "ಉ" }, { "U", "ಊ" },
+            { "R", "ಋ" }, { "e", "ಎ" }, { "E", "ಏ" },
+            { "Y", "ಐ" }, { "o", "ಒ" }, { "O", "ಓ" },
+            { "V", "ಔ" },
+            { "M", "ಂ" }, { "H", "ಃ" }
+        };
+
+        private readonly Dictionary<string, string> _nudiMatras = new Dictionary<string, string>
+        {
+            { "a", "" }, // Inherent vowel (no matra needed for Base Consonant)
             { "A", "ಾ" },
-            { "i", "ಿ" },
-            { "I", "ೀ" },
-            { "u", "ು" },
-            { "U", "ೂ" },
-            { "e", "ೆ" },
-            { "E", "ೇ" },
-            { "o", "ೊ" },
-            { "O", "ೋ" }
+            { "i", "ಿ" }, { "I", "ೀ" },
+            { "u", "ು" }, { "U", "ೂ" },
+            { "R", "ೃ" },
+            { "e", "ೆ" }, { "E", "ೇ" },
+            { "Y", "ೈ" },
+            { "o", "ೊ" }, { "O", "ೋ" },
+            { "V", "ೌ" },
+            { "M", "ಂ" }, { "H", "ಃ" }
+        };
+
+        private readonly Dictionary<string, string> _nudiSpecials = new Dictionary<string, string>
+        {
+            { "rX", "ಱ" },
+            { "LX", "ೞ" },
+            { "RX", "ೠ" },
+            { "jX", "ಜ಼" },
+            { "PX", "ಫ಼" },
+            { "KX", "ಖ಼" }
+        };
+
+        private readonly Dictionary<string, string> _nudiSpecialMatras = new Dictionary<string, string>
+        {
+            { "RX", "ೄ" }
+        };
+
+        private readonly Dictionary<string, string> _diacritics = new Dictionary<string, string>
+        {
+            { "!", "\u0306" }, // Laghu (Breve)
+            { "@", "\u0304" }, // Guru (Macron)
+            { "#", "\u0333" }, // Double low line
+            { "$", "₹" },      // Rupee (Caps+4 mapped to Shift+4 here as closest approximation)
+            { "%", "\u0951" }, // Svarita
+            { "^", "\u1CDA" }, // Dirgha Svarita
+            { "&", "\u093C" }, // Nukta
+            { "*", "\u0307" }, // Dot above
+            { "(", "\u0308" }, // Two dots above
+            { ")", "\u0C81" }  // Chandrabindu
+        };
+
+        private readonly Dictionary<string, string> _symbolDiacritics = new Dictionary<string, string>
+        {
+            { ".", "\u0324" }, // Two dots below
+            { "-", "\u0332" }, // One line below
+            { "'", "\u0301" }, // Acute
+            { ",", "\u0327" }  // Cedilla
         };
 
         // Baraha Phonetic Map
@@ -128,34 +171,143 @@ namespace KannadaNudiWeb.Services
 
         private (string text, int backspaceCount) GetNudiTransliteration(string key)
         {
-            // Nudi/KGP Legacy Logic:
+            string combined = _buffer.ToString() + key;
 
-            // If key is a vowel modifier and buffer ends in consonant key
-            if (_nudiVowelSigns.ContainsKey(key) && _buffer.Length > 0 && IsNudiConsonantKey(_buffer[_buffer.Length - 1]))
+            // 1. Check for 2-char specials (e.g. rX, RX, LX)
+            if (combined.Length >= 2)
             {
-                string lastKey = _buffer[_buffer.Length - 1].ToString();
-                string halantForm = _nudiMap[lastKey]; // e.g. "ಕ್" (2 chars: 0C95 0CCD)
-                string baseForm = halantForm.TrimEnd('\u0CCD'); // e.g. "ಕ"
-                string sign = _nudiVowelSigns[key];
+                string lastTwo = combined.Substring(combined.Length - 2);
 
-                string replacement = baseForm + sign;
-                int removeCount = halantForm.Length; // Remove the full previous sequence (e.g. 2 chars)
+                // We need to know if the last keystroke (before this one) was effectively a Matra or Base context
+                // to decide how to handle cases like RX (ೠ vs ೄ).
+                // However, RX is usually entered after a consonant for Matra ೄ, or standalone for ೠ.
 
-                _buffer.Append(key);
-                return (replacement, removeCount);
+                if (_buffer.Length > 0)
+                {
+                    string prevKey = _buffer[_buffer.Length - 1].ToString();
+                    string seq = prevKey + key;
+
+                    if (_nudiSpecials.ContainsKey(seq))
+                    {
+                        // Determine if we are in a Matra context (previous char was a consonant base)
+                        // If so, and if seq is RX, we might want 'ೄ' instead of 'ೠ'
+                        bool prevWasMatraContext = IsNudiMatraContext(_buffer.ToString().Substring(0, _buffer.Length - 1), prevKey);
+
+                        _buffer.Append(key);
+
+                        if (prevWasMatraContext && _nudiSpecialMatras.ContainsKey(seq))
+                        {
+                            return (_nudiSpecialMatras[seq], 1); // Replace 'ೃ' with 'ೄ'
+                        }
+                        else
+                        {
+                            return (_nudiSpecials[seq], 1); // Replace Base 'ಋ' with 'ೠ' OR 'ರ' with 'ಱ'
+                        }
+                    }
+                }
             }
 
-            // If key is a consonant
-            if (_nudiMap.TryGetValue(key, out string? val))
+            // 2. Check for Consonant Modifiers (f, F)
+            if (key == "f" || key == "F")
             {
-                _buffer.Append(key);
-                return (val, 0);
+                if (_buffer.Length > 0)
+                {
+                    char lastKeyChar = _buffer[_buffer.Length - 1];
+                    string lastKey = lastKeyChar.ToString();
+
+                    // If last key produced a Base Consonant (which ends in 'a' implicit), we add Halant.
+                    // If last key produced 'ಕ' (Base), we want 'ಕ್' (Halant).
+                    // This is done by appending '್'. We do NOT backspace 'ಕ'.
+                    if (_nudiConsonants.ContainsKey(lastKey))
+                    {
+                        _buffer.Append(key);
+                        string modifier = (key == "f") ? "್" : "್\u200D";
+                        return (modifier, 0);
+                    }
+                }
             }
 
-            // Default: just insert key, clear buffer
-            _buffer.Clear();
+            // 3. Check for Vowels (Matra vs Independent)
+            if (_nudiVowels.ContainsKey(key))
+            {
+                // Check context
+                if (IsNudiMatraContext(_buffer.ToString(), key))
+                {
+                    _buffer.Append(key);
+                    string matra = _nudiMatras[key];
+                    // If matra is empty (key 'a'), we assume user wants to confirm Base Consonant.
+                    // We return empty string, 0 backspace.
+                    // But effectively we consumed the key.
+                    return (matra, 0);
+                }
+                else
+                {
+                    _buffer.Append(key);
+                    return (_nudiVowels[key], 0);
+                }
+            }
+
+            // 4. Check for Consonants
+            if (_nudiConsonants.ContainsKey(key))
+            {
+                _buffer.Append(key);
+                return (_nudiConsonants[key], 0);
+            }
+
+            // 5. Diacritics
+            if (_diacritics.ContainsKey(key))
+            {
+                _buffer.Append(key);
+                return (_diacritics[key], 0);
+            }
+
+            if (_symbolDiacritics.ContainsKey(key))
+            {
+                _buffer.Append(key);
+                return (_symbolDiacritics[key], 0);
+            }
+
+            // Default
             _buffer.Append(key);
             return (key, 0);
+        }
+
+        private bool IsNudiMatraContext(string buffer, string currentKey)
+        {
+            if (string.IsNullOrEmpty(buffer)) return false;
+
+            char lastChar = buffer[buffer.Length - 1];
+            string lastKey = lastChar.ToString();
+
+            if (_nudiConsonants.ContainsKey(lastKey))
+            {
+                // Last key was a consonant.
+                // It is in Base form (e.g. 'ಕ').
+                // It can accept a matra.
+                return true;
+            }
+
+            // If last key was f/F, then it's Halant form. Cannot accept Matra.
+            if (lastKey == "f" || lastKey == "F") return false;
+
+            // If last key was a Vowel/Matra, then it cannot accept another Matra (usually).
+            if (_nudiVowels.ContainsKey(lastKey)) return false;
+
+            // If last key sequence was a special Consonant (rX, LX, etc)
+            // We need to check the last 2 chars of buffer.
+            if (buffer.Length >= 2)
+            {
+                 string suffix = buffer.Substring(buffer.Length-2);
+                 if (_nudiSpecials.ContainsKey(suffix))
+                 {
+                     string val = _nudiSpecials[suffix];
+                     // If val is a consonant (ಱ, ೞ, etc), it can accept Matra.
+                     // Consonant checks: ಱ(rX), ೞ(LX), ಜ಼(jX), ಫ಼(PX), ಖ಼(KX)
+                     if (val == "ಱ" || val == "ೞ" || val == "ಜ಼" || val == "ಫ಼" || val == "ಖ಼") return true;
+                 }
+            }
+
+            return false;
         }
 
         private (string text, int backspaceCount) GetBarahaTransliteration(string key)
@@ -177,34 +329,8 @@ namespace KannadaNudiWeb.Services
                             // Found a valid C+V combo!
                             // e.g. "kh" + "aa"
 
-                            // To correctly calculate backspace, we need to know what was output for 'potentialConsonantToken'.
-                            // The buffer contains 'potentialConsonantToken' (plus maybe previous parts of vowel if we are extending 'a' -> 'aa'?)
-                            // No, the buffer only contains keys.
-                            // If buffer="k", output was "ಕ್" (2 chars).
-                            // If buffer="kh", output was "ಖ್" (2 chars).
-
-                            // BUT: If buffer="ka", output was "ಕ" (1 char). Now user types 'a' -> "kaa".
-                            // We need to replace "ಕ" (1 char) with "ಕಾ" (2 chars).
-
-                            // We need to know what characters were produced by the *previous* state of the buffer.
-                            // This state isn't tracked explicitly here.
-
-                            // However, we can reconstruct what the PREVIOUS transliteration for the buffer was.
-                            // But that's complex because the buffer might be "namaska". 's'+'k'+'a'.
-
-                            // Simplification: We assume the buffer represents ONE phonetic unit being built.
-                            // So if Buffer="ka", the previous output was Transliterate("ka").
-                            // BackspaceCount = Length of Transliterate(Buffer).
-
-                            // Let's verify this assumption.
-                            // T1: 'k' -> Buffer="k", Out="ಕ್" (2).
-                            // T2: 'a' -> Buffer="ka". Previous was "k" -> "ಕ್". Backspace=2. New="ಕ".
-                            // T3: 'a' -> Buffer="kaa". Previous was "ka" -> "ಕ" (1). Backspace=1. New="ಕಾ".
-
-                            // This logic holds if we can accurately determine the string produced by the *previous* buffer content.
-
                             string previousOutput = RecalculateOutput(_buffer.ToString());
-                            if (string.IsNullOrEmpty(previousOutput)) previousOutput = ""; // Should generally not happen if buffer > 0
+                            if (string.IsNullOrEmpty(previousOutput)) previousOutput = "";
 
                             string consChar = _barahaMap[potentialConsonantToken];
                             string baseChar = consChar.TrimEnd('\u0CCD');
@@ -286,12 +412,6 @@ namespace KannadaNudiWeb.Services
             {
                 _buffer.Length--;
             }
-        }
-
-        private bool IsNudiConsonantKey(char k)
-        {
-            string s = k.ToString();
-            return _nudiMap.ContainsKey(s) && !_nudiVowelSigns.ContainsKey(s);
         }
 
         private bool IsBarahaConsonant(string k)
