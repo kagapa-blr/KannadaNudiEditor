@@ -1,17 +1,12 @@
 ; -------------------------------------------------
-; Kannada Nudi Baraha – Inno Setup Script (CI Ready)
+; Kannada Nudi Baraha – Inno Setup Script
 ; -------------------------------------------------
 
 #define MyAppName "KannadaNudiBaraha"
 #define MyAppPublisher "KAGAPA"
 #define MyAppURL "https://kagapa.com/"
 #define MyAppExeName "KannadaNudiEditor.exe"
-
-; Version handled dynamically by GitHub Actions
 #define MyAppVersion "1.0.0"
-
-; CI-friendly source folder (relative to repository)
-#define SourceDir "setup"
 
 [Setup]
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
@@ -48,7 +43,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Point directly to CI publish folder
 Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
@@ -68,86 +62,40 @@ Root: HKCR; Subkey: ".html\OpenWithProgids"; ValueType: string; ValueName: "{#My
 Root: HKCR; Subkey: ".htm\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppExeName}"; ValueData: ""; Flags: uninsdeletevalue
 
 [Code]
-procedure Log(Message: string);
-var
-  ResultCode: Integer;
-begin
-  Exec('cmd.exe', '/C echo ::notice::' + Message, '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-end;
-
-procedure LogPublishFiles();
-var
-  FindRec: TFindRec;
-  PublishPath: string;
-begin
-  PublishPath := ExpandConstant('{#SourceDir}\..\publish');
-  Log('Checking publish folder: ' + PublishPath);
-
-  if not DirExists(PublishPath) then
-  begin
-    Log('Publish folder does not exist!');
-    Exit;
-  end;
-
-  if FindFirst(PublishPath + '\*', faAnyFile, FindRec) then
-  begin
-    repeat
-      if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) = 0 then
-        Log('Publish folder contains: ' + FindRec.Name);
-    until not FindNext(FindRec);
-    FindClose(FindRec);
-  end
-  else
-    Log('Publish folder is empty!');
-end;
-
-function HasDotNet8Desktop(): Boolean;
+function IsDotNet8Installed(): Boolean;
 var
   FindRec: TFindRec;
   BasePath: string;
 begin
   BasePath := ExpandConstant('{pf}\dotnet\shared\Microsoft.WindowsDesktop.App');
-  Log('Checking .NET runtime in: ' + BasePath);
-
   Result := False;
-  if not DirExists(BasePath) then
-  begin
-    Log('Base path not found.');
-    Exit;
-  end;
 
-  if FindFirst(BasePath + '\8.0.*', FindRec) then
+  if DirExists(BasePath) then
   begin
-    try
-      repeat
-        if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
-        begin
-          Log('Found .NET 8 folder: ' + FindRec.Name);
-          Result := True;
-          Exit;
-        end;
-      until not FindNext(FindRec);
-    finally
-      FindClose(FindRec);
+    if FindFirst(BasePath + '\8.0.*', faDirectory, FindRec) then
+    begin
+      try
+        repeat
+          if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
+          begin
+            Result := True;
+            Exit;
+          end;
+        until not FindNext(FindRec);
+      finally
+        FindClose(FindRec);
+      end;
     end;
-  end
-  else
-    Log('No 8.0.* folders found.');
+  end;
 end;
 
 function InitializeSetup(): Boolean;
 begin
-  Log('Initializing setup...');
-  LogPublishFiles();
-  Result := HasDotNet8Desktop();
-  if not Result then
-    Log('Microsoft .NET 8 Desktop Runtime not found! Setup will exit.');
-end;
-
-procedure CurStepChanged(CurStep: TSetupStep);
-begin
-  case CurStep of
-    ssInstall: Log('Starting file installation...');
-    ssPostInstall: Log('Post-installation steps...');
-  end;
+  if not IsDotNet8Installed() then
+  begin
+    MsgBox('.NET 8 Desktop Runtime is required to install this application.', mbError, MB_OK);
+    Result := False;
+  end
+  else
+    Result := True;
 end;
