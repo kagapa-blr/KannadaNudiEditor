@@ -63,64 +63,43 @@ Root: HKCR; Subkey: ".htm\OpenWithProgids"; ValueType: string; ValueName: "{#MyA
 
 
 
+; -------------------------------------------------
+; .NET 8 DESKTOP RUNTIME CHECK
+; -------------------------------------------------
 [Code]
-; -----------------------------------------------------
-; Function: IsDotNet8Installed
-; Purpose: Check if Microsoft .NET 8 Desktop Runtime
-;          is installed on the machine.
-; Returns: True if .NET 8 found, False otherwise.
-; -----------------------------------------------------
-function IsDotNet8Installed(): Boolean;
+
+function HasDotNet8Desktop(): Boolean;
 var
   FindRec: TFindRec;
   BasePath: string;
 begin
   Result := False;
-
-  ; Default installation folder for .NET Desktop runtimes
   BasePath := ExpandConstant('{pf}\dotnet\shared\Microsoft.WindowsDesktop.App');
 
-  ; Check if the folder exists
-  if DirExists(BasePath) then
+  if not DirExists(BasePath) then Exit;
+
+  if FindFirst(BasePath + '\8.0.*', FindRec) then
   begin
-    ; Look for a folder starting with 8.0
-    if FindFirst(BasePath + '\8.0.*', faDirectory, FindRec) then
-    begin
-      try
-        repeat
-          ; Only check directories
-          if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
-          begin
-            Result := True; ; .NET 8 found
-            Exit;
-          end;
-        until not FindNext(FindRec);
-      finally
-        FindClose(FindRec);
-      end;
+    try
+      repeat
+        if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
+        begin
+          Result := True;
+          Exit;
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
     end;
   end;
 end;
 
-; -----------------------------------------------------
-; Function: InitializeSetup
-; Purpose: Runs before installation starts.
-;          Checks prerequisites like .NET 8.
-; Returns: True if installer should continue, False to abort.
-; -----------------------------------------------------
 function InitializeSetup(): Boolean;
 begin
-  ; Check for .NET 8 Desktop Runtime
-  if not IsDotNet8Installed() then
-  begin
-    ; Show error message and abort installation
+  Result := HasDotNet8Desktop();
+  if not Result then
     MsgBox(
-      'Microsoft .NET 8 Desktop Runtime is required to install this application.'#13#10 +
-      'Please install it from https://dotnet.microsoft.com/en-us/download/dotnet/8.0',
-      mbError, MB_OK
-    );
-    Result := False; ; Stop installation
-  end
-  else
-    Result := True; ; Continue installation
+      'Microsoft .NET 8 Desktop Runtime (x64) is required.' + #13#10#13#10 +
+      'https://dotnet.microsoft.com/download/dotnet/8.0',
+      mbError, MB_OK);
 end;
