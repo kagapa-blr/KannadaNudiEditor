@@ -1,6 +1,7 @@
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Media;
 using Kannada.AsciiUnicode.Converters;
@@ -12,47 +13,119 @@ namespace KannadaNudiEditor.Helpers.Conversion
         public sealed record ConvertResult(DocumentAdv Document, int ConvertedParagraphs);
 
         // Singleton instance of the SDK
-        private static readonly KannadaConverter sdkConverter = KannadaConverter.Instance;
+        private static KannadaConverter? _converter;
 
         // ============================================================
-        // MAIN ENTRY POINT
+        // GET CUSTOM CONVERTER WITH MAPPINGS
+        // ============================================================
+        private static KannadaConverter GetConverter()
+        {
+            if (_converter != null)
+                return _converter;
+
+            try
+            {
+                var basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+                var asciiToUnicodePath = Path.Combine(basePath, "Resources", "AsciiToUnicodeMapping.json");
+                var unicodeToAsciiPath = Path.Combine(basePath, "Resources", "UnicodeToAsciiMapping.json");
+
+                var asciiToUnicode = LoadMapping(asciiToUnicodePath);
+                var unicodeToAscii = LoadMapping(unicodeToAsciiPath);
+
+                _converter = KannadaConverter.CreateWithCustomMapping(
+                    userAsciiToUnicodeMapping: asciiToUnicode,
+                    userUnicodeToAsciiMapping: unicodeToAscii
+                );
+
+                SimpleLogger.Log($"Custom mappings loaded | A→U={asciiToUnicode.Count}, U→A={unicodeToAscii.Count}");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogError("Error initializing KannadaConverter: " + ex.Message);
+                _converter = KannadaConverter.Instance; // fallback to default
+            }
+
+            return _converter;
+        }
+
+        // ============================================================
+        // LOAD JSON MAPPINGS
+        // ============================================================
+        private static Dictionary<string, string> LoadMapping(string filePath)
+        {
+            try
+            {
+                SimpleLogger.Log($"Loading mapping file: {filePath}");
+
+                if (!File.Exists(filePath))
+                {
+                    SimpleLogger.LogWarning($"Mapping file not found: {filePath}");
+                    return new Dictionary<string, string>();
+                }
+
+                var json = File.ReadAllText(filePath, Encoding.UTF8);
+                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                return dict ?? new Dictionary<string, string>();
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogError($"Failed to load mapping file '{filePath}': {ex.Message}");
+                return new Dictionary<string, string>();
+            }
+        }
+
+        // ============================================================
+        // MAIN CONVERSION ENTRY
         // ============================================================
         public static Task<ConvertResult> ConvertFileToDocumentAsync(
             string filePath,
-            bool asciiToUnicode = true, // New: direction
+            bool asciiToUnicode = true,
             string fontFamilyName = "NudiParijatha",
             bool applyA4NormalMargins = true,
             string[]? nudiFontKeywords = null)
         {
             if (string.IsNullOrWhiteSpace(filePath))
+            {
+                SimpleLogger.LogError("File path is empty.");
                 throw new ArgumentException("File path is empty.", nameof(filePath));
+            }
 
             string fileName = Path.GetFileName(filePath);
-            SimpleLogger.Log($"Convert started: {fileName}");
+            SimpleLogger.Log($"Conversion started: {fileName}");
 
             return Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                var tempEditor = new SfRichTextBoxAdv();
-
-                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                try
                 {
-                    var format = GetFormatType(Path.GetExtension(filePath));
-                    SimpleLogger.Log($"Loading file: {fileName} | format={format}");
-                    tempEditor.Load(fs, format);
+                    var tempEditor = new SfRichTextBoxAdv();
+
+                    using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        var format = GetFormatType(Path.GetExtension(filePath));
+                        SimpleLogger.Log($"Loading file: {fileName} | format={format}");
+                        tempEditor.Load(fs, format);
+                    }
+
+                    int paraCount = ConvertDocumentInPlace(
+                        tempEditor.Document,
+                        asciiToUnicode,
+                        fontFamilyName,
+                        nudiFontKeywords
+                    );
+
+                    if (applyA4NormalMargins)
+                        ApplyA4NormalMargins(tempEditor.Document);
+
+                    SimpleLogger.Log($"Conversion completed: {fileName} | paragraphs converted={paraCount}");
+                    return new ConvertResult(tempEditor.Document, paraCount);
                 }
-
-                int paraCount = ConvertDocumentInPlace(
-                    tempEditor.Document,
-                    asciiToUnicode,
-                    fontFamilyName,
-                    nudiFontKeywords
-                );
-
-                if (applyA4NormalMargins)
-                    ApplyA4NormalMargins(tempEditor.Document);
-
-                SimpleLogger.Log($"Convert completed: {fileName} | paragraphs={paraCount}");
-                return new ConvertResult(tempEditor.Document, paraCount);
+                catch (Exception ex)
+                {
+                    SimpleLogger.LogError($"Failed to convert file '{fileName}': {ex.Message}");
+                    return new ConvertResult(new DocumentAdv(), 0); // return empty document on failure
+                }
 
             }).Task;
         }
@@ -70,18 +143,25 @@ namespace KannadaNudiEditor.Helpers.Conversion
             var targetFont = new FontFamily(fontFamilyName);
             var keywords = nudiFontKeywords ?? new[] { "nudi", "parijatha", "lipi" };
 
-            foreach (SectionAdv section in doc.Sections)
+            try
             {
-                for (int i = 0; i < section.Blocks.Count; i++)
+                foreach (SectionAdv section in doc.Sections)
                 {
-                    ProcessBlockWithSDK(
-                        section.Blocks[i],
-                        asciiToUnicode,
-                        targetFont,
-                        keywords,
-                        ref stats
-                    );
+                    for (int i = 0; i < section.Blocks.Count; i++)
+                    {
+                        ProcessBlockWithSDK(
+                            section.Blocks[i],
+                            asciiToUnicode,
+                            targetFont,
+                            keywords,
+                            ref stats
+                        );
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogError("Error during document conversion: " + ex.Message);
             }
 
             LogConversionStats(stats);
@@ -89,7 +169,7 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // ============================================================
-        // PARAGRAPH PROCESSOR USING SDK
+        // PARAGRAPH PROCESSOR
         // ============================================================
         private static void ProcessBlockWithSDK(
             BlockAdv block,
@@ -120,30 +200,34 @@ namespace KannadaNudiEditor.Helpers.Conversion
                 }
                 else
                 {
-                    // Flush pending Nudi text before non-Nudi span
                     if (nudiBuffer.Length > 0 && nudiFormat != null)
                     {
-                        var convertedText = asciiToUnicode
-                            ? sdkConverter.ConvertAsciiToUnicode(nudiBuffer.ToString())
-                            : sdkConverter.ConvertUnicodeToAscii(nudiBuffer.ToString());
-
-                        var convertedSpan = new SpanAdv
+                        try
                         {
-                            Text = convertedText
-                        };
+                            var converter = GetConverter();
+                            var convertedText = asciiToUnicode
+                                ? converter.ConvertAsciiToUnicode(nudiBuffer.ToString())
+                                : converter.ConvertUnicodeToAscii(nudiBuffer.ToString());
 
-                        ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
+                            var convertedSpan = new SpanAdv { Text = convertedText };
+                            ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
 
-                        newInlines.Add(convertedSpan);
+                            newInlines.Add(convertedSpan);
 
-                        nudiBuffer.Clear();
-                        nudiFormat = null;
-
-                        paragraphConverted = true;
-                        stats = stats with { ConvertedSpans = stats.ConvertedSpans + 1 };
+                            paragraphConverted = true;
+                            stats = stats with { ConvertedSpans = stats.ConvertedSpans + 1 };
+                        }
+                        catch (Exception ex)
+                        {
+                            SimpleLogger.LogError($"Error converting span: {ex.Message}");
+                        }
+                        finally
+                        {
+                            nudiBuffer.Clear();
+                            nudiFormat = null;
+                        }
                     }
 
-                    // Keep original non-Nudi span exactly as-is
                     newInlines.Add(span);
                 }
             }
@@ -151,21 +235,24 @@ namespace KannadaNudiEditor.Helpers.Conversion
             // Flush trailing Nudi text
             if (nudiBuffer.Length > 0 && nudiFormat != null)
             {
-                var convertedText = asciiToUnicode
-                    ? sdkConverter.ConvertAsciiToUnicode(nudiBuffer.ToString())
-                    : sdkConverter.ConvertUnicodeToAscii(nudiBuffer.ToString());
-
-                var convertedSpan = new SpanAdv
+                try
                 {
-                    Text = convertedText
-                };
+                    var converter = GetConverter();
+                    var convertedText = asciiToUnicode
+                        ? converter.ConvertAsciiToUnicode(nudiBuffer.ToString())
+                        : converter.ConvertUnicodeToAscii(nudiBuffer.ToString());
 
-                ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
+                    var convertedSpan = new SpanAdv { Text = convertedText };
+                    ApplyCharacterFormat(nudiFormat, convertedSpan.CharacterFormat, targetFont);
 
-                newInlines.Add(convertedSpan);
-
-                paragraphConverted = true;
-                stats = stats with { ConvertedSpans = stats.ConvertedSpans + 1 };
+                    newInlines.Add(convertedSpan);
+                    paragraphConverted = true;
+                    stats = stats with { ConvertedSpans = stats.ConvertedSpans + 1 };
+                }
+                catch (Exception ex)
+                {
+                    SimpleLogger.LogError($"Error converting trailing span: {ex.Message}");
+                }
             }
 
             if (!paragraphConverted)
@@ -182,18 +269,25 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // ============================================================
-        // APPLY FONT PROPERTIES
+        // FONT APPLICATION
         // ============================================================
         private static void ApplyCharacterFormat(CharacterFormat source, CharacterFormat target, FontFamily font)
         {
-            target.FontFamily = font;
-            target.FontSize = source.FontSize;
-            target.Bold = source.Bold;
-            target.Italic = source.Italic;
-            target.Underline = source.Underline;
-            target.FontColor = source.FontColor;
-            target.HighlightColor = source.HighlightColor;
-            target.BaselineAlignment = source.BaselineAlignment;
+            try
+            {
+                target.FontFamily = font;
+                target.FontSize = source.FontSize;
+                target.Bold = source.Bold;
+                target.Italic = source.Italic;
+                target.Underline = source.Underline;
+                target.FontColor = source.FontColor;
+                target.HighlightColor = source.HighlightColor;
+                target.BaselineAlignment = source.BaselineAlignment;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogError("Error applying character format: " + ex.Message);
+            }
         }
 
         // ============================================================
@@ -201,12 +295,19 @@ namespace KannadaNudiEditor.Helpers.Conversion
         // ============================================================
         private static bool IsNudiFontFast(SpanAdv span, string[] keywords)
         {
-            var source = span.CharacterFormat.FontFamily?.Source;
-            if (string.IsNullOrEmpty(source))
-                return false;
+            try
+            {
+                var source = span.CharacterFormat.FontFamily?.Source;
+                if (string.IsNullOrEmpty(source))
+                    return false;
 
-            string fontLower = source.ToLowerInvariant();
-            return keywords.Any(fontLower.Contains);
+                string fontLower = source.ToLowerInvariant();
+                return keywords.Any(fontLower.Contains);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         // ============================================================
@@ -233,21 +334,28 @@ namespace KannadaNudiEditor.Helpers.Conversion
         // ============================================================
         private static void ApplyA4NormalMargins(DocumentAdv doc)
         {
-            const double dpi = 96.0;
-            double a4WidthPx = 8.3 * dpi;
-            double a4HeightPx = 11.7 * dpi;
-            double marginPx = 1.0 * dpi;
-
-            if (doc.Sections.Count == 0)
-                doc.Sections.Add(new SectionAdv());
-
-            foreach (SectionAdv s in doc.Sections)
+            try
             {
-                s.SectionFormat.PageSize = new Size(a4WidthPx, a4HeightPx);
-                s.SectionFormat.PageMargin = new Thickness(marginPx);
-            }
+                const double dpi = 96.0;
+                double a4WidthPx = 8.3 * dpi;
+                double a4HeightPx = 11.7 * dpi;
+                double marginPx = 1.0 * dpi;
 
-            SimpleLogger.Log("Page setup applied: A4 with normal margins");
+                if (doc.Sections.Count == 0)
+                    doc.Sections.Add(new SectionAdv());
+
+                foreach (SectionAdv s in doc.Sections)
+                {
+                    s.SectionFormat.PageSize = new Size(a4WidthPx, a4HeightPx);
+                    s.SectionFormat.PageMargin = new Thickness(marginPx);
+                }
+
+                SimpleLogger.Log("Page setup applied: A4 with normal margins");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogError("Error applying page setup: " + ex.Message);
+            }
         }
 
         // ============================================================

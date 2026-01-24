@@ -46,6 +46,15 @@ public static class SimpleLogger
             Debug.WriteLine("Logging failed: " + ex.Message);
         }
     }
+    public static void LogWarning(string message)
+    {
+        Log("[WARNING] " + message);
+    }
+
+    public static void LogError(string message)
+    {
+        Log("[ERROR] " + message);
+    }
 
     public static void LogException(Exception ex, string context = "")
     {
