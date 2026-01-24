@@ -30,7 +30,7 @@ jobs:
         run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
 
       - name: Publish Build Output
-        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output publish
+        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup\publish
 
       - name: Upload Publish Folder (Optional)
         uses: actions/upload-artifact@v4
