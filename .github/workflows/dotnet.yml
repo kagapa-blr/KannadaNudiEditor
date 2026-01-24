@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Required for pushing tags and creating releases
+  contents: write  # Needed for creating releases
 
 jobs:
   build:
@@ -33,20 +33,16 @@ jobs:
       run: |
         dotnet publish "KannadaNudiEditor.csproj" `
           --configuration Release `
-          --output published
+          --output publish
 
-    - name: Zip Published Files
-      run: Compress-Archive -Path published\* -DestinationPath kannadaNudi.zip
-      shell: pwsh
-
-    - name: Upload Build Artifact
+    - name: Upload Publish Folder (Optional for debug)
       uses: actions/upload-artifact@v4
       with:
-        name: kannadaNudi-build
-        path: kannadaNudi.zip
+        name: publish-folder
+        path: publish
 
   release:
-    name: Create GitHub Release
+    name: Create GitHub Release with Installer
     runs-on: windows-latest
     needs: build
 
@@ -56,40 +52,50 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Download Build Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: kannadaNudi-build
-
-    - name: Get Latest Version Tag
+    - name: Get Latest Version Number
       id: get_version
       shell: pwsh
       run: |
         git fetch --tags
-        $LATEST_TAG = git tag -l 'v*' --sort=-v:refname | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } | Select-Object -First 1
-        if (-not $LATEST_TAG) {
-          $NEW_VERSION = "v1.0.0"
+        $latest = git tag -l --sort=-v:refname | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -First 1
+        if (-not $latest) {
+            $new_version = "1.0.0"
         } else {
-          $VERSION = $LATEST_TAG.TrimStart('v')
-          $VERSION_PARTS = $VERSION.Split('.')
-          $PATCH = [int]$VERSION_PARTS[2] + 1
-          $NEW_VERSION = "v$($VERSION_PARTS[0]).$($VERSION_PARTS[1]).$PATCH"
+            $parts = $latest.Split('.')
+            $patch = [int]$parts[2] + 1
+            $new_version = "$($parts[0]).$($parts[1]).$patch"
         }
-        echo "NEW_VERSION=$NEW_VERSION" >> $env:GITHUB_ENV
-        echo "New version: $NEW_VERSION"
+        echo "RELEASE_VERSION=$new_version" >> $env:GITHUB_ENV
+        echo "New release version: $new_version"
 
-    - name: Create and Push New Tag
+    - name: Update Inno Setup Script Version
       run: |
-        git tag ${{ env.NEW_VERSION }}
-        git push origin ${{ env.NEW_VERSION }}
+        $issFile = "setup\NudiBaravanigeSetup.iss"
+        (Get-Content $issFile) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$env:RELEASE_VERSION`"" | Set-Content $issFile
 
-    - name: Wait for Tag Push
-      run: git fetch --tags
+    - name: Compile Inno Setup Installer
+      shell: pwsh
+      run: |
+        $ISCC = "C:\Program Files\Inno Setup 6\ISCC.exe"
+        & $ISCC "setup\NudiBaravanigeSetup.iss"
+    
+    - name: Rename Installer to Modern Extension (.setup)
+      shell: pwsh
+      run: |
+        $outDir = "setup\Output"
+        $exe = Get-ChildItem $outDir -Filter "*.exe" | Select-Object -First 1
+        Rename-Item $exe.FullName "$outDir\KannadaNudiEditor_$env:RELEASE_VERSION.setup"
+
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: KannadaNudiInstaller
+        path: setup\Output\*.setup
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ env.NEW_VERSION }}
-        files: kannadaNudi.zip
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag_name: ${{ env.RELEASE_VERSION }}
+        files: setup\Output\*.setup
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
