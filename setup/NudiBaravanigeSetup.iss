@@ -72,7 +72,7 @@ begin
 
   if DirExists(BasePath) then
   begin
-    if FindFirst(BasePath + '\8.0.*', faDirectory, FindRec) then
+    if FindFirst(BasePath + '\8.0.*', 0, FindRec) then
     begin
       try
         repeat
