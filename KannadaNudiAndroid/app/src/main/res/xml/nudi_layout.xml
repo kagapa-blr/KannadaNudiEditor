@@ -5,65 +5,52 @@
     android:verticalGap="0px"
     android:keyHeight="60dp">
 
-    <!-- Nudi Map visual representation but emitting ASCII codes -->
-    <!-- Q=ದ್ W=ತ್ E=ಎ R=ರ್ T=ಟ್ Y=ಯ್ U=ಉ I=ಇ O=ಒ P=ಪ್ -->
+    <!-- Row 1: Q-P (Normal: ಟ ಡ ಎ ರ ತ ಯ ಉ ಇ ಒ ಪ) -->
     <Row>
-        <Key android:codes="113" android:keyLabel="ದ್" android:keyEdgeFlags="left"/>
-        <Key android:codes="119" android:keyLabel="ತ್"/>
+        <Key android:codes="113" android:keyLabel="ಟ" android:keyEdgeFlags="left"/>
+        <Key android:codes="119" android:keyLabel="ಡ"/>
         <Key android:codes="101" android:keyLabel="ಎ"/>
-        <Key android:codes="114" android:keyLabel="ರ್"/>
-        <Key android:codes="116" android:keyLabel="ಟ್"/>
-        <Key android:codes="121" android:keyLabel="ಯ್"/>
+        <Key android:codes="114" android:keyLabel="ರ"/>
+        <Key android:codes="116" android:keyLabel="ತ"/>
+        <Key android:codes="121" android:keyLabel="ಯ"/>
         <Key android:codes="117" android:keyLabel="ಉ"/>
         <Key android:codes="105" android:keyLabel="ಇ"/>
         <Key android:codes="111" android:keyLabel="ಒ"/>
-        <Key android:codes="112" android:keyLabel="ಪ್" android:keyEdgeFlags="right"/>
+        <Key android:codes="112" android:keyLabel="ಪ" android:keyEdgeFlags="right"/>
     </Row>
 
-    <!-- A=ಅ S=ಸ್ D=ಡ್ F=ಫ್ G=ಗ್ H=ಹ್ J=ಜ್ K=ಕ್ L=ಲ್ -->
-    <!-- F is not in Nudi Map? Check C# -->
-    <!-- C#: f is not mapped in Nudi map. Default pass through.
-         Wait, usually 'f' is unused or specific.
-         Let's check code: "f" not in nudiMap.
-         So I'll label it 'f'.
-         Wait, let's check standard Nudi layout images. usually f is 'ph'? No, p=pa.
-         In Baraha, f=pha. In Nudi, P=pha (Shift+p).
-         f maps to nothing in basic Nudi map in C# code.
-         I'll leave it as 'f' or blank. I'll put 'f' for now.
-    -->
+    <!-- Row 2: A-L (Normal: ಅ ಸ ದ ್ ಗ ಹ ಜ ಕ ಲ) -->
     <Row>
         <Key android:codes="97" android:keyLabel="ಅ" android:keyEdgeFlags="left"/>
-        <Key android:codes="115" android:keyLabel="ಸ್"/>
-        <Key android:codes="100" android:keyLabel="ಡ್"/>
-        <Key android:codes="102" android:keyLabel="f"/>
-        <Key android:codes="103" android:keyLabel="ಗ್"/>
-        <Key android:codes="104" android:keyLabel="ಹ್"/>
-        <Key android:codes="106" android:keyLabel="ಜ್"/>
-        <Key android:codes="107" android:keyLabel="ಕ್"/>
-        <Key android:codes="108" android:keyLabel="ಲ್" android:keyEdgeFlags="right"/>
+        <Key android:codes="115" android:keyLabel="ಸ"/>
+        <Key android:codes="100" android:keyLabel="ದ"/>
+        <Key android:codes="102" android:keyLabel="್"/>
+        <Key android:codes="103" android:keyLabel="ಗ"/>
+        <Key android:codes="104" android:keyLabel="ಹ"/>
+        <Key android:codes="106" android:keyLabel="ಜ"/>
+        <Key android:codes="107" android:keyLabel="ಕ"/>
+        <Key android:codes="108" android:keyLabel="ಲ" android:keyEdgeFlags="right"/>
     </Row>
 
-    <!-- Z=??? X=??? C=ಚ್ V=ವ್ B=ಬ್ N=ಣ್ M=ಮ್ -->
-    <!-- C#: z, x not in nudiMap. c=cha, v=va, b=ba, n=na(dental), m=ma. N=Retroflex Na. -->
-    <!-- Wait, 'n' in C# map is "ನ್" (dental). 'N' is "ಣ್". -->
-    <!-- This layout is lowercase. Shift will handle uppercase. -->
+    <!-- Row 3: Z-M (Normal: ಞ ಷ ಚ ವ ಬ ನ ಮ) -->
     <Row>
         <Key android:codes="-1" android:keyLabel="SHIFT" android:keyWidth="15%p" android:isModifier="true" android:isSticky="true" android:keyEdgeFlags="left"/>
-        <Key android:codes="122" android:keyLabel="z"/>
-        <Key android:codes="120" android:keyLabel="x"/>
-        <Key android:codes="99" android:keyLabel="ಚ್"/>
-        <Key android:codes="118" android:keyLabel="ವ್"/>
-        <Key android:codes="98" android:keyLabel="ಬ್"/>
-        <Key android:codes="110" android:keyLabel="ನ್"/>
-        <Key android:codes="109" android:keyLabel="ಮ್"/>
+        <Key android:codes="122" android:keyLabel="ಞ"/>
+        <Key android:codes="120" android:keyLabel="ಷ"/>
+        <Key android:codes="99" android:keyLabel="ಚ"/>
+        <Key android:codes="118" android:keyLabel="ವ"/>
+        <Key android:codes="98" android:keyLabel="ಬ"/>
+        <Key android:codes="110" android:keyLabel="ನ"/>
+        <Key android:codes="109" android:keyLabel="ಮ"/>
         <Key android:codes="-5" android:keyLabel="DEL" android:keyWidth="15%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
 
+    <!-- Row 4: Numbers, Mic, Space, Switch, Done -->
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-2" android:keyLabel="123" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-2" android:keyLabel="?123" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
         <Key android:codes="-102" android:keyLabel="MIC" android:keyWidth="10%p"/>
         <Key android:codes="32" android:keyLabel="SPACE" android:keyWidth="40%p"/>
-        <Key android:codes="-201" android:keyLabel="ABC" android:keyWidth="15%p"/> <!-- Switch to Qwerty -->
+        <Key android:codes="-201" android:keyLabel="ABC" android:keyWidth="15%p"/> <!-- Switch to Qwerty/Baraha -->
         <Key android:codes="-4" android:keyLabel="DONE" android:keyWidth="20%p" android:keyEdgeFlags="right"/>
     </Row>
 </Keyboard>

@@ -34,6 +34,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     private lateinit var keyboardView: KeyboardView
     private lateinit var qwertyKeyboard: Keyboard
     private lateinit var nudiKeyboard: Keyboard
+    private lateinit var numberpadKeyboard: Keyboard
     private var isCaps = false
     private val transliterationEngine = TransliterationEngine()
     private var speechRecognizer: SpeechRecognizer? = null
@@ -94,6 +95,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
         qwertyKeyboard = Keyboard(this, R.xml.qwerty)
         nudiKeyboard = Keyboard(this, R.xml.nudi_layout)
+        numberpadKeyboard = Keyboard(this, R.xml.numberpad_layout)
 
         val switchButton = rootView.findViewById<TextView>(R.id.tv_switch_keyboard)
         switchButton.setOnClickListener {
@@ -108,7 +110,8 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
         candidatesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         candidatesView.adapter = candidatesAdapter
 
-        keyboardView.keyboard = qwertyKeyboard
+        // Default to Nudi
+        keyboardView.keyboard = nudiKeyboard
         keyboardView.setOnKeyboardActionListener(this)
 
         return rootView
@@ -118,14 +121,14 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
         super.onStartInput(attribute, restarting)
         transliterationEngine.clearBuffer()
 
-        // Default to Phonetic (Baraha)
-        transliterationEngine.setLayout(KeyboardLayout.Baraha)
+        // Default to Nudi (Direct)
+        transliterationEngine.setLayout(KeyboardLayout.Nudi)
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         // Ensure keyboard is set when view is started
-        keyboardView.keyboard = qwertyKeyboard
+        keyboardView.keyboard = nudiKeyboard
         keyboardView.invalidateAllKeys()
         updateCandidates()
     }
@@ -146,6 +149,10 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
                 inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))
             }
+            10 -> { // Custom Enter Key (Numberpad)
+                inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+                inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))
+            }
             -102 -> { // MIC Code
                 checkAudioPermissionAndListen()
             }
@@ -154,14 +161,14 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 keyboardView.keyboard = nudiKeyboard
                 keyboardView.invalidateAllKeys()
             }
-            -201 -> { // Switch to Qwerty
+            -201 -> { // Switch to Qwerty (Baraha)
                 transliterationEngine.setLayout(KeyboardLayout.Baraha)
                 keyboardView.keyboard = qwertyKeyboard
                 keyboardView.invalidateAllKeys()
             }
-            -2 -> {
-                // Mode Change (123/Symbols) - Not implemented yet
-                // Fallthrough prevention
+            -2 -> { // Switch to Numberpad
+                keyboardView.keyboard = numberpadKeyboard
+                keyboardView.invalidateAllKeys()
             }
             else -> {
                 var code = primaryCode.toChar()
@@ -171,7 +178,12 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
                 // Process through Transliteration Engine
                 val keyString = code.toString()
-                val result = transliterationEngine.getTransliteration(keyString)
+
+                // Get context for Matra handling
+                val textBefore = inputConnection.getTextBeforeCursor(1, 0)
+                val lastChar = if (!textBefore.isNullOrEmpty()) textBefore[0] else null
+
+                val result = transliterationEngine.getTransliteration(keyString, lastChar)
 
                 if (result.backspaceCount > 0) {
                     inputConnection.deleteSurroundingText(result.backspaceCount, 0)

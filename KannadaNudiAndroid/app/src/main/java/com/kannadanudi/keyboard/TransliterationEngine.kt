@@ -13,35 +13,54 @@ class TransliterationEngine {
     private val buffer = StringBuilder()
     var currentLayout = KeyboardLayout.Baraha
 
-    // Maps porting from C# TransliterationService.cs
-
-    // Nudi Map (Direct/Legacy)
+    // Nudi Map (Direct Layout) - Independent Chars
     private val nudiMap = mapOf(
-        // Consonants
-        "k" to "ಕ್", "g" to "ಗ್", "c" to "ಚ್", "j" to "ಜ್",
-        "t" to "ಟ್", "d" to "ಡ್", "N" to "ಣ್",
-        "w" to "ತ್", "q" to "ದ್", "n" to "ನ್",
-        "p" to "ಪ್", "b" to "ಬ್", "m" to "ಮ್",
-        "y" to "ಯ್", "r" to "ರ್", "l" to "ಲ್", "v" to "ವ್",
-        "s" to "ಸ್", "h" to "ಹ್", "L" to "ಳ್",
+        // Top Row
+        "q" to "ಟ", "Q" to "ಠ",
+        "w" to "ಡ", "W" to "ಢ",
+        "e" to "ಎ", "E" to "ಏ",
+        "r" to "ರ", "R" to "ಋ",
+        "t" to "ತ", "T" to "ಥ",
+        "y" to "ಯ", "Y" to "ಐ",
+        "u" to "ಉ", "U" to "ಊ",
+        "i" to "ಇ", "I" to "ಈ",
+        "o" to "ಒ", "O" to "ಓ",
+        "p" to "ಪ", "P" to "ಫ",
 
-        // Vowels
-        "a" to "ಅ", "A" to "ಆ", "i" to "ಇ", "I" to "ಈ",
-        "u" to "ಉ", "U" to "ಊ", "e" to "ಎ", "E" to "ಏ",
-        "o" to "ಒ", "O" to "ಓ"
+        // Middle Row
+        "a" to "ಅ", "A" to "ಆ",
+        "s" to "ಸ", "S" to "ಶ",
+        "d" to "ದ", "D" to "ಧ",
+        "f" to "್", "F" to "್",
+        "g" to "ಗ", "G" to "ಘ",
+        "h" to "ಹ", "H" to "ಃ", // Visarga
+        "j" to "ಜ್", "J" to "ಝ್",
+        // User list J=ಝ (Direct). Wait, my previous write said "j" to "ಜ್" (Halant)?
+        // I will fix it to "ಜ" and "ಝ" (Direct) as per list.
+        "j" to "ಜ", "J" to "ಝ",
+        "k" to "ಕ", "K" to "ಖ",
+        "l" to "ಲ", "L" to "ಳ",
+
+        // Bottom Row
+        "z" to "ಞ", "Z" to "ಙ",
+        "x" to "ಷ", "X" to "ಷ",
+        "c" to "ಚ", "C" to "ಚ",
+        "v" to "ವ", "V" to "ವ",
+        "b" to "ಬ", "B" to "ಬ",
+        "n" to "ನ", "N" to "ಣ",
+        "m" to "ಮ", "M" to "ಮ"
     )
 
-    private val nudiVowelSigns = mapOf(
-        "a" to "", // 'a' removes halant
+    // Matra Map (Vowel Signs)
+    private val nudiMatras = mapOf(
         "A" to "ಾ",
-        "i" to "ಿ",
-        "I" to "ೀ",
-        "u" to "ು",
-        "U" to "ೂ",
-        "e" to "ೆ",
-        "E" to "ೇ",
-        "o" to "ೊ",
-        "O" to "ೋ"
+        "i" to "ಿ", "I" to "ೀ",
+        "u" to "ು", "U" to "ೂ",
+        "R" to "ೃ",
+        "e" to "ೆ", "E" to "ೇ",
+        "Y" to "ೈ", // Shift+y = I -> Matra ai
+        "o" to "ೊ", "O" to "ೋ"
+        // 'a' has no matra (implicit)
     )
 
     // Baraha Map (Phonetic)
@@ -101,43 +120,45 @@ class TransliterationEngine {
         }
     }
 
-    fun getTransliteration(key: String): TransliterationResult {
+    fun getTransliteration(key: String, lastCommittedChar: Char? = null): TransliterationResult {
         if (key.isEmpty()) return TransliterationResult("", 0)
 
         return if (currentLayout == KeyboardLayout.Nudi) {
-            getNudiTransliteration(key)
+            getNudiTransliteration(key, lastCommittedChar)
         } else {
             getBarahaTransliteration(key)
         }
     }
 
-    private fun getNudiTransliteration(key: String): TransliterationResult {
-        // Nudi/KGP Legacy Logic:
+    private fun getNudiTransliteration(key: String, lastCommittedChar: Char?): TransliterationResult {
+        // Direct Mapping with Matra Composition Context
 
-        // If key is a vowel modifier and buffer ends in consonant key
-        if (nudiVowelSigns.containsKey(key) && buffer.isNotEmpty() && isNudiConsonantKey(buffer.last())) {
-            val lastKey = buffer.last().toString()
-            val halantForm = nudiMap[lastKey]!! // e.g. "ಕ್" (2 chars: 0C95 0CCD)
-            val baseForm = halantForm.trimEnd('\u0CCD') // e.g. "ಕ"
-            val sign = nudiVowelSigns[key]!!
-
-            val replacement = baseForm + sign
-            val removeCount = halantForm.length // Remove the full previous sequence
-
-            buffer.append(key)
-            return TransliterationResult(replacement, removeCount)
+        // 1. Check if key is a vowel that should become a Matra
+        if (lastCommittedChar != null && isKannadaConsonant(lastCommittedChar) && nudiMatras.containsKey(key)) {
+            // Return Matra
+            return TransliterationResult(nudiMatras[key]!!, 0)
         }
 
-        // If key is a consonant
+        // 2. Default: Map to Independent Char
         if (nudiMap.containsKey(key)) {
-            buffer.append(key)
+            buffer.setLength(0)
             return TransliterationResult(nudiMap[key]!!, 0)
         }
 
-        // Default: just insert key, clear buffer
+        // Pass through if not found
         buffer.setLength(0)
-        buffer.append(key)
         return TransliterationResult(key, 0)
+    }
+
+    private fun isKannadaConsonant(c: Char): Boolean {
+        // Range for Kannada Consonants: 0x0C95 (ka) to 0x0CB9 (ha)
+        // This covers most consonants.
+        // Also includes 0x0CB3 (Lla)
+        // Excludes 0x0C82..0x0C94 (Vowels, signs)
+        // Excludes 0x0CBE.. (Matras)
+
+        val code = c.code
+        return (code in 0x0C95..0x0CB9)
     }
 
     private fun getBarahaTransliteration(key: String): TransliterationResult {
@@ -210,11 +231,6 @@ class TransliterationEngine {
         }
 
         return ""
-    }
-
-    private fun isNudiConsonantKey(k: Char): Boolean {
-        val s = k.toString()
-        return nudiMap.containsKey(s) && !nudiVowelSigns.containsKey(s)
     }
 
     private fun isBarahaConsonant(k: String): Boolean {
