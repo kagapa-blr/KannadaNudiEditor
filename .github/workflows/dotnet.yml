@@ -94,8 +94,6 @@ jobs:
 
       - name: Compile Inno Setup Installer
         shell: pwsh
-      - name: Compile Inno Setup Installer
-        shell: pwsh
         run: |
           Write-Host "Current working directory: $PWD"
           Write-Host "Contents of setup folder:"
@@ -118,7 +116,6 @@ jobs:
 
           # Compile the installer
           & $ISCC $issFile
-
 
       - name: Upload Installer Artifact
         uses: actions/upload-artifact@v4
