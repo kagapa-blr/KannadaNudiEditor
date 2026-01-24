@@ -15,31 +15,28 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Restore NuGet Packages
-      run: dotnet restore "KannadaNudiEditor.sln"
+      - name: Restore NuGet Packages
+        run: dotnet restore "KannadaNudiEditor.sln"
 
-    - name: Build Solution
-      run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
+      - name: Build Solution
+        run: dotnet build "KannadaNudiEditor.sln" --configuration Release --no-restore
 
-    - name: Publish Build Output
-      run: |
-        dotnet publish "KannadaNudiEditor.csproj" `
-          --configuration Release `
-          --output publish
+      - name: Publish Build Output
+        run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output publish
 
-    - name: Upload Publish Folder (Optional for debug)
-      uses: actions/upload-artifact@v4
-      with:
-        name: publish-folder
-        path: publish
+      - name: Upload Publish Folder (Optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-folder
+          path: publish
 
   release:
     name: Create GitHub Release with Installer
@@ -47,55 +44,64 @@ jobs:
     needs: build
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Get Latest Version Number
-      id: get_version
-      shell: pwsh
-      run: |
-        git fetch --tags
-        $latest = git tag -l --sort=-v:refname | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -First 1
-        if (-not $latest) {
-            $new_version = "1.0.0"
-        } else {
-            $parts = $latest.Split('.')
-            $patch = [int]$parts[2] + 1
-            $new_version = "$($parts[0]).$($parts[1]).$patch"
-        }
-        echo "RELEASE_VERSION=$new_version" >> $env:GITHUB_ENV
-        echo "New release version: $new_version"
+      - name: Get Latest Version Number
+        id: get_version
+        shell: pwsh
+        run: |
+          git fetch --tags
+          $latest = git tag -l --sort=-v:refname | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -First 1
+          if (-not $latest) {
+              $new_version = "1.0.0"
+          } else {
+              $parts = $latest.Split('.')
+              $patch = [int]$parts[2] + 1
+              $new_version = "$($parts[0]).$($parts[1]).$patch"
+          }
+          echo "RELEASE_VERSION=$new_version" >> $env:GITHUB_ENV
+          echo "New release version: $new_version"
 
-    - name: Update Inno Setup Script Version
-      run: |
-        $issFile = "setup\NudiBaravanigeSetup.iss"
-        (Get-Content $issFile) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$env:RELEASE_VERSION`"" | Set-Content $issFile
+      - name: Download & Install Inno Setup
+        shell: pwsh
+        run: |
+          $url = "https://jrsoftware.org/download.php/is.exe?site=1"
+          $installer = "$env:TEMP\inno_setup.exe"
+          Invoke-WebRequest -Uri $url -OutFile $installer
+          Start-Process -FilePath $installer -ArgumentList "/VERYSILENT /NORESTART /ALLUSERS" -Wait
 
-    - name: Compile Inno Setup Installer
-      shell: pwsh
-      run: |
-        $ISCC = "C:\Program Files\Inno Setup 6\ISCC.exe"
-        & $ISCC "setup\NudiBaravanigeSetup.iss"
-    
-    - name: Rename Installer to Modern Extension (.setup)
-      shell: pwsh
-      run: |
-        $outDir = "setup\Output"
-        $exe = Get-ChildItem $outDir -Filter "*.exe" | Select-Object -First 1
-        Rename-Item $exe.FullName "$outDir\KannadaNudiEditor_$env:RELEASE_VERSION.setup"
+      - name: Update Inno Setup Script Version
+        shell: pwsh
+        run: |
+          $issFile = "setup\NudiBaravanigeSetup.iss"
+          (Get-Content $issFile) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$env:RELEASE_VERSION`"" | Set-Content $issFile
 
-    - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: KannadaNudiInstaller
-        path: setup\Output\*.setup
+      - name: Compile Inno Setup Installer
+        shell: pwsh
+        run: |
+          $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $ISCC "setup\NudiBaravanigeSetup.iss"
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{ env.RELEASE_VERSION }}
-        files: setup\Output\*.setup
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Rename Installer to Modern Extension (.setup)
+        shell: pwsh
+        run: |
+          $outDir = "setup\Output"
+          $exe = Get-ChildItem $outDir -Filter "*.exe" | Select-Object -First 1
+          Rename-Item $exe.FullName "$outDir\KannadaNudiEditor_$env:RELEASE_VERSION.setup"
+
+      - name: Upload Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KannadaNudiInstaller
+          path: setup\Output\*.setup
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          files: setup\Output\*.setup
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
