@@ -11,14 +11,14 @@ permissions:
 
 jobs:
   build:
-    name: Build WPF App
+    name: Build and Publish WPF App
     runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -33,7 +33,10 @@ jobs:
         run: dotnet publish "KannadaNudiEditor.csproj" --configuration Release --output setup/publish
 
       - name: Verify Publish Folder
-        run: dir setup\publish
+        run: |
+          Write-Host "Current working directory: $PWD"
+          Write-Host "Contents of setup folder:"
+          Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
 
       - name: Upload Publish Folder (Optional)
         uses: actions/upload-artifact@v4
@@ -52,6 +55,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Download Publish Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: publish-folder
+          path: setup/publish
+
       - name: Get Latest Version Number
         id: get_version
         shell: pwsh
@@ -66,7 +75,7 @@ jobs:
               $new_version = "$($parts[0]).$($parts[1]).$patch"
           }
           echo "RELEASE_VERSION=$new_version" >> $env:GITHUB_ENV
-          echo "New release version: $new_version"
+          Write-Host "New release version: $new_version"
 
       - name: Download & Install Inno Setup
         shell: pwsh
@@ -81,17 +90,26 @@ jobs:
         run: |
           $issFile = "setup\NudiBaravanigeSetup.iss"
           (Get-Content $issFile) -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$env:RELEASE_VERSION`"" | Set-Content $issFile
+          Write-Host "Updated ISS file version to $env:RELEASE_VERSION"
 
       - name: Compile Inno Setup Installer
         shell: pwsh
         run: |
-            Write-Host "Current working directory: $PWD"
-            Write-Host "Contents of setup folder:"
-            Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
-            $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-            $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
-            Write-Host "Using ISS file: $issFile"
-            & $ISCC $issFile
+          Write-Host "Current working directory: $PWD"
+          Write-Host "Contents of setup folder:"
+          Get-ChildItem "setup" | ForEach-Object { Write-Host $_.FullName }
+
+          $ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          $issFile = Join-Path $PWD "setup\NudiBaravanigeSetup.iss"
+          Write-Host "Using ISS file: $issFile"
+
+          # Ensure publish folder exists
+          if (-not (Test-Path "$PWD\setup\publish")) {
+              Write-Host "Publish folder is missing!"
+              Exit 1
+          }
+
+          & $ISCC $issFile
 
       - name: Upload Installer Artifact
         uses: actions/upload-artifact@v4
