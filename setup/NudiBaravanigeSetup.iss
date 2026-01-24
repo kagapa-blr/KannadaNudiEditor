@@ -10,9 +10,6 @@
 ; Version handled dynamically by GitHub Actions
 #define MyAppVersion "1.0.0"
 
-; CI-friendly folder of the ISS file
-#define SetupFolder GetCurrentDir()
-
 [Setup]
 AppId={{E0BD2D2E-D1E1-4AF0-99D7-8663ACCFB0B4}}
 AppName={#MyAppName}
@@ -48,8 +45,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Use SetupFolder macro for CI correctness
-Source: "{#SetupFolder}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Absolute path for CI
+Source: "D:\a\KannadaNudiEditor\KannadaNudiEditor\setup\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
