@@ -128,7 +128,7 @@
 </style>
 
 @code {
-    public bool IsKannadaInput { get; set; } = false;
+    public bool IsKannadaInput { get; set; } = true;
 
     bool isListening = false;
     bool showSaveModal = false;
@@ -151,6 +151,7 @@
             await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
             // Updated call to use namespaced function
             await JSRuntime.InvokeVoidAsync("quillInterop.registerKeyInterceptor", objRef);
+            await JSRuntime.InvokeVoidAsync("quillInterop.setKannadaMode", IsKannadaInput);
         }
     }
 
