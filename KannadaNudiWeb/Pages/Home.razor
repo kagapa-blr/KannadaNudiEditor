@@ -37,6 +37,21 @@
     </div>
 
     <div class="toolbar-group">
+        <div class="btn-group" role="group">
+            <button class="btn btn-outline-dark" @onclick="Undo" title="Undo"><span class="bi bi-arrow-counterclockwise"></span></button>
+            <button class="btn btn-outline-dark" @onclick="Redo" title="Redo"><span class="bi bi-arrow-clockwise"></span></button>
+        </div>
+        <div class="btn-group ms-2" role="group">
+            <button class="btn btn-outline-dark" @onclick="CopyText" title="Copy"><span class="bi bi-clipboard"></span></button>
+            <button class="btn btn-outline-dark" @onclick="PasteText" title="Paste"><span class="bi bi-clipboard-check"></span></button>
+        </div>
+        <div class="btn-group ms-2" role="group">
+            <button class="btn btn-outline-dark" @onclick="InsertTable" title="Insert Table (3x3)"><span class="bi bi-table"></span></button>
+            <button class="btn btn-outline-dark" @onclick="ToggleHighlight" title="Highlight Text"><span class="bi bi-highlighter"></span></button>
+        </div>
+    </div>
+
+    <div class="toolbar-group">
          <button class="btn btn-secondary" @onclick="SaveDocument">
              <span class="bi bi-save"></span> Save
          </button>
@@ -228,6 +243,36 @@
         Console.WriteLine($"Speech Error: {error}");
         isListening = false;
         StateHasChanged();
+    }
+
+    private async Task Undo()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.undo");
+    }
+
+    private async Task Redo()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.redo");
+    }
+
+    private async Task CopyText()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.copyText");
+    }
+
+    private async Task PasteText()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.pasteText");
+    }
+
+    private async Task InsertTable()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.insertTable", 3, 3);
+    }
+
+    private async Task ToggleHighlight()
+    {
+        await JSRuntime.InvokeVoidAsync("quillInterop.toggleHighlight");
     }
 
     private void SaveDocument()
