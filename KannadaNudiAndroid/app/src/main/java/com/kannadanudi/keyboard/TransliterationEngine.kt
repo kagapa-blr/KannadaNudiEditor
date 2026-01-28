@@ -4,7 +4,8 @@ import java.lang.StringBuilder
 
 enum class KeyboardLayout {
     Nudi,
-    Baraha
+    Baraha,
+    English
 }
 
 data class TransliterationResult(val text: String, val backspaceCount: Int)
@@ -123,10 +124,13 @@ class TransliterationEngine {
     fun getTransliteration(key: String, lastCommittedChar: Char? = null): TransliterationResult {
         if (key.isEmpty()) return TransliterationResult("", 0)
 
-        return if (currentLayout == KeyboardLayout.Nudi) {
-            getNudiTransliteration(key, lastCommittedChar)
-        } else {
-            getBarahaTransliteration(key)
+        return when (currentLayout) {
+            KeyboardLayout.Nudi -> getNudiTransliteration(key, lastCommittedChar)
+            KeyboardLayout.Baraha -> getBarahaTransliteration(key)
+            KeyboardLayout.English -> {
+                buffer.setLength(0)
+                TransliterationResult(key, 0)
+            }
         }
     }
 
