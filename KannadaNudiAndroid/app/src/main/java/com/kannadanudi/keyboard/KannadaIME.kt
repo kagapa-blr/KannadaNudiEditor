@@ -144,7 +144,11 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
             }
             Keyboard.KEYCODE_SHIFT -> {
                 isCaps = !isCaps
-                keyboardView.keyboard = if (isCaps) nudiShiftedKeyboard else nudiKeyboard
+                if (keyboardView.keyboard == qwertyKeyboard || keyboardView.keyboard == numberpadKeyboard) {
+                    keyboardView.isShifted = isCaps
+                } else {
+                    keyboardView.keyboard = if (isCaps) nudiShiftedKeyboard else nudiKeyboard
+                }
                 keyboardView.invalidateAllKeys()
             }
             Keyboard.KEYCODE_DONE -> {
@@ -165,6 +169,8 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 keyboardView.invalidateAllKeys()
             }
             -201 -> { // Switch to Qwerty (English)
+                isCaps = false
+                keyboardView.isShifted = false
                 transliterationEngine.setLayout(KeyboardLayout.English)
                 keyboardView.keyboard = qwertyKeyboard
                 keyboardView.invalidateAllKeys()
