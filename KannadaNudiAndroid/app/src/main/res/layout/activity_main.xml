@@ -16,6 +16,7 @@
         android:layout_marginBottom="32dp"/>
 
     <TextView
+        android:id="@+id/tvInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To use this keyboard, you must enable it in System Settings."
@@ -24,6 +25,7 @@
         android:layout_marginBottom="24dp"/>
 
     <TextView
+        android:id="@+id/tvSteps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1. Click the button below.\n2. Toggle 'Kannada Nudi Keyboard' to ON.\n3. Open any app and switch keyboard."
