@@ -34,6 +34,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     private lateinit var keyboardView: KeyboardView
     private lateinit var qwertyKeyboard: Keyboard
     private lateinit var nudiKeyboard: Keyboard
+    private lateinit var nudiShiftedKeyboard: Keyboard
     private lateinit var numberpadKeyboard: Keyboard
     private var isCaps = false
     private val transliterationEngine = TransliterationEngine()
@@ -95,6 +96,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
 
         qwertyKeyboard = Keyboard(this, R.xml.qwerty)
         nudiKeyboard = Keyboard(this, R.xml.nudi_layout)
+        nudiShiftedKeyboard = Keyboard(this, R.xml.nudi_layout_shifted)
         numberpadKeyboard = Keyboard(this, R.xml.numberpad_layout)
 
         val switchButton = rootView.findViewById<TextView>(R.id.tv_switch_keyboard)
@@ -142,7 +144,7 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
             }
             Keyboard.KEYCODE_SHIFT -> {
                 isCaps = !isCaps
-                keyboardView.isShifted = isCaps
+                keyboardView.keyboard = if (isCaps) nudiShiftedKeyboard else nudiKeyboard
                 keyboardView.invalidateAllKeys()
             }
             Keyboard.KEYCODE_DONE -> {
@@ -157,12 +159,13 @@ class KannadaIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
                 checkAudioPermissionAndListen()
             }
             -200 -> { // Switch to Nudi
+                isCaps = false
                 transliterationEngine.setLayout(KeyboardLayout.Nudi)
                 keyboardView.keyboard = nudiKeyboard
                 keyboardView.invalidateAllKeys()
             }
-            -201 -> { // Switch to Qwerty (Baraha)
-                transliterationEngine.setLayout(KeyboardLayout.Baraha)
+            -201 -> { // Switch to Qwerty (English)
+                transliterationEngine.setLayout(KeyboardLayout.English)
                 keyboardView.keyboard = qwertyKeyboard
                 keyboardView.invalidateAllKeys()
             }
