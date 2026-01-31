@@ -1,6 +1,10 @@
+using System.Collections.Specialized;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Animation;
 using Syncfusion.Licensing;
+using System;
+using System.Threading;
 
 namespace KannadaNudiEditor.Helpers
 {
@@ -37,10 +41,23 @@ namespace KannadaNudiEditor.Helpers
     {
         public static void ShowError(string title, Exception? ex)
         {
-            string message = ex == null ? title : $"{title}\n{ex.Message}\n\n{ex.StackTrace}";
+            // Suppress clipboard corruption errors
+            if (ex is COMException comEx &&
+                (uint)comEx.HResult == 0x800401D3)
+            {
+                SimpleLogger.Log("Suppressed clipboard bad data error dialog.");
+                SafeClipboard.ClearSafely();
+                return;
+            }
+
+            string message = ex == null
+                ? title
+                : $"{title}\n{ex.Message}\n\n{ex.StackTrace}";
+
             SimpleLogger.Log("Showing error: " + message);
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
     }
 
 
@@ -56,6 +73,72 @@ namespace KannadaNudiEditor.Helpers
         }
     }
 
+
+
+    public static class SafeClipboard
+    {
+        private const uint CLIPBRD_E_BAD_DATA = 0x800401D3;
+
+        public static bool TryGetFileDropList(out StringCollection files)
+        {
+            files = new StringCollection();
+
+            try
+            {
+                if (!Clipboard.ContainsFileDropList())
+                    return false;
+
+                files = Clipboard.GetFileDropList();
+                return files != null && files.Count > 0;
+            }
+            catch (COMException ex) when ((uint)ex.HResult == CLIPBRD_E_BAD_DATA)
+            {
+                SimpleLogger.Log("Clipboard contains bad data. Ignoring safely.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log("Clipboard access failed: " + ex);
+                return false;
+            }
+        }
+
+        public static void ClearSafely()
+        {
+            try
+            {
+                Clipboard.Clear();
+            }
+            catch
+            {
+                // Clipboard may be locked by another process – ignore
+                SimpleLogger.Log("Failed to clear clipboard, possibly locked by another process.");
+            }
+        }
+
+        public static void ExecuteWithRetry(Action action, int retries = 3)
+        {
+            for (int i = 0; i < retries; i++)
+            {
+                try
+                {
+                    action();
+                    return;
+                }
+                catch (COMException ex) when ((uint)ex.HResult == CLIPBRD_E_BAD_DATA)
+                {
+                    SimpleLogger.Log($"Clipboard retry {i + 1} failed.");
+                    Thread.Sleep(50);
+                }
+            }
+
+            SimpleLogger.Log("Clipboard retries exhausted.");
+        }
+
+
+
+
+    }
 
 
 }

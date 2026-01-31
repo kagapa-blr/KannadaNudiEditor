@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -110,10 +111,24 @@ namespace KannadaNudiEditor
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             SimpleLogger.Log("DispatcherUnhandledException: " + e.Exception);
+
+            // Ignore clipboard corruption completely
+            if (e.Exception is COMException comEx &&
+                (uint)comEx.HResult == 0x800401D3)
+            {
+                SimpleLogger.Log("Handled clipboard bad data at App level.");
+                SafeClipboard.ClearSafely();
+                e.Handled = true;
+                return;
+            }
+
+            // Real UI crash
             KillKeyboardProcess();
             ErrorHelper.ShowError("A UI thread error occurred", e.Exception);
             e.Handled = true;
         }
+
+
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
