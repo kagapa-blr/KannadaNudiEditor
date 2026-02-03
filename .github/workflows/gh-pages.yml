@@ -10,28 +10,43 @@ permissions:
 jobs:
   deploy-to-github-pages:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Publish .NET Core Project
-        run: dotnet publish KannadaNudiWeb/KannadaNudiWeb.csproj -c Release -o release --nologo
+      - name: Publish Blazor App
+        run: |
+          dotnet publish KannadaNudiWeb/KannadaNudiWeb.csproj \
+            -c Release \
+            -o release \
+            --nologo
 
-      - name: Change base-tag in index.html from / to /<repo-name>/
-        run: sed -i 's/<base href="\/" \/>/<base href="\/${{ github.event.repository.name }}\/" \/>/g' release/wwwroot/index.html
+      # IMPORTANT: base href MUST be "/" for apex domain
+      - name: Ensure correct base href
+        run: |
+          sed -i 's|<base href=".*" />|<base href="/" />|g' release/wwwroot/index.html
 
+      # SPA routing support
       - name: Copy index.html to 404.html
         run: cp release/wwwroot/index.html release/wwwroot/404.html
 
-      - name: Add .nojekyll file
+      # Disable Jekyll
+      - name: Add .nojekyll
         run: touch release/wwwroot/.nojekyll
 
-      - name: Commit wwwroot to GitHub Pages
+      # Custom domain
+      - name: Add CNAME
+        run: echo "nudiweb.com" > release/wwwroot/CNAME
+
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: release/wwwroot
+          clean: true
