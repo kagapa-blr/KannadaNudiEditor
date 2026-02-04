@@ -108,3 +108,13 @@ a, .btn-link {
 .loading-progress-text:after {
     content: var(--blazor-load-percentage-text, "Loading");
 }
+
+/* iOS/Mac-specific override to ensure Kannada ligatures render correctly */
+@supports (-webkit-touch-callout: none) {
+    .ql-editor, .ql-editor * {
+        /* Force System Font on iOS to fix ligature rendering, overriding inline Quill styles */
+        font-family: 'Kannada Sangam MN', 'Nudi Parijatha', sans-serif !important;
+        font-feature-settings: "kern" 1, "liga" 1;
+        text-rendering: optimizeLegibility;
+    }
+}
