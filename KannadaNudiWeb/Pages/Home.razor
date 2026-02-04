@@ -1,6 +1,8 @@
 @page "/"
 @using KannadaNudiWeb.Services
+@using KannadaNudiEditor.Helpers.Conversion
 @inject TransliterationService TransliterationService
+@inject FileConversionService FileConversionService
 @inject SpeechService SpeechService
 @inject IJSRuntime JSRuntime
 
@@ -86,6 +88,45 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (showImportModal)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal show" style="display:block;" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import File (@pendingFileName)</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>How should the content of this file be interpreted?</p>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="importType" id="importUnicode" value="Unicode" checked="@(importType == "Unicode")" @onchange="@(() => importType = "Unicode")">
+                        <label class="form-check-label" for="importUnicode">
+                            <strong>Unicode (Standard)</strong><br/>
+                            <small class="text-muted">Use this if the file already contains readable Kannada text.</small>
+                        </label>
+                    </div>
+
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="radio" name="importType" id="importAscii" value="ASCII" checked="@(importType == "ASCII")" @onchange="@(() => importType = "ASCII")">
+                        <label class="form-check-label" for="importAscii">
+                            <strong>ASCII (Nudi/Baraha)</strong><br/>
+                            <small class="text-muted">Use this if the file contains English characters (e.g. "r", "k") that look like Kannada when using Nudi fonts.</small>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="FinishImport">Import</button>
                 </div>
             </div>
         </div>
@@ -283,6 +324,8 @@
     private void CloseModal()
     {
         showSaveModal = false;
+        showImportModal = false;
+        pendingFileBytes = null;
     }
 
     private async Task DownloadDocx()
@@ -301,21 +344,127 @@
         CloseModal();
     }
 
+    // Import Logic
+    bool showImportModal = false;
+    string importType = "Unicode"; // "Unicode" or "ASCII"
+    string pendingFileName = "";
+    string pendingFileExtension = "";
+    byte[]? pendingFileBytes;
+
     private async Task LoadDocument(InputFileChangeEventArgs e)
     {
         try
         {
             var file = e.File;
-            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024);
-            using var reader = new StreamReader(stream);
-            string content = await reader.ReadToEndAsync();
+            pendingFileName = file.Name;
+            pendingFileExtension = Path.GetExtension(file.Name).ToLowerInvariant();
 
-            await JSRuntime.InvokeVoidAsync("quillInterop.setHtml", content);
+            if (pendingFileExtension != ".txt" && pendingFileExtension != ".docx")
+            {
+                Console.WriteLine("Unsupported file type");
+                return;
+            }
+
+            // Read file into memory
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024); // 5MB limit
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            pendingFileBytes = ms.ToArray();
+
+            // Show options modal
+            importType = "Unicode"; // Reset to default
+            showImportModal = true;
         }
         catch(Exception ex)
         {
             Console.WriteLine("Error loading file: " + ex.Message);
         }
+    }
+
+    private async Task FinishImport()
+    {
+        if (pendingFileBytes == null) return;
+
+        try
+        {
+            string htmlContent = "";
+
+            if (pendingFileExtension == ".txt")
+            {
+                // Assume UTF-8 for now, but could be ASCII if user says so?
+                // If user selected ASCII mode, it means the CONTENT is visually ASCII (Nudi),
+                // but the file encoding is likely ANSI or UTF-8.
+                // We'll decode as UTF-8 string first.
+                string rawText = System.Text.Encoding.UTF8.GetString(pendingFileBytes);
+
+                if (importType == "ASCII")
+                {
+                    htmlContent = FileConversionService.AsciiToUnicodeConverter(rawText);
+                    // Wrap in p tags for Quill? Quill handles plain text usually, but setHtml expects HTML.
+                    // Let's wrap in <p> or just let Quill handle it.
+                    // But AsciiToUnicodeConverter returns plain text.
+                    // Escaping HTML chars in text is safer.
+                    htmlContent = System.Net.WebUtility.HtmlEncode(htmlContent).Replace("\n", "<br>");
+                }
+                else
+                {
+                    htmlContent = System.Net.WebUtility.HtmlEncode(rawText).Replace("\n", "<br>");
+                }
+            }
+            else if (pendingFileExtension == ".docx")
+            {
+                // Convert Docx to HTML using Mammoth (JS)
+                htmlContent = await JSRuntime.InvokeAsync<string>("quillInterop.docToHtml", pendingFileBytes);
+
+                if (importType == "ASCII")
+                {
+                    htmlContent = ProcessHtmlAsciiToUnicode(htmlContent);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(htmlContent))
+            {
+                await JSRuntime.InvokeVoidAsync("quillInterop.setHtml", htmlContent);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error importing file: " + ex.Message);
+        }
+        finally
+        {
+            CloseModal();
+        }
+    }
+
+    private string ProcessHtmlAsciiToUnicode(string html)
+    {
+        // Simple HTML walker: split by tags
+        var parts = System.Text.RegularExpressions.Regex.Split(html, @"(<[^>]+>)");
+        var sb = new System.Text.StringBuilder();
+
+        foreach (var part in parts)
+        {
+            if (part.StartsWith("<") && part.EndsWith(">"))
+            {
+                sb.Append(part);
+            }
+            else if (!string.IsNullOrEmpty(part))
+            {
+                // This is text content.
+                // 1. Decode HTML entities (e.g. &nbsp; to space, &lt; to <)
+                string decoded = System.Net.WebUtility.HtmlDecode(part);
+
+                // 2. Convert Nudi ASCII to Unicode
+                string converted = FileConversionService.AsciiToUnicodeConverter(decoded);
+
+                // 3. Re-encode HTML special chars (e.g. < to &lt;) to prevent breaking HTML
+                string encoded = System.Net.WebUtility.HtmlEncode(converted);
+
+                sb.Append(encoded);
+            }
+        }
+        return sb.ToString();
     }
 
     public void Dispose()
