@@ -328,14 +328,6 @@ window.quillInterop = {
 
                 // Handle Backspace (deleteContentBackward)
                 else if (e.inputType === 'deleteContentBackward') {
-                    // Check if we just handled it in keydown
-                    if (window.quillInterop.lastProcessedSource === 'keydown' &&
-                        Date.now() - window.quillInterop.lastProcessedTime < 200) {
-                        console.log("Ignoring beforeinput Backspace (handled by keydown)");
-                        e.preventDefault();
-                        return;
-                    }
-
                     console.log("beforeinput Backspace intercepted");
                     e.preventDefault();
 
@@ -352,16 +344,21 @@ window.quillInterop = {
             if (window.isKannadaMode) {
                 window.quillInterop.lastKeyHandledTime = Date.now();
 
-                // Handle Backspace via keydown
+                // Handle Backspace via keydown ONLY if beforeinput is not supported
                 if (e.key === 'Backspace') {
-                    // Update state FIRST
+                     // If the browser supports beforeinput (Input Events Level 2), let it handle the backspace.
+                     // This prevents double-handling and issues on iOS where keydown preventDefault is flaky.
+                     if (window.InputEvent && typeof InputEvent.prototype.getTargetRanges === "function") {
+                         console.log("Deferring Backspace to beforeinput handler");
+                         return;
+                     }
+
+                    // Fallback for older browsers
+                    console.log("Processing Backspace via keydown (Fallback)");
                     window.quillInterop.lastProcessedTime = Date.now();
                     window.quillInterop.lastProcessedSource = 'keydown';
 
-                    console.log("Processing Backspace via keydown");
                     dotNetReference.invokeMethodAsync('ProcessBackspace');
-
-                    // Prevent default to try and stop beforeinput
                     e.preventDefault();
                     return;
                 }
