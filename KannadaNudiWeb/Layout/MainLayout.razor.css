@@ -74,3 +74,19 @@ main {
     height: 75px;
     object-fit: contain;
 }
+
+@media (max-width: 576px) {
+    .header-container {
+        min-height: 70px;
+        padding-bottom: 5px;
+    }
+
+    .header-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .header-title {
+        font-size: 1.5rem;
+    }
+}
