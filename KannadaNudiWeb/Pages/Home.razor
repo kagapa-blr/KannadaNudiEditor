@@ -5,6 +5,7 @@
 @inject FileConversionService FileConversionService
 @inject SpeechService SpeechService
 @inject IJSRuntime JSRuntime
+@implements IDisposable
 
 <PageTitle>Kannada Nudi Editor</PageTitle>
 
@@ -29,10 +30,10 @@
     }
 
     <div class="toolbar-group">
-         <button class="btn @(isListening ? "btn-danger" : "btn-primary")" @onclick="ToggleSpeech">
+         <button id="btn-speech" class="btn @(isListening ? "btn-danger" : "btn-primary")">
              <span class="bi bi-mic"></span> @(isListening ? "Stop Speech" : "Start Speech")
          </button>
-         <select class="form-select ms-2" style="width:auto; display:inline-block;" @bind="speechLang">
+         <select id="select-speech-lang" class="form-select ms-2" style="width:auto; display:inline-block;" @bind="speechLang">
              <option value="kn-IN">Kannada</option>
              <option value="en-IN">English</option>
          </select>
@@ -133,8 +134,6 @@
     </div>
 }
 
-<!-- Removed <script> block, logic moved to quillInterop.js -->
-
 <style>
     .toolbar-container {
         display: flex;
@@ -199,6 +198,8 @@
         await TransliterationService.InitializeAsync();
         SpeechService.OnResult += OnSpeechResult;
         SpeechService.OnError += OnSpeechError;
+        SpeechService.OnStarted += OnSpeechStarted;
+        SpeechService.OnEnded += OnSpeechEnded;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -209,6 +210,9 @@
             // Updated call to use namespaced function
             await JSRuntime.InvokeVoidAsync("quillInterop.registerKeyInterceptor", objRef);
             await JSRuntime.InvokeVoidAsync("quillInterop.setKannadaMode", IsKannadaInput);
+
+            // Initialize Speech button listener
+            await SpeechService.InitializeAsync("btn-speech", "select-speech-lang");
         }
     }
 
@@ -258,19 +262,7 @@
         }
     }
 
-    private async void ToggleSpeech()
-    {
-        if (isListening)
-        {
-            await SpeechService.StopAsync();
-            isListening = false;
-        }
-        else
-        {
-            await SpeechService.StartAsync(speechLang);
-            isListening = true;
-        }
-    }
+    // ToggleSpeech removed as logic is now handled in JS via InitializeAsync
 
     private void OnSpeechResult(string text)
     {
@@ -283,8 +275,25 @@
     private void OnSpeechError(string error)
     {
         Console.WriteLine($"Speech Error: {error}");
-        isListening = false;
-        StateHasChanged();
+        // We do not force isListening = false here because OnSpeechEnded will be called by JS if it stops
+        // or we might want to keep listening despite a transient error?
+        // Usually error stops recognition.
+    }
+
+    private void OnSpeechStarted()
+    {
+        InvokeAsync(() => {
+            isListening = true;
+            StateHasChanged();
+        });
+    }
+
+    private void OnSpeechEnded()
+    {
+        InvokeAsync(() => {
+            isListening = false;
+            StateHasChanged();
+        });
     }
 
     private async Task Undo()
@@ -470,6 +479,10 @@
 
     public void Dispose()
     {
+        SpeechService.OnResult -= OnSpeechResult;
+        SpeechService.OnError -= OnSpeechError;
+        SpeechService.OnStarted -= OnSpeechStarted;
+        SpeechService.OnEnded -= OnSpeechEnded;
         objRef?.Dispose();
     }
 }
