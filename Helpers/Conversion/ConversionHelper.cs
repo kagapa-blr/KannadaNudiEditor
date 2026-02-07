@@ -170,32 +170,55 @@ namespace KannadaNudiEditor.Helpers.Conversion
                 main.Document.Save();
                 return totalParagraphs;
             }
-
-            private static int ConvertBody(OpenXmlElement? element, Func<string, string> converter)
+            private static int ConvertBody(OpenXmlElement? element, Func<string, string> converter, string[]? nudiFontKeywords = null)
             {
                 if (element == null) return 0;
+                nudiFontKeywords ??= new[] { "nudi", "parijatha", "lipi" };
 
-                int count = 0;
+                int paragraphCount = 0;
+
                 foreach (var para in element.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
                 {
                     foreach (var run in para.Elements<DocumentFormat.OpenXml.Wordprocessing.Run>())
                     {
-                        foreach (var text in run.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>())
+                        var runProps = run.RunProperties;
+                        string? fontName = runProps?.RunFonts?.Ascii?.Value;
+
+                        // Skip runs that are not Nudi font
+                        if (string.IsNullOrWhiteSpace(fontName) || !nudiFontKeywords.Any(k => fontName.ToLower().Contains(k)))
+                            continue;
+
+                        var textElements = run.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>().ToList();
+                        if (!textElements.Any()) continue;
+
+                        // Combine all text in this run
+                        string combinedText = string.Concat(textElements.Select(t => t.Text));
+
+                        // Convert only Nudi text
+                        string convertedText;
+                        try
                         {
-                            if (!string.IsNullOrWhiteSpace(text.Text))
-                            {
-                                text.Text = converter(text.Text);
-                                text.Space = SpaceProcessingModeValues.Preserve;
-                            }
+                            convertedText = converter(combinedText);
                         }
+                        catch
+                        {
+                            convertedText = combinedText; // fallback if converter fails
+                        }
+
+                        // Assign converted text back to first Text element, clear others
+                        textElements[0].Text = convertedText;
+                        textElements[0].Space = SpaceProcessingModeValues.Preserve;
+                        for (int i = 1; i < textElements.Count; i++)
+                            textElements[i].Text = "";
                     }
-                    count++;
+
+                    paragraphCount++;
                 }
-                return count;
+
+                return paragraphCount;
             }
-        
-        
-        
+
+
         }
     }
 }
