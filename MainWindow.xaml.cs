@@ -2887,15 +2887,16 @@ namespace KannadaNudiEditor
         {
             var dlg = new OpenFileDialog
             {
-                Filter = "Text and Word files|*.txt;*.docx",
+                Filter = "Text and Word files (*.txt;*.docx)|*.txt;*.docx",
                 Title = $"Select file for {operationName}"
             };
 
             if (dlg.ShowDialog() != true) return;
 
             string filePath = dlg.FileName;
-            SimpleLogger.Log($"{operationName} - file selected: {filePath}");
-            LoadingView.Show(); // show loading only during conversion
+            SimpleLogger.Log($"{operationName}: Processing file: {filePath}");
+
+            LoadingView.Show();
 
             Stopwatch totalSw = Stopwatch.StartNew();
             int totalParagraphs = 0;
@@ -2907,46 +2908,63 @@ namespace KannadaNudiEditor
                     ? ConversionHelper.Converter.ConvertAsciiToUnicode
                     : ConversionHelper.Converter.ConvertUnicodeToAscii;
 
-                // Conversion stopwatch
                 Stopwatch convSw = Stopwatch.StartNew();
                 (tempFile, totalParagraphs) = await Task.Run(() =>
                     ConversionHelper.ConvertFileToTempWithParagraphCount(filePath, converterFunc));
                 convSw.Stop();
 
-                totalSw.Stop();
-
-                // Hide loading immediately after conversion
+                // Hide loading after conversion completes
                 LoadingView.Hide();
 
-                string convTime = $"{convSw.Elapsed.Minutes} minutes {convSw.Elapsed.Seconds} seconds {convSw.Elapsed.Milliseconds} milliseconds";
-                string totalTime = $"{totalSw.Elapsed.Minutes} minutes {totalSw.Elapsed.Seconds} seconds {totalSw.Elapsed.Milliseconds} milliseconds";
+                string convTime = FormatDuration(convSw.Elapsed);
+                string totalTime = FormatDuration(totalSw.Elapsed);
 
-                SimpleLogger.Log(
-                    $"{operationName} completed. Paragraphs: {totalParagraphs}, Conversion: {convTime}, Total: {totalTime}");
+                SimpleLogger.Log($"{operationName} completed successfully. Paragraphs: {totalParagraphs}, " +
+                                $"Conversion time: {convTime}, Total time: {totalTime}");
 
-                // Show message BEFORE loading the editor
-                MessageBox.Show(
-                    $"{operationName} completed!\n\n" +
-                    $"Paragraphs: {totalParagraphs}\n" +
-                    $"Conversion Time: {convTime}\n" +
-                    $"Total Time: {totalTime}\n\n" +
-                    $"File ready at:\n{tempFile}",
-                    operationName, MessageBoxButton.OK, MessageBoxImage.Information);
-                // Close backstage and focus editor
-                if (ribbon != null) { ribbon.IsBackStageVisible = false; }
+                MessageBoxResult result = MessageBox.Show(
+                    $"{operationName} completed successfully!\n\n" +
+                    $"Paragraphs processed: {totalParagraphs}\n" +
+                    $"Conversion time: {convTime}\n" +
+                    $"Total time: {totalTime}\n\n" +
+                    $"Load converted file into editor?",
+                    operationName,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
 
-                // Now load editor silently after user clicks OK
-                await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
-                richTextBoxAdv?.Focus();
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (ribbon != null) ribbon.IsBackStageVisible = false;
+                    await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
+                    richTextBoxAdv?.Focus();
+                    SimpleLogger.Log("Converted file loaded into editor");
+                }
+                else
+                {
+                    SimpleLogger.Log("User chose not to load file into editor");
+                }
             }
             catch (Exception ex)
             {
-                SimpleLogger.LogException(ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:0.000}s");
-                MessageBox.Show($"Failed:\n\n{ex.Message}", operationName, MessageBoxButton.OK, MessageBoxImage.Error);
-                LoadingView.Hide(); // ensure loading is hidden on error
-                if (ribbon != null)
-                    ribbon.IsBackStageVisible = false;
+                SimpleLogger.LogException(ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:F3}s");
+                MessageBox.Show($"Conversion failed:\n\n{ex.Message}", operationName,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            finally
+            {
+                LoadingView.Hide();
+                if (ribbon != null) ribbon.IsBackStageVisible = false;
+            }
+        }
+
+        private static string FormatDuration(TimeSpan duration)
+        {
+            if (duration.TotalMinutes >= 1)
+                return $"{duration.Minutes}m {duration.Seconds}s";
+            else if (duration.TotalSeconds >= 1)
+                return $"{duration.Seconds}s {duration.Milliseconds}ms";
+            else
+                return $"{duration.Milliseconds}ms";
         }
 
 
