@@ -2882,6 +2882,7 @@ namespace KannadaNudiEditor
             await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
         }
 
+
         private async Task ConvertFileAsync(bool asciiToUnicode, string operationName)
         {
             var dlg = new OpenFileDialog
@@ -2894,9 +2895,11 @@ namespace KannadaNudiEditor
 
             string filePath = dlg.FileName;
             SimpleLogger.Log($"{operationName} - file selected: {filePath}");
-            LoadingView.Show();
+            LoadingView.Show(); // show loading only during conversion
 
             Stopwatch totalSw = Stopwatch.StartNew();
+            int totalParagraphs = 0;
+            string tempFile = "";
 
             try
             {
@@ -2906,47 +2909,45 @@ namespace KannadaNudiEditor
 
                 // Conversion stopwatch
                 Stopwatch convSw = Stopwatch.StartNew();
-                var (tempFile, totalParagraphs) = await Task.Run(() =>
+                (tempFile, totalParagraphs) = await Task.Run(() =>
                     ConversionHelper.ConvertFileToTempWithParagraphCount(filePath, converterFunc));
                 convSw.Stop();
 
-                // Editor load stopwatch
-                Stopwatch loadSw = Stopwatch.StartNew();
-                await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
-                loadSw.Stop();
-
                 totalSw.Stop();
 
-                string convTime = $"{convSw.Elapsed.Minutes:D2}:{convSw.Elapsed.Seconds:D2}.{convSw.Elapsed.Milliseconds:D3}";
-                string loadTime = $"{loadSw.Elapsed.Minutes:D2}:{loadSw.Elapsed.Seconds:D2}.{loadSw.Elapsed.Milliseconds:D3}";
-                string totalTime = $"{totalSw.Elapsed.Minutes:D2}:{totalSw.Elapsed.Seconds:D2}.{totalSw.Elapsed.Milliseconds:D3}";
+                // Hide loading immediately after conversion
+                LoadingView.Hide();
+
+                string convTime = $"{convSw.Elapsed.Minutes} minutes {convSw.Elapsed.Seconds} seconds {convSw.Elapsed.Milliseconds} milliseconds";
+                string totalTime = $"{totalSw.Elapsed.Minutes} minutes {totalSw.Elapsed.Seconds} seconds {totalSw.Elapsed.Milliseconds} milliseconds";
 
                 SimpleLogger.Log(
-                    $"{operationName} completed. Paragraphs: {totalParagraphs}, Conversion: {convTime}, Load: {loadTime}, Total: {totalTime}");
+                    $"{operationName} completed. Paragraphs: {totalParagraphs}, Conversion: {convTime}, Total: {totalTime}");
 
+                // Show message BEFORE loading the editor
                 MessageBox.Show(
                     $"{operationName} completed!\n\n" +
                     $"Paragraphs: {totalParagraphs}\n" +
                     $"Conversion Time: {convTime}\n" +
-                    $"Editor Load Time: {loadTime}\n" +
                     $"Total Time: {totalTime}\n\n" +
-                    $"File loaded from TempConverted:\n{tempFile}",
+                    $"File ready at:\n{tempFile}",
                     operationName, MessageBoxButton.OK, MessageBoxImage.Information);
+                // Close backstage and focus editor
+                if (ribbon != null) { ribbon.IsBackStageVisible = false; }
+
+                // Now load editor silently after user clicks OK
+                await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
+                richTextBoxAdv?.Focus();
             }
             catch (Exception ex)
             {
                 SimpleLogger.LogException(ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:0.000}s");
                 MessageBox.Show($"Failed:\n\n{ex.Message}", operationName, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                LoadingView.Hide();
-                richTextBoxAdv?.Focus();
+                LoadingView.Hide(); // ensure loading is hidden on error
                 if (ribbon != null)
                     ribbon.IsBackStageVisible = false;
             }
         }
-
 
 
         //Recent File Tab

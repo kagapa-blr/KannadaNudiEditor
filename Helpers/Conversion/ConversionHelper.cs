@@ -1,14 +1,17 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Kannada.AsciiUnicode.Converters;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
-using Microsoft.Win32;
-using System.Threading;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
+using System.Windows;
+using System.Windows.Media;
 
 namespace KannadaNudiEditor.Helpers.Conversion
 {
@@ -18,70 +21,88 @@ namespace KannadaNudiEditor.Helpers.Conversion
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             @"KannadaNudiBaraha\TempConverted");
 
-        public static readonly KannadaConverter Converter;
+        // Singleton converter
+        private static KannadaConverter? _converter;
 
-        static ConversionHelper()
+        /// <summary>
+        /// Get singleton converter instance (loads JSON once)
+        /// </summary>
+        public static KannadaConverter Converter => _converter ??= LoadConverter();
+
+        // ============================================================
+        // Load KannadaConverter with JSON mappings
+        // ============================================================
+        private static KannadaConverter LoadConverter()
         {
             Directory.CreateDirectory(TempFolder);
 
-            var customAsciiToUnicode = new System.Collections.Generic.Dictionary<string, string>
-            {
-                { "wÃPÀëÚ", "ತೀಕ್ಷ್ಣ" },
-                { "PÀëÚ", "ಕ್ಷ್ಣ" },
-                { "UÉÀ", "ಗೆ" }
-            };
+            string asciiPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AsciiToUnicodeMapping.json");
+            string unicodePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "UnicodeToAsciiMapping.json");
 
-            var customUnicodeToAscii = new System.Collections.Generic.Dictionary<string, string>
-            {
-                { "ತೀಕ್ಷ್ಣ", "wÃPÀëÚ" },
-                { "ಕ್ಷ್ಣ", "PÀëÚ" }
-            };
+            var asciiMap = LoadMapping(asciiPath);
+            var unicodeMap = LoadMapping(unicodePath);
 
-            Converter = KannadaConverter.CreateWithCustomMapping(customAsciiToUnicode, customUnicodeToAscii);
+            SimpleLogger.Log($"Custom mappings loaded | ASCII→Unicode={asciiMap.Count}, Unicode→ASCII={unicodeMap.Count}");
+
+            return KannadaConverter.CreateWithCustomMapping(asciiMap, unicodeMap);
         }
 
         // ============================================================
-        // Convert file and return (tempPath, totalParagraphs)
+        // Load JSON mapping into dictionary
         // ============================================================
-        public static (string tempFile, int totalParagraphs) ConvertFileToTempWithParagraphCount(string inputPath, Func<string, string> converter)
+        private static Dictionary<string, string> LoadMapping(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                SimpleLogger.Log($"Mapping JSON not found: {filePath}, returning empty mapping");
+                return new Dictionary<string, string>();
+            }
+
+            try
+            {
+                string json = File.ReadAllText(filePath, Encoding.UTF8);
+                var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                return map ?? new Dictionary<string, string>();
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, $"Failed to load mapping JSON: {filePath}");
+                return new Dictionary<string, string>();
+            }
+        }
+
+        // ============================================================
+        // Convert file (TXT/DOCX) and return temp path + paragraph count
+        // ============================================================
+        public static (string tempFile, int totalParagraphs) ConvertFileToTempWithParagraphCount(
+            string inputPath, Func<string, string> converter)
         {
             if (!File.Exists(inputPath))
                 throw new FileNotFoundException("Input file not found", inputPath);
 
             string fileName = Path.GetFileNameWithoutExtension(inputPath);
             string ext = Path.GetExtension(inputPath).ToLower();
-            string uniqueFile = $"{fileName}_{DateTime.Now:yyyyMMdd_HHmmssfff}{ext}";
-            string outputPath = Path.Combine(TempFolder, uniqueFile);
+            string tempFile = Path.Combine(TempFolder, $"{fileName}_{DateTime.Now:yyyyMMdd_HHmmssfff}{ext}");
 
-            SimpleLogger.Log($"Starting conversion: {inputPath} → {outputPath}");
+            SimpleLogger.Log($"Starting conversion: {inputPath} → {tempFile}");
 
-            int paragraphCount = 0;
-
-            switch (ext)
+            int paragraphCount = ext switch
             {
-                case ".txt":
-                    ConvertTextFile(inputPath, outputPath, converter);
-                    paragraphCount = 1; // single block for TXT
-                    break;
+                ".txt" => ConvertTextFile(inputPath, tempFile, converter),
+                ".docx" => ConvertDocxFileWithParagraphCount(inputPath, tempFile, converter),
+                _ => throw new NotSupportedException($"File type {ext} is not supported.")
+            };
 
-                case ".docx":
-                    paragraphCount = ConvertDocxFileWithParagraphCount(inputPath, outputPath, converter);
-                    break;
-
-                default:
-                    throw new NotSupportedException($"File type {ext} is not supported.");
-            }
-
-            SimpleLogger.Log($"Conversion completed: {outputPath}, Paragraphs: {paragraphCount}");
-            return (outputPath, paragraphCount);
+            SimpleLogger.Log($"Conversion completed: {tempFile}, Paragraphs: {paragraphCount}");
+            return (tempFile, paragraphCount);
         }
 
-        private static void ConvertTextFile(string inputPath, string outputPath, Func<string, string> converter)
+        private static int ConvertTextFile(string inputPath, string outputPath, Func<string, string> converter)
         {
             string content = File.ReadAllText(inputPath, Encoding.UTF8);
             string converted = converter(content);
             File.WriteAllText(outputPath, converted, Encoding.UTF8);
-            SimpleLogger.Log($"TXT file converted. Length: {converted.Length} chars");
+            return 1; // single block for TXT
         }
 
         private static int ConvertDocxFileWithParagraphCount(string inputPath, string outputPath, Func<string, string> converter)
@@ -90,105 +111,91 @@ namespace KannadaNudiEditor.Helpers.Conversion
         }
 
         // ============================================================
-        // Load file into SfRichTextBoxAdv
+        // Async load into SfRichTextBoxAdv (preserves formatting)
         // ============================================================
         public static async Task LoadFileIntoEditorAsync(string filePath, SfRichTextBoxAdv richTextBox, CancellationToken? cancellationToken = null)
         {
-            if (!File.Exists(filePath)) throw new FileNotFoundException("Converted file not found", filePath);
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("Converted file not found", filePath);
 
-            var ext = Path.GetExtension(filePath).ToLower();
-            var formatType = GetFormatType(ext);
+            var format = GetFormatType(Path.GetExtension(filePath));
+            using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
-            try
-            {
-                using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                if (cancellationToken.HasValue)
-                    await richTextBox.LoadAsync(fs, formatType, cancellationToken.Value);
-                else
-                    await richTextBox.LoadAsync(fs, formatType);
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.LogException(ex, $"Failed to load {filePath} into editor");
-                throw;
-            }
+            if (cancellationToken.HasValue)
+                await richTextBox.LoadAsync(fs, format, cancellationToken.Value);
+            else
+                await richTextBox.LoadAsync(fs, format);
         }
 
-        private static FormatType GetFormatType(string ext)
+        private static FormatType GetFormatType(string ext) => ext.ToLowerInvariant() switch
         {
-            return ext switch
-            {
-                ".txt" => FormatType.Txt,
-                ".rtf" => FormatType.Rtf,
-                ".xaml" => FormatType.Xaml,
-                ".docx" => FormatType.Docx,
-                ".doc" => FormatType.Doc,
-                ".htm" or ".html" => FormatType.Html,
-                _ => throw new NotSupportedException($"Unsupported file type: {ext}")
-            };
-        }
+            ".txt" => FormatType.Txt,
+            ".rtf" => FormatType.Rtf,
+            ".xaml" => FormatType.Xaml,
+            ".docx" => FormatType.Docx,
+            ".doc" => FormatType.Doc,
+            ".htm" or ".html" => FormatType.Html,
+            _ => throw new NotSupportedException($"Unsupported file type: {ext}")
+        };
 
         // ============================================================
-        // Internal DOCX helper with paragraph count
+        // DOCX helper with font/format preservation
         // ============================================================
         private static class DocxHelper
         {
             public static int ConvertDocxWithParagraphCount(string inputPath, string outputPath, Func<string, string> converter)
             {
-                if (!File.Exists(inputPath))
-                    throw new FileNotFoundException("Input DOCX not found", inputPath);
-
                 File.Copy(inputPath, outputPath, true);
-                var sw = Stopwatch.StartNew();
-
                 using var doc = WordprocessingDocument.Open(outputPath, true);
-                var mainPart = doc.MainDocumentPart;
-                if (mainPart?.Document == null) return 0;
+                var main = doc.MainDocumentPart;
+                if (main?.Document == null) return 0;
 
                 int totalParagraphs = 0;
-                totalParagraphs += ConvertBodyText(mainPart.Document.Body, converter);
+                totalParagraphs += ConvertBody(main.Document.Body, converter);
 
-                if (mainPart.HeaderParts != null)
-                    foreach (var header in mainPart.HeaderParts)
-                        totalParagraphs += ConvertBodyText(header.Header, converter);
+                if (main.HeaderParts != null)
+                    foreach (var header in main.HeaderParts)
+                        totalParagraphs += ConvertBody(header.Header, converter);
 
-                if (mainPart.FooterParts != null)
-                    foreach (var footer in mainPart.FooterParts)
-                        totalParagraphs += ConvertBodyText(footer.Footer, converter);
+                if (main.FooterParts != null)
+                    foreach (var footer in main.FooterParts)
+                        totalParagraphs += ConvertBody(footer.Footer, converter);
 
-                if (mainPart.FootnotesPart != null)
-                    totalParagraphs += ConvertBodyText(mainPart.FootnotesPart.Footnotes, converter);
+                if (main.FootnotesPart != null)
+                    totalParagraphs += ConvertBody(main.FootnotesPart.Footnotes, converter);
 
-                if (mainPart.EndnotesPart != null)
-                    totalParagraphs += ConvertBodyText(mainPart.EndnotesPart.Endnotes, converter);
+                if (main.EndnotesPart != null)
+                    totalParagraphs += ConvertBody(main.EndnotesPart.Endnotes, converter);
 
-                mainPart.Document.Save();
-                sw.Stop();
-
-                SimpleLogger.Log($"DOCX converted. Paragraphs: {totalParagraphs}, Time: {sw.ElapsedMilliseconds} ms");
+                main.Document.Save();
                 return totalParagraphs;
             }
 
-            private static int ConvertBodyText(OpenXmlElement? element, Func<string, string> converter)
+            private static int ConvertBody(OpenXmlElement? element, Func<string, string> converter)
             {
                 if (element == null) return 0;
 
                 int count = 0;
-                foreach (var paragraph in element.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
+                foreach (var para in element.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
                 {
-                    foreach (var run in paragraph.Elements<DocumentFormat.OpenXml.Wordprocessing.Run>())
+                    foreach (var run in para.Elements<DocumentFormat.OpenXml.Wordprocessing.Run>())
                     {
                         foreach (var text in run.Elements<DocumentFormat.OpenXml.Wordprocessing.Text>())
                         {
-                            if (string.IsNullOrWhiteSpace(text.Text)) continue;
-                            text.Text = converter(text.Text);
-                            text.Space = SpaceProcessingModeValues.Preserve;
+                            if (!string.IsNullOrWhiteSpace(text.Text))
+                            {
+                                text.Text = converter(text.Text);
+                                text.Space = SpaceProcessingModeValues.Preserve;
+                            }
                         }
                     }
                     count++;
                 }
                 return count;
             }
+        
+        
+        
         }
     }
 }
