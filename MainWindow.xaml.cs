@@ -1490,7 +1490,7 @@ namespace KannadaNudiEditor
         private async void WordExport(string extension)
 
         {
-            SaveFileDialog saveDialog = new SaveFileDialog();
+            SaveFileDialog saveDialog = new();
             {
                 saveDialog.Filter = "Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml";
             }
@@ -2872,9 +2872,6 @@ namespace KannadaNudiEditor
 
 
 
-        // ============================================================
-        // BUTTON CLICK HANDLERS
-        // ============================================================
         private async void AsciiToUnicodeButton_Click(object sender, RoutedEventArgs e)
         {
             await ConvertFileAsync(asciiToUnicode: true, operationName: "ASCII to Unicode");
@@ -2885,14 +2882,11 @@ namespace KannadaNudiEditor
             await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
         }
 
-        // ============================================================
-        // FILE CONVERSION USING SDK
-        // ============================================================
         private async Task ConvertFileAsync(bool asciiToUnicode, string operationName)
         {
             var dlg = new OpenFileDialog
             {
-                Filter = "All supported|*.txt;*.docx;*.doc;*.rtf;*.html;*.htm|Text|*.txt|Word|*.doc;*.docx|RTF|*.rtf|HTML|*.html;*.htm",
+                Filter = "Text and Word files|*.txt;*.docx",
                 Title = $"Select file for {operationName}"
             };
 
@@ -2902,59 +2896,47 @@ namespace KannadaNudiEditor
             SimpleLogger.Log($"{operationName} - file selected: {filePath}");
             LoadingView.Show();
 
-            var totalSw = Stopwatch.StartNew();
-            Stopwatch? uiSw = null;
+            Stopwatch totalSw = Stopwatch.StartNew();
 
             try
             {
-                // ---- Conversion timing ----
-                Stopwatch? convSw = Stopwatch.StartNew();
+                Func<string, string> converterFunc = asciiToUnicode
+                    ? ConversionHelper.Converter.ConvertAsciiToUnicode
+                    : ConversionHelper.Converter.ConvertUnicodeToAscii;
 
-                // Call SDK-backed ConversionFileManager
-                var result = await ConversionFileManager.ConvertFileToDocumentAsync(
-                    filePath: filePath,
-                    asciiToUnicode: asciiToUnicode,
-                    fontFamilyName: "NudiParijatha",
-                    applyA4NormalMargins: true
-                );
-
+                // Conversion stopwatch
+                Stopwatch convSw = Stopwatch.StartNew();
+                var (tempFile, totalParagraphs) = await Task.Run(() =>
+                    ConversionHelper.ConvertFileToTempWithParagraphCount(filePath, converterFunc));
                 convSw.Stop();
 
-                // ---- UI rendering timing ----
-                uiSw = Stopwatch.StartNew();
+                // Editor load stopwatch
+                Stopwatch loadSw = Stopwatch.StartNew();
+                await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
+                loadSw.Stop();
 
-                richTextBoxAdv.Document = result.Document;
-                richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(filePath);
-                currentFilePath = string.Empty;
-
-                uiSw.Stop();
                 totalSw.Stop();
 
-                string convTime = TimeHelper.FormatElapsed(convSw.Elapsed);
-                string uiTime = TimeHelper.FormatElapsed(uiSw.Elapsed);
-                string totalTime = TimeHelper.FormatElapsed(totalSw.Elapsed);
+                string convTime = $"{convSw.Elapsed.Minutes:D2}:{convSw.Elapsed.Seconds:D2}.{convSw.Elapsed.Milliseconds:D3}";
+                string loadTime = $"{loadSw.Elapsed.Minutes:D2}:{loadSw.Elapsed.Seconds:D2}.{loadSw.Elapsed.Milliseconds:D3}";
+                string totalTime = $"{totalSw.Elapsed.Minutes:D2}:{totalSw.Elapsed.Seconds:D2}.{totalSw.Elapsed.Milliseconds:D3}";
 
                 SimpleLogger.Log(
-                    $"{operationName} - done. " +
-                    $"Paragraphs: {result.ConvertedParagraphs}. " +
-                    $"Conversion: {convTime}. UI: {uiTime}. Total: {totalTime}");
+                    $"{operationName} completed. Paragraphs: {totalParagraphs}, Conversion: {convTime}, Load: {loadTime}, Total: {totalTime}");
 
                 MessageBox.Show(
-                    $"Conversion completed!\n\n" +
-                    $"Paragraphs: {result.ConvertedParagraphs}\n" +
+                    $"{operationName} completed!\n\n" +
+                    $"Paragraphs: {totalParagraphs}\n" +
                     $"Conversion Time: {convTime}\n" +
-                    $"UI Load Time: {uiTime}\n" +
-                    $"Total Time: {totalTime}",
+                    $"Editor Load Time: {loadTime}\n" +
+                    $"Total Time: {totalTime}\n\n" +
+                    $"File loaded from TempConverted:\n{tempFile}",
                     operationName, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                SimpleLogger.LogException(
-                    ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:0.000}s");
-
-                MessageBox.Show(
-                    $"Failed:\n\n{ex.Message}",
-                    operationName, MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, $"{operationName} failed after {totalSw.Elapsed.TotalSeconds:0.000}s");
+                MessageBox.Show($"Failed:\n\n{ex.Message}", operationName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
