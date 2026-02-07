@@ -40,10 +40,10 @@
   <ItemGroup>
     <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="32.1.23" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="32.1.23" />
-    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="32.1.23" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="32.1.23" />
-    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="32.1.23" />
+    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="31.2.16" />
   </ItemGroup>
 </Project>
