@@ -6,15 +6,14 @@ namespace KannadaNudiEditor.Helpers
 {
     public static class NudiFileManager
     {
-
-
         // ============================================================
-        // Save: editor -> file
+        // Save file (supports .nudi using OpenXML)
         // ============================================================
         public static async Task<bool> SaveToFileAsync(
             string filePath,
             SfRichTextBoxAdv richTextBoxAdv,
-            Action triggerSaveAs)
+            Action? triggerSaveAs) // nullable
+
         {
             ArgumentNullException.ThrowIfNull(richTextBoxAdv);
 
@@ -28,44 +27,41 @@ namespace KannadaNudiEditor.Helpers
                 }
 
                 string displayName = Path.GetFileName(filePath);
-                var formatType = GetFormatType(Path.GetExtension(filePath));
 
-                SimpleLogger.Log($"[Save] Saving file: {filePath} | format={formatType}");
+                if (Path.GetExtension(filePath).Equals(".nudi", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Save as .nudi using OpenXML
+                    await SaveNudiOpenXmlAsync(filePath, richTextBoxAdv);
+                }
+                else
+                {
+                    // Use Syncfusion SaveAsync for other formats
+                    var formatType = GetFormatType(Path.GetExtension(filePath));
+                    await using var stream = new FileStream(
+                        filePath,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.ReadWrite,
+                        64 * 1024,
+                        FileOptions.Asynchronous);
+                    await richTextBoxAdv.SaveAsync(stream, formatType);
+                }
 
-                await using var stream = new FileStream(
-                    filePath,
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.ReadWrite,
-                    bufferSize: 64 * 1024,
-                    options: FileOptions.Asynchronous);
-
-                await richTextBoxAdv.SaveAsync(stream, formatType);
-
-                // Update document title in UI
                 richTextBoxAdv.DocumentTitle = displayName;
-
                 SimpleLogger.Log($"[Save] Completed: {displayName}");
                 return true;
-            }
-            catch (IOException ioEx)
-            {
-                SimpleLogger.LogException(ioEx, "[Save] File in use");
-                MessageBox.Show($"File is being used by another process:\n{ioEx.Message}",
-                    "File In Use", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
             }
             catch (Exception ex)
             {
                 SimpleLogger.LogException(ex, "[Save] Failed");
-                MessageBox.Show($"Failed to save the file:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Failed to save the file:\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }
 
         // ============================================================
-        // SaveAs helper (keeps your existing pattern)
+        // SaveAs helper
         // ============================================================
         public static void SaveAs(string extension, Action<string> exportAction)
         {
@@ -78,13 +74,28 @@ namespace KannadaNudiEditor.Helpers
             catch (Exception ex)
             {
                 SimpleLogger.LogException(ex, "[SaveAs] Failed");
-                MessageBox.Show($"Save As failed:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Save As failed:\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         // ============================================================
-        // Internals: extension -> Syncfusion FormatType
+        // OpenXML save for .nudi
+        // ============================================================
+        private static async Task SaveNudiOpenXmlAsync(string filePath, SfRichTextBoxAdv richTextBoxAdv)
+        {
+            using MemoryStream ms = new MemoryStream();
+            // Save content as DOCX into memory stream
+            await richTextBoxAdv.SaveAsync(ms, FormatType.Docx);
+            ms.Position = 0;
+
+            // Write memory stream to file with .nudi extension
+            await using FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite, 64 * 1024, FileOptions.Asynchronous);
+            await ms.CopyToAsync(fs);
+        }
+
+        // ============================================================
+        // Map file extension -> Syncfusion FormatType
         // ============================================================
         private static FormatType GetFormatType(string extension)
         {
@@ -95,6 +106,7 @@ namespace KannadaNudiEditor.Helpers
                 ".html" => FormatType.Html,
                 ".htm" => FormatType.Html,
                 ".doc" => FormatType.Doc,
+                ".nudi" => FormatType.Docx,
                 _ => FormatType.Docx,
             };
         }

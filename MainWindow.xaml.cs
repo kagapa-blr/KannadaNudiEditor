@@ -455,24 +455,64 @@ namespace KannadaNudiEditor
 
 
 
+        #region nudi Filemanager
 
+        private async Task DoSaveAsAsync()
+        {
+            // Show SaveFileDialog with all supported formats
+            var dlg = new SaveFileDialog
+            {
+                Filter =
+                    "Nudi File (*.nudi)|*.nudi|" +
+                    "Word Document (*.docx)|*.docx|" +
+                    "Word 97-2003 Document (*.doc)|*.doc|" +
+                    "Rich Text File (*.rtf)|*.rtf|" +
+                    "Text File (*.txt)|*.txt|" +
+                    "Web Page (*.htm,*.html)|*.htm;*.html|" +
+                    "XAML File (*.xaml)|*.xaml",
+                DefaultExt = ".docx",
+                FileName = Path.GetFileNameWithoutExtension(currentFilePath) ?? "Document"
+            };
+
+            if (dlg.ShowDialog() != true)
+                return; // user canceled
+
+            currentFilePath = dlg.FileName;
+
+            // Save file according to chosen extension
+            bool saved = await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, null);
+            if (saved)
+            {
+                _isDocumentModified = false;
+                SimpleLogger.Log($"Document saved successfully: {currentFilePath}");
+            }
+        }
 
         private async void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
                 LoadingView.Show();
-                await Task.Delay(100);
+                await Task.Delay(50); // allow UI to update
 
-                bool saveSuccess = await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, () =>
+                // If currentFilePath is null or empty, we treat it as a new file
+                if (string.IsNullOrWhiteSpace(currentFilePath))
                 {
-                    NudiFileManager.SaveAs(".docx", WordExport);
+                    // Trigger Save As for new files
+                    await DoSaveAsAsync();
+                    return;
+                }
+
+                // Existing file: save directly
+                bool saveSuccess = await NudiFileManager.SaveToFileAsync(currentFilePath, richTextBoxAdv, async () =>
+                {
+                    await DoSaveAsAsync();
                 });
 
                 if (saveSuccess)
                 {
                     _isDocumentModified = false;
-                    SimpleLogger.Log($"Document saved successfully to '{currentFilePath ?? "new file"}'.");
+                    SimpleLogger.Log($"Document saved successfully to '{currentFilePath}'.");
                 }
                 else
                 {
@@ -494,33 +534,19 @@ namespace KannadaNudiEditor
                 ribbon.IsBackStageVisible = false;
             }
         }
+
         private async void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
                 LoadingView.Show();
-                await Task.Delay(100);
-
-                string extension = e?.Parameter?.ToString() ?? ".docx";
-
-                try
-                {
-                    NudiFileManager.SaveAs(extension, WordExport);
-                    _isDocumentModified = false;
-                    SimpleLogger.Log($"Document saved successfully using 'Save As' with extension '{extension}'.");
-                }
-                catch (Exception exSaveAs)
-                {
-                    string msg = $"Save As failed:\n{exSaveAs.Message}\n\nStack Trace:\n{exSaveAs.StackTrace}";
-                    MessageBox.Show(msg, "Save As Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    SimpleLogger.LogException(exSaveAs, "Save As failed");
-                }
+                await Task.Delay(50); // let UI render
+                await DoSaveAsAsync();
             }
             catch (Exception ex)
             {
-                string errorMsg = $"Unexpected error during Save As:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}";
-                MessageBox.Show(errorMsg, "Save As Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                SimpleLogger.LogException(ex, "Unexpected error during Save As operation");
+                MessageBox.Show($"Failed to save document:\n{ex.Message}", "Save As Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, "Save As failed");
             }
             finally
             {
@@ -559,35 +585,63 @@ namespace KannadaNudiEditor
             }
         }
 
-
         private async void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
-                // Show loading
                 LoadingView.Show();
+                SimpleLogger.Log($"[NEW] User clicked New. Current active window: '{this.Title}'");
 
-                await Task.Run(() =>
+                // Optional small delay for UI responsiveness
+                await Task.Delay(100);
+
+                // Create a new MainWindow with no initial file
+                MainWindow newWindow = new MainWindow(null);
+                SimpleLogger.Log($"[NEW] Creating new window instance: {newWindow.GetHashCode()}");
+
+                // Show the new window
+                newWindow.Show();
+                SimpleLogger.Log($"[NEW] New window shown: '{newWindow.Title}'");
+
+                // Force the new window to foreground and focus its editor
+                if (newWindow.richTextBoxAdv != null)
                 {
-                    // Simulate slight delay if needed (optional)
-                    System.Threading.Thread.Sleep(100);
-                });
+                    // Temporarily make topmost to ensure foreground
+                    newWindow.Topmost = true;
 
-                MainWindow mainWindow = new MainWindow(null);
-                mainWindow.Show();
+                    // Use Dispatcher to delay activation slightly for OS to process window
+                    _ = newWindow.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        newWindow.Activate();                       // Bring to front
+                        newWindow.richTextBoxAdv.Focus();           // Focus editor
+                        newWindow.Topmost = false;                  // Reset Topmost
+                        SimpleLogger.Log($"[NEW] Focus set to new window's editor: '{newWindow.Title}'");
+                    }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }
+
+                // Log currently active window after showing new window
+                SimpleLogger.Log($"[NEW] Currently active window: '{Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)?.Title ?? "Unknown"}'");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to open new window:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, "[NEW] Failed to open new window");
             }
             finally
             {
                 LoadingView.Hide();
-                richTextBoxAdv.Focus();
-                ribbon.IsBackStageVisible = false;
+
+                // Only focus the original window if it is still active
+                if (this.IsActive && richTextBoxAdv != null)
+                {
+                    richTextBoxAdv.Focus();
+                    SimpleLogger.Log($"[NEW] Focus returned to original window: '{this.Title}'");
+                }
+
+                if (ribbon != null)
+                    ribbon.IsBackStageVisible = false;
             }
         }
-
 
         private async void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -743,7 +797,7 @@ namespace KannadaNudiEditor
             }
         }
 
-
+        #endregion
 
 
 
@@ -755,7 +809,7 @@ namespace KannadaNudiEditor
 
 
 
-
+        #region Export Handlers
         private async void pdfSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -886,7 +940,7 @@ namespace KannadaNudiEditor
         }
 
 
-
+        #endregion
 
 
         void OnlineHelpButton_Click(object sender, RoutedEventArgs e)
@@ -954,6 +1008,8 @@ namespace KannadaNudiEditor
         }
 
 
+
+        #region Font and Highlight Color Handlers
         void IncreaseFontSizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (richTextBoxAdv != null)
@@ -1007,7 +1063,7 @@ namespace KannadaNudiEditor
                     richTextBoxAdv.Selection.CharacterFormat.FontColor = Color.FromArgb(0x00, 0xff, 0x00, 0x00);
             }
         }
-
+        #endregion
 
         void HighlightColorSplitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1431,7 +1487,14 @@ namespace KannadaNudiEditor
         {
             var openDialog = new OpenFileDialog
             {
-                Filter = "All supported files (*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.docx;*.doc;*.htm;*.html;*.rtf;*.txt;*.xaml|Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml",
+                Filter = "All supported files (*.nudi,*.docx,*.doc,*.htm,*.html,*.rtf,*.txt,*.xaml)|*.nudi;*.docx;*.doc;*.htm;*.html;*.rtf;*.txt;*.xaml" +
+                         "|Nudi File (*.nudi)|*.nudi" +
+                         "|Word Document (*.docx)|*.docx" +
+                         "|Word 97 - 2003 Document (*.doc)|*.doc" +
+                         "|Web Page (*.htm,*.html)|*.htm;*.html" +
+                         "|Rich Text File (*.rtf)|*.rtf" +
+                         "|Text File (*.txt)|*.txt" +
+                         "|Xaml File (*.xaml)|*.xaml",
                 FilterIndex = 1,
                 Multiselect = false
             };
@@ -1441,14 +1504,18 @@ namespace KannadaNudiEditor
 
             using var fileStream = openDialog.OpenFile();
             var file = new FileInfo(openDialog.FileName);
-            var fileName = file.Name;          // includes extension [web:102]
-            var fileExtension = file.Extension; // includes leading dot [web:100]
+            var fileName = file.Name;          // includes extension
+            var fileExtension = file.Extension; // includes leading dot
 
             if (string.IsNullOrWhiteSpace(fileExtension))
                 return;
 
-            var formatType = GetFormatType(fileExtension);
+            // Treat .nudi as DOCX internally
+            var formatType = fileExtension.Equals(".nudi", StringComparison.OrdinalIgnoreCase)
+                ? FormatType.Docx
+                : GetFormatType(fileExtension);
 
+            // Cancel any ongoing load
             if (loadAsync != null && !loadAsync.IsCompleted && !loadAsync.IsFaulted && cancellationTokenSource != null)
             {
                 cancellationTokenSource.Cancel();
@@ -1474,6 +1541,7 @@ namespace KannadaNudiEditor
                 loadAsync = null;
             }
 
+            // Update UI & metadata
             richTextBoxAdv.DocumentTitle = Path.GetFileNameWithoutExtension(fileName);
             currentFilePath = openDialog.FileName;
 
@@ -1487,39 +1555,6 @@ namespace KannadaNudiEditor
 
 
 
-        private async void WordExport(string extension)
-
-        {
-            SaveFileDialog saveDialog = new();
-            {
-                saveDialog.Filter = "Word Document (*.docx)|*.docx|Word 97 - 2003 Document (*.doc)|*.doc|Web Page (*.htm,*.html)|*.htm;*.html|Rich Text File (*.rtf)|*.rtf|Text File (*.txt)|*.txt|Xaml File (*.xaml)|*.xaml";
-            }
-            ;
-            if (saveDialog.ShowDialog() == true)
-            {
-                Stream? fileStream = saveDialog.OpenFile();
-                if (fileStream == null) return;
-                {
-                    FormatType formatType = GetFormatType(extension);
-#if Framework3_5
-                    RichTextBoxAdv.Save(fileStream, formatType);
-#elif Framework4_0
-                    RichTextBoxAdv.SaveAsync(fileStream, formatType);
-#else
-                    await richTextBoxAdv.SaveAsync(fileStream, formatType);
-                    currentFilePath = saveDialog.FileName;
-
-#endif
-                }
-                fileStream.Close();
-            }
-        }
-        /// <summary>
-        /// Gets the format type.
-        /// </summary>
-        /// <param name="extension"></param>
-        /// <returns></returns>
-        /// <remarks></remarks>
         private FormatType GetFormatType(string extension)
         {
             switch (extension.ToLower())
@@ -2639,6 +2674,7 @@ namespace KannadaNudiEditor
             StopPythonProcess(); // Stop if another language is running
 
             var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "recognize_mic.exe");
+            SimpleLogger.Log($"Starting Python process for language: {languageCode} at path: {exePath}");
 
             var psi = new ProcessStartInfo
             {
