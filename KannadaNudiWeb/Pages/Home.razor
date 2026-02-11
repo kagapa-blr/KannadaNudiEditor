@@ -1,0 +1,181 @@
+@page "/"
+@using KannadaNudiWeb.Services
+@inject TransliterationService TransliterationService
+@inject SpeechService SpeechService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Kannada Nudi Editor</PageTitle>
+
+<div class="toolbar-container">
+    <div class="toolbar-group">
+        <label class="toolbar-label">Input Mode:</label>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="inputModeSwitch" checked="@IsKannadaInput" @onchange="OnInputModeChange">
+            <label class="form-check-label" for="inputModeSwitch">@(IsKannadaInput ? "KAN" : "ENG")</label>
+        </div>
+    </div>
+
+    <div class="toolbar-group">
+         <button class="btn @(isListening ? "btn-danger" : "btn-primary")" @onclick="ToggleSpeech">
+             <span class="bi bi-mic"></span> @(isListening ? "Stop Speech" : "Start Speech")
+         </button>
+         <select class="form-select ms-2" style="width:auto; display:inline-block;" @bind="speechLang">
+             <option value="kn-IN">Kannada</option>
+             <option value="en-IN">English</option>
+         </select>
+    </div>
+
+    <div class="toolbar-group">
+         <button class="btn btn-secondary" @onclick="SaveDocument">
+             <span class="bi bi-save"></span> Save
+         </button>
+         <InputFile OnChange="LoadDocument" class="file-input-hidden" id="fileUpload" />
+         <label for="fileUpload" class="btn btn-secondary"><span class="bi bi-folder2-open"></span> Open</label>
+    </div>
+</div>
+
+<div id="editor-wrapper" tabindex="0" style="outline:none;">
+    <div id="quill-editor" style="height: 600px;"></div>
+</div>
+
+<!-- Removed <script> block, logic moved to quillInterop.js -->
+
+<style>
+    .toolbar-container {
+        display: flex;
+        gap: 20px;
+        padding: 10px;
+        background: #f3f3f3;
+        border-bottom: 1px solid #ccc;
+        align-items: center;
+    }
+    .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .file-input-hidden {
+        display: none;
+    }
+</style>
+
+@code {
+    public bool IsKannadaInput { get; set; } = false;
+
+    bool isListening = false;
+    string speechLang = "kn-IN";
+    DotNetObjectReference<Home>? objRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        objRef = DotNetObjectReference.Create(this);
+        await TransliterationService.InitializeAsync();
+        SpeechService.OnResult += OnSpeechResult;
+        SpeechService.OnError += OnSpeechError;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("quillInterop.init", "#quill-editor", objRef);
+            // Updated call to use namespaced function
+            await JSRuntime.InvokeVoidAsync("quillInterop.registerKeyInterceptor", objRef);
+        }
+    }
+
+    private async Task OnInputModeChange(ChangeEventArgs args)
+    {
+        IsKannadaInput = (bool)(args.Value ?? false);
+        if (!IsKannadaInput)
+        {
+            TransliterationService.ClearBuffer();
+        }
+        await JSRuntime.InvokeVoidAsync("quillInterop.setKannadaMode", IsKannadaInput);
+    }
+
+    [JSInvokable]
+    public void OnSelectionChanged()
+    {
+        TransliterationService.ClearBuffer();
+    }
+
+    [JSInvokable]
+    public void ProcessBackspace()
+    {
+        TransliterationService.RemoveLast();
+    }
+
+    [JSInvokable]
+    public async Task ProcessKannadaKey(string key)
+    {
+        var result = TransliterationService.GetTransliteration(key);
+
+        if (result.backspaceCount > 0)
+        {
+            await JSRuntime.InvokeVoidAsync("quillInterop.backspace", result.backspaceCount);
+        }
+
+        if (!string.IsNullOrEmpty(result.text))
+        {
+            await JSRuntime.InvokeVoidAsync("quillInterop.insertText", result.text);
+        }
+    }
+
+    private async void ToggleSpeech()
+    {
+        if (isListening)
+        {
+            await SpeechService.StopAsync();
+            isListening = false;
+        }
+        else
+        {
+            await SpeechService.StartAsync(speechLang);
+            isListening = true;
+        }
+    }
+
+    private void OnSpeechResult(string text)
+    {
+        InvokeAsync(async () =>
+        {
+            await JSRuntime.InvokeVoidAsync("quillInterop.insertText", text + " ");
+        });
+    }
+
+    private void OnSpeechError(string error)
+    {
+        Console.WriteLine($"Speech Error: {error}");
+        isListening = false;
+        StateHasChanged();
+    }
+
+    private async Task SaveDocument()
+    {
+        string html = await JSRuntime.InvokeAsync<string>("quillInterop.getHtml");
+        await JSRuntime.InvokeVoidAsync("quillInterop.downloadFile", "Document.html", html);
+    }
+
+    private async Task LoadDocument(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024);
+            using var reader = new StreamReader(stream);
+            string content = await reader.ReadToEndAsync();
+
+            await JSRuntime.InvokeVoidAsync("quillInterop.setHtml", content);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine("Error loading file: " + ex.Message);
+        }
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
+    }
+}
