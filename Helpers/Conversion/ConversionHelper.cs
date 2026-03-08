@@ -202,10 +202,12 @@ namespace KannadaNudiEditor.Helpers.Conversion
                             EastAsia = "NudiParijatha"
                         };
 
-                        if (string.IsNullOrWhiteSpace(fontName) || !nudiFontKeywords.Any(k => fontName.ToLowerInvariant().Contains(k)))
+                        // Convert if: font is empty/none OR font starts with any keyword in nudiFontKeywords (case-insensitive)
+                        // Only skip if font is explicitly set and doesn't match any keyword
+                        if (!string.IsNullOrWhiteSpace(fontName) && !nudiFontKeywords.Any(k => fontName.ToLowerInvariant().StartsWith(k)))
                         {
                             skippedRuns++;
-                            SimpleLogger.Log($"Skipped run - Font: '{fontName ?? "none"}'");
+                            SimpleLogger.Log($"Skipped run - Font: '{fontName}' (not a conversion font)");
                             continue;
                         }
 
