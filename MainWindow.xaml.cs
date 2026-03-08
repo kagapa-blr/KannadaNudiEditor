@@ -2972,10 +2972,16 @@ namespace KannadaNudiEditor
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (ribbon != null) ribbon.IsBackStageVisible = false;
-                    await ConversionHelper.LoadFileIntoEditorAsync(tempFile, richTextBoxAdv);
-                    richTextBoxAdv?.Focus();
-                    SimpleLogger.Log("Converted file loaded into editor");
+                    SimpleLogger.Log($"Loading converted file: {tempFile}");
+                    bool openSuccess = await OpenDocumentFromPathAsync(tempFile, updateRecentFiles: true);
+                    if (openSuccess)
+                    {
+                        SimpleLogger.Log("Converted file loaded into editor successfully");
+                    }
+                    else
+                    {
+                        SimpleLogger.Log("Failed to load converted file into editor");
+                    }
                 }
                 else
                 {
