@@ -20,6 +20,7 @@ using PageSize = KannadaNudiEditor.Helpers.PageSize;
 using KannadaNudiEditor.Views.Loading;
 using KannadaNudiEditor.Views.PageNumber;
 using KannadaNudiEditor.Helpers.Conversion;
+using Syncfusion.SfSkinManager;
 
 
 namespace KannadaNudiEditor
@@ -95,6 +96,7 @@ namespace KannadaNudiEditor
 
         public MainWindow(string? startupFilePath = null)
         {
+            SfSkinManager.ApplyThemeAsDefaultStyle = true;
             InitializeComponent();
             _startupFilePath = startupFilePath;
 

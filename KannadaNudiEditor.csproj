@@ -32,19 +32,25 @@
   </ItemGroup>
 
   <!-- WPF Images from Images folder -->
-  <ItemGroup>
-    <Resource Include="Images\**\*.png" />
-  </ItemGroup>
+<ItemGroup>
+  <!-- Include all images (png, gif, jpg, bmp, ico) recursively from Images folder -->
+  <Resource Include="Images\**\*.png" />
+  <Resource Include="Images\**\*.gif" />
+  <Resource Include="Images\**\*.jpg" />
+  <Resource Include="Images\**\*.jpeg" />
+  <Resource Include="Images\**\*.bmp" />
+  <Resource Include="Images\**\*.ico" />
+</ItemGroup>
 
   <!-- NuGet Packages -->
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
     <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.13" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="31.2.16" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="31.2.16" />
-    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="31.2.16" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="31.2.16" />
-    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="31.2.16" />
+    <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="32.2.8" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="32.2.8" />
+    <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="32.2.8" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="32.2.8" />
+    <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="32.2.8" />
   </ItemGroup>
 </Project>

@@ -106,10 +106,12 @@ namespace KannadaNudiEditor.Helpers.Conversion
             var format = GetFormatType(Path.GetExtension(filePath));
             using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
-            if (cancellationToken.HasValue)
-                await richTextBox.LoadAsync(fs, format, cancellationToken.Value);
-            else
-                await richTextBox.LoadAsync(fs, format);
+            // Create a completely fresh control (like the sample app)
+            var tempControl = new SfRichTextBoxAdv();
+            tempControl.Load(fs, format);
+
+            // Copy the loaded document to the main control
+            richTextBox.Document = tempControl.Document;
 
             await Task.Delay(200);
 
