@@ -1,6 +1,5 @@
 using System.IO;
 using System.Text;
-using System.Text.Json;
 using Kannada.AsciiUnicode.Converters;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
 using DocumentFormat.OpenXml;
@@ -20,41 +19,57 @@ namespace KannadaNudiEditor.Helpers.Conversion
 
         public static KannadaConverter Converter => _converter ??= LoadConverter();
 
+        /// <summary>
+        /// Resets the converter cache to force reload of mappings on next access.
+        /// Call this after custom mappings are saved.
+        /// </summary>
+        public static void ResetConverter()
+        {
+            _converter = null;
+            SimpleLogger.Log("Converter cache reset. Custom mappings will be reloaded on next conversion.");
+        }
+
         private static KannadaConverter LoadConverter()
         {
             Directory.CreateDirectory(TempFolder);
 
-            string asciiPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AsciiToUnicodeMapping.json");
-            string unicodePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "UnicodeToAsciiMapping.json");
-
-            var asciiMap = LoadMapping(asciiPath);
-            var unicodeMap = LoadMapping(unicodePath);
-
-            SimpleLogger.Log($"Custom mappings loaded. ASCII→Unicode: {asciiMap.Count} mappings, Unicode→ASCII: {unicodeMap.Count} mappings");
-
-            return KannadaConverter.CreateWithCustomMapping(asciiMap, unicodeMap);
-        }
-
-        private static Dictionary<string, string> LoadMapping(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                SimpleLogger.LogWarning($"Mapping file not found: {filePath}. Using empty mapping.");
-                return new Dictionary<string, string>();
-            }
+            // Load custom mappings created by the user
+            var customAsciiToUnicode = new Dictionary<string, string>();
+            var customUnicodeToAscii = new Dictionary<string, string>();
 
             try
             {
-                string json = File.ReadAllText(filePath, Encoding.UTF8);
-                var map = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-                SimpleLogger.Log($"Loaded mapping from {Path.GetFileName(filePath)}: {map?.Count ?? 0} entries");
-                return map ?? new Dictionary<string, string>();
+                var customMappings = CustomMappingsHelper.LoadMappings();
+                if (customMappings.Count > 0)
+                {
+                    customAsciiToUnicode = customMappings;
+
+                    // Create reverse mapping for Unicode to ASCII
+                    foreach (var kvp in customMappings)
+                    {
+                        customUnicodeToAscii[kvp.Value] = kvp.Key;
+                    }
+
+                    SimpleLogger.Log($"Loaded {customMappings.Count} custom ASCII→Unicode mappings and created reverse mappings");
+                }
+                else
+                {
+                    SimpleLogger.Log("No custom mappings found. Using SDK default mappings only.");
+                }
             }
             catch (Exception ex)
             {
-                SimpleLogger.LogException(ex, $"Failed to load mapping file: {filePath}");
-                return new Dictionary<string, string>();
+                SimpleLogger.LogException(ex, "Failed to load custom mappings");
             }
+
+            // Create converter with custom mappings (SDK provides comprehensive default mappings)
+            var converter = KannadaConverter.CreateWithCustomMapping(
+                userAsciiToUnicodeMapping: customAsciiToUnicode,
+                userUnicodeToAsciiMapping: customUnicodeToAscii
+            );
+
+            SimpleLogger.Log("KannadaConverter initialized with custom user mappings (SDK default mappings also available)");
+            return converter;
         }
 
         public static (string tempFile, int totalParagraphs) ConvertFileToTempWithParagraphCount(

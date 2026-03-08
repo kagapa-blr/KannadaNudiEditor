@@ -642,27 +642,59 @@
                                                    TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </Grid>
+
+                                <!-- Divider before custom mappings -->
+                                <Rectangle Grid.Row="5"
+                                           Stroke="Gray"
+                                           HorizontalAlignment="Stretch"
+                                           StrokeThickness="1"
+                                           StrokeDashArray="5"
+                                           Margin="10"
+                                           Height="1"/>
                             </Grid>
 
-                            <!-- Middle separator -->
-                            <Border BorderThickness="0.5"
-                                    BorderBrush="#FFBCBCBC"
-                                    Margin="15"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"/>
-
-                            <!-- Right hint panel -->
-                            <Grid Grid.Column="2"
-                                  VerticalAlignment="Top"
-                                  HorizontalAlignment="Left"
-                                  Margin="20,5,0,0">
-                                <TextBlock Text="Select conversion direction and open your file to convert automatically."
-                                           FontStyle="Italic"
+                            <!-- Custom Mappings Section in Right Panel -->
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Margin="20,5,0,0">
+                                <TextBlock Text="Conversion Settings"
+                                           FontWeight="Bold"
                                            FontSize="14"
+                                           Margin="0,0,0,15"/>
+                                
+                                <Button x:Name="customMappingsButton"
+                                        Width="200"
+                                        Height="50"
+                                        Margin="0,0,0,15"
+                                        Content="⚙ Configure Custom Mappings"
+                                        Click="ConfigureCustomMappings_Click"
+                                        Background="#9C27B0"
+                                        Foreground="White"
+                                        FontWeight="Bold"
+                                        FontSize="12"
+                                        Padding="10"/>
+                                
+                                <TextBlock Text="Define your own ASCII to Unicode character mappings for specialized conversion needs."
+                                           FontStyle="Italic"
+                                           FontSize="11"
                                            TextWrapping="Wrap"
-                                           Width="300"/>
-                            </Grid>
+                                           Width="250"
+                                           Foreground="Gray"/>
+                                
+                                <TextBlock Text="&#10;Basic Instructions:"
+                                           FontWeight="Bold"
+                                           FontSize="11"
+                                           Margin="0,15,0,5"/>
+                                
+                                <TextBlock Text="1. Click the button above&#10;2. Enter ASCII and Unicode pairs&#10;3. Save your mappings&#10;4. Mappings will be used in conversions"
+                                           FontSize="10"
+                                           TextWrapping="Wrap"
+                                           Width="250"
+                                           LineHeight="16"/>
+                            </StackPanel>
                         </Grid>
+
                     </Syncfusion:BackstageTabItem>
 
 

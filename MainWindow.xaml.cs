@@ -2920,6 +2920,29 @@ namespace KannadaNudiEditor
             await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
         }
 
+        private void ConfigureCustomMappings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SimpleLogger.Log("Opening Custom Mappings window");
+                var window = new Views.CustomMappings.CustomMappingsWindow
+                {
+                    Owner = this
+                };
+                window.ShowDialog();
+                SimpleLogger.Log("Custom Mappings window closed");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "Error opening Custom Mappings window");
+                MessageBox.Show(
+                    $"Failed to open Custom Mappings window:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
 
         private async Task ConvertFileAsync(bool asciiToUnicode, string operationName)
         {
