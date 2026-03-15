@@ -29,46 +29,63 @@ namespace KannadaNudiEditor.Helpers.Conversion
             SimpleLogger.Log("Converter cache reset. Custom mappings will be reloaded on next conversion.");
         }
 
+        /// <summary>
+        /// Validates that the converter is using custom mappings.
+        /// For testing/debugging purposes.
+        /// </summary>
+        public static bool HasCustomMappingsLoaded()
+        {
+            var customMappings = CustomMappingsHelper.LoadMappings();
+            return customMappings.Count > 0;
+        }
+
+        /// <summary>
+        /// Gets the count of custom mappings currently saved.
+        /// </summary>
+        public static int GetCustomMappingsCount()
+        {
+            return CustomMappingsHelper.LoadMappings().Count;
+        }
+
         private static KannadaConverter LoadConverter()
         {
             Directory.CreateDirectory(TempFolder);
 
             // Load custom mappings created by the user
-            var customAsciiToUnicode = new Dictionary<string, string>();
-            var customUnicodeToAscii = new Dictionary<string, string>();
+            Dictionary<string, string>? customMappings = null;
 
             try
             {
-                var customMappings = CustomMappingsHelper.LoadMappings();
-                if (customMappings.Count > 0)
+                var loadedMappings = CustomMappingsHelper.LoadMappings();
+                if (loadedMappings.Count > 0)
                 {
-                    customAsciiToUnicode = customMappings;
-
-                    // Create reverse mapping for Unicode to ASCII
-                    foreach (var kvp in customMappings)
+                    customMappings = loadedMappings;
+                    SimpleLogger.Log($"✓ Loaded {customMappings.Count} custom ASCII→Unicode mappings");
+                    foreach (var kvp in customMappings.Take(5))
                     {
-                        customUnicodeToAscii[kvp.Value] = kvp.Key;
+                        SimpleLogger.Log($"  Custom: '{kvp.Key}' → '{kvp.Value}'");
                     }
-
-                    SimpleLogger.Log($"Loaded {customMappings.Count} custom ASCII→Unicode mappings and created reverse mappings");
+                    if (customMappings.Count > 5)
+                    {
+                        SimpleLogger.Log($"  ... and {customMappings.Count - 5} more custom mappings");
+                    }
                 }
                 else
                 {
-                    SimpleLogger.Log("No custom mappings found. Using SDK default mappings only.");
+                    SimpleLogger.Log("ℹ No custom mappings found. Using SDK default mappings only.");
                 }
             }
             catch (Exception ex)
             {
                 SimpleLogger.LogException(ex, "Failed to load custom mappings");
+                SimpleLogger.Log("⚠ Using SDK default mappings only due to loading error");
             }
 
-            // Create converter with custom mappings (SDK provides comprehensive default mappings)
-            var converter = KannadaConverter.CreateWithCustomMapping(
-                userAsciiToUnicodeMapping: customAsciiToUnicode,
-                userUnicodeToAsciiMapping: customUnicodeToAscii
-            );
+            // Create converter with custom mappings (SDK will merge with defaults)
+            // Pass null if no custom mappings, or the dictionary if custom mappings exist
+            var converter = KannadaConverter.CreateWithCustomMapping(customMappings);
 
-            SimpleLogger.Log("KannadaConverter initialized with custom user mappings (SDK default mappings also available)");
+            SimpleLogger.Log($"✓ KannadaConverter initialized - {(customMappings?.Count > 0 ? "using custom + SDK default mappings" : "using SDK default mappings only")}");
             return converter;
         }
 

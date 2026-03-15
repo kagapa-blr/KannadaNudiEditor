@@ -163,18 +163,35 @@ namespace KannadaNudiEditor.Views.CustomMappings
                     if (string.IsNullOrWhiteSpace(ascii) || string.IsNullOrWhiteSpace(unicode))
                         continue;
 
-                    // Avoid duplicates (use last one)
+                    // Avoid duplicates - using the last value if same ASCII appears multiple times
+                    if (newMappings.ContainsKey(ascii))
+                    {
+                        SimpleLogger.Log($"Duplicate mapping for ASCII '{ascii}' - using the last value");
+                    }
                     newMappings[ascii] = unicode;
                 }
 
                 CustomMappingsHelper.SaveMappings(newMappings);
-                SimpleLogger.Log($"Saved {newMappings.Count} custom mappings");
+                SimpleLogger.Log($"✓ Saved {newMappings.Count} custom mappings to {CustomMappingsHelper.GetMappingsFilePath()}");
+
+                // Log each mapping for verification
+                foreach (var kvp in newMappings.Take(5))
+                {
+                    SimpleLogger.Log($"  Custom: '{kvp.Key}' → '{kvp.Value}'");
+                }
+                if (newMappings.Count > 5)
+                {
+                    SimpleLogger.Log($"  ... and {newMappings.Count - 5} more custom mappings");
+                }
 
                 // Reset the converter cache to reload with new mappings
                 ConversionHelper.ResetConverter();
+                SimpleLogger.Log("✓ Converter cache cleared - custom mappings will be reloaded on next conversion");
 
                 MessageBox.Show(
-                    $"Successfully saved {newMappings.Count} custom mappings!\n\nThey will be used in the next conversion.",
+                    $"✓ Successfully saved {newMappings.Count} custom mappings!\n\n" +
+                    $"File: {CustomMappingsHelper.GetMappingsFilePath()}\n\n" +
+                    $"Custom mappings will override SDK defaults and be used in the next conversion.",
                     "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -186,7 +203,7 @@ namespace KannadaNudiEditor.Views.CustomMappings
             {
                 SimpleLogger.LogException(ex, "Failed to save custom mappings");
                 MessageBox.Show(
-                    $"Failed to save mappings:\n{ex.Message}",
+                    $"✗ Failed to save mappings:\n{ex.Message}",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
