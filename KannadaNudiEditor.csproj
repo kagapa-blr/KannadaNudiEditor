@@ -45,7 +45,7 @@
   <!-- NuGet Packages -->
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
-    <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.16" />
+    <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.17" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="33.1.47" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="33.1.47" />

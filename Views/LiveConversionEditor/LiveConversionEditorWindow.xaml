@@ -1,0 +1,228 @@
+<Window x:Class="KannadaNudiEditor.Views.LiveConversionEditor.LiveConversionEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Live Conversion Editor"
+        WindowStartupLocation="CenterScreen"
+        Width="1000"
+        Height="700"
+        ShowInTaskbar="True"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize"
+        Background="#F5F5F5">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0"
+              Background="White">
+            <StackPanel Orientation="Vertical"
+                        Margin="20,15">
+                <TextBlock Text="Live Conversion Editor"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+                <TextBlock Text="Type in either panel and see real-time conversion to the other format"
+                           FontSize="12"
+                           Foreground="Gray"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Conversion Mode Toggle -->
+        <Grid Grid.Row="1"
+              Background="White"
+              Margin="20,20,20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Text="Conversion Mode:"
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="0,0,15,0"/>
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        x:Name="ModeTogglePanel">
+                <!-- ASCII to Unicode Button -->
+                <Button x:Name="AsciiToUnicodeButton"
+                        Width="180"
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Content="← ASCII to Unicode →"
+                        Click="AsciiToUnicodeMode_Click"
+                        Background="#E3F2FD"
+                        BorderBrush="#2196F3"
+                        BorderThickness="2"
+                        FontWeight="Bold"
+                        Foreground="#1976D2"
+                        Tag="AsciiToUnicode"/>
+
+                <!-- Unicode to ASCII Button -->
+                <Button x:Name="UnicodeToAsciiButton"
+                        Width="180"
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Content="← Unicode to ASCII →"
+                        Click="UnicodeToAsciiMode_Click"
+                        Background="#FFF3E0"
+                        BorderBrush="#FF9800"
+                        BorderThickness="2"
+                        FontWeight="Bold"
+                        Foreground="#E65100"
+                        Tag="UnicodeToAscii"/>
+            </StackPanel>
+
+            <Button Grid.Column="2"
+                    Content="Copy Left"
+                    x:Name="CopyLeftButton"
+                    Width="80"
+                    Height="35"
+                    Click="CopyLeft_Click"
+                    Background="#4CAF50"
+                    Foreground="White"
+                    FontWeight="Bold"/>
+        </Grid>
+
+        <!-- Content Area with two panels -->
+        <Grid Grid.Row="2"
+              Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel (Input) -->
+            <Grid Grid.Column="0"
+                  Background="White"
+                  Margin="0,0,10,0"
+                  x:Name="LeftPanel">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           x:Name="LeftPanelTitle"
+                           Text="ASCII"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           Foreground="White"
+                           Background="#2196F3"
+                           Padding="10"
+                           Margin="0"/>
+
+                <TextBox Grid.Row="1"
+                         x:Name="LeftTextBox"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         Padding="15"
+                         FontFamily="Courier New"
+                         FontSize="12"
+                         TextChanged="LeftTextBox_TextChanged"
+                         BorderThickness="1"
+                         BorderBrush="#CCCCCC"/>
+            </Grid>
+
+            <!-- Separator -->
+            <Border Grid.Column="1"
+                    Width="2"
+                    Background="#CCCCCC"
+                    Margin="0"/>
+
+            <!-- Right Panel (Output) -->
+            <Grid Grid.Column="2"
+                  Background="White"
+                  Margin="10,0,0,0"
+                  x:Name="RightPanel">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           x:Name="RightPanelTitle"
+                           Text="Unicode"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           Foreground="White"
+                           Background="#FF9800"
+                           Padding="10"
+                           Margin="0"/>
+
+                <TextBox Grid.Row="1"
+                         x:Name="RightTextBox"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         Padding="15"
+                         FontFamily="NudiParijatha"
+                         FontSize="14"
+                         TextChanged="RightTextBox_TextChanged"
+                         BorderThickness="1"
+                         BorderBrush="#CCCCCC"/>
+            </Grid>
+        </Grid>
+
+        <!-- Footer with info -->
+        <Border Grid.Row="3"
+                Background="White"
+                Margin="0,10,0,0"
+                Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           x:Name="InfoTextBlock"
+                           Text="Ready for conversion"
+                           FontSize="11"
+                           Foreground="Gray"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                           Text=" | "
+                           FontSize="11"
+                           Foreground="Gray"
+                           Margin="10,0"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2"
+                           x:Name="CharCountTextBlock"
+                           Text="Characters: 0"
+                           FontSize="11"
+                           Foreground="Gray"
+                           VerticalAlignment="Center"/>
+                <Button Grid.Column="4"
+                        Content="Clear All"
+                        HorizontalAlignment="Right"
+                        Width="80"
+                        Height="30"
+                        Click="ClearAll_Click"
+                        Background="#FF5252"
+                        Foreground="White"
+                        FontSize="11"
+                        FontWeight="Bold"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

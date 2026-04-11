@@ -2920,6 +2920,29 @@ namespace KannadaNudiEditor
             await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
         }
 
+        private void LiveConversionEditor_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SimpleLogger.Log("Opening Live Conversion Editor window");
+                var window = new Views.LiveConversionEditor.LiveConversionEditorWindow
+                {
+                    Owner = this
+                };
+                window.Show();
+                SimpleLogger.Log("Live Conversion Editor window opened successfully");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open Live Conversion Editor:\n\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                SimpleLogger.LogException(ex, "Failed to open Live Conversion Editor");
+            }
+
+            // Close backstage
+            CloseBackstage();
+        }
+
         private void ConfigureCustomMappings_Click(object sender, RoutedEventArgs e)
         {
             try
