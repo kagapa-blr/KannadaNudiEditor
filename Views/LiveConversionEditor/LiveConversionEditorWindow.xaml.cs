@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using KannadaNudiEditor.Helpers.Conversion;
+using System.Windows.Documents;
+using Kannada.AsciiUnicode.Converters;
+using KannadaNudiEditor.Helpers;
 
 namespace KannadaNudiEditor.Views.LiveConversionEditor
 {
@@ -9,6 +12,9 @@ namespace KannadaNudiEditor.Views.LiveConversionEditor
     {
         private bool _isAsciiToUnicode = true;
         private bool _isUpdatingFromCode = false;
+        private KannadaConverter? _converter;
+        private readonly Stopwatch _conversionTimer = new();
+        private double _currentZoomLevel = 1.0;
 
         public LiveConversionEditorWindow()
         {
@@ -18,14 +24,48 @@ namespace KannadaNudiEditor.Views.LiveConversionEditor
 
         private void InitializeWindow()
         {
-            // Set initial mode to ASCII → Unicode
-            SetAsciiToUnicodeMode();
+            try
+            {
+                _converter = KannadaConverter.Instance;
+                SimpleLogger.Log("Kannada Conversion Editor initialized");
+                SetAsciiToUnicodeMode();
+                LeftTextBox.TextChanged += LeftTextBox_TextChanged;
+                RightTextBox.TextChanged += RightTextBox_TextChanged;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Initialization Failed");
+                SimpleLogger.LogException(ex, "Converter initialization failed");
+            }
         }
 
-        /// <summary>
-        /// Switch to ASCII → Unicode mode
-        /// </summary>
-        private void AsciiToUnicodeMode_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        private string GetText(RichTextBox rtb)
+        {
+            return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.TrimEnd();
+        }
+
+        private void SetText(RichTextBox rtb, string text)
+        {
+            rtb.Document.Blocks.Clear();
+            rtb.Document.Blocks.Add(new Paragraph(new Run(text)));
+        }
+
+        private void ClearText(RichTextBox rtb)
+        {
+            rtb.Document.Blocks.Clear();
+        }
+
+        private void ModeToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            SetUnicodeToAsciiMode();
+        }
+
+        private void ModeToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             SetAsciiToUnicodeMode();
         }
@@ -33,176 +73,157 @@ namespace KannadaNudiEditor.Views.LiveConversionEditor
         private void SetAsciiToUnicodeMode()
         {
             _isAsciiToUnicode = true;
-
-            // Update UI
-            AsciiToUnicodeButton.Background = System.Windows.Media.Brushes.LightBlue;
-            AsciiToUnicodeButton.Foreground = System.Windows.Media.Brushes.DarkBlue;
-            AsciiToUnicodeButton.BorderThickness = new Thickness(2);
-
-            UnicodeToAsciiButton.Background = System.Windows.Media.Brushes.White;
-            UnicodeToAsciiButton.Foreground = System.Windows.Media.Brushes.Black;
-            UnicodeToAsciiButton.BorderThickness = new Thickness(1);
-
-            // Update panel titles
-            LeftPanelTitle.Text = "ASCII";
-            LeftPanelTitle.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(33, 150, 243)); // Blue
-
-            RightPanelTitle.Text = "Unicode";
-            RightPanelTitle.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 152, 0)); // Orange
-
-            // Set appropriate fonts
-            LeftTextBox.FontFamily = new System.Windows.Media.FontFamily("Courier New");
+            ModeToggle.IsChecked = false;
+            ModeLabel.Text = "ASCII → Unicode";
+            LeftPanelTitle.Text = "ASCII Input";
+            RightPanelTitle.Text = "Unicode Output";
+            LeftTextBox.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             RightTextBox.FontFamily = new System.Windows.Media.FontFamily("NudiParijatha");
-
-            // Clear and convert
             ClearAll();
-            InfoTextBlock.Text = "Mode: ASCII → Unicode (type ASCII on the left)";
-        }
-
-        /// <summary>
-        /// Switch to Unicode → ASCII mode
-        /// </summary>
-        private void UnicodeToAsciiMode_Click(object sender, RoutedEventArgs e)
-        {
-            SetUnicodeToAsciiMode();
         }
 
         private void SetUnicodeToAsciiMode()
         {
             _isAsciiToUnicode = false;
-
-            // Update UI
-            UnicodeToAsciiButton.Background = System.Windows.Media.Brushes.LightYellow;
-            UnicodeToAsciiButton.Foreground = System.Windows.Media.Brushes.DarkOrange;
-            UnicodeToAsciiButton.BorderThickness = new Thickness(2);
-
-            AsciiToUnicodeButton.Background = System.Windows.Media.Brushes.White;
-            AsciiToUnicodeButton.Foreground = System.Windows.Media.Brushes.Black;
-            AsciiToUnicodeButton.BorderThickness = new Thickness(1);
-
-            // Update panel titles
-            LeftPanelTitle.Text = "Unicode";
-            LeftPanelTitle.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 152, 0)); // Orange
-
-            RightPanelTitle.Text = "ASCII";
-            RightPanelTitle.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(33, 150, 243)); // Blue
-
-            // Set appropriate fonts
+            ModeToggle.IsChecked = true;
+            ModeLabel.Text = "Unicode → ASCII";
+            LeftPanelTitle.Text = "Unicode Input";
+            RightPanelTitle.Text = "ASCII Output";
             LeftTextBox.FontFamily = new System.Windows.Media.FontFamily("NudiParijatha");
-            RightTextBox.FontFamily = new System.Windows.Media.FontFamily("Courier New");
-
-            // Clear and convert
+            RightTextBox.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             ClearAll();
-            InfoTextBlock.Text = "Mode: Unicode → ASCII (type Unicode on the left)";
         }
 
-        /// <summary>
-        /// Handle text changes in the left text box
-        /// </summary>
         private void LeftTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_isUpdatingFromCode)
-                return;
+            if (_isUpdatingFromCode || _converter == null) return;
 
             try
             {
-                string leftText = LeftTextBox.Text;
+                string leftText = GetText(LeftTextBox);
                 UpdateCharCount(leftText.Length);
 
                 if (string.IsNullOrEmpty(leftText))
                 {
                     _isUpdatingFromCode = true;
-                    RightTextBox.Clear();
+                    ClearText(RightTextBox);
                     _isUpdatingFromCode = false;
+                    UpdateStatus("Ready", "neutral");
                     return;
                 }
 
-                // Perform conversion based on mode
+                _conversionTimer.Restart();
                 string convertedText = _isAsciiToUnicode
-                    ? ConversionHelper.Converter.ConvertAsciiToUnicode(leftText)
-                    : ConversionHelper.Converter.ConvertUnicodeToAscii(leftText);
+                    ? _converter.ConvertAsciiToUnicode(leftText)
+                    : _converter.ConvertUnicodeToAscii(leftText);
+                _conversionTimer.Stop();
 
-                // Update right panel without triggering its TextChanged event
                 _isUpdatingFromCode = true;
-                RightTextBox.Text = convertedText;
+                SetText(RightTextBox, convertedText);
                 _isUpdatingFromCode = false;
 
-                InfoTextBlock.Text = $"Converted: {leftText.Length} character(s)";
+                UpdateStatus($"Converted {leftText.Length} chars", "success", _conversionTimer.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
-                InfoTextBlock.Text = $"Error: {ex.Message}";
-                SimpleLogger.LogException(ex, "LiveConversionEditor: Error in left text conversion");
+                UpdateStatus($"Error: {ex.Message}", "error");
+                SimpleLogger.LogException(ex, "Conversion error");
             }
         }
 
-        /// <summary>
-        /// Handle text changes in the right text box
-        /// </summary>
         private void RightTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_isUpdatingFromCode)
-                return;
+            if (_isUpdatingFromCode || _converter == null) return;
 
             try
             {
-                string rightText = RightTextBox.Text;
+                string rightText = GetText(RightTextBox);
 
                 if (string.IsNullOrEmpty(rightText))
                 {
                     _isUpdatingFromCode = true;
-                    LeftTextBox.Clear();
+                    ClearText(LeftTextBox);
                     _isUpdatingFromCode = false;
                     UpdateCharCount(0);
+                    UpdateStatus("Ready", "neutral");
                     return;
                 }
 
-                // Perform reverse conversion based on mode
+                _conversionTimer.Restart();
                 string convertedText = _isAsciiToUnicode
-                    ? ConversionHelper.Converter.ConvertUnicodeToAscii(rightText)
-                    : ConversionHelper.Converter.ConvertAsciiToUnicode(rightText);
+                    ? _converter.ConvertUnicodeToAscii(rightText)
+                    : _converter.ConvertAsciiToUnicode(rightText);
+                _conversionTimer.Stop();
 
-                // Update left panel without triggering its TextChanged event
                 _isUpdatingFromCode = true;
-                LeftTextBox.Text = convertedText;
+                SetText(LeftTextBox, convertedText);
                 _isUpdatingFromCode = false;
 
-                InfoTextBlock.Text = $"Reverse converted: {rightText.Length} character(s)";
+                UpdateStatus($"Converted {rightText.Length} chars", "success", _conversionTimer.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
-                InfoTextBlock.Text = $"Error: {ex.Message}";
-                SimpleLogger.LogException(ex, "LiveConversionEditor: Error in right text conversion");
+                UpdateStatus($"Error: {ex.Message}", "error");
+                SimpleLogger.LogException(ex, "Conversion error");
             }
         }
 
-        /// <summary>
-        /// Copy left text to clipboard
-        /// </summary>
         private void CopyLeft_Click(object sender, RoutedEventArgs e)
+        {
+            string text = GetText(LeftTextBox);
+            if (string.IsNullOrEmpty(text))
+            {
+                UpdateStatus("Nothing to copy", "warning");
+                return;
+            }
+            try
+            {
+                Clipboard.SetText(text);
+                UpdateStatus($"Copied {text.Length} chars", "success");
+            }
+            catch
+            {
+                UpdateStatus("Copy failed", "error");
+            }
+        }
+
+        private void CopyRight_Click(object sender, RoutedEventArgs e)
+        {
+            string text = GetText(RightTextBox);
+            if (string.IsNullOrEmpty(text))
+            {
+                UpdateStatus("Nothing to copy", "warning");
+                return;
+            }
+            try
+            {
+                Clipboard.SetText(text);
+                UpdateStatus($"Copied {text.Length} chars", "success");
+            }
+            catch
+            {
+                UpdateStatus("Copy failed", "error");
+            }
+        }
+
+        private void Swap_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (!string.IsNullOrEmpty(LeftTextBox.Text))
-                {
-                    Clipboard.SetText(LeftTextBox.Text);
-                    InfoTextBlock.Text = "Left text copied to clipboard!";
-                }
-                else
-                {
-                    InfoTextBlock.Text = "Nothing to copy";
-                }
+                _isUpdatingFromCode = true;
+                string temp = GetText(LeftTextBox);
+                SetText(LeftTextBox, GetText(RightTextBox));
+                SetText(RightTextBox, temp);
+                _isUpdatingFromCode = false;
+                UpdateStatus("Panels swapped", "success");
             }
             catch (Exception ex)
             {
-                InfoTextBlock.Text = "Failed to copy to clipboard";
-                SimpleLogger.LogException(ex, "LiveConversionEditor: Copy error");
+                UpdateStatus("Swap failed", "error");
+                SimpleLogger.LogException(ex, "Swap error");
             }
         }
 
-        /// <summary>
-        /// Clear all text boxes
-        /// </summary>
         private void ClearAll_Click(object sender, RoutedEventArgs e)
         {
             ClearAll();
@@ -211,19 +232,67 @@ namespace KannadaNudiEditor.Views.LiveConversionEditor
         private void ClearAll()
         {
             _isUpdatingFromCode = true;
-            LeftTextBox.Clear();
-            RightTextBox.Clear();
+            ClearText(LeftTextBox);
+            ClearText(RightTextBox);
             _isUpdatingFromCode = false;
             UpdateCharCount(0);
-            InfoTextBlock.Text = "Cleared all text";
+            UpdateStatus("Ready", "neutral");
         }
 
-        /// <summary>
-        /// Update character count display
-        /// </summary>
+        private void ZoomIn_Click(object sender, RoutedEventArgs e)
+        {
+            _currentZoomLevel = Math.Min(_currentZoomLevel + 0.1, 3.0);
+            ApplyZoom();
+        }
+
+        private void ZoomOut_Click(object sender, RoutedEventArgs e)
+        {
+            _currentZoomLevel = Math.Max(_currentZoomLevel - 0.1, 0.5);
+            ApplyZoom();
+        }
+
+        private void ApplyZoom()
+        {
+            LeftTextBox.FontSize = 12 * _currentZoomLevel;
+            RightTextBox.FontSize = 13 * _currentZoomLevel;
+            ZoomDisplayLabel.Text = $"{(int)(_currentZoomLevel * 100)}%";
+            UpdateStatus($"Zoom: {(int)(_currentZoomLevel * 100)}%", "neutral");
+        }
+
         private void UpdateCharCount(int count)
         {
-            CharCountTextBlock.Text = $"Characters: {count}";
+            CharCountTextBlock.Text = count == 0 ? "No text" : $"{count} chars";
+            LeftCharCount.Text = GetText(LeftTextBox).Length > 0 ? $"({GetText(LeftTextBox).Length})" : "";
+            RightCharCount.Text = GetText(RightTextBox).Length > 0 ? $"({GetText(RightTextBox).Length})" : "";
+        }
+
+        private void UpdateStatus(string message, string type, long? elapsedMs = null)
+        {
+            StatusTextBlock.Text = message;
+            StatusTextBlock.Foreground = type switch
+            {
+                "success" => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(16, 124, 16)),
+                "error" => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(209, 52, 56)),
+                "warning" => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 152, 0)),
+                _ => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(102, 102, 102))
+            };
+
+            ConversionTimeTextBlock.Text = elapsedMs.HasValue
+                ? (elapsedMs.Value < 1 ? "< 1ms" : $"{elapsedMs.Value}ms")
+                : "";
+        }
+
+        private void TextBox_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.Text))
+            {
+                string text = (string)e.Data.GetData(System.Windows.DataFormats.Text);
+                if (sender is RichTextBox rtb)
+                {
+                    rtb.AppendText(text);
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
