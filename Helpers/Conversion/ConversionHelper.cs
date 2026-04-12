@@ -16,21 +16,96 @@ namespace KannadaNudiEditor.Helpers.Conversion
             @"KannadaNudiBaraha\TempConverted");
 
         private static KannadaConverter? _converter;
-
-        public static KannadaConverter Converter => _converter ??= LoadConverter();
+        private static object _converterLock = new();
 
         /// <summary>
-        /// Resets the converter cache to force reload of mappings on next access.
-        /// Call this after custom mappings are saved.
+        /// Gets or creates the Kannada converter with custom mappings merged and prioritized.
+        /// Custom mappings override SDK defaults for edge cases while maintaining full compatibility.
+        /// Cached for performance but can be reset when custom mappings are updated.
         /// </summary>
-        public static void ResetConverter()
+        public static KannadaConverter Converter
         {
-            _converter = null;
-            SimpleLogger.Log("Converter cache reset. Custom mappings will be reloaded on next conversion.");
+            get
+            {
+                if (_converter == null)
+                {
+                    lock (_converterLock)
+                    {
+                        if (_converter == null)
+                        {
+                            _converter = LoadConverterWithCustomMappings();
+                        }
+                    }
+                }
+                return _converter;
+            }
         }
 
         /// <summary>
-        /// Validates that the converter is using custom mappings.
+        /// Loads SDK default mappings and merges with custom mappings.
+        /// Custom mappings take priority - if a mapping exists in both, custom wins.
+        /// Existing mappings are preserved (no data loss).
+        /// </summary>
+        private static KannadaConverter LoadConverterWithCustomMappings()
+        {
+            Directory.CreateDirectory(TempFolder);
+
+            Dictionary<string, string>? customMappings = null;
+            int customMappingCount = 0;
+
+            try
+            {
+                customMappings = CustomMappingsHelper.LoadMappings();
+                customMappingCount = customMappings.Count;
+
+                if (customMappingCount > 0)
+                {
+                    SimpleLogger.Log($"✓ Loaded {customMappingCount} custom ASCII→Unicode mappings");
+                    SimpleLogger.Log($"  Custom mappings will override SDK defaults for these {customMappingCount} edge cases");
+                    foreach (var kvp in customMappings.Take(5))
+                    {
+                        SimpleLogger.Log($"    Custom: '{kvp.Key}' → '{kvp.Value}'");
+                    }
+                    if (customMappingCount > 5)
+                    {
+                        SimpleLogger.Log($"    ... and {customMappingCount - 5} more custom mappings");
+                    }
+                }
+                else
+                {
+                    SimpleLogger.Log("ℹ No custom mappings found. Using SDK default mappings only.");
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.LogException(ex, "Failed to load custom mappings");
+                SimpleLogger.Log("⚠ Continuing with SDK default mappings only due to loading error");
+                customMappings = null;
+            }
+
+            // Create converter with merged custom + SDK default mappings
+            // SDK properly merges them with custom taking priority (existing mappings preserved)
+            var converter = KannadaConverter.CreateWithCustomMapping(customMappings);
+
+            SimpleLogger.Log($"✓ KannadaConverter initialized - {(customMappingCount > 0 ? $"using custom + SDK default mappings ({customMappingCount} custom overrides)" : "using SDK default mappings only")}");
+            return converter;
+        }
+
+        /// <summary>
+        /// Resets the converter cache to force reload of mappings on next access.
+        /// Call this after custom mappings are saved to apply them immediately.
+        /// </summary>
+        public static void ResetConverter()
+        {
+            lock (_converterLock)
+            {
+                _converter = null;
+            }
+            SimpleLogger.Log("✓ Converter cache reset. Custom mappings will be reloaded on next conversion.");
+        }
+
+        /// <summary>
+        /// Validates that custom mappings are saved.
         /// For testing/debugging purposes.
         /// </summary>
         public static bool HasCustomMappingsLoaded()
@@ -45,48 +120,6 @@ namespace KannadaNudiEditor.Helpers.Conversion
         public static int GetCustomMappingsCount()
         {
             return CustomMappingsHelper.LoadMappings().Count;
-        }
-
-        private static KannadaConverter LoadConverter()
-        {
-            Directory.CreateDirectory(TempFolder);
-
-            // Load custom mappings created by the user
-            Dictionary<string, string>? customMappings = null;
-
-            try
-            {
-                var loadedMappings = CustomMappingsHelper.LoadMappings();
-                if (loadedMappings.Count > 0)
-                {
-                    customMappings = loadedMappings;
-                    SimpleLogger.Log($"✓ Loaded {customMappings.Count} custom ASCII→Unicode mappings");
-                    foreach (var kvp in customMappings.Take(5))
-                    {
-                        SimpleLogger.Log($"  Custom: '{kvp.Key}' → '{kvp.Value}'");
-                    }
-                    if (customMappings.Count > 5)
-                    {
-                        SimpleLogger.Log($"  ... and {customMappings.Count - 5} more custom mappings");
-                    }
-                }
-                else
-                {
-                    SimpleLogger.Log("ℹ No custom mappings found. Using SDK default mappings only.");
-                }
-            }
-            catch (Exception ex)
-            {
-                SimpleLogger.LogException(ex, "Failed to load custom mappings");
-                SimpleLogger.Log("⚠ Using SDK default mappings only due to loading error");
-            }
-
-            // Create converter with custom mappings (SDK will merge with defaults)
-            // Pass null if no custom mappings, or the dictionary if custom mappings exist
-            var converter = KannadaConverter.CreateWithCustomMapping(customMappings);
-
-            SimpleLogger.Log($"✓ KannadaConverter initialized - {(customMappings?.Count > 0 ? "using custom + SDK default mappings" : "using SDK default mappings only")}");
-            return converter;
         }
 
         public static (string tempFile, int totalParagraphs) ConvertFileToTempWithParagraphCount(
@@ -180,36 +213,38 @@ namespace KannadaNudiEditor.Helpers.Conversion
                     return 0;
                 }
 
+                var loggedFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 int totalParagraphs = 0;
-                totalParagraphs += ConvertBody(main.Document.Body, converter);
+                totalParagraphs += ConvertBody(main.Document.Body, converter, null, loggedFonts);
 
                 if (main.HeaderParts != null)
                 {
                     foreach (var header in main.HeaderParts)
-                        totalParagraphs += ConvertBody(header.Header, converter);
+                        totalParagraphs += ConvertBody(header.Header, converter, null, loggedFonts);
                 }
 
                 if (main.FooterParts != null)
                 {
                     foreach (var footer in main.FooterParts)
-                        totalParagraphs += ConvertBody(footer.Footer, converter);
+                        totalParagraphs += ConvertBody(footer.Footer, converter, null, loggedFonts);
                 }
 
                 if (main.FootnotesPart != null)
-                    totalParagraphs += ConvertBody(main.FootnotesPart.Footnotes, converter);
+                    totalParagraphs += ConvertBody(main.FootnotesPart.Footnotes, converter, null, loggedFonts);
 
                 if (main.EndnotesPart != null)
-                    totalParagraphs += ConvertBody(main.EndnotesPart.Endnotes, converter);
+                    totalParagraphs += ConvertBody(main.EndnotesPart.Endnotes, converter, null, loggedFonts);
 
                 main.Document.Save();
                 SimpleLogger.Log($"DOCX conversion completed. Total paragraphs processed: {totalParagraphs}");
                 return totalParagraphs;
             }
 
-            private static int ConvertBody(OpenXmlElement? element, Func<string, string> converter, string[]? nudiFontKeywords = null)
+            private static int ConvertBody(OpenXmlElement? element, Func<string, string> converter, string[]? nudiFontKeywords = null, HashSet<string>? loggedFonts = null)
             {
                 if (element == null) return 0;
                 nudiFontKeywords ??= new[] { "nudi", "parijatha", "lipi" };
+                loggedFonts ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
                 int paragraphCount = 0;
                 int skippedRuns = 0;
@@ -239,7 +274,11 @@ namespace KannadaNudiEditor.Helpers.Conversion
                         if (!string.IsNullOrWhiteSpace(fontName) && !nudiFontKeywords.Any(k => fontName.ToLowerInvariant().StartsWith(k)))
                         {
                             skippedRuns++;
-                            SimpleLogger.Log($"Skipped run - Font: '{fontName}' (not a conversion font)");
+                            if (!loggedFonts.Contains(fontName))
+                            {
+                                SimpleLogger.Log($"Skipped run - Font: '{fontName}' (not a conversion font)");
+                                loggedFonts.Add(fontName);
+                            }
                             continue;
                         }
 
@@ -247,23 +286,34 @@ namespace KannadaNudiEditor.Helpers.Conversion
                         if (!textElements.Any()) continue;
 
                         string combinedText = string.Concat(textElements.Select(t => t.Text));
+                        if (string.IsNullOrEmpty(combinedText)) continue;
+
                         string convertedText;
                         try
                         {
                             convertedText = converter(combinedText);
+                            convertedRuns++;
+                        }
+                        catch (ArgumentOutOfRangeException ex)
+                        {
+                            // Should be rare now after SDK fixes for ProcessArkavattu and ProcessVattakshara
+                            SimpleLogger.LogWarning($"Converter error: Skipping problematic text to preserve document : {ex.Message}");
+                            convertedText = combinedText;
+                            skippedRuns++;
+                            continue;
                         }
                         catch (Exception ex)
                         {
-                            SimpleLogger.LogWarning($"Text conversion failed for run, using original text: {ex.Message}");
+                            SimpleLogger.LogWarning($"Text conversion failed ({ex.GetType().Name}): {ex.Message}");
                             convertedText = combinedText;
+                            skippedRuns++;
+                            continue;
                         }
 
                         textElements[0].Text = convertedText;
                         textElements[0].Space = SpaceProcessingModeValues.Preserve;
                         for (int i = 1; i < textElements.Count; i++)
                             textElements[i].Text = "";
-
-                        convertedRuns++;
                     }
                     paragraphCount++;
                 }

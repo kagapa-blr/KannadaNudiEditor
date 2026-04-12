@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Kannada.AsciiUnicode.Converters;
 using KannadaNudiEditor.Helpers;
+using KannadaNudiEditor.Helpers.Conversion;
 
 namespace KannadaNudiEditor.Views.LiveConversionEditor
 {
@@ -26,8 +27,8 @@ namespace KannadaNudiEditor.Views.LiveConversionEditor
         {
             try
             {
-                _converter = KannadaConverter.Instance;
-                SimpleLogger.Log("Kannada Conversion Editor initialized");
+                _converter = ConversionHelper.Converter;
+                SimpleLogger.Log("Kannada Conversion Editor initialized with custom mappings support");
                 SetAsciiToUnicodeMode();
                 LeftTextBox.TextChanged += LeftTextBox_TextChanged;
                 RightTextBox.TextChanged += RightTextBox_TextChanged;
