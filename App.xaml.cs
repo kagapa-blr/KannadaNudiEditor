@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -29,6 +30,7 @@ namespace KannadaNudiEditor
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             base.OnStartup(e);
 
             string? startupFilePath = null;

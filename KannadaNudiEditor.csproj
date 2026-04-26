@@ -12,9 +12,26 @@
     <ApplicationIcon>Assets\nudi.ico</ApplicationIcon>
 
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+    <!-- Self-contained publish settings -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+
+    <!-- Single EXE packaging -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 
+    <!-- Stability for WPF / Syncfusion -->
+    <PublishTrimmed>false</PublishTrimmed>
+
+    <!-- Reduce release size -->
+    <DebugType>none</DebugType>
     <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+
+    <!-- Optional performance improvement -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+
   </PropertyGroup>
 
   <!-- Include ENTIRE Assets folder recursively -->
@@ -24,38 +41,43 @@
     </Content>
   </ItemGroup>
 
-  <!-- Include ENTIRE Resources folder recursively (JSON mappings, etc.) -->
+  <!-- Include ENTIRE Resources folder recursively -->
   <ItemGroup>
     <Content Include="Resources\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
-  <!-- WPF Images from Images folder -->
-<ItemGroup>
-  <!-- Include all images (png, gif, jpg, bmp, ico) recursively from Images folder -->
-  <Resource Include="Images\**\*.png" />
-  <Resource Include="Images\**\*.gif" />
-  <Resource Include="Images\**\*.jpg" />
-  <Resource Include="Images\**\*.jpeg" />
-  <Resource Include="Images\**\*.bmp" />
-  <Resource Include="Images\**\*.ico" />
-</ItemGroup>
+  <!-- WPF Images -->
+  <ItemGroup>
+    <Resource Include="Images\**\*.png" />
+    <Resource Include="Images\**\*.gif" />
+    <Resource Include="Images\**\*.jpg" />
+    <Resource Include="Images\**\*.jpeg" />
+    <Resource Include="Images\**\*.bmp" />
+    <Resource Include="Images\**\*.ico" />
+  </ItemGroup>
 
   <!-- NuGet Packages -->
   <ItemGroup>
+
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
+
     <PackageReference Include="KannadaAsciiUnicodeSDK" Version="1.0.21" />
-  
+
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+
     <PackageReference Include="Syncfusion.DocToPDFConverter.Wpf" Version="33.1.47" />
     <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="33.1.47" />
     <PackageReference Include="Syncfusion.SfRichTextRibbon.WPF" Version="33.1.47" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="33.1.47" />
     <PackageReference Include="Syncfusion.Themes.Windows11Light.WPF" Version="33.1.47" />
 
- 
-  <!-- <ProjectReference Include="..\KannadaAsciiUnicode\Kannada.AsciiUnicode\Kannada.AsciiUnicode.csproj" /> -->
+    <!-- Optional local project reference -->
+    <!--
+    <ProjectReference Include="..\KannadaAsciiUnicode\Kannada.AsciiUnicode\Kannada.AsciiUnicode.csproj" />
+    -->
 
   </ItemGroup>
+
 </Project>
