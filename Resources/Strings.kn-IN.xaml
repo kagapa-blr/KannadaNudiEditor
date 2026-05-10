@@ -319,6 +319,16 @@
   <sys:String x:Key="StartNudiTooltip">ಕನ್ನಡ ಅಕ್ಷರಗಳನ್ನು ನಿಮ್ಮ ಸಿಸ್ಟಮ್ನ ಎಲ್ಲಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಟೈಪ್ ಮತ್ತು ರೆಂಡರ್ ಮಾಡಲು ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಿ.</sys:String>
   <sys:String x:Key="StopNudiTooltip">ನುಡಿ ಎಂಜಿನ್ ಅನ್ನು ನಿಲ್ಲಿಸಿ, ಇದು ಸಿಸ್ಟಮ್ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಬಿಡುಗಡೆ ಮಾಡುತ್ತದೆ.</sys:String>
 
+  <!-- NudiManager Tab: Keyboard Selection Group -->
+  <sys:String x:Key="NudiManagerKeyboardSelectionGroup">ಕೀಬೋರ್ಡ್ ಆಯ್ಕೆ</sys:String>
+  <sys:String x:Key="NudiManagerKeyboardSelectionGroupTooltip">ಕೀಬೋರ್ಡ್ ವಿನ್ಯಾಸನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಮತ್ತು ಪ್ರಾರಂಭಿಸಿ</sys:String>
+  <sys:String x:Key="NudiManagerKeyboardSelectionComboboxTooltip">ಕೀಬೋರ್ಡ್ ವಿನ್ಯಾಸನ್ನು ಆಯ್ಕೆ ಮಾಡಿ</sys:String>
+
+  <!-- NudiManager Tab: Help Group -->
+  <sys:String x:Key="NudiManagerHelpGroup">ಸಹಾಯ</sys:String>
+  <sys:String x:Key="NudiManagerHelpGroupTooltip">ನುಡಿ ಕೀಬೋರ್ಡ್ ಗೈಡ್ ಮತ್ತು ಮ್ಯಾಪಿಂಗ್ ನೋಡಿ</sys:String>
+  <sys:String x:Key="NudiManagerGuideButton">ಗೈಡ್</sys:String>
+
 
   <!-- =========================== -->
   <!-- Help -->
@@ -329,8 +339,8 @@
   <sys:String x:Key="HelpTab">ಸಹಾಯ</sys:String>
 
   <!-- Groups -->
-  <sys:String x:Key="HelpGroup">ನುಡಿ ಪರಿಚಯ</sys:String>
-  <sys:String x:Key="HelpGroupDescription">ನುಡಿ ತಂತ್ರಾಂಶದ ಪರಿಚಯ ಮತ್ತು ರಚನಾಕಾರರು.</sys:String>
+  <sys:String x:Key="HelpTabGroup">ನುಡಿ ಪರಿಚಯ</sys:String>
+  <sys:String x:Key="HelpTabGroupDescription">ನುಡಿ ತಂತ್ರಾಂಶದ ಪರಿಚಯ ಮತ್ತು ರಚನಾಕಾರರು.</sys:String>
 
   <sys:String x:Key="HelpDocumentationGroup">ದಸ್ತಾವೇಜುಗಳು</sys:String>
   <sys:String x:Key="HelpDocumentationGroupDescription">ಬಳಕೆದಾರರ ಮಾರ್ಗದರ್ಶಿಗಳು ಮತ್ತು ಉಲ್ಲೇಖ.</sys:String>

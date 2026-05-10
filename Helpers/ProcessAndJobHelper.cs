@@ -9,6 +9,8 @@ namespace KannadaNudiEditor.Helpers
     {
         private Process? _kannadaKeyboardProcess;
         private Job? _keyboardJob;
+        private Process? _keyboardFileProcess;
+        private Job? _keyboardFileJob;
 
         public void LaunchKannadaKeyboard()
         {
@@ -43,6 +45,64 @@ namespace KannadaNudiEditor.Helpers
             catch (Exception ex)
             {
                 SimpleLogger.Log("Failed to start kannadaKeyboard.exe: " + ex);
+            }
+        }
+
+        public void LaunchKeyboardFromKeyboardExeFiles(string exeName)
+        {
+            try
+            {
+                // Kill the existing keyboard process if any
+                KillKeyboardFileProcess();
+
+                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "KeyboardExeFiles", exeName + ".exe");
+
+                if (!File.Exists(exePath))
+                {
+                    SimpleLogger.Log($"{exeName}.exe not found at {exePath}");
+                    return;
+                }
+
+                _keyboardFileProcess = Process.Start(new ProcessStartInfo
+                {
+                    FileName = exePath,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                });
+
+                if (_keyboardFileProcess != null)
+                {
+                    _keyboardFileJob = new Job();
+                    _keyboardFileJob.AddProcess(_keyboardFileProcess);
+                }
+
+                SimpleLogger.Log($"{exeName}.exe started.");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Failed to start {exeName}.exe: {ex}");
+            }
+        }
+
+        public void KillKeyboardFileProcess()
+        {
+            try
+            {
+                if (_keyboardFileProcess != null && !_keyboardFileProcess.HasExited)
+                {
+                    _keyboardFileProcess.Kill();
+                    _keyboardFileProcess.WaitForExit(500);
+                }
+
+                _keyboardFileJob?.Dispose();
+                _keyboardFileProcess = null;
+                _keyboardFileJob = null;
+
+                SimpleLogger.Log("Keyboard file process killed.");
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error killing keyboard file process: {ex}");
             }
         }
 

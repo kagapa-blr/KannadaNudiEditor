@@ -1,0 +1,58 @@
+{
+    "KeyboardGuide": {
+        "Title": "ನುಡಿ ೬.೧ ಪ್ರಾಯೋಗಿಕ ಆವೃತ್ತಿ",
+        "Description": "ಕನ್ನಡದ ಅಕ್ಷರಗಳಿಗೆ ಚಿಹ್ನೆಗಳು ಮೂಡಿಸಲು + On CapsLock English Small Letters + On CapsLock English Capital Letters + On CapsLock + Shift key",     
+        "SymbolsWithCapsLock": [
+        {
+           " ಕ̆ k̆ K̆":1
+        },
+        {
+           "ಕ̄ k̄ K̄":2
+        },
+        {
+            "ಕ͇ k͇ K͇":3
+        },
+        {
+            "ಕ̍ k̍ K̍":5
+        },
+        {
+            "ಕ̎ k̎ K̎":6
+        },
+        {
+            "ಕ k K dot below":7
+        },
+        {
+            "ಕ̇ k̇ K̇":8
+        },
+        {
+            "ಕ̈ k̈ K̈":9
+        },
+        {
+            "ಕಁ kಁ Kಁ":0
+        },
+        {
+            "ಕ̲ k̲ K̲":"- (Hyphen)"
+        },
+        {
+            "ಕ̧ ķ Ķ":", commas"
+        },
+        {
+            "ಕ̤ k̤ K̤":". full stops"
+        },
+        {
+            "ಕ́ ḱ Ś":"ʼ apostrophe"
+        },
+        {
+            "ૐ":"O + shift X"
+        },
+        {
+            "₹":"CAPSLOCK + 4"
+        }
+
+
+
+        
+    
+    ]
+    }
+}

@@ -655,6 +655,7 @@
                                            Height="1"/>
 
                                 <!-- Live Conversion Editor Button -->
+                                <!--
                                 <Grid Grid.Row="6"
                                       Margin="10">
                                     <Grid.ColumnDefinitions>
@@ -683,7 +684,7 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <!-- Divider before custom mappings -->
+                                Divider before custom mappings
                                 <Rectangle Grid.Row="7"
                                            Stroke="Gray"
                                            HorizontalAlignment="Stretch"
@@ -691,6 +692,7 @@
                                            StrokeDashArray="5"
                                            Margin="10"
                                            Height="1"/>
+                                -->
                             </Grid>
 
                             <!-- Custom Mappings Section in Right Panel -->
@@ -3185,70 +3187,77 @@
 
             <Syncfusion:RibbonTab Caption="{DynamicResource NudiManagerTab}">
 
-                <!-- Nudi Controls Group -->
-                <Syncfusion:RibbonBar Header="{DynamicResource NudiManagerGroup}"
+                <!-- Keyboard Selection Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource NudiManagerKeyboardSelectionGroup}"
                                       IsLauncherButtonVisible="False">
                     <Syncfusion:RibbonBar.ToolTip>
                         <Syncfusion:ScreenTip MaxWidth="300">
-                            <TextBlock Text="{DynamicResource NudiManagerGroupDescription}"
+                            <TextBlock Text="{DynamicResource NudiManagerKeyboardSelectionGroupTooltip}"
                                        TextWrapping="Wrap"/>
                         </Syncfusion:ScreenTip>
                     </Syncfusion:RibbonBar.ToolTip>
 
-                    <!-- Horizontal StackPanel for icon-only buttons -->
                     <StackPanel Margin="5"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
 
-                        <!-- Start Button -->
-                        <Button Width="40"
-                                Height="40"
-                                Padding="0"
-                                VerticalContentAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Click="StartNudiEngine_Click"
-                                Margin="0,0,10,0">
-                            <Image Source="Images/nudimanager/start-icon.png"
-                                   Width="24"
-                                   Height="24"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <StackPanel>
-                                        <TextBlock Text="{DynamicResource NudiManagerTab}"
-                                                   FontWeight="Bold"
-                                                   FontSize="12"
-                                                   Margin="0,0,0,5"/>
-                                        <TextBlock Text="{DynamicResource StartNudiTooltip}"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   MaxWidth="200"/>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
+                        <!-- Keyboard Dropdown -->
+                        <ComboBox x:Name="KeyboardExeComboBox"
+                                  Width="150"
+                                  Height="32"
+                                  Padding="8,5"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,10,0"
+                                  SelectionChanged="KeyboardExeComboBox_SelectionChanged"
+                                  ToolTip="{DynamicResource NudiManagerKeyboardSelectionComboboxTooltip}">
+                        </ComboBox>
 
-                        <!-- Stop Button -->
-                        <Button Width="40"
-                                Height="40"
+                    </StackPanel>
+                </Syncfusion:RibbonBar>
+
+                <!-- Nudi Guide Group -->
+                <Syncfusion:RibbonBar Header="{DynamicResource NudiManagerHelpGroup}"
+                                      IsLauncherButtonVisible="False">
+                    <Syncfusion:RibbonBar.ToolTip>
+                        <Syncfusion:ScreenTip MaxWidth="300">
+                            <TextBlock Text="{DynamicResource NudiManagerHelpGroupTooltip}"
+                                       TextWrapping="Wrap"/>
+                        </Syncfusion:ScreenTip>
+                    </Syncfusion:RibbonBar.ToolTip>
+
+                    <StackPanel Margin="5"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+
+                        <!-- Guide Button -->
+                        <Button Width="50"
+                                Height="50"
                                 Padding="0"
                                 VerticalContentAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Click="StopNudiEngine_Click">
-                            <Image Source="Images/nudimanager/stop-icon.png"
-                                   Width="24"
-                                   Height="24"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+                                Click="ShowNudiGuide_Click">
+                            <StackPanel Orientation="Vertical"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <TextBlock Text="📋"
+                                           FontSize="24"
+                                           HorizontalAlignment="Center"
+                                           Foreground="#1F4788"/>
+                                <TextBlock Text="{DynamicResource NudiManagerGuideButton}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel>
-                                        <TextBlock Text="{DynamicResource NudiManagerTab}"
+                                        <TextBlock Text="Nudi Keyboard Guide"
                                                    FontWeight="Bold"
                                                    FontSize="12"
                                                    Margin="0,0,0,5"/>
-                                        <TextBlock Text="{DynamicResource StopNudiTooltip}"
+                                        <TextBlock Text="View keyboard mappings and special characters"
                                                    TextWrapping="WrapWithOverflow"
                                                    MaxWidth="200"/>
                                     </StackPanel>

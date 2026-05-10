@@ -1,0 +1,40 @@
+<Window x:Class="KannadaNudiEditor.Views.NudiGuideWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ನುಡಿ ೬.೧ - ಕೀಬೋರ್ಡ್ ಗೈಡ್"
+        Width="900"
+        Height="750"
+        WindowStartupLocation="CenterOwner"
+        Background="White">
+    <Grid>
+        <TabControl>
+            <!-- Tab 1: Keyboard Text Mappings -->
+            <TabItem Header="ಕೀಬೋರ್ಡ್ ಮ್ಯಾಪಿಂಗ್"
+                    Padding="10,5">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border Padding="20">
+                        <StackPanel x:Name="GuideContent">
+                            <!-- Content will be loaded from JSON in code-behind -->
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 2: Keyboard Visual Guide -->
+            <TabItem Header="ಕೀಬೋರ್ಡ್ ಚಿತ್ರ"
+                    Padding="10,5">
+                <Grid Background="White">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Auto">
+                        <Border Padding="10">
+                            <Image x:Name="KeyboardImage"
+                                   Stretch="UniformToFill"
+                                   MaxHeight="600"
+                                   MaxWidth="800"/>
+                        </Border>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

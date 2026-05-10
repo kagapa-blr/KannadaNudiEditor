@@ -343,6 +343,16 @@
   <sys:String x:Key="StartNudiEngine">Start Nudi Engine</sys:String>
   <sys:String x:Key="StopNudiEngine">Stop Nudi Engine</sys:String>
   <sys:String x:Key="StartNudiTooltip">Start the Kannada Nudi engine to enable typing and rendering of Kannada characters across all applications on your system.</sys:String>
+
+  <!-- NudiManager Tab: Keyboard Selection Group -->
+  <sys:String x:Key="NudiManagerKeyboardSelectionGroup">Keyboard Selection</sys:String>
+  <sys:String x:Key="NudiManagerKeyboardSelectionGroupTooltip">Select and launch a keyboard layout</sys:String>
+  <sys:String x:Key="NudiManagerKeyboardSelectionComboboxTooltip">Select a keyboard layout</sys:String>
+
+  <!-- NudiManager Tab: Help Group -->
+  <sys:String x:Key="NudiManagerHelpGroup">Help</sys:String>
+  <sys:String x:Key="NudiManagerHelpGroupTooltip">View Nudi keyboard guide and mappings</sys:String>
+  <sys:String x:Key="NudiManagerGuideButton">Guide</sys:String>
   <sys:String x:Key="StopNudiTooltip">Stop the Nudi engine when it’s no longer needed to free up system resources.</sys:String>
 
 
@@ -355,8 +365,8 @@
   <sys:String x:Key="HelpTab">Help</sys:String>
 
   <!-- Groups -->
-  <sys:String x:Key="HelpGroup">About Nudi</sys:String>
-  <sys:String x:Key="HelpGroupDescription">Learn about the Nudi software and its creators.</sys:String>
+  <sys:String x:Key="HelpTabGroup">About Nudi</sys:String>
+  <sys:String x:Key="HelpTabGroupDescription">Learn about the Nudi software and its creators.</sys:String>
 
   <sys:String x:Key="HelpDocumentationGroup">Documentation</sys:String>
   <sys:String x:Key="HelpDocumentationGroupDescription">User guides and reference materials.</sys:String>

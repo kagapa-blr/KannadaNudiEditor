@@ -75,7 +75,7 @@ namespace KannadaNudiEditor
             try
             {
                 LicenseHelper.RegisterSyncfusionLicense();
-                _processHelper.LaunchKannadaKeyboard();
+                // Kannada keyboard will be launched from NudiManager tab with Kannada.exe as default
 
                 var banner = new BannerWindow();
                 banner.Show();

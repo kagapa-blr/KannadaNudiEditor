@@ -31,6 +31,7 @@ namespace KannadaNudiEditor
     public partial class MainWindow : RibbonWindow
     {
         #region Feilds
+        private ProcessHelper? _processHelper;
 #if !Framework3_5
         Task<bool>? loadAsync = null;
         CancellationTokenSource? cancellationTokenSource = null;
@@ -99,6 +100,7 @@ namespace KannadaNudiEditor
             SfSkinManager.ApplyThemeAsDefaultStyle = true;
             InitializeComponent();
             _startupFilePath = startupFilePath;
+            _processHelper = new ProcessHelper();
 
             // Ensure non-nullable fields are initialized
             if (spellChecker == null)
@@ -140,6 +142,7 @@ namespace KannadaNudiEditor
             ApplyDefaultPageSettings();
             ConfigureSpellChecker();
             InitRecentFilesUi();
+            LoadKeyboardExeFiles();
 
             SimpleLogger.Log("MainWindow initialized.");
         }
@@ -398,6 +401,10 @@ namespace KannadaNudiEditor
             this.Unloaded -= OnUnloaded;
             this.Loaded -= OnLoaded;
             DisposeRibbon();
+
+            // Kill keyboard file process
+            _processHelper?.KillKeyboardFileProcess();
+
             if (richTextBoxAdv != null)
             {
                 richTextBoxAdv.SelectionChanged -= RichTextBoxAdv_SelectionChanged;
@@ -2571,67 +2578,99 @@ namespace KannadaNudiEditor
             }
         }
 
-
-        private void StartNudiEngine_Click(object sender, RoutedEventArgs e)
+        private void LoadKeyboardExeFiles()
         {
-            string exeFileName = "kannadaKeyboard.exe";
-            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", exeFileName);
+            try
+            {
+                string keyboardExeFilesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "KeyboardExeFiles");
 
-            // Check if the process is already running
-            if (IsProcessRunning(Path.GetFileNameWithoutExtension(exeFileName)))
-            {
-                MessageBox.Show("The Nudi Engine is already running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (!Directory.Exists(keyboardExeFilesPath))
+                {
+                    SimpleLogger.Log($"KeyboardExeFiles directory not found at {keyboardExeFilesPath}");
+                    return;
+                }
+
+                var exeFiles = Directory.GetFiles(keyboardExeFilesPath, "*.exe");
+                KeyboardExeComboBox.Items.Clear();
+
+                foreach (var file in exeFiles)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+                    // Add "(default)" label to Kannada keyboard
+                    if (fileName == "Kannada")
+                    {
+                        KeyboardExeComboBox.Items.Add("Kannada (default)");
+                    }
+                    else
+                    {
+                        KeyboardExeComboBox.Items.Add(fileName);
+                    }
+                }
+
+                if (KeyboardExeComboBox.Items.Count > 0)
+                {
+                    // Find and select "Kannada (default)" by default
+                    // This will trigger SelectionChanged which will launch the keyboard
+                    int kannadaIndex = KeyboardExeComboBox.Items.IndexOf("Kannada (default)");
+                    if (kannadaIndex >= 0)
+                    {
+                        KeyboardExeComboBox.SelectedIndex = kannadaIndex;
+                    }
+                    else
+                    {
+                        KeyboardExeComboBox.SelectedIndex = 0;
+                    }
+                }
+
+                SimpleLogger.Log($"Loaded {exeFiles.Length} keyboard exe files.");
             }
-            else
+            catch (Exception ex)
             {
-                // Check if the executable exists at the given path
-                if (File.Exists(exePath))
-                {
-                    try
-                    {
-                        // Start the process
-                        Process.Start(exePath);
-                        MessageBox.Show("The Nudi Engine has started.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error starting Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Executable not found at path: {exePath}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                SimpleLogger.Log($"Error loading keyboard exe files: {ex}");
+                MessageBox.Show($"Error loading keyboard files: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void StopNudiEngine_Click(object sender, RoutedEventArgs e)
+        private void KeyboardExeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            // Check if the "kannadaKeyboard.exe" process is running
-            if (IsProcessRunning("kannadaKeyboard"))
+            if (KeyboardExeComboBox.SelectedItem == null)
+                return;
+
+            string selectedKeyboard = KeyboardExeComboBox.SelectedItem.ToString() ?? string.Empty;
+            if (string.IsNullOrEmpty(selectedKeyboard))
+                return;
+
+            // Remove "(default)" label if present
+            selectedKeyboard = selectedKeyboard.Replace(" (default)", "");
+
+            try
             {
-                // Stop the process (assuming the name of the process is "kannadaKeyboard")
-                try
-                {
-                    foreach (var process in Process.GetProcessesByName("kannadaKeyboard"))
-                    {
-                        process.Kill();
-                    }
-                    MessageBox.Show("The Nudi Engine has stopped.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error stopping Nudi Engine: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                LoadingView.Show();
+                _processHelper?.LaunchKeyboardFromKeyboardExeFiles(selectedKeyboard);
+                SimpleLogger.Log($"Switched to keyboard: {selectedKeyboard}");
             }
-            else
+            finally
             {
-                MessageBox.Show("The Nudi Engine is not running.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadingView.Hide();
             }
         }
-        private bool IsProcessRunning(string processName)
+
+        private void ShowNudiGuide_Click(object sender, RoutedEventArgs e)
         {
-            return Process.GetProcessesByName(processName).Length > 0;
+            try
+            {
+                var guideWindow = new Views.NudiGuideWindow
+                {
+                    Owner = this,
+                    WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
+                };
+                guideWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Log($"Error opening Nudi guide: {ex}");
+                MessageBox.Show($"Error opening Nudi guide: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
 
@@ -2920,6 +2959,8 @@ namespace KannadaNudiEditor
             await ConvertFileAsync(asciiToUnicode: false, operationName: "Unicode to ASCII");
         }
 
+        // Live Conversion Editor feature commented out for future use
+        /*
         private void LiveConversionEditor_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -2942,6 +2983,7 @@ namespace KannadaNudiEditor
             // Close backstage
             CloseBackstage();
         }
+        */
 
         private void ConfigureCustomMappings_Click(object sender, RoutedEventArgs e)
         {
