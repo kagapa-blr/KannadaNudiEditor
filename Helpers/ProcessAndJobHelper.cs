@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -52,20 +53,28 @@ namespace KannadaNudiEditor.Helpers
         {
             try
             {
-                // Kill the existing keyboard process if any
+                string normalizedName = Path.GetFileNameWithoutExtension(exeName ?? string.Empty).Trim();
+                if (string.IsNullOrWhiteSpace(normalizedName))
+                {
+                    SimpleLogger.Log("No keyboard executable name supplied.");
+                    return;
+                }
+
                 KillKeyboardFileProcess();
 
-                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "KeyboardExeFiles", exeName + ".exe");
+                string keyboardDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "KeyboardExeFiles");
+                string exePath = Path.Combine(keyboardDirectory, normalizedName + ".exe");
 
                 if (!File.Exists(exePath))
                 {
-                    SimpleLogger.Log($"{exeName}.exe not found at {exePath}");
+                    SimpleLogger.Log($"{normalizedName}.exe not found at {exePath}");
                     return;
                 }
 
                 _keyboardFileProcess = Process.Start(new ProcessStartInfo
                 {
                     FileName = exePath,
+                    WorkingDirectory = keyboardDirectory,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 });
@@ -76,7 +85,7 @@ namespace KannadaNudiEditor.Helpers
                     _keyboardFileJob.AddProcess(_keyboardFileProcess);
                 }
 
-                SimpleLogger.Log($"{exeName}.exe started.");
+                SimpleLogger.Log($"{normalizedName}.exe started.");
             }
             catch (Exception ex)
             {
@@ -88,10 +97,64 @@ namespace KannadaNudiEditor.Helpers
         {
             try
             {
-                if (_keyboardFileProcess != null && !_keyboardFileProcess.HasExited)
+                string keyboardDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "KeyboardExeFiles");
+                var keyboardNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                if (Directory.Exists(keyboardDirectory))
                 {
-                    _keyboardFileProcess.Kill();
-                    _keyboardFileProcess.WaitForExit(500);
+                    foreach (string file in Directory.GetFiles(keyboardDirectory, "*.exe"))
+                    {
+                        keyboardNames.Add(Path.GetFileNameWithoutExtension(file));
+                    }
+                }
+
+                foreach (Process process in Process.GetProcesses())
+                {
+                    try
+                    {
+                        if (process.HasExited)
+                            continue;
+
+                        bool shouldKill = false;
+
+                        if (_keyboardFileProcess != null && process.Id == _keyboardFileProcess.Id)
+                        {
+                            shouldKill = true;
+                        }
+                        else if (keyboardNames.Count > 0)
+                        {
+                            string processName = process.ProcessName;
+                            if (keyboardNames.Contains(processName))
+                            {
+                                shouldKill = true;
+                            }
+                            else
+                            {
+                                string? modulePath = process.MainModule?.FileName;
+                                if (!string.IsNullOrWhiteSpace(modulePath))
+                                {
+                                    string normalizedModulePath = modulePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                                    string normalizedKeyboardDirectory = keyboardDirectory.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
+                                    if (normalizedModulePath.StartsWith(normalizedKeyboardDirectory + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                                        normalizedModulePath.Equals(normalizedKeyboardDirectory, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        shouldKill = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (shouldKill)
+                        {
+                            process.Kill(true);
+                            process.WaitForExit(2000);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleLogger.Log($"Could not stop keyboard process {process.ProcessName}: {ex.Message}");
+                    }
                 }
 
                 _keyboardFileJob?.Dispose();

@@ -15,8 +15,10 @@ namespace KannadaNudiEditor
     public partial class App : Application
     {
         private readonly ProcessHelper _processHelper;
+        private string _currentKeyboardSelection = "Kannada";
 
         public ProcessHelper ProcessHelper => _processHelper;
+        public string CurrentKeyboardSelection => _currentKeyboardSelection;
 
         public App()
         {
@@ -109,6 +111,18 @@ namespace KannadaNudiEditor
         public bool ShouldKillKeyboardProcessOnWindowClose()
         {
             return Application.Current?.Windows.OfType<MainWindow>().Count() <= 1;
+        }
+
+        public void SetCurrentKeyboardSelection(string keyboardSelection)
+        {
+            if (string.IsNullOrWhiteSpace(keyboardSelection))
+                return;
+
+            string normalized = keyboardSelection.Replace(" (default)", "").Trim();
+            if (string.IsNullOrWhiteSpace(normalized))
+                return;
+
+            _currentKeyboardSelection = normalized;
         }
 
         protected override void OnExit(ExitEventArgs e)

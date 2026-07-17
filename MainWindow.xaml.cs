@@ -89,8 +89,7 @@ namespace KannadaNudiEditor
         private bool _ignorePageSizeChange = false;
 
         private bool _isDocumentModified = false;
-
-
+        private bool _isLoadingKeyboardSelection = false;
 
         private readonly string? _startupFilePath;
         private bool _startupFileOpened = false;
@@ -2596,13 +2595,19 @@ namespace KannadaNudiEditor
                     return;
                 }
 
+                _isLoadingKeyboardSelection = true;
                 var exeFiles = Directory.GetFiles(keyboardExeFilesPath, "*.exe");
                 KeyboardExeComboBox.Items.Clear();
+
+                string preferredKeyboard = "Kannada";
+                if (Application.Current is App app)
+                {
+                    preferredKeyboard = app.CurrentKeyboardSelection;
+                }
 
                 foreach (var file in exeFiles)
                 {
                     string fileName = Path.GetFileNameWithoutExtension(file);
-                    // Add "(default)" label to Kannada keyboard
                     if (fileName == "Kannada")
                     {
                         KeyboardExeComboBox.Items.Add("Kannada (default)");
@@ -2615,17 +2620,23 @@ namespace KannadaNudiEditor
 
                 if (KeyboardExeComboBox.Items.Count > 0)
                 {
-                    // Find and select "Kannada (default)" by default
-                    // This will trigger SelectionChanged which will launch the keyboard
-                    int kannadaIndex = KeyboardExeComboBox.Items.IndexOf("Kannada (default)");
-                    if (kannadaIndex >= 0)
+                    string displayValue = preferredKeyboard == "Kannada" ? "Kannada (default)" : preferredKeyboard;
+                    int preferredIndex = KeyboardExeComboBox.Items.IndexOf(displayValue);
+
+                    if (preferredIndex >= 0)
                     {
-                        KeyboardExeComboBox.SelectedIndex = kannadaIndex;
+                        KeyboardExeComboBox.SelectedIndex = preferredIndex;
                     }
                     else
                     {
-                        KeyboardExeComboBox.SelectedIndex = 0;
+                        int kannadaIndex = KeyboardExeComboBox.Items.IndexOf("Kannada (default)");
+                        KeyboardExeComboBox.SelectedIndex = kannadaIndex >= 0 ? kannadaIndex : 0;
                     }
+                }
+
+                if (Application.Current is App appCurrent && string.Equals(appCurrent.CurrentKeyboardSelection, "Kannada", StringComparison.OrdinalIgnoreCase))
+                {
+                    _processHelper.LaunchKeyboardFromKeyboardExeFiles("Kannada");
                 }
 
                 SimpleLogger.Log($"Loaded {exeFiles.Length} keyboard exe files.");
@@ -2635,11 +2646,15 @@ namespace KannadaNudiEditor
                 SimpleLogger.Log($"Error loading keyboard exe files: {ex}");
                 MessageBox.Show($"Error loading keyboard files: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            finally
+            {
+                _isLoadingKeyboardSelection = false;
+            }
         }
 
         private void KeyboardExeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (KeyboardExeComboBox.SelectedItem == null)
+            if (_isLoadingKeyboardSelection || KeyboardExeComboBox.SelectedItem == null)
                 return;
 
             string selectedKeyboard = KeyboardExeComboBox.SelectedItem.ToString() ?? string.Empty;
@@ -2651,6 +2666,11 @@ namespace KannadaNudiEditor
 
             try
             {
+                if (Application.Current is App app)
+                {
+                    app.SetCurrentKeyboardSelection(selectedKeyboard);
+                }
+
                 LoadingView.Show();
                 _processHelper.LaunchKeyboardFromKeyboardExeFiles(selectedKeyboard);
                 SimpleLogger.Log($"Switched to keyboard: {selectedKeyboard}");
