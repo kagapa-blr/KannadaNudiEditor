@@ -16,6 +16,8 @@ namespace KannadaNudiEditor
     {
         private readonly ProcessHelper _processHelper;
 
+        public ProcessHelper ProcessHelper => _processHelper;
+
         public App()
         {
             SimpleLogger.Log("=== Application Started ===");
@@ -102,6 +104,11 @@ namespace KannadaNudiEditor
         public void KillKeyboardProcess()
         {
             _processHelper.KillKeyboardProcess();
+        }
+
+        public bool ShouldKillKeyboardProcessOnWindowClose()
+        {
+            return Application.Current?.Windows.OfType<MainWindow>().Count() <= 1;
         }
 
         protected override void OnExit(ExitEventArgs e)

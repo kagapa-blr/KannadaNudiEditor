@@ -31,7 +31,7 @@ namespace KannadaNudiEditor
     public partial class MainWindow : RibbonWindow
     {
         #region Feilds
-        private ProcessHelper? _processHelper;
+        private readonly ProcessHelper _processHelper;
 #if !Framework3_5
         Task<bool>? loadAsync = null;
         CancellationTokenSource? cancellationTokenSource = null;
@@ -95,12 +95,12 @@ namespace KannadaNudiEditor
         private readonly string? _startupFilePath;
         private bool _startupFileOpened = false;
 
-        public MainWindow(string? startupFilePath = null)
+        public MainWindow(string? startupFilePath = null, ProcessHelper? processHelper = null)
         {
             SfSkinManager.ApplyThemeAsDefaultStyle = true;
             InitializeComponent();
             _startupFilePath = startupFilePath;
-            _processHelper = new ProcessHelper();
+            _processHelper = processHelper ?? (Application.Current is App app ? app.ProcessHelper : new ProcessHelper());
 
             // Ensure non-nullable fields are initialized
             if (spellChecker == null)
@@ -402,8 +402,11 @@ namespace KannadaNudiEditor
             this.Loaded -= OnLoaded;
             DisposeRibbon();
 
-            // Kill keyboard file process
-            _processHelper?.KillKeyboardFileProcess();
+            // Keep keyboard process alive while other editor windows are open.
+            if (Application.Current is App app && app.ShouldKillKeyboardProcessOnWindowClose())
+            {
+                _processHelper.KillKeyboardFileProcess();
+            }
 
             if (richTextBoxAdv != null)
             {
@@ -604,8 +607,8 @@ namespace KannadaNudiEditor
                 // Optional small delay for UI responsiveness
                 await Task.Delay(100);
 
-                // Create a new MainWindow with no initial file
-                MainWindow newWindow = new MainWindow(null);
+                // Create a new MainWindow with no initial file using the shared keyboard process helper
+                MainWindow newWindow = new MainWindow(null, _processHelper);
                 SimpleLogger.Log($"[NEW] Creating new window instance: {newWindow.GetHashCode()}");
 
                 // Show the new window
@@ -1947,7 +1950,8 @@ namespace KannadaNudiEditor
             if (!_isDocumentModified)
             {
                 SimpleLogger.Log("Window closing: no unsaved changes.");
-                app.KillKeyboardProcess(); // terminate keyboard
+                if (app.ShouldKillKeyboardProcessOnWindowClose())
+                    app.KillKeyboardProcess();
                 return;
             }
 
@@ -1967,7 +1971,8 @@ namespace KannadaNudiEditor
                         SfRichTextBoxAdv.SaveDocumentCommand.Execute(null, richTextBoxAdv);
                         _isDocumentModified = false;
                         SimpleLogger.Log("Document saved successfully before closing.");
-                        app.KillKeyboardProcess();
+                        if (app.ShouldKillKeyboardProcessOnWindowClose())
+                            app.KillKeyboardProcess();
                     }
                     catch (Exception ex)
                     {
@@ -1979,7 +1984,8 @@ namespace KannadaNudiEditor
 
                 case MessageBoxResult.No:
                     SimpleLogger.Log("User chose not to save changes and closed the window.");
-                    app.KillKeyboardProcess();
+                    if (app.ShouldKillKeyboardProcessOnWindowClose())
+                        app.KillKeyboardProcess();
                     break;
 
                 case MessageBoxResult.Cancel:
@@ -2646,7 +2652,7 @@ namespace KannadaNudiEditor
             try
             {
                 LoadingView.Show();
-                _processHelper?.LaunchKeyboardFromKeyboardExeFiles(selectedKeyboard);
+                _processHelper.LaunchKeyboardFromKeyboardExeFiles(selectedKeyboard);
                 SimpleLogger.Log($"Switched to keyboard: {selectedKeyboard}");
             }
             finally
