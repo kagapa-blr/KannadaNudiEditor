@@ -2,9 +2,9 @@ name: Build and Release Kannada Nudi Editor (WPF)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
 
       - name: Restore NuGet Packages
         run: dotnet restore "KannadaNudiEditor.sln"
@@ -80,7 +80,7 @@ jobs:
       - name: Download & Install Inno Setup
         shell: pwsh
         run: |
-          $url = "https://jrsoftware.org/download.php/is.exe?site=1"
+          $url = "https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe"
           $installer = "$env:TEMP\inno_setup.exe"
           Invoke-WebRequest -Uri $url -OutFile $installer
           Start-Process -FilePath $installer -ArgumentList "/VERYSILENT /NORESTART /ALLUSERS" -Wait
