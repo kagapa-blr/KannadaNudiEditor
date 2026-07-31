@@ -645,7 +645,7 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <!-- Divider before Live Editor -->
+                                <!-- Divider before Kannada Digits -->
                                 <Rectangle Grid.Row="5"
                                            Stroke="Gray"
                                            HorizontalAlignment="Stretch"
@@ -653,6 +653,98 @@
                                            StrokeDashArray="5"
                                            Margin="10"
                                            Height="1"/>
+
+                                <!-- Kannada Digits Checkbox -->
+                                <Grid Grid.Row="6"
+                                      Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox x:Name="kannadaDigitsCheckBox"
+                                              Grid.Column="0"
+                                               IsChecked="True"
+                                              VerticalAlignment="Top"
+                                              Margin="5,5,5,0"
+                                              ToolTip="Keep Kannada digits (೦-೯). If unchecked, Kannada digits are converted to English digits (0-9)."/>
+
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Top"
+                                                Margin="10,5">
+
+                                        <TextBlock Text="Keep Kannada Digits"
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,5"/>
+
+                                        <TextBlock Text="When checked: Kannada digits (೦-೯) are preserved&#10;When unchecked: Kannada digits (೦-೯) → English digits (0-9)"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="11"
+                                                   Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Examples:"
+                                                   FontWeight="Bold"
+                                                   FontSize="10"
+                                                   Margin="0,0,0,5"/>
+
+                                        <Grid Margin="10,0,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Header -->
+                                            <TextBlock Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Text="Input"
+                                                       FontWeight="Bold"
+                                                       FontSize="9"
+                                                       Margin="0,0,15,5"/>
+                                            <TextBlock Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       Text="Unchecked"
+                                                       FontWeight="Bold"
+                                                       FontSize="9"
+                                                       Margin="0,0,15,5"/>
+                                            <TextBlock Grid.Row="0"
+                                                       Grid.Column="2"
+                                                       Text="Checked"
+                                                       FontWeight="Bold"
+                                                       FontSize="9"
+                                                       Margin="0,0,0,5"/>
+
+                                            <!-- Example -->
+                                            <TextBlock Grid.Row="1"
+                                                       Grid.Column="0"
+                                                       Text="೧೨೩೪೫"
+                                                       FontSize="9"
+                                                       FontFamily="Tunga"
+                                                       Margin="0,0,15,3"/>
+                                            <TextBlock Grid.Row="1"
+                                                       Grid.Column="1"
+                                                       Text="12345"
+                                                       FontSize="9"
+                                                       Margin="0,0,15,3"/>
+                                            <TextBlock Grid.Row="1"
+                                                       Grid.Column="2"
+                                                       Text="೧೨೩೪೫"
+                                                       FontSize="9"
+                                                       FontFamily="Tunga"
+                                                       Margin="0,0,0,3"/>
+                                        </Grid>
+
+                                    </StackPanel>
+                                </Grid>
+
+
+
+
 
                                 <!-- Live Conversion Editor Button -->
                                 <!--

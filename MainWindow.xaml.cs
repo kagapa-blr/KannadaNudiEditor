@@ -2977,7 +2977,9 @@ namespace KannadaNudiEditor
 
         private async void AsciiToUnicodeButton_Click(object sender, RoutedEventArgs e)
         {
-            await ConvertFileAsync(asciiToUnicode: true, operationName: "ASCII to Unicode");
+            // Read checkbox: true = convert digits to Kannada, false = keep English digits
+            bool convertDigitsToKannada = kannadaDigitsCheckBox.IsChecked ?? false;
+            await ConvertFileAsync(asciiToUnicode: true, operationName: "ASCII to Unicode", convertDigitsToKannada: convertDigitsToKannada);
         }
 
         private async void UnicodeToAsciiButton_Click(object sender, RoutedEventArgs e)
@@ -3035,7 +3037,7 @@ namespace KannadaNudiEditor
         }
 
 
-        private async Task ConvertFileAsync(bool asciiToUnicode, string operationName)
+        private async Task ConvertFileAsync(bool asciiToUnicode, string operationName, bool convertDigitsToKannada = false)
         {
             var dlg = new OpenFileDialog
             {
@@ -3056,8 +3058,14 @@ namespace KannadaNudiEditor
 
             try
             {
+                // SDK parameter: convertToEnglishDigit = true means OUTPUT English digits
+                // We want the OPPOSITE: if user checked "Convert to Kannada", we pass false to SDK
+                // So: convertDigitsToKannada=true → convertToEnglishDigit=false (output Kannada)
+                //     convertDigitsToKannada=false → convertToEnglishDigit=true (output English)
+                bool convertToEnglishDigit = !convertDigitsToKannada;
+
                 Func<string, string> converterFunc = asciiToUnicode
-                    ? ConversionHelper.Converter.ConvertAsciiToUnicode
+                    ? (text) => ConversionHelper.Converter.ConvertAsciiToUnicode(text, convertToEnglishDigit)
                     : ConversionHelper.Converter.ConvertUnicodeToAscii;
 
                 Stopwatch convSw = Stopwatch.StartNew();
